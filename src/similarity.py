@@ -3,10 +3,12 @@ from dataclasses import dataclass
 import io
 from typing import Protocol
 from loguru import logger
-
 import pandas as pd
+import numpy as np
+
 
 from data import File
+
 import zstd
 import gzip
 import zstandard
@@ -15,7 +17,7 @@ import zlib
 
 class Compress(Protocol):
     @abstractmethod
-    def __call__(self, file: bytes, out: io.StringIO) -> None:
+    def __call__(self, file: bytes, out: io.BytesIO) -> None:
         pass
 
     def name(self) -> str:
@@ -80,7 +82,7 @@ class Zlib:
 class Gzip:
     compression_lvl: int
 
-    def __call__(self, file: bytes, out: io.StringIO) -> None:
+    def __call__(self, file: bytes, out: io.BytesIO) -> None:
         assert self.compression_lvl in range(1, 10), (
             f"Compression level {self.compression_lvl} is out of range"
         )
@@ -117,13 +119,10 @@ class NCD(SimilarityMetric):
         cb = outb.getbuffer().nbytes
         cab = outab.getbuffer().nbytes
 
-        logger.debug(f"file a: {ca}")
-        logger.debug(f"file b: {cb}")
-        logger.debug(f"file concat: {cab}")
         return (cab - min(ca, cb)) / max(ca, cb)
 
 
-def get_compressor(comp_name: str) -> Compress:
+def get_compressor(comp_name: str) -> Compress | None:
     match comp_name:
         case "zstd":
             return Zstd(compression_lvl=1)
@@ -161,8 +160,37 @@ def get_similarities(metric: SimilarityMetric, afile: File, bfiles: [File]) -> [
 def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> pd.DataFrame:
     data = {}
     for file in files:
-        data[file.name] = get_similarities(metric, file, files)
+        data[str(file)] = get_similarities(metric, file, files)
 
-    dataframe = pd.DataFrame(data)
+    df = pd.DataFrame(data)
+    return df
+
+
+def create_similarity_matrix_fast(
+    metric: SimilarityMetric, files: [File]
+) -> pd.DataFrame:
+    labels = [str(file) for file in files]
+    # logger.debug(f"Labels: {labels}")
+    data = []
+    for i, file in enumerate(files):
+        data.extend(get_similarities(metric, file, files[i:]))
+        if i == 0:
+            dim = len(data)
+    # logger.debug(f"Data: {data}")
+
+    X = np.zeros((dim, dim))
+    X[np.triu_indices(X.shape[0], k=0)] = data
+    X = X + X.T - np.diag(np.diag(X))
+
+    dataframe = pd.DataFrame(X, columns=labels, index=labels)
 
     return dataframe
+
+
+def similarities_from_data(
+    metric: SimilarityMetric, dataframe: pd.DataFrame
+) -> pd.DataFrame:
+    all_files = dataframe.to_numpy().flatten()
+    similarities = create_similarity_matrix_fast(metric, all_files)
+
+    return similarities
