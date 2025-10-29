@@ -1,6 +1,7 @@
-from data import File
+from simbench.data import File
+import simbench.similarity as sim
+
 from pathlib import Path
-import similarity as sim
 from loguru import logger
 import pandas as pd
 import os

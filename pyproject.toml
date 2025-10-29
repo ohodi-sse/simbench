@@ -1,9 +1,48 @@
+
+[build-system]
+requires = ["setuptools"]
+
+[tool.setuptools.packages.find]
+include = ["simbench"]  
+
+
 [project]
-name = "similaritytool"
+name = "simbench"
 version = "0.1.0"
 description = "Add your description here"
 readme = "README.md"
 requires-python = ">=3.13"
+license = "BSD-3-Clause"
 dependencies = [
+    "click>=8.3.0",
     "jupyter>=1.1.1",
+    "loguru>=0.7.3",
+    "numpy>=2.3.4",
+    "pandas>=2.3.3",
+    "pyarrow>=22.0.0",
+    "scikit-learn>=1.7.2",
+    "zstandard>=0.25.0",
+    "zstd>=1.5.7.2",
 ]
+authors = [
+  { name = "Oskar", email = "ohodi@dtu.dk" },
+  { name = "Christian Gram Kalhauge", email = "chrg@dtu.dk" }
+]
+classifiers = [
+    "Programming Language :: Python :: 3.13",
+    "Operating System :: OS Independent",
+]
+
+[project.scripts]
+simbench = "simbench.cli:cli"
+
+[dependency-groups]
+dev = [
+    "pytest>=8.4.2",
+]
+
+[tool.pytest.ini_options]
+markers = [
+  "slow: mark test as slow"
+]
+

@@ -7,7 +7,7 @@ import pandas as pd
 import numpy as np
 
 
-from data import File
+from .data import File
 
 import zstd
 import gzip

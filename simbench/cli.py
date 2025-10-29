@@ -3,8 +3,8 @@ import os
 import datetime as dt
 from pathlib import Path
 
-from data import File, load_parquet, write_parquet, print_md_data, collect_datafiles
-import similarity as sim
+from .data import File, load_parquet, write_parquet, print_md_data, collect_datafiles
+from . import similarity as sim
 from loguru import logger
 import pandas as pd
 
