@@ -1,5 +1,5 @@
 import pandas as pd
-from data import File
+from simbench.data import File
 
 
 def classify_best_match(

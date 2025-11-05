@@ -1,10 +1,8 @@
 from pathlib import Path
-import os
+
 import numpy as np
 import pandas as pd
-import pyarrow as pa
-import pyarrow.parquet as pq
-
+from typing import TypedDict, Required, Generic, TypeVarTuple, Tuple, NewType
 from sklearn.model_selection import train_test_split
 from loguru import logger
 
@@ -20,7 +18,7 @@ class File:
             raise ValueError(f"Path {filepath} is not a file.")
         self.path = filepath
         self.name = filepath.name
-        self.group = os.path.dirname(filepath)
+        self.group = filepath.parent # Assuming the file is in a folder named after group
 
     def __str__(self) -> str:
         return f"g:{self.group}_f:{self.name}"
@@ -36,40 +34,65 @@ class File:
             self._bytes = self.path.read_bytes()
         return self._bytes
 
+class AnalysisInfoDF(TypedDict,total=False):
+    src : Required[str]
+    target : Required[str]
+    src_label : Required[str]
+
+
+class SimilariyAnalysisDF(TypedDict,total=False):
+    tool_name : Required[str]
+    similarity : Required[float]
+    options : str # Maybe it should be a subtype
+
+
+
+# SimInfo = NewType('SimInfo',AnalysisInfoDF)
+# SimData = NewType('SimData',SimilariyAnalysisDF)
+# Shape = TypeVarTuple('Shape')
+#
+#
+# class AnalysisDataFrame(Generic[SimInfo,*Shape]): 
+#
+#     def __init__(self,info : SimInfo, data: Tuple(*Shape)):
+#         self.src = info.src
+#         self.target = info.target 
+#         self.src_label = info.src_label
+#         self._shape: Tuple[*Shape] = shape
+#
+#
+# def analyze_data(datafiles: [Path], metric: SimilariyMetric) -> AnalysisDataFrame:
+#     # Should compare all datafiles pairwise with the metric, and return in the analysis DF format
+#     pass
+
 
 def collect_datafiles(dir: Path) -> pd.DataFrame:
     # This functions expects the dir to point to a directory,
     # containing folders each containing samples with one specific label.
     data = {}
 
-    for d in os.listdir(dir):
-        d_path = os.getcwd() / dir / Path(d)
-        if d_path.is_dir():
+    for d in dir.iterdir():
+        if d.is_dir():
             # extracting the group number from the folder name
-            label = int("".join([c for c in d_path.name if c.isdigit()]))
-            logger.debug(label)
+            label = int("".join([c for c in d.name if c.isdigit()]))
+
             data[label] = [
-                str(File(Path(file.path), label))
-                for file in os.scandir(d_path)
+                File(file, label)
+                for file in d.iterdir()
                 if file.is_file() and file.name.endswith(".java")
             ]
 
     return pd.DataFrame(data)
 
 
-def str_to_path(strpath: str) -> Path:
-    return Path(strpath)
-
-
 def write_parquet(filename: Path, data: pd.DataFrame) -> None:
-    table = pa.Table.from_pandas(data)
-    pq.write_table(table, filename)
+    data.to_parquet(filename)
 
 
 def load_parquet(filename: Path) -> pd.DataFrame:
     if not filename.is_file():
         raise ValueError(f"Path {filename} is not a valid file.")
-    df = pq.read_table(filename).to_pandas()
+    df = pd.read_parquet(filename)
     return df
 
 
@@ -77,11 +100,16 @@ def print_md_data(data: pd.DataFrame) -> str:
     return data.to_markdown()
 
 
+
+
+######## DATA SPLITTING #############
+
+
 def split_classes(classdir: Path) -> (np.array, np.array):
     classes = [
         int("".join([ch for ch in c if ch.isdigit()]))
-        for c in os.listdir(classdir)
-        if (classdir / Path(c)).is_dir()
+        for c in classdir.iterdir()
+        if c.is_dir()
     ]
 
     classes_train, classes_test = train_test_split(

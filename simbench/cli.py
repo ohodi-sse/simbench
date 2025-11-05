@@ -1,5 +1,4 @@
 import click
-import os
 import datetime as dt
 from pathlib import Path
 
@@ -18,7 +17,7 @@ def get_similarities(file_from_dir: str, load_file: str) -> pd.DataFrame:
         return df
 
     if file_from_dir:
-        dirpath = Path(os.getcwd()) / file_from_dir
+        dirpath = Path.cwd() / file_from_dir
 
         data = collect_datafiles(dirpath)
 
@@ -51,8 +50,7 @@ def collect_data(dir: str, save: bool) -> pd.DataFrame:
 
 @click.command()
 @click.argument("filepath")
-def show_file(filepath: str):
-    filepath = Path(os.getcwd()) / Path(filepath)
+def show_file(filepath: Path):
     data = load_parquet(filepath)
     formatted = print_md_data(data)
     print(formatted)

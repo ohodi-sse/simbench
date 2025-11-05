@@ -35,7 +35,10 @@ class Zstd:
         out.write(zstd.compress(file, self.compression_lvl))
 
     def name(self) -> str:
-        return f"zstd_clvl{self.compression_lvl}"
+        return "zstd"
+
+    def options(self) -> str:
+        return f"compression_lvl: {self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -53,7 +56,10 @@ class Zstandard:
         out.write(zstandard.compress(file, self.compression_lvl))
 
     def name(self) -> str:
-        return f"zstandard_clvl{self.compression_lvl}"
+        return "zstandard"
+
+    def options(self) -> str:
+        return f"compression_lvl: {self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -71,7 +77,10 @@ class Zlib:
         out.write(zlib.compress(file, self.compression_lvl))
 
     def name(self) -> str:
-        return f"zlib_clvl{self.compression_lvl}"
+        return "zlib"
+
+    def options(self) -> str:
+        return f"compression_lvl: {self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -89,7 +98,10 @@ class Gzip:
         out.write(gzip.compress(file, level=self.compression_lvl))
 
     def name(self) -> str:
-        return f"gzip_clvl{self.compression_lvl}"
+        return "gzip"
+
+    def options(self) -> str:
+        return f"compression_lvl: {self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -119,7 +131,7 @@ class NCD(SimilarityMetric):
         cb = outb.getbuffer().nbytes
         cab = outab.getbuffer().nbytes
 
-        return (cab - min(ca, cb)) / max(ca, cb)
+        return 1 - (cab - min(ca, cb)) / max(ca, cb)
 
 
 def get_compressor(comp_name: str) -> Compress | None:
@@ -152,7 +164,7 @@ def get_metric(metric_name: str, compressor_name: str) -> SimilarityMetric | Non
 def get_similarities(metric: SimilarityMetric, afile: File, bfiles: [File]) -> [float]:
     similarities = []
     for bfile in bfiles:
-        similarities.append((1 - metric(afile.get_bytes(), bfile.get_bytes())))
+        similarities.append(metric(afile.get_bytes(), bfile.get_bytes()))
 
     return similarities
 
