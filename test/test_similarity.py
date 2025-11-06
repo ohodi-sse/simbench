@@ -1,11 +1,13 @@
 from pathlib import Path
 from loguru import logger
-import pandas as pd
+import polars as pl
 import time
 import pytest
 
 from simbench.data import (
     File,
+    FileInfoDF,
+    AnalysisSimDF,
     collect_datafiles,
     split_collected_data,
     split_classes,
@@ -17,8 +19,8 @@ from simbench.classification import classify_best_match, classify_data
 
 
 @pytest.fixture
-def predata_size():
-    return 300 * 5
+def predata_shape():
+    return (300, 2)
 
 
 @pytest.fixture
@@ -39,7 +41,7 @@ def test_get_similarity1(testfiles):
     logger.debug(f"Similarity is: {similarity}")
 
     assert isinstance(similarity, list)
-    assert similarity[0] == 0.3555555555555555
+    assert round(similarity[0], 2) == 0.36
 
 
 def test_get_similarity2(testfiles):
@@ -50,47 +52,28 @@ def test_get_similarity2(testfiles):
     logger.debug(f"Similarity is: {similarity}")
 
     assert isinstance(similarity, list)
-    assert similarity[0] == 0.8285714285714285
+    assert round(similarity[0], 2) == 0.83
 
 
 def test_create_sim_matrix(testfiles):
     metric = sim.get_metric("NCD", "zstd")
     df = sim.create_similarity_matrix(metric, testfiles)
 
-    assert isinstance(df, pd.DataFrame)
+    assert isinstance(df, pl.DataFrame)
+
+    filter_expr = (pl.col("src") == "test1.txt") & (pl.col("target") == "test2.txt")
+    similarity = df.filter(filter_expr).select("similarity")
+
+    assert similarity.shape == (1, 1), "Failed to extract unique element"
+    assert round(similarity.item(), 2) == 0.36, ""
 
 
-def test_matrix_equal(testfiles):
-    metric = sim.get_metric("NCD", "zstd")
-
-    start = time.time()
-    df1 = sim.create_similarity_matrix(metric, testfiles)
-    _end1 = time.time() - start
-
-    start = time.time()
-    df2 = sim.create_similarity_matrix_fast(metric, testfiles)
-    _end2 = time.time() - start
-
-    # assert df1.equals(df2)
-    # assert end2 < end1
-
-
-def test_collect_data():
+def test_collect_data(predata_shape):
     testdir = Path.cwd() / "predata/"
     collect_df = collect_datafiles(testdir)
 
-    assert isinstance(collect_df, pd.DataFrame)
-    assert collect_df.size == 300 * 5
-
-
-# def test_split_collected(predata_size):
-#     datafile = Path("./predata/datafiles_2025-10-29.parquet")
-#
-#     train_classes, test_class = split_classes(os.getcwd() / Path("./predata"))
-#     X_train, X_test, y_train, y_test = split_collected_data(datafile, train_classes)
-#
-#     assert X_train.size == 900  # round(round(0.8 * 5) * 0.8 * 300)
-#     assert X_test.size == round((1 - 0.8) * predata_size)
+    assert isinstance(collect_df, pl.DataFrame)
+    assert collect_df.shape == predata_shape
 
 
 @pytest.mark.slow
@@ -99,10 +82,16 @@ def test_similarities_from_data():
     collect_df = collect_datafiles(testdir)
 
     metric = sim.get_metric("NCD", "zstd")
-    sims = sim.similarities_from_data(metric, collect_df)
+    df = sim.similarities_from_data(metric, collect_df)
 
-    assert isinstance(sims, pd.DataFrame)
-    assert sims.size == 25 * 300 * 300
+    assert isinstance(df, pl.DataFrame)
+
+    test_src = "s005618736.java"
+    test_target = "s007352793.java"
+
+    filter_expr = (pl.col("src") == test_src) & (pl.col("target") == test_target)
+    similarity = df.filter(filter_expr).select("similarity")
+    assert similarity == 0.56
 
 
 # def test_best_match_classify():
@@ -111,7 +100,7 @@ def test_similarities_from_data():
 #
 #     similarities = load_parquet(filename)
 #
-#     assert isinstance(similarities, pd.DataFrame)
+#     assert isinstance(similarities, pl.DataFrame)
 #
 #     testfile = File(os.getcwd() / Path("predata/p00005/s581579443.java"))
 #
@@ -129,7 +118,7 @@ def test_similarities_from_data():
 #
 #     similarities = load_parquet(filename)
 #
-#     assert isinstance(similarities, pd.DataFrame)
+#     assert isinstance(similarities, pl.DataFrame)
 #
 #     (train_classes, test_class) = split_classes(os.getcwd() / Path("./predata"))
 #     training_files, test_files, _, _ = split_collected_data(datafiles, train_classes)

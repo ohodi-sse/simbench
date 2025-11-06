@@ -64,6 +64,3 @@ def cli():
 cli.add_command(get_similarities)
 cli.add_command(show_file)
 cli.add_command(collect_data)
-
-if __name__ == "__main__":
-    cli()

@@ -2,12 +2,10 @@ from abc import abstractmethod
 from dataclasses import dataclass
 import io
 from typing import Protocol
-from loguru import logger
-import pandas as pd
-import numpy as np
+import polars as pl
 
 
-from .data import File
+from .data import File, AnalysisSimDF, FileInfoDF
 
 import zstd
 import gzip
@@ -20,6 +18,7 @@ class Compress(Protocol):
     def __call__(self, file: bytes, out: io.BytesIO) -> None:
         pass
 
+    @abstractmethod
     def name(self) -> str:
         pass
 
@@ -112,6 +111,9 @@ class SimilarityMetric(Protocol):
     @abstractmethod
     def __call__(self, afile, bfile) -> float: ...
 
+    @abstractmethod
+    def name(self) -> str: ...
+
 
 @dataclass(frozen=True)
 class NCD(SimilarityMetric):
@@ -132,6 +134,9 @@ class NCD(SimilarityMetric):
         cab = outab.getbuffer().nbytes
 
         return 1 - (cab - min(ca, cb)) / max(ca, cb)
+
+    def name(self):
+        return f"NCD_{self.compressor.name}"
 
 
 def get_compressor(comp_name: str) -> Compress | None:
@@ -169,40 +174,50 @@ def get_similarities(metric: SimilarityMetric, afile: File, bfiles: [File]) -> [
     return similarities
 
 
-def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> pd.DataFrame:
+def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> AnalysisSimDF:
     data = {}
-    for file in files:
-        data[str(file)] = get_similarities(metric, file, files)
+    data["src"] = []
+    data["target"] = []
+    data["tool_name"] = []
+    data["similarity"] = []
+    # df = AnalysisSimDF()
 
-    df = pd.DataFrame(data)
-    return df
+    for src in files:
+        for target in files:
+            data["src"].append(src.name)
+            data["target"].append(target.name)
+            data["tool_name"].append(metric.name())
+            data["similarity"].append(metric(src.get_bytes(), target.get_bytes()))
 
-
-def create_similarity_matrix_fast(
-    metric: SimilarityMetric, files: [File]
-) -> pd.DataFrame:
-    labels = [str(file) for file in files]
-    # logger.debug(f"Labels: {labels}")
-    data = []
-    for i, file in enumerate(files):
-        data.extend(get_similarities(metric, file, files[i:]))
-        if i == 0:
-            dim = len(data)
-    # logger.debug(f"Data: {data}")
-
-    X = np.zeros((dim, dim))
-    X[np.triu_indices(X.shape[0], k=0)] = data
-    X = X + X.T - np.diag(np.diag(X))
-
-    dataframe = pd.DataFrame(X, columns=labels, index=labels)
-
-    return dataframe
+    return pl.DataFrame(data)
 
 
 def similarities_from_data(
-    metric: SimilarityMetric, dataframe: pd.DataFrame
-) -> pd.DataFrame:
+    metric: SimilarityMetric, dataframe: pl.DataFrame
+) -> pl.DataFrame:
     all_files = dataframe.to_numpy().flatten()
-    similarities = create_similarity_matrix_fast(metric, all_files)
+    similarities = create_similarity_matrix(metric, all_files)
 
     return similarities
+
+
+# OBSOLETE AS LONG AS WE CANNOT EXPLOIT COMMUTATIVITY
+# def create_similarity_matrix_fast(
+#     metric: SimilarityMetric, files: [File]
+# ) -> pl.DataFrame:
+#     labels = [str(file) for file in files]
+#     # logger.debug(f"Labels: {labels}")
+#     data = []
+#     for i, file in enumerate(files):
+#         data.extend(get_similarities(metric, file, files[i:]))
+#         if i == 0:
+#             dim = len(data)
+#     # logger.debug(f"Data: {data}")
+#
+#     X = np.zeros((dim, dim))
+#     X[np.triu_indices(X.shape[0], k=0)] = data
+#     X = X + X.T - np.diag(np.diag(X))
+#
+#     dataframe = pl.DataFrame(X, columns=labels, index=labels)
+#
+#     return dataframe

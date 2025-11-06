@@ -1,10 +1,10 @@
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
-from typing import TypedDict, Required, Generic, TypeVarTuple, Tuple, NewType
+import os
+import polars as pl
+from typing import TypedDict, Required  # , Generic, TypeVarTuple, Tuple, NewType
 from sklearn.model_selection import train_test_split
-from loguru import logger
 
 
 class File:
@@ -18,7 +18,9 @@ class File:
             raise ValueError(f"Path {filepath} is not a file.")
         self.path = filepath
         self.name = filepath.name
-        self.group = filepath.parent # Assuming the file is in a folder named after group
+        self.group = (
+            filepath.parent
+        )  # Assuming the file is in a folder named after group
 
     def __str__(self) -> str:
         return f"g:{self.group}_f:{self.name}"
@@ -34,17 +36,22 @@ class File:
             self._bytes = self.path.read_bytes()
         return self._bytes
 
-class AnalysisInfoDF(TypedDict,total=False):
-    src : Required[str]
-    target : Required[str]
-    src_label : Required[str]
+
+class FileInfoDF(TypedDict, total=False):
+    src: Required[str]
+    src_label: Required[str]
 
 
-class SimilariyAnalysisDF(TypedDict,total=False):
-    tool_name : Required[str]
-    similarity : Required[float]
-    options : str # Maybe it should be a subtype
+class AnalysisSimDF(TypedDict, total=False):
+    src: Required[str]
+    target: Required[str]
+    src_label: Required[str]
+    tool_name: Required[str]
+    similarity: Required[float]
+    options: str  # Maybe it should be a subtype
 
+    # def __call__(self):
+    #     return {"src": [], "target": [], "tool_name": [], "similarity": []}
 
 
 # SimInfo = NewType('SimInfo',AnalysisInfoDF)
@@ -52,11 +59,11 @@ class SimilariyAnalysisDF(TypedDict,total=False):
 # Shape = TypeVarTuple('Shape')
 #
 #
-# class AnalysisDataFrame(Generic[SimInfo,*Shape]): 
+# class AnalysisDataFrame(Generic[SimInfo,*Shape]):
 #
 #     def __init__(self,info : SimInfo, data: Tuple(*Shape)):
 #         self.src = info.src
-#         self.target = info.target 
+#         self.target = info.target
 #         self.src_label = info.src_label
 #         self._shape: Tuple[*Shape] = shape
 #
@@ -66,40 +73,46 @@ class SimilariyAnalysisDF(TypedDict,total=False):
 #     pass
 
 
-def collect_datafiles(dir: Path) -> pd.DataFrame:
+def path_to_str(dir: Path) -> str:
+    dirpath = (os.getcwd()) / dir
+    return str(dirpath)
+
+
+def collect_datafiles(dir: Path) -> FileInfoDF:
     # This functions expects the dir to point to a directory,
     # containing folders each containing samples with one specific label.
-    data = {}
+    data = {"src": [], "src_label": []}
 
     for d in dir.iterdir():
         if d.is_dir():
-            # extracting the group number from the folder name
-            label = int("".join([c for c in d.name if c.isdigit()]))
-
-            data[label] = [
-                File(file, label)
+            data["src"] = [
+                File(file)
                 for file in d.iterdir()
                 if file.is_file() and file.name.endswith(".java")
             ]
 
-    return pd.DataFrame(data)
+            data["src_label"] = [d.name for _ in range(len(data["src"]))]
+
+    return pl.DataFrame(data)
 
 
-def write_parquet(filename: Path, data: pd.DataFrame) -> None:
+def join_on_src_target():
+    pass
+
+
+def write_parquet(filename: Path, data: pl.DataFrame) -> None:
     data.to_parquet(filename)
 
 
-def load_parquet(filename: Path) -> pd.DataFrame:
+def load_parquet(filename: Path) -> pl.DataFrame:
     if not filename.is_file():
         raise ValueError(f"Path {filename} is not a valid file.")
-    df = pd.read_parquet(filename)
+    df = pl.read_parquet(filename)
     return df
 
 
-def print_md_data(data: pd.DataFrame) -> str:
+def print_md_data(data: pl.DataFrame) -> str:
     return data.to_markdown()
-
-
 
 
 ######## DATA SPLITTING #############
