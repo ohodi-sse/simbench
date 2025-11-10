@@ -1,40 +1,25 @@
-import pandas as pd
-from simbench.data import File
+import polars as pl
 
 
-def classify_best_match(
-    similarities: pd.DataFrame, training_files: [File], file: File
-) -> float:
+def classify_best_match(similarities: pl.DataFrame, src: str) -> (str, float):
     # Takes a file with all similarities and extracts the column corresponding to the file in question
-    # It should limit itself to compare with files in the training set
-    #
-    # print(f"File column: {file_column}")
-    # training_filtered = file_column[training_files]
-    # file_column_filtered = similarities.loc[[training_files], [str(file)]]
 
-    file_column = similarities.loc[[str(file)], training_files]
-    print(file_column)
-    best_match = max(file_column.to_numpy().max())
+    filter_expr = (pl.col("src") == src) & (pl.col("target") != src)
+    file_column = similarities.filter(filter_expr).sort("similarity", descending=True)
 
-    return best_match
+    best_match_score = file_column.select("similarity").item(0, 0)
+    best_match_name = file_column.select("target").item(0, 0)
+
+    return (best_match_name, best_match_score)
 
 
-def classify_data(
-    similarities: pd.DataFrame,
-    classifier,
-    training_files: pd.DataFrame,
-    test_files: pd.DataFrame,
-) -> pd.DataFrame:
-    classification_table = {}
-    indexes = ["true class", "classified as"]
-    for testfile in test_files:
-        label = classify_best_match(
-            similarities, training_files, testfile
-        )  # should use generic classifier of type callable
-        truelabel = testfile.group
+def classify_knn_match(similarities: pl.DataFrame, src: str, k: int) -> [(str, float)]:
+    # Takes a file with all similarities and extracts the column corresponding to the file in question
 
-        classification_table[str(testfile)] = [truelabel, label]
+    filter_expr = (pl.col("src") == src) & (pl.col("target") != src)
+    file_column = similarities.filter(filter_expr).sort("similarity", descending=True)
 
-    df = pd.DataFrame(classification_table, index=indexes)
+    best_match_score = [file_column.select("similarity").item(i, 0) for i in range(k)]
+    best_match_name = [file_column.select("target").item(i, 0) for i in range(k)]
 
-    return df
+    return (best_match_name, best_match_score)

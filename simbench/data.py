@@ -1,7 +1,6 @@
 from pathlib import Path
 
 import numpy as np
-import os
 import polars as pl
 from typing import TypedDict, Required  # , Generic, TypeVarTuple, Tuple, NewType
 from sklearn.model_selection import train_test_split
@@ -23,7 +22,7 @@ class File:
         )  # Assuming the file is in a folder named after group
 
     def __str__(self) -> str:
-        return f"g:{self.group}_f:{self.name}"
+        return f"g:{self.group}_n:{self.name}"
 
     def parse(str) -> (str, str):
         args = str.split("_")
@@ -73,11 +72,6 @@ class AnalysisSimDF(TypedDict, total=False):
 #     pass
 
 
-def path_to_str(dir: Path) -> str:
-    dirpath = (os.getcwd()) / dir
-    return str(dirpath)
-
-
 def collect_datafiles(dir: Path) -> FileInfoDF:
     # This functions expects the dir to point to a directory,
     # containing folders each containing samples with one specific label.
@@ -85,13 +79,14 @@ def collect_datafiles(dir: Path) -> FileInfoDF:
 
     for d in dir.iterdir():
         if d.is_dir():
-            data["src"] = [
+            dir_srcs = [
                 File(file)
                 for file in d.iterdir()
                 if file.is_file() and file.name.endswith(".java")
             ]
 
-            data["src_label"] = [d.name for _ in range(len(data["src"]))]
+            data["src"].extend(dir_srcs)
+            data["src_label"].extend([d.name for _ in range(len(dir_srcs))])
 
     return pl.DataFrame(data)
 
@@ -111,8 +106,11 @@ def load_parquet(filename: Path) -> pl.DataFrame:
     return df
 
 
-def print_md_data(data: pl.DataFrame) -> str:
-    return data.to_markdown()
+def get_similarity(data: pl.DataFrame, src: str, target: str) -> float:
+    filter_expr = (pl.col("src") == src) & (pl.col("target") == target)
+    similarity = data.filter(filter_expr).select("similarity")
+
+    return similarity.item()
 
 
 ######## DATA SPLITTING #############

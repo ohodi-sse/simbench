@@ -2,16 +2,15 @@ import click
 import datetime as dt
 from pathlib import Path
 
-from .data import File, load_parquet, write_parquet, print_md_data, collect_datafiles
+from .data import load_parquet, collect_datafiles
 from . import similarity as sim
-from loguru import logger
-import pandas as pd
+import polars as pl
 
 
 @click.command()
 @click.option("--load_file")
 @click.option("--file_from_dir")
-def get_similarities(file_from_dir: str, load_file: str) -> pd.DataFrame:
+def get_similarities(file_from_dir: str, load_file: str) -> pl.DataFrame:
     if load_file:
         df = load_parquet(Path(load_file))
         return df
@@ -27,33 +26,35 @@ def get_similarities(file_from_dir: str, load_file: str) -> pd.DataFrame:
         metric = sim.get_metric("NCD", "zstd")
         df = sim.similarities_from_data(metric, data)
 
-        write_parquet(analysis_file, df)
+        df.write_parquet(analysis_file)
         return df
 
 
 @click.command()
 @click.argument("dir")
-@click.option("--save", default=False, help="Writes the collected data to a file")
-def collect_data(dir: str, save: bool) -> pd.DataFrame:
-    dirpath = Path(dir)
-    df = collect_datafiles(dirpath)
+@click.option("--save", help="Writes the collected data to a file")
+def collect_data(dir: str, save) -> pl.DataFrame:
+    dirpath = Path.cwd() / Path(dir)
+    files_to_analyze = collect_datafiles(dirpath)
 
     time = dt.datetime.now().strftime("%Y-%m-%d")
-    data_file = dirpath / f"datafiles_{time}.parquet"
+    data_filepath = Path.cwd() / f"analyses/similarities_{time}.parquet"
 
+    metric = sim.get_metric("NCD", "zstd")
+    similarity_df = sim.similarities_from_data(metric, files_to_analyze)
     if save:
-        write_parquet(data_file, df)
-        return df
+        similarity_df.write_parquet(data_filepath.resolve())
+        return similarity_df
     else:
-        return df
+        print(similarity_df)
+        return similarity_df
 
 
 @click.command()
 @click.argument("filepath")
-def show_file(filepath: Path):
-    data = load_parquet(filepath)
-    formatted = print_md_data(data)
-    print(formatted)
+def show_file(filepath: str):
+    data = load_parquet(Path(filepath))
+    print(data)
 
 
 @click.group()

@@ -5,7 +5,7 @@ from typing import Protocol
 import polars as pl
 
 
-from .data import File, AnalysisSimDF, FileInfoDF
+from .data import File, AnalysisSimDF
 
 import zstd
 import gzip
@@ -175,12 +175,9 @@ def get_similarities(metric: SimilarityMetric, afile: File, bfiles: [File]) -> [
 
 
 def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> AnalysisSimDF:
-    data = {}
-    data["src"] = []
-    data["target"] = []
-    data["tool_name"] = []
-    data["similarity"] = []
-    # df = AnalysisSimDF()
+    data = {"src": [], "target": [], "tool_name": [], "similarity": []}
+
+    assert isinstance(files[0], File)
 
     for src in files:
         for target in files:
@@ -192,10 +189,9 @@ def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> Analysi
     return pl.DataFrame(data)
 
 
-def similarities_from_data(
-    metric: SimilarityMetric, dataframe: pl.DataFrame
-) -> pl.DataFrame:
-    all_files = dataframe.to_numpy().flatten()
+def similarities_from_data(metric: SimilarityMetric, df: pl.DataFrame) -> pl.DataFrame:
+    all_files = pl.Series(df.select("src")).to_list()
+    print(all_files)
     similarities = create_similarity_matrix(metric, all_files)
 
     return similarities
