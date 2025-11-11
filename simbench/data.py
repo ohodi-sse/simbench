@@ -4,6 +4,7 @@ import numpy as np
 import polars as pl
 from typing import TypedDict, Required  # , Generic, TypeVarTuple, Tuple, NewType
 from sklearn.model_selection import train_test_split
+from loguru import logger
 
 
 class File:
@@ -49,45 +50,24 @@ class AnalysisSimDF(TypedDict, total=False):
     similarity: Required[float]
     options: str  # Maybe it should be a subtype
 
-    # def __call__(self):
-    #     return {"src": [], "target": [], "tool_name": [], "similarity": []}
-
-
-# SimInfo = NewType('SimInfo',AnalysisInfoDF)
-# SimData = NewType('SimData',SimilariyAnalysisDF)
-# Shape = TypeVarTuple('Shape')
-#
-#
-# class AnalysisDataFrame(Generic[SimInfo,*Shape]):
-#
-#     def __init__(self,info : SimInfo, data: Tuple(*Shape)):
-#         self.src = info.src
-#         self.target = info.target
-#         self.src_label = info.src_label
-#         self._shape: Tuple[*Shape] = shape
-#
-#
-# def analyze_data(datafiles: [Path], metric: SimilariyMetric) -> AnalysisDataFrame:
-#     # Should compare all datafiles pairwise with the metric, and return in the analysis DF format
-#     pass
-
 
 def collect_datafiles(dir: Path) -> FileInfoDF:
     # This functions expects the dir to point to a directory,
     # containing folders each containing samples with one specific label.
     data = {"src": [], "src_label": []}
 
-    for d in dir.iterdir():
+    logger.debug(f"Collecting data from {str(dir)}")
+    dirs = dir.iterdir()
+    assert dirs, f"Failed to find any subdirectories in {dir}"
+
+    for d in dirs:
         if d.is_dir():
-            dir_srcs = [
-                File(file).name
-                for file in d.iterdir()
-                if file.is_file() and file.name.endswith(".java")
-            ]
+            dir_srcs = [File(file) for file in d.iterdir() if file.is_file()]
 
             data["src"].extend(dir_srcs)
             data["src_label"].extend([d.name for _ in range(len(dir_srcs))])
 
+    assert data["src"], "Failed to collect any files in the specified directory"
     return pl.DataFrame(data)
 
 

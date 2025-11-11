@@ -4,7 +4,7 @@ import io
 from typing import Protocol
 import polars as pl
 
-
+from pathlib import Path
 from .data import File, AnalysisSimDF
 
 import zstd
@@ -94,7 +94,7 @@ class Gzip:
         assert self.compression_lvl in range(1, 10), (
             f"Compression level {self.compression_lvl} is out of range"
         )
-        out.write(gzip.compress(file, level=self.compression_lvl))
+        out.write(gzip.compress(file, self.compression_lvl))
 
     def name(self) -> str:
         return "gzip"
@@ -191,8 +191,8 @@ def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> Analysi
 
 
 def similarities_from_data(metric: SimilarityMetric, df: pl.DataFrame) -> pl.DataFrame:
-    all_files = pl.Series(df.select("src")).to_list()
-    similarities = create_similarity_matrix(metric, all_files)
+    files = pl.Series(df.select("src")).to_list()
+    similarities = create_similarity_matrix(metric, files)
 
     return similarities
 

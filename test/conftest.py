@@ -4,7 +4,7 @@ from pathlib import Path
 from simbench.data import File, collect_datafiles
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def predata_shape():
     return (5 * 300, 2)
 
@@ -16,11 +16,11 @@ def testdir():
 
 @pytest.fixture(scope="module")
 def testfiles(testdir):
-    testfiles = [File(f) for f in testdir.iterdir() if f.name.endswith(".txt")]
+    testfiles = [File(f) for f in testdir.iterdir() if f.name.endswith(".java")]
     return testfiles
 
 
-@pytest.fixture
+@pytest.fixture(scope="module")
 def analysisfile():
     return Path("analyses/test_analysis.parquet")
 
@@ -29,3 +29,8 @@ def analysisfile():
 def datafilesDF():
     testdir = Path.cwd() / "predata/"
     return collect_datafiles(testdir)
+
+
+@pytest.fixture(params=["zstd", "zstandard", "gzip"])
+def compressorname(request):
+    return request.param

@@ -1,5 +1,7 @@
 import polars as pl
 from .data import get_label
+from collections import Counter
+from loguru import logger
 
 
 class Classication:
@@ -35,5 +37,8 @@ def classify_knn_match(similarities: pl.DataFrame, src: str, k: int) -> [Classic
     scores = [file_column.select("similarity").item(i, 0) for i in range(k)]
     names = [file_column.select("target").item(i, 0) for i in range(k)]
     labels = [file_column.select("").item(i, 0) for i in range(k)]
+    label_counts = Counter(labels)
 
-    return (best_match_name, best_match_score)
+    logger.debug(label_counts)
+
+    k_classifications = [Classication(names[i], labels[i], scores[i]) for i in range(k)]
