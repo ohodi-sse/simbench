@@ -9,26 +9,26 @@ from sklearn.model_selection import train_test_split
 class File:
     name: str
     path: Path
-    group: int = -1
+    label: str = ""
     _bytes: bytes = None
 
-    def __init__(self, filepath: Path, group: int = -1):
+    def __init__(self, filepath: Path):
         if not filepath.is_file():
             raise ValueError(f"Path {filepath} is not a file.")
         self.path = filepath
         self.name = filepath.name
-        self.group = (
-            filepath.parent
+        self.label = (
+            filepath.parent.stem
         )  # Assuming the file is in a folder named after group
 
     def __str__(self) -> str:
-        return f"g:{self.group}_n:{self.name}"
+        return f"{self.name}"
 
     def parse(str) -> (str, str):
         args = str.split("_")
-        group = args[0][2:]
+        label = args[0][2:]
         name = args[1][2:]
-        return group, name
+        return label, name
 
     def get_bytes(self) -> bytes:
         if self._bytes is None:
@@ -80,7 +80,7 @@ def collect_datafiles(dir: Path) -> FileInfoDF:
     for d in dir.iterdir():
         if d.is_dir():
             dir_srcs = [
-                File(file)
+                File(file).name
                 for file in d.iterdir()
                 if file.is_file() and file.name.endswith(".java")
             ]
@@ -111,6 +111,15 @@ def get_similarity(data: pl.DataFrame, src: str, target: str) -> float:
     similarity = data.filter(filter_expr).select("similarity")
 
     return similarity.item()
+
+
+def get_label(data: pl.DataFrame, src: str) -> str:
+    filter_expr = pl.col("src") == src
+    label_col = data.filter(filter_expr).select("src_label")
+    assert not label_col.is_empty(), f"Failed to find a label for {src} in {data}"
+    label = label_col.item(0, 0)
+
+    return label
 
 
 ######## DATA SPLITTING #############

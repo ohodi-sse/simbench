@@ -6,62 +6,58 @@ from .data import load_parquet, collect_datafiles
 from . import similarity as sim
 import polars as pl
 
-
-@click.command()
-@click.option("--load_file")
-@click.option("--file_from_dir")
-def get_similarities(file_from_dir: str, load_file: str) -> pl.DataFrame:
-    if load_file:
-        df = load_parquet(Path(load_file))
-        return df
-
-    if file_from_dir:
-        dirpath = Path.cwd() / file_from_dir
-
-        data = collect_datafiles(dirpath)
-
-        time = dt.datetime.now().strftime("%Y-%m-%d_%H:%M")
-        analysis_file = dirpath / f"similarities_{time}.parquet"
-
-        metric = sim.get_metric("NCD", "zstd")
-        df = sim.similarities_from_data(metric, data)
-
-        df.write_parquet(analysis_file)
-        return df
+from loguru import logger
 
 
 @click.command()
-@click.argument("dir")
-@click.option("--save", help="Writes the collected data to a file")
-def collect_data(dir: str, save) -> pl.DataFrame:
+@click.option("-lf", "--load_file", help="")
+def get_similarities(load_file: str) -> pl.DataFrame:
+    data = load_parquet(Path(load_file))
+    logger.info(data)
+
+
+@click.command()
+@click.option(
+    "-d",
+    "--dir",
+    help="Specify path to the data. It loads files in all subdirectories, and labels files according to their subdirectory",
+)
+@click.option(
+    "-c",
+    "--compressor",
+    default="zstd",
+    help="Choose compressor: zstd, zstandard, gzip",
+)
+@click.option(
+    "-w", "--write", default=False, help="Writes the collected data to a file"
+)
+def collect_data(dir: str, write: bool, compressor: str) -> pl.DataFrame:
+    logger.debug("Instantiating similarity metric")
+
+    metric = sim.get_metric("NCD", compressor)
+
     dirpath = Path.cwd() / Path(dir)
+    logger.debug("Collecting files for analysis")
     files_to_analyze = collect_datafiles(dirpath)
 
     time = dt.datetime.now().strftime("%Y-%m-%d")
     data_filepath = Path.cwd() / f"analyses/similarities_{time}.parquet"
 
-    metric = sim.get_metric("NCD", "zstd")
+    logger.debug(f"Calculating similarities for {metric.name()}")
     similarity_df = sim.similarities_from_data(metric, files_to_analyze)
-    if save:
+    if write:
         similarity_df.write_parquet(data_filepath.resolve())
         return similarity_df
     else:
-        print(similarity_df)
+        logger.info(similarity_df)
         return similarity_df
 
 
-@click.command()
-@click.argument("filepath")
-def show_file(filepath: str):
-    data = load_parquet(Path(filepath))
-    print(data)
-
-
 @click.group()
+@click.option()
 def cli():
     pass
 
 
 cli.add_command(get_similarities)
-cli.add_command(show_file)
 cli.add_command(collect_data)

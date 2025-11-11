@@ -136,10 +136,10 @@ class NCD(SimilarityMetric):
         return 1 - (cab - min(ca, cb)) / max(ca, cb)
 
     def name(self):
-        return f"NCD_{self.compressor.name}"
+        return f"NCD_{self.compressor.name()}"
 
 
-def get_compressor(comp_name: str) -> Compress | None:
+def parse_compressor(comp_name: str) -> Compress | None:
     match comp_name:
         case "zstd":
             return Zstd(compression_lvl=1)
@@ -162,7 +162,7 @@ def metric(metric_name: str, compressor: Compress) -> SimilarityMetric | None:
 
 
 def get_metric(metric_name: str, compressor_name: str) -> SimilarityMetric | None:
-    comp = get_compressor(compressor_name)
+    comp = parse_compressor(compressor_name)
     return metric(metric_name, comp)
 
 
@@ -175,13 +175,14 @@ def get_similarities(metric: SimilarityMetric, afile: File, bfiles: [File]) -> [
 
 
 def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> AnalysisSimDF:
-    data = {"src": [], "target": [], "tool_name": [], "similarity": []}
+    data = {"src": [], "src_label": [], "target": [], "tool_name": [], "similarity": []}
 
     assert isinstance(files[0], File)
 
     for src in files:
         for target in files:
             data["src"].append(src.name)
+            data["src_label"].append(src.label)
             data["target"].append(target.name)
             data["tool_name"].append(metric.name())
             data["similarity"].append(metric(src.get_bytes(), target.get_bytes()))
@@ -191,7 +192,6 @@ def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> Analysi
 
 def similarities_from_data(metric: SimilarityMetric, df: pl.DataFrame) -> pl.DataFrame:
     all_files = pl.Series(df.select("src")).to_list()
-    print(all_files)
     similarities = create_similarity_matrix(metric, all_files)
 
     return similarities

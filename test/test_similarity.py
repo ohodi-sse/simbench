@@ -8,10 +8,12 @@ from simbench.data import (
     collect_datafiles,
     load_parquet,
     get_similarity,
+    get_label,
 )
 
 import simbench.similarity as sim
 from simbench.classification import classify_best_match
+import simbench.cli as cli
 
 
 @pytest.fixture
@@ -19,16 +21,26 @@ def predata_shape():
     return (5 * 300, 2)
 
 
-@pytest.fixture
-def testfiles():
-    dirpath = Path.cwd() / "./test/testfiles/"
-    testfiles = [File(f) for f in dirpath.iterdir() if f.name.endswith(".txt")]
+@pytest.fixture(scope="module")
+def testdir():
+    return Path.cwd() / "./test/testfiles/"
+
+
+@pytest.fixture(scope="module")
+def testfiles(testdir):
+    testfiles = [File(f) for f in testdir.iterdir() if f.name.endswith(".txt")]
     return testfiles
 
 
 @pytest.fixture
 def analysisfile():
     return Path("analyses/test_analysis.parquet")
+
+
+@pytest.fixture(scope="module")
+def datafilesDF():
+    testdir = Path.cwd() / "predata/"
+    return collect_datafiles(testdir)
 
 
 def test_compressor():
@@ -91,16 +103,25 @@ def test_get_similarity(analysisfile):
 
 
 @pytest.mark.slow
-def test_similarities_from_data():
-    testdir = Path.cwd() / "predata/"
-    collect_df = collect_datafiles(testdir)
-
-    assert isinstance(collect_df, pl.DataFrame), "Analysis data frame is malformed"
+def test_similarities_from_data(datafilesDF):
+    assert isinstance(datafilesDF, pl.DataFrame), "Analysis data frame is malformed"
 
     metric = sim.get_metric("NCD", "zstd")
-    df = sim.similarities_from_data(metric, collect_df)
+    df = sim.similarities_from_data(metric, datafilesDF)
 
     assert isinstance(df, pl.DataFrame), "Similarity dataframe is malformed"
+
+
+def test_get_label(analysisfile, datafilesDF):
+    test_src = "s005618736.java"
+    similarities = load_parquet(analysisfile)
+
+    assert isinstance(similarities, pl.DataFrame)
+
+    label = get_label(similarities, test_src)
+    ref_label = datafilesDF.filter(pl.col("src") == test_src).select("src_label").item()
+
+    assert label == ref_label
 
 
 def test_best_match_classify(analysisfile):
@@ -109,38 +130,13 @@ def test_best_match_classify(analysisfile):
 
     assert isinstance(similarities, pl.DataFrame)
 
-    matchfile, matchscore = classify_best_match(similarities, test_src)
+    classification = classify_best_match(similarities, test_src)
 
-    assert isinstance(matchscore, float)
-    assert matchfile != test_src, "Best match is the file itself"
+    assert classification.name != test_src, "Best match is the file itself"
+    assert classification.labelled_as == "p00001"
 
 
-# def test_classify():
-#     filename = Path("predata/similarities_2025-10-29_11:09.parquet")
-#     datafiles = Path("./predata/datafiles_2025-10-29.parquet")
-#
-#     similarities = load_parquet(filename)
-#
-#     assert isinstance(similarities, pl.DataFrame)
-#
-#     (train_classes, test_class) = split_classes(os.getcwd() / Path("./predata"))
-#     training_files, test_files, _, _ = split_collected_data(datafiles, train_classes)
-#
-#     classfications = classify_data(similarities, "dummy", training_files, test_files)
-#
-#     print(classfications)
-#
-#     assert False
-#
+def test_cli_collect_data(testdir):
+    similarities = cli.collect_data(dir=testdir)
 
-# def test_dataframe_model1():
-#     testdict = {
-#         "src": "test1",
-#         "target": "test2",
-#         "src_label": "group1",
-#         "tool_name": "NCD",
-#         "similarity": 0.5,
-#     }
-#     testclass = AnalysisDataFrame(testdict)
-#
-#     assert isinstance(testclass, AnalysisDataFrame)
+    assert isinstance(similarities, pl.DataFrame)
