@@ -44,10 +44,10 @@ def test_create_sim_matrix(testfiles):
     metric = sim.get_metric("NCD", "zstd")
     df = sim.create_similarity_matrix(metric, testfiles)
 
-    assert isinstance(df, pl.DataFrame)
+    assert isinstance(df, pl.LazyFrame)
 
     filter_expr = (pl.col("src") == "test1.java") & (pl.col("target") == "test2.java")
-    similarity = df.filter(filter_expr).select("similarity")
+    similarity = df.filter(filter_expr).select("similarity").collect()
 
     assert similarity.shape == (1, 1), "Failed to extract unique element"
     assert round(similarity.item(), 2) == 0.36, ""
@@ -55,19 +55,17 @@ def test_create_sim_matrix(testfiles):
 
 def test_collect_data(predata_shape):
     testdir = Path.cwd() / "predata/"
-    collect_df = collect_datafiles(testdir)
+    collect_df = collect_datafiles(testdir).collect()
 
     assert isinstance(collect_df, pl.DataFrame)
     assert collect_df.shape == predata_shape
 
 
-def test_get_similarity(analysisfile):
-    data = load_parquet(analysisfile)
-
+def test_get_similarity(similaritiesfile):
     test_src = "s005618736.java"
     test_target = "s007352793.java"
 
-    similarity = get_similarity(data, test_src, test_target)
+    similarity = get_similarity(similaritiesfile, test_src, test_target)
 
     assert round(similarity, 2) == 0.29, (
         "Failed to assert the similarity of two test files"
@@ -84,20 +82,19 @@ def test_parse_compressor(compressorname):
 
 @pytest.mark.slow
 def test_similarities_from_data(datafilesDF):
-    assert isinstance(datafilesDF, pl.DataFrame), "Analysis data frame is malformed"
+    assert isinstance(datafilesDF, pl.LazyFrame), "Analysis data frame is malformed"
 
     metric = sim.get_metric("NCD", "zstd")
     df = sim.similarities_from_data(metric, datafilesDF)
 
-    assert isinstance(df, pl.DataFrame), "Similarity dataframe is malformed"
+    assert isinstance(df.collect(), pl.DataFrame), "Similarity dataframe is malformed"
 
 
-def test_get_label(analysisfile, datafilesDF):
+def test_get_label(similaritiesfile, datafilesDF):
     test_src = "s005618736.java"
-    similarities = load_parquet(analysisfile)
 
-    assert isinstance(similarities, pl.DataFrame)
+    assert isinstance(similaritiesfile, pl.LazyFrame)
 
-    label = get_label(similarities, test_src)
+    label = get_label(datafilesDF, test_src)
 
     assert label == "p00001"

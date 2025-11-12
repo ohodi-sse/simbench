@@ -1,12 +1,14 @@
 import pytest
 from pathlib import Path
+from simbench.data import load_parquet
+from loguru import logger
 
 from simbench.data import File, collect_datafiles
 
 
 @pytest.fixture(scope="module")
 def predata_shape():
-    return (5 * 300, 2)
+    return (5 * 300, 3)
 
 
 @pytest.fixture(scope="module")
@@ -16,13 +18,18 @@ def testdir():
 
 @pytest.fixture(scope="module")
 def testfiles(testdir):
-    testfiles = [File(f) for f in testdir.iterdir() if f.name.endswith(".java")]
+    testfiles = [
+        File(filepath.name, testdir.name, filepath)
+        for filepath in testdir.iterdir()
+        if filepath.name.endswith(".java")
+    ]
     return testfiles
 
 
 @pytest.fixture(scope="module")
-def analysisfile():
-    return Path("analyses/test_analysis.parquet")
+def similaritiesfile():
+    path = Path("analyses/test_analysis.parquet")
+    return load_parquet(path)
 
 
 @pytest.fixture(scope="module")
@@ -34,3 +41,17 @@ def datafilesDF():
 @pytest.fixture(params=["zstd", "zstandard", "gzip"])
 def compressorname(request):
     return request.param
+
+
+@pytest.fixture(scope="module")
+def choose_test_data():
+    import random
+
+    datapath = Path.cwd() / "data/Project_CodeNet_Java250/"
+    classes = [d.name for d in datapath.iterdir()]
+
+    assert len(classes) == 250, "There should be 250 testclasses"
+    random.seed(5)  # original seed is 5
+    sample_data = random.sample(classes, 5)
+
+    return sample_data

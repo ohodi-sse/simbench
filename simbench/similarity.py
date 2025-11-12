@@ -177,7 +177,9 @@ def get_similarities(metric: SimilarityMetric, afile: File, bfiles: [File]) -> [
 def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> AnalysisSimDF:
     data = {"src": [], "src_label": [], "target": [], "tool_name": [], "similarity": []}
 
-    assert isinstance(files[0], File)
+    assert isinstance(files[0], File), (
+        "Can only create similarity matrix from File list"
+    )
 
     for src in files:
         for target in files:
@@ -187,11 +189,12 @@ def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> Analysi
             data["tool_name"].append(metric.name())
             data["similarity"].append(metric(src.get_bytes(), target.get_bytes()))
 
-    return pl.DataFrame(data)
+    return pl.LazyFrame(data)
 
 
-def similarities_from_data(metric: SimilarityMetric, df: pl.DataFrame) -> pl.DataFrame:
-    files = pl.Series(df.select("src")).to_list()
+def similarities_from_data(metric: SimilarityMetric, df: pl.LazyFrame) -> pl.LazyFrame:
+    file_paths = pl.Series(df.select("src_file").collect()).to_list()
+    files = [File(fp.name, fp.parent.stem, fp) for fp in file_paths]
     similarities = create_similarity_matrix(metric, files)
 
     return similarities

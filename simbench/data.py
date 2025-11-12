@@ -13,23 +13,20 @@ class File:
     label: str = ""
     _bytes: bytes = None
 
-    def __init__(self, filepath: Path):
+    def __init__(self, name, label, filepath: Path):
         if not filepath.is_file():
             raise ValueError(f"Path {filepath} is not a file.")
+        assert name == filepath.name, "File name must match the final part of the path"
+        assert label == filepath.parent.stem, (
+            "Label must match the parent directory of the file"
+        )
+
+        self.name = name
+        self.label = label
         self.path = filepath
-        self.name = filepath.name
-        self.label = (
-            filepath.parent.stem
-        )  # Assuming the file is in a folder named after group
 
     def __str__(self) -> str:
         return f"{self.name}"
-
-    def parse(str) -> (str, str):
-        args = str.split("_")
-        label = args[0][2:]
-        name = args[1][2:]
-        return label, name
 
     def get_bytes(self) -> bytes:
         if self._bytes is None:
@@ -54,7 +51,7 @@ class AnalysisSimDF(TypedDict, total=False):
 def collect_datafiles(dir: Path) -> FileInfoDF:
     # This functions expects the dir to point to a directory,
     # containing folders each containing samples with one specific label.
-    data = {"src": [], "src_label": []}
+    data = {"src": [], "src_label": [], "src_file": []}
 
     logger.debug(f"Collecting data from {str(dir)}")
     dirs = dir.iterdir()
@@ -62,42 +59,48 @@ def collect_datafiles(dir: Path) -> FileInfoDF:
 
     for d in dirs:
         if d.is_dir():
-            dir_srcs = [File(file) for file in d.iterdir() if file.is_file()]
+            dir_srcs = [filepath for filepath in d.iterdir() if filepath.is_file()]
 
-            data["src"].extend(dir_srcs)
-            data["src_label"].extend([d.name for _ in range(len(dir_srcs))])
+            data["src"].extend([file.name for file in dir_srcs])
+            data["src_label"].extend([file.parent.stem for file in dir_srcs])
+            data["src_file"].extend(dir_srcs)
 
     assert data["src"], "Failed to collect any files in the specified directory"
-    return pl.DataFrame(data)
+    return pl.LazyFrame(data)
 
 
 def join_on_src_target():
     pass
 
 
-def write_parquet(filename: Path, data: pl.DataFrame) -> None:
+def write_parquet(filename: Path, data: pl.LazyFrame) -> None:
     data.to_parquet(filename)
 
 
-def load_parquet(filename: Path) -> pl.DataFrame:
+def load_parquet(filename: Path) -> pl.LazyFrame:
     if not filename.is_file():
         raise ValueError(f"Path {filename} is not a valid file.")
-    df = pl.read_parquet(filename)
+    df = pl.scan_parquet(filename)
     return df
 
 
-def get_similarity(data: pl.DataFrame, src: str, target: str) -> float:
+def get_similarity(data: pl.LazyFrame, src: str, target: str) -> float:
     filter_expr = (pl.col("src") == src) & (pl.col("target") == target)
-    similarity = data.filter(filter_expr).select("similarity")
+    similarity = data.filter(filter_expr).select("similarity").collect()
 
     return similarity.item()
 
 
-def get_label(data: pl.DataFrame, src: str) -> str:
+def get_label(data_overview: pl.LazyFrame, src: str) -> str:
     filter_expr = pl.col("src") == src
-    label_col = data.filter(filter_expr).select("src_label")
-    assert not label_col.is_empty(), f"Failed to find a label for {src} in {data}"
-    label = label_col.item(0, 0)
+    file_col = data_overview.filter(filter_expr).select("src_label").collect()
+    assert not file_col.is_empty(), (
+        f"Failed to find a label for {src} in {data_overview}"
+    )
+
+    label = file_col.item(0, 0)
+
+    assert isinstance(label, str), "get_label must return a string"
 
     return label
 

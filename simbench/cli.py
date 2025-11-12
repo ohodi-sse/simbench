@@ -46,6 +46,9 @@ def collect_data(dir: str, write: bool, compressor: str) -> pl.DataFrame:
     logger.debug(f"Collecting files for analysis from {dirpath}")
     files_to_analyze = collect_datafiles(dirpath)
 
+    # files_to_analyze.write_parquet(
+    #     (Path.cwd() / "analyses/datafile_overview.parquet").resolve()
+    # )
     logger.debug(f"Calculating similarities for {metric.name()}")
     similarity_df = sim.similarities_from_data(metric, files_to_analyze)
 
@@ -53,11 +56,17 @@ def collect_data(dir: str, write: bool, compressor: str) -> pl.DataFrame:
     if write:
         data_filepath = Path.cwd() / f"analyses/similarities_{metric.name()}.parquet"
         logger.info(f"Writing to {str(data_filepath)}")
-        similarity_df.write_parquet(data_filepath.resolve())
+        similarity_df.collect().write_parquet(data_filepath.resolve())
     else:
-        click.echo(similarity_df)
+        click.echo(similarity_df.collect())
 
     logger.info("Done")
+
+
+def write_data_overview():
+    dataframe = {"src": [], "src_label": [], "src_path": []}
+
+    data = collect_data()
 
 
 cli.add_command(get_similarities)
