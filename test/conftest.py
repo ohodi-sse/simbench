@@ -1,22 +1,21 @@
 import pytest
 from pathlib import Path
 from simbench.data import load_parquet
-from loguru import logger
 
 from simbench.data import File, collect_datafiles
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def predata_shape():
     return (5 * 300, 3)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def testdir():
     return Path.cwd() / "./test/testfiles/"
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def testfiles(testdir):
     testfiles = [
         File(filepath.name, testdir.name, filepath)
@@ -26,13 +25,13 @@ def testfiles(testdir):
     return testfiles
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def similaritiesfile():
     path = Path("analyses/test_analysis.parquet")
     return load_parquet(path)
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def datafilesDF():
     testdir = Path.cwd() / "predata/"
     return collect_datafiles(testdir)
@@ -43,7 +42,7 @@ def compressorname(request):
     return request.param
 
 
-@pytest.fixture(scope="module")
+@pytest.fixture(scope="session")
 def choose_test_data():
     import random
 
