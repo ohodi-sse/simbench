@@ -9,6 +9,7 @@ from simbench.classification import (
     create_classification_dataframe,
     check_classification,
     get_confusion_matrix,
+    get_performance_overview,
 )
 
 
@@ -80,6 +81,22 @@ def test_confusion_matrix(similaritiesfile):
 
     assert total_sum == confusion_df.collect().height * 1500, (
         "Each row should label all data of the set"
+    )
+
+
+def test_performance_overview(similaritiesfile):
+    class_df = create_classification_dataframe(similaritiesfile, 1)
+
+    perf_df = get_performance_overview(class_df)
+
+    assert isinstance(perf_df, pl.LazyFrame)
+
+    perf_collect = perf_df.collect()
+    logger.debug(perf_collect)
+    scores = [perf_collect.select(col).item() for col in ["Acc", "Prec", "Rec", "F1"]]
+
+    assert [0 <= score and score <= 1 for score in scores], (
+        "Scores must be between 0 and 1"
     )
 
 

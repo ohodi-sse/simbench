@@ -126,31 +126,54 @@ def get_confusion_matrix(class_df: pl.LazyFrame) -> pl.LazyFrame:
             "class": classes,
             "true_pos": true_pos,
             "true_neg": true_neg,
-            "false_neg": false_neg,
             "false_pos": false_pos,
+            "false_neg": false_neg,
         }
     )
 
 
-def get_recall(true_positives, false_negatives):
-    return (
-        true_positives / (true_positives + false_negatives)
-        if (true_positives + false_negatives) > 0
-        else 0
+def get_performance_overview(class_df: pl.LazyFrame) -> pl.LazyFrame:
+    confusion_mat = get_confusion_matrix(class_df)
+
+    summed_cols = confusion_mat.select(
+        "true_pos", "true_neg", "false_pos", "false_neg"
+    ).sum()
+
+    true_pos = summed_cols.select("true_pos").collect().item()
+    true_neg = summed_cols.select("true_neg").collect().item()
+    false_pos = summed_cols.select("false_pos").collect().item()
+    false_neg = summed_cols.select("false_neg").collect().item()
+
+    total_population = sum(
+        [summed_cols.collect().select(c).item() for c in summed_cols.collect().columns]
     )
 
+    # Accuracy
+    accuracy = (true_pos + true_neg) / total_population
 
-def get_precision(true_positives, false_positives):
-    return (
-        true_positives / (true_positives + false_positives)
-        if (true_positives + false_positives) > 0
-        else 0
-    )
+    # Precision
+    precision = true_pos / (true_pos + false_pos)
 
+    # Recall
+    recall = true_pos / (true_pos + false_neg)
 
-def get_f_score(precision, recall):
-    return (
+    # F-Score
+    f_score = (
         (2 * precision * recall) / (precision + recall)
         if (precision + recall) > 0
         else 0
     )
+
+    overview = {
+        "FP": [false_pos],
+        "FN": [false_neg],
+        "Acc": [accuracy],
+        "Prec": [precision],
+        "Rec": [recall],
+        "F1": [f_score],
+    }
+
+    return pl.LazyFrame(overview)
+
+    # AUC
+    #
