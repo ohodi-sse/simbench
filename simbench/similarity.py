@@ -37,7 +37,7 @@ class Zstd:
         return "zstd"
 
     def options(self) -> str:
-        return f"compression_lvl: {self.compression_lvl}"
+        return f"comp_lvl: {self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -58,7 +58,7 @@ class Zstandard:
         return "zstandard"
 
     def options(self) -> str:
-        return f"compression_lvl: {self.compression_lvl}"
+        return f"comp_lvl: {self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -79,7 +79,7 @@ class Zlib:
         return "zlib"
 
     def options(self) -> str:
-        return f"compression_lvl: {self.compression_lvl}"
+        return f"comp_lvl: {self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -100,7 +100,7 @@ class Gzip:
         return "gzip"
 
     def options(self) -> str:
-        return f"compression_lvl: {self.compression_lvl}"
+        return f"comp_lvl: {self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -113,6 +113,9 @@ class SimilarityMetric(Protocol):
 
     @abstractmethod
     def name(self) -> str: ...
+
+    @abstractmethod
+    def options(self) -> str: ...
 
 
 @dataclass(frozen=True)
@@ -137,6 +140,9 @@ class NCD(SimilarityMetric):
 
     def name(self):
         return f"NCD_{self.compressor.name()}"
+
+    def options(self):
+        return self.compressor.options()
 
 
 def parse_compressor(comp_name: str) -> Compress | None:

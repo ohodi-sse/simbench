@@ -4,8 +4,8 @@ import pytest
 
 
 from simbench.classification import (
-    classify_best_match,
-    classify_knn_match,
+    BestMatch,
+    KNN,
     create_classification_dataframe,
     check_classification,
     get_confusion_matrix,
@@ -18,7 +18,8 @@ def test_best_match_classify(similaritiesfile):
 
     assert isinstance(similaritiesfile, pl.LazyFrame)
 
-    classification = classify_best_match(similaritiesfile, test_src)
+    bm_classifier = BestMatch()
+    classification = bm_classifier(similaritiesfile, test_src)
 
     assert classification.name == test_src, (
         "Gave the classification the wrong name: {classification.name} should be {test_src}"
@@ -34,7 +35,8 @@ def test_knn_classify(similaritiesfile):
 
     assert isinstance(similaritiesfile, pl.LazyFrame)
 
-    classification = classify_knn_match(similaritiesfile, test_src, k=10)
+    knn_classifier = KNN(10)
+    classification = knn_classifier(similaritiesfile, test_src)
     assert classification.name == test_src, "Best match is the file itself"
     assert classification.labelled_as == "p00001"
     assert test_src not in classification.similar_files, (
@@ -47,8 +49,10 @@ def test_k1_equals_best_match(similaritiesfile):
 
     assert isinstance(similaritiesfile, pl.LazyFrame)
 
-    best_match = classify_best_match(similaritiesfile, test_src)
-    knn_1 = classify_knn_match(similaritiesfile, test_src, k=1)
+    bm_classifier = BestMatch()
+    knn_classifier = KNN(1)
+    best_match = bm_classifier(similaritiesfile, test_src)
+    knn_1 = knn_classifier(similaritiesfile, test_src)
 
     assert best_match.name == knn_1.name
     assert best_match.labelled_as == knn_1.labelled_as

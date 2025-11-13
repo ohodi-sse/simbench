@@ -12,7 +12,7 @@ from simbench.data import (
 )
 
 import simbench.similarity as sim
-from simbench.classification import classify_best_match
+from simbench.classification import BestMatch
 
 
 def test_compressor():

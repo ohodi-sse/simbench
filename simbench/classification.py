@@ -3,14 +3,7 @@ from .data import get_label
 from collections import Counter
 from abc import abstractmethod
 from typing import Callable
-
-
-class Classifier(Callable):
-    name: str
-
-    @abstractmethod
-    def __call__():
-        pass
+from dataclasses import dataclass
 
 
 class Classification:
@@ -24,49 +17,68 @@ class Classification:
         self.similar_files = similar_files
 
 
-class BestMatchClassifier(Classifier):
-    name: str
+class Classifier(Callable):
+    @abstractmethod
+    def __call__(self, similarity_df: pl.LazyFrame) -> Classification:
+        pass
 
-    def __init__(self):
-        self.name = "Best match"
+    @abstractmethod
+    def name(self) -> str:
+        pass
 
 
-def classify_best_match(similarities: pl.LazyFrame, src: str) -> Classification:
-    # Takes a file with all similarities and extracts the column corresponding to the file in question
+@dataclass(frozen=True)
+class BestMatch(Classifier):
+    def __call__(self, similarity_df: pl.LazyFrame, src: str) -> Classification:
+        filter_expr = (pl.col("src") == src) & (pl.col("target") != src)
+        file_column = similarity_df.filter(filter_expr).sort(
+            "similarity", descending=True
+        )
 
-    filter_expr = (pl.col("src") == src) & (pl.col("target") != src)
-    file_column = similarities.filter(filter_expr).sort("similarity", descending=True)
+        best_match_name = file_column.select("target").collect().item(0, 0)
+        label = get_label(similarity_df, best_match_name)
 
-    # best_match_score = file_column.select("similarity").item(0, 0)
-    best_match_name = file_column.select("target").collect().item(0, 0)
-    label = get_label(similarities, best_match_name)
+        return Classification(src, label, [best_match_name])
 
-    return Classification(src, label, [best_match_name])
+    def name(self) -> str:
+        return "KNN_1"
 
 
 def sort_pr_src(similarities: pl.LazyFrame) -> pl.LazyFrame:
     return similarities.sort("src", "similarity", descending=[False, True])
 
 
-def classify_knn_match(similarities: pl.LazyFrame, src: str, k: int) -> Classification:
-    assert k > 0, "k must be positive"
-    sorted_sim = sort_pr_src(similarities)
+@dataclass(frozen=True)
+class KNN(Classifier):
+    k: int
 
-    filter_expr = (pl.col("src") == src) & (pl.col("target") != src)
-    src_sim = sorted_sim.filter(filter_expr).select(["target", "similarity"])
+    def __call__(self, similarities: pl.LazyFrame, src: str) -> Classification:
+        assert self.k > 0, "k must be positive"
+        sorted_sim = sort_pr_src(similarities)
 
-    k_best = src_sim.head(k)
+        filter_expr = (pl.col("src") == src) & (pl.col("target") != src)
+        src_sim = sorted_sim.filter(filter_expr).select(["target", "similarity"])
 
-    k_best_names = pl.Series(k_best.select("target").collect()).to_list()
-    labels = [get_label(similarities, filename) for filename in k_best_names]
+        k_best = src_sim.head(self.k)
 
-    label_counts = Counter(labels)
-    label = max(label_counts)
+        k_best_names = pl.Series(k_best.select("target").collect()).to_list()
+        labels = [get_label(similarities, filename) for filename in k_best_names]
 
-    return Classification(src, label, k_best_names)
+        label_counts = Counter(labels)
+        label = max(label_counts)
+
+        return Classification(src, label, k_best_names)
+
+    def name(self) -> str:
+        return f"KNN_{self.k}"
+
+    def __post_init__(self):
+        assert isinstance(self.k, int)
 
 
-def create_classification_dataframe(similarities: pl.LazyFrame, k: int) -> pl.LazyFrame:
+def create_classification_dataframe(
+    similarities: pl.LazyFrame, classifier: Classifier
+) -> pl.LazyFrame:
     data = {"src": [], "classifier": [], "labelled_as": []}
 
     src_df = similarities.select("src", "src_label").unique(maintain_order=True)
@@ -74,9 +86,7 @@ def create_classification_dataframe(similarities: pl.LazyFrame, k: int) -> pl.La
 
     name = "knn"
 
-    classifications = [
-        classify_knn_match(similarities, src, k).labelled_as for src in src_names
-    ]
+    classifications = [classifier(similarities, src).labelled_as for src in src_names]
 
     data["src"] = src_names
     data["classifier"] = [name for _ in range(len(src_names))]
