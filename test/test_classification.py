@@ -84,6 +84,7 @@ def test_confusion_matrix(similaritiesfile):
     )
 
 
+@pytest.mark.slow
 def test_performance_overview(similaritiesfile):
     class_df = create_classification_dataframe(similaritiesfile, 1)
 

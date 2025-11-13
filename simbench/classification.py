@@ -1,7 +1,6 @@
 import polars as pl
 from .data import get_label
 from collections import Counter
-from loguru import logger
 from abc import abstractmethod
 from typing import Callable
 
