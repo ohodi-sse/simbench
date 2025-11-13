@@ -1,8 +1,10 @@
 import pytest
 from pathlib import Path
 from simbench.data import load_parquet
+from loguru import logger
 
 from simbench.data import File, collect_datafiles
+from simbench.classification import get_classifier
 
 
 @pytest.fixture(scope="session")
@@ -27,13 +29,13 @@ def testfiles(testdir):
 
 @pytest.fixture(scope="session")
 def similaritiesfile():
-    path = Path("analyses/test_analysis.parquet")
+    path = Path("test/analyses/NCD_zstd_similarities.parquet")
     return load_parquet(path)
 
 
 @pytest.fixture(scope="session")
 def datafilesDF():
-    testdir = Path.cwd() / "predata/"
+    testdir = Path.cwd() / "test/"
     return collect_datafiles(testdir)
 
 
@@ -42,15 +44,27 @@ def compressorname(request):
     return request.param
 
 
-@pytest.fixture(scope="session")
-def choose_test_data():
-    import random
+@pytest.fixture(params=["bm", "knn_10"])
+def classifiername(request):
+    return request.param
 
+
+@pytest.fixture(params=["bm", "knn_10"])
+def classifier(request):
+    return get_classifier(request.param)
+
+
+@pytest.fixture(scope="session")
+def choose_data():
     datapath = Path.cwd() / "data/Project_CodeNet_Java250/"
     classes = [d.name for d in datapath.iterdir()]
 
-    assert len(classes) == 250, "There should be 250 testclasses"
-    random.seed(5)  # original seed is 5
-    sample_data = random.sample(classes, 5)
+    return classes
 
-    return sample_data
+
+@pytest.fixture(scope="session")
+def choose_predata():
+    datapath = Path.cwd() / "predata"
+    classes = [d.name for d in datapath.iterdir() if d.name != "analyses"]
+
+    return classes

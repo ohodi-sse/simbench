@@ -4,6 +4,7 @@ from collections import Counter
 from abc import abstractmethod
 from typing import Callable
 from dataclasses import dataclass
+from loguru import logger
 
 
 class Classification:
@@ -41,7 +42,7 @@ class BestMatch(Classifier):
         return Classification(src, label, [best_match_name])
 
     def name(self) -> str:
-        return "KNN_1"
+        return "BestMatch"
 
 
 def sort_pr_src(similarities: pl.LazyFrame) -> pl.LazyFrame:
@@ -76,6 +77,24 @@ class KNN(Classifier):
         assert isinstance(self.k, int)
 
 
+def get_classifier(classifier_name: str) -> Classifier:
+    classf_opts = classifier_name.split("_")
+
+    match classf_opts[0]:
+        case "bm":
+            return BestMatch()
+        case "knn":
+            try:
+                k = int(classf_opts[1])
+                return KNN(k)
+            except ValueError():
+                logger.warning(
+                    "KNN classifiers should be given a k value. Pass knn_? where ? is an int"
+                )
+        case e:
+            logger.warning(f"Don't know how to handle classifier name: {e}")
+
+
 def create_classification_dataframe(
     similarities: pl.LazyFrame, classifier: Classifier
 ) -> pl.LazyFrame:
@@ -84,12 +103,10 @@ def create_classification_dataframe(
     src_df = similarities.select("src", "src_label").unique(maintain_order=True)
     src_names = pl.Series(src_df.select("src").collect()).to_list()
 
-    name = "knn"
-
     classifications = [classifier(similarities, src).labelled_as for src in src_names]
 
     data["src"] = src_names
-    data["classifier"] = [name for _ in range(len(src_names))]
+    data["classifier"] = [classifier.name() for _ in range(len(src_names))]
     data["labelled_as"] = classifications
 
     return src_df.join(pl.LazyFrame(data), on="src")

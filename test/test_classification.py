@@ -14,7 +14,7 @@ from simbench.classification import (
 
 
 def test_best_match_classify(similaritiesfile):
-    test_src = "s005618736.java"
+    test_src = "test1.java"
 
     assert isinstance(similaritiesfile, pl.LazyFrame)
 
@@ -24,28 +24,28 @@ def test_best_match_classify(similaritiesfile):
     assert classification.name == test_src, (
         "Gave the classification the wrong name: {classification.name} should be {test_src}"
     )
-    assert classification.labelled_as == "p00001"
+    assert classification.labelled_as == "testfiles"
     assert test_src not in classification.similar_files, (
         "Test file is compared against when choosing label"
     )
 
 
 def test_knn_classify(similaritiesfile):
-    test_src = "s005618736.java"
+    test_src = "test2.java"
 
     assert isinstance(similaritiesfile, pl.LazyFrame)
 
-    knn_classifier = KNN(10)
+    knn_classifier = KNN(3)
     classification = knn_classifier(similaritiesfile, test_src)
     assert classification.name == test_src, "Best match is the file itself"
-    assert classification.labelled_as == "p00001"
+    assert classification.labelled_as == "testfiles"
     assert test_src not in classification.similar_files, (
         "Test file is compared against when choosing label"
     )
 
 
 def test_k1_equals_best_match(similaritiesfile):
-    test_src = "s005618736.java"
+    test_src = "test1.java"
 
     assert isinstance(similaritiesfile, pl.LazyFrame)
 
@@ -60,16 +60,16 @@ def test_k1_equals_best_match(similaritiesfile):
 
 
 @pytest.mark.slow
-def test_classification_dataframe(similaritiesfile):
-    class_df = create_classification_dataframe(similaritiesfile, 1)
+def test_classification_dataframe(similaritiesfile, classifier):
+    class_df = create_classification_dataframe(similaritiesfile, classifier)
 
     assert isinstance(class_df, pl.LazyFrame)
-    assert check_classification(class_df, "s492836966.java")
+    assert check_classification(class_df, "test1.java")
 
 
 @pytest.mark.slow
-def test_confusion_matrix(similaritiesfile):
-    class_df = create_classification_dataframe(similaritiesfile, 1)
+def test_confusion_matrix(similaritiesfile, classifier):
+    class_df = create_classification_dataframe(similaritiesfile, classifier)
     confusion_df = get_confusion_matrix(class_df)
 
     assert isinstance(confusion_df, pl.LazyFrame)
@@ -83,14 +83,12 @@ def test_confusion_matrix(similaritiesfile):
     total_sum = sum([summed_cols.select(c).item() for c in summed_cols.columns])
     logger.debug(total_sum)
 
-    assert total_sum == confusion_df.collect().height * 1500, (
-        "Each row should label all data of the set"
-    )
+    assert total_sum == 14, "Each row should label all data of the set"
 
 
 @pytest.mark.slow
-def test_performance_overview(similaritiesfile):
-    class_df = create_classification_dataframe(similaritiesfile, 1)
+def test_performance_overview(similaritiesfile, classifier):
+    class_df = create_classification_dataframe(similaritiesfile, classifier)
 
     perf_df = get_performance_overview(class_df)
 
@@ -105,5 +103,12 @@ def test_performance_overview(similaritiesfile):
     )
 
 
-def test_data_choice(choose_test_data):
-    assert choose_test_data == ["p02659", "p02641", "p02921", "p02582", "p03644"]
+def test_data_choice(choose_data):
+    assert len(choose_data) == 245, "There should be 245 data classes"
+
+
+def test_predata_choice(choose_predata):
+    assert len(choose_predata) == 5, "There should be 5 predata classes"
+    assert sorted(choose_predata) == sorted(
+        ["p02659", "p02641", "p02921", "p02582", "p03644"]
+    )

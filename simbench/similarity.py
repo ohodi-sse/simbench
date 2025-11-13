@@ -3,8 +3,8 @@ from dataclasses import dataclass
 import io
 from typing import Protocol
 import polars as pl
-
 from pathlib import Path
+
 from .data import File, AnalysisSimDF
 
 import zstd
@@ -41,7 +41,6 @@ class Zstd:
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
-        # assert isinstance(self, Compress)
 
 
 @dataclass(frozen=True)
@@ -62,7 +61,6 @@ class Zstandard:
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
-        # assert isinstance(self, Compress)
 
 
 @dataclass(frozen=True)
@@ -83,7 +81,6 @@ class Zlib:
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
-        # assert isinstance(self, Compress)
 
 
 @dataclass(frozen=True)
@@ -104,7 +101,6 @@ class Gzip:
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
-        # assert isinstance(self, Compress)
 
 
 class SimilarityMetric(Protocol):
@@ -199,7 +195,9 @@ def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> Analysi
 
 
 def similarities_from_data(metric: SimilarityMetric, df: pl.LazyFrame) -> pl.LazyFrame:
-    file_paths = pl.Series(df.select("src_file").collect()).to_list()
+    file_paths = [
+        Path(fp) for fp in pl.Series(df.select("src_file").collect()).to_list()
+    ]
     files = [File(fp.name, fp.parent.stem, fp) for fp in file_paths]
     similarities = create_similarity_matrix(metric, files)
 

@@ -56,14 +56,17 @@ def collect_datafiles(dir: Path) -> FileInfoDF:
     logger.debug(f"Collecting data from {str(dir)}")
     dirs = dir.iterdir()
     assert dirs, f"Failed to find any subdirectories in {dir}"
+    currdir = Path.cwd()
 
     for d in dirs:
-        if d.is_dir():
+        if d.is_dir() and d.name != "analyses":
             dir_srcs = [filepath for filepath in d.iterdir() if filepath.is_file()]
 
             data["src"].extend([file.name for file in dir_srcs])
             data["src_label"].extend([file.parent.stem for file in dir_srcs])
-            data["src_file"].extend(dir_srcs)
+            data["src_file"].extend(
+                [str(file.relative_to(currdir)) for file in dir_srcs]
+            )
 
     assert data["src"], "Failed to collect any files in the specified directory"
     return pl.LazyFrame(data)

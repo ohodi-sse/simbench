@@ -4,9 +4,7 @@ import polars as pl
 import pytest
 
 from simbench.data import (
-    File,
     collect_datafiles,
-    load_parquet,
     get_similarity,
     get_label,
 )
@@ -62,12 +60,12 @@ def test_collect_data(predata_shape):
 
 
 def test_get_similarity(similaritiesfile):
-    test_src = "s005618736.java"
-    test_target = "s007352793.java"
+    test_src = "test1.java"
+    test_target = "test2.java"
 
     similarity = get_similarity(similaritiesfile, test_src, test_target)
 
-    assert round(similarity, 2) == 0.29, (
+    assert round(similarity, 2) == 0.36, (
         "Failed to assert the similarity of two test files"
     )
 
@@ -91,10 +89,9 @@ def test_similarities_from_data(datafilesDF):
 
 
 def test_get_label(similaritiesfile, datafilesDF):
-    test_src = "s005618736.java"
-
+    test_src = "test3.java"
     assert isinstance(similaritiesfile, pl.LazyFrame)
 
     label = get_label(datafilesDF, test_src)
 
-    assert label == "p00001"
+    assert label == "testfiles"

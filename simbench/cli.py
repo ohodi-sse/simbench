@@ -2,6 +2,8 @@ import click
 from pathlib import Path
 
 from .data import load_parquet, collect_datafiles
+from .analysis import run_analysis
+from .classification import get_classifier
 from . import similarity as sim
 import polars as pl
 
@@ -63,11 +65,47 @@ def collect_data(dir: str, write: bool, compressor: str) -> pl.DataFrame:
     logger.info("Done")
 
 
-def write_data_overview():
-    dataframe = {"src": [], "src_label": [], "src_path": []}
+@click.command()
+@click.option(
+    "-d",
+    "--dir",
+    help="Specify path to the data. It loads files in all subdirectories, and labels files according to their subdirectory",
+)
+@click.option(
+    "-c",
+    "--compressor",
+    default="zstd",
+    help="Choose compressor: zstd, zstandard, gzip",
+)
+@click.option(
+    "-w", "--write", default=False, help="Writes the collected data to a file"
+)
+@click.option(
+    "-cl",
+    "--classifier",
+    default="bm",
+    help="Choose one of the following classifiers: bm, knn_?",
+)
+def analyse(dir: str, compressor: str, classifier: str, write: bool):
+    dirpath = Path(dir)
+    logger.debug("Instantiating similarity metric")
+    metric = sim.get_metric("NCD", compressor)
+    logger.debug(f"Metric initialized as: {metric.name()}")
 
-    data = collect_data()
+    classifier = get_classifier(classifier)
+    logger.debug(f"Classifier initialized as: {classifier.name()}")
+
+    (data_df, sim_df, class_df, perf_df) = run_analysis(
+        dirpath, metric, classifier, write
+    )
+
+    click.echo(f"Data overview: \n{data_df.collect()}")
+    click.echo(f"Similarities: \n{sim_df.collect()}")
+    click.echo(f"Classifications: \n{class_df.collect()}")
+    click.echo(f"Performance overview: \n{perf_df.collect()}")
+    click.echo("Done")
 
 
 cli.add_command(get_similarities)
 cli.add_command(collect_data)
+cli.add_command(analyse)
