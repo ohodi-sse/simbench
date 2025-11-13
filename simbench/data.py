@@ -1,8 +1,8 @@
 from pathlib import Path
 
 import numpy as np
-import pandas as pd
-from typing import TypedDict, Required, Generic, TypeVarTuple, Tuple, NewType
+import polars as pl
+from typing import TypedDict, Required  # , Generic, TypeVarTuple, Tuple, NewType
 from sklearn.model_selection import train_test_split
 from loguru import logger
 
@@ -10,96 +10,99 @@ from loguru import logger
 class File:
     name: str
     path: Path
-    group: int = -1
+    label: str = ""
     _bytes: bytes = None
 
-    def __init__(self, filepath: Path, group: int = -1):
+    def __init__(self, name, label, filepath: Path):
         if not filepath.is_file():
             raise ValueError(f"Path {filepath} is not a file.")
+        assert name == filepath.name, "File name must match the final part of the path"
+        assert label == filepath.parent.stem, (
+            "Label must match the parent directory of the file"
+        )
+
+        self.name = name
+        self.label = label
         self.path = filepath
-        self.name = filepath.name
-        self.group = filepath.parent # Assuming the file is in a folder named after group
 
     def __str__(self) -> str:
-        return f"g:{self.group}_f:{self.name}"
-
-    def parse(str) -> (str, str):
-        args = str.split("_")
-        group = args[0][2:]
-        name = args[1][2:]
-        return group, name
+        return f"{self.name}"
 
     def get_bytes(self) -> bytes:
         if self._bytes is None:
             self._bytes = self.path.read_bytes()
         return self._bytes
 
-class AnalysisInfoDF(TypedDict,total=False):
-    src : Required[str]
-    target : Required[str]
-    src_label : Required[str]
+
+class FileInfoDF(TypedDict, total=False):
+    src: Required[str]
+    src_label: Required[str]
 
 
-class SimilariyAnalysisDF(TypedDict,total=False):
-    tool_name : Required[str]
-    similarity : Required[float]
-    options : str # Maybe it should be a subtype
+class AnalysisSimDF(TypedDict, total=False):
+    src: Required[str]
+    target: Required[str]
+    src_label: Required[str]
+    tool_name: Required[str]
+    similarity: Required[float]
+    options: str  # Maybe it should be a subtype
 
 
-
-# SimInfo = NewType('SimInfo',AnalysisInfoDF)
-# SimData = NewType('SimData',SimilariyAnalysisDF)
-# Shape = TypeVarTuple('Shape')
-#
-#
-# class AnalysisDataFrame(Generic[SimInfo,*Shape]): 
-#
-#     def __init__(self,info : SimInfo, data: Tuple(*Shape)):
-#         self.src = info.src
-#         self.target = info.target 
-#         self.src_label = info.src_label
-#         self._shape: Tuple[*Shape] = shape
-#
-#
-# def analyze_data(datafiles: [Path], metric: SimilariyMetric) -> AnalysisDataFrame:
-#     # Should compare all datafiles pairwise with the metric, and return in the analysis DF format
-#     pass
-
-
-def collect_datafiles(dir: Path) -> pd.DataFrame:
+def collect_datafiles(dir: Path) -> FileInfoDF:
     # This functions expects the dir to point to a directory,
     # containing folders each containing samples with one specific label.
-    data = {}
+    data = {"src": [], "src_label": [], "src_file": []}
 
-    for d in dir.iterdir():
+    logger.debug(f"Collecting data from {str(dir)}")
+    dirs = dir.iterdir()
+    assert dirs, f"Failed to find any subdirectories in {dir}"
+
+    for d in dirs:
         if d.is_dir():
-            # extracting the group number from the folder name
-            label = int("".join([c for c in d.name if c.isdigit()]))
+            dir_srcs = [filepath for filepath in d.iterdir() if filepath.is_file()]
 
-            data[label] = [
-                File(file, label)
-                for file in d.iterdir()
-                if file.is_file() and file.name.endswith(".java")
-            ]
+            data["src"].extend([file.name for file in dir_srcs])
+            data["src_label"].extend([file.parent.stem for file in dir_srcs])
+            data["src_file"].extend(dir_srcs)
 
-    return pd.DataFrame(data)
+    assert data["src"], "Failed to collect any files in the specified directory"
+    return pl.LazyFrame(data)
 
 
-def write_parquet(filename: Path, data: pd.DataFrame) -> None:
+def join_on_src_target():
+    pass
+
+
+def write_parquet(filename: Path, data: pl.LazyFrame) -> None:
     data.to_parquet(filename)
 
 
-def load_parquet(filename: Path) -> pd.DataFrame:
+def load_parquet(filename: Path) -> pl.LazyFrame:
     if not filename.is_file():
         raise ValueError(f"Path {filename} is not a valid file.")
-    df = pd.read_parquet(filename)
+    df = pl.scan_parquet(filename)
     return df
 
 
-def print_md_data(data: pd.DataFrame) -> str:
-    return data.to_markdown()
+def get_similarity(data: pl.LazyFrame, src: str, target: str) -> float:
+    filter_expr = (pl.col("src") == src) & (pl.col("target") == target)
+    similarity = data.filter(filter_expr).select("similarity").collect()
+
+    return similarity.item()
 
 
+def get_label(data_overview: pl.LazyFrame, src: str) -> str:
+    filter_expr = pl.col("src") == src
+    file_col = data_overview.filter(filter_expr).select("src_label").collect()
+    assert not file_col.is_empty(), (
+        f"Failed to find a label for {src} in {data_overview}"
+    )
+
+    label = file_col.item(0, 0)
+
+    assert isinstance(label, str), "get_label must return a string"
+
+    return label
 
 
 ######## DATA SPLITTING #############
