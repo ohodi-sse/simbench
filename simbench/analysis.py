@@ -8,6 +8,7 @@ import simbench.data as data
 from simbench.classification import (
     Classifier,
     create_classification_dataframe,
+    get_classifier,
     get_performance_overview,
 )
 
@@ -94,3 +95,37 @@ def run_analysis(
         return (data_df, similarity_df, class_df, perf_df)
     else:
         return (data_df, similarity_df, class_df, perf_df)
+
+
+def extract_bad_matches(similarity_df: pl.LazyFrame) -> pl.LazyFrame:
+    assert similarity_df.collect_schema() == data.SIMILARITIES_SCHEMA
+
+    classifier = get_classifier("bm")
+    assert classifier
+
+    class_df = create_classification_dataframe(similarity_df, classifier)
+    expr = pl.col("src_label") != pl.col("labelled_as")
+    bad_srcs = pl.Series(class_df.filter(expr).select("src").collect()).to_list()
+
+    bad_srcs_list = [
+        similarity_df.filter(pl.col("src") == bad_src)
+        .sort(by="similarity", descending=True)
+        .select("src")
+        .collect()
+        .item()
+        for bad_src in bad_srcs
+    ]
+
+    bad_targets_list = [
+        similarity_df.filter(pl.col("src") == bad_src)
+        .sort(by="similarity", descending=True)
+        .select("target")
+        .collect()
+        .item()
+        for bad_src in bad_srcs
+    ]
+
+    bad_matches = [(s, t) for (s, t) in zip(bad_srcs_list, bad_targets_list)]
+    logger.debug(bad_matches)
+
+    return bad_matches

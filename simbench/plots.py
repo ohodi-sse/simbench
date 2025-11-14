@@ -83,6 +83,10 @@ def create_nclass_classification_plot(class_df: pl.LazyFrame):
     ax.axes.yaxis.set_ticks([])
     ax.tick_params(axis="x", which="major", labelsize=14)
 
+    labels = [n for n in classes]
+    step = 1.0 / len(classes)
+    ticks = np.arange(0 + step / 2, 1 + step / 2, step)
+    ax.set_xticks(ticks, labels)
     ax.set_title("Classification Report", fontdict=title_font_dict, pad=25)
     ax.set_xlabel("Observed Class", fontdict=axis_label_font_dict, labelpad=10)
     ax.set_ylabel("Predicted Class", fontdict=axis_label_font_dict, labelpad=35)

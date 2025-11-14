@@ -1,8 +1,10 @@
+from numpy import extract
 import polars as pl
 from loguru import logger
 import pytest
 
 
+from simbench.analysis import extract_bad_matches
 from simbench.classification import (
     BestMatch,
     KNN,
@@ -112,3 +114,9 @@ def test_predata_choice(choose_predata):
     assert sorted(choose_predata) == sorted(
         ["p02659", "p02641", "p02921", "p02582", "p03644"]
     )
+
+
+def test_extract_bad_matches(similaritiesfile):
+    bad_matches = extract_bad_matches(similaritiesfile)
+
+    assert bad_matches == []
