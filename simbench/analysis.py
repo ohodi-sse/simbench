@@ -1,5 +1,6 @@
 from loguru import logger
 from pathlib import Path
+import polars as pl
 
 from simbench.similarity import SimilarityMetric
 import simbench.similarity as sim
@@ -17,27 +18,27 @@ def get_data_overview_path(dir: Path) -> Path:
 
 
 def get_similarity_path(dir: Path, metric: SimilarityMetric) -> Path:
-    sim_filename = f"{metric.name()}_similarities.parquet"
+    sim_filename = f"{metric.name()}-similarities.parquet"
     return Path.cwd() / dir / "analyses" / sim_filename
 
 
 def get_classification_path(
     dir: Path, metric: SimilarityMetric, classifier: Classifier
 ) -> Path:
-    classf_filename = f"{metric.name()}_{classifier.name()}_classifications.parquet"
+    classf_filename = f"{metric.name()}-{classifier.name()}-classifications.parquet"
     return Path.cwd() / dir / "analyses" / classf_filename
 
 
 def get_performance_overview_path(
     dir: Path, metric: SimilarityMetric, classifier: Classifier
 ) -> Path:
-    perf_filename = f"{metric.name()}_{classifier.name()}_performance_overview.parquet"
+    perf_filename = f"{metric.name()}-{classifier.name()}-performance_overview.parquet"
     return Path.cwd() / dir / "analyses" / perf_filename
 
 
 def run_analysis(
     datadir: Path, metric: SimilarityMetric, classifier: Classifier, write: bool
-) -> None:
+) -> tuple[pl.LazyFrame, pl.LazyFrame, pl.LazyFrame, pl.LazyFrame]:
     assert isinstance(datadir, Path), "Run analysis has to be passed a Path object"
 
     dirpath = Path.cwd() / datadir

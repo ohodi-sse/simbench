@@ -1,16 +1,20 @@
-import polars as pl
-from .data import get_label
+from .data import (
+    get_label,
+    CLASSIFICATIONS_SCHEMA,
+    PERFORMANCE_SCHEMA,
+    CONFUSION_SCHEMA,
+)
 from collections import Counter
 from abc import abstractmethod
-from typing import Callable
 from dataclasses import dataclass
 from loguru import logger
+import polars as pl
 
 
 class Classification:
     name: str
     labelled_as: str
-    similar_files: [(str, int)]
+    similar_files: list[tuple[str, int]]
 
     def __init__(self, name, label, similar_files):
         self.name = name
@@ -18,9 +22,9 @@ class Classification:
         self.similar_files = similar_files
 
 
-class Classifier(Callable):
+class Classifier:
     @abstractmethod
-    def __call__(self, similarity_df: pl.LazyFrame) -> Classification:
+    def __call__(self, similarity_df: pl.LazyFrame, src: str) -> Classification:
         pass
 
     @abstractmethod
@@ -71,23 +75,29 @@ class KNN(Classifier):
         return Classification(src, label, k_best_names)
 
     def name(self) -> str:
-        return f"KNN_{self.k}"
+        return f"knn_{self.k}"
 
     def __post_init__(self):
         assert isinstance(self.k, int)
 
 
-def get_classifier(classifier_name: str) -> Classifier:
+def get_classifier(classifier_name: str) -> Classifier | None:
     classf_opts = classifier_name.split("_")
+
+    k = None
+    if len(classf_opts) > 1:
+        k = int(classf_opts[1])
 
     match classf_opts[0]:
         case "bm":
             return BestMatch()
         case "knn":
+            assert k, (
+                "Must provide the knn option as knn_? where ? is the number of nearest neighbours"
+            )
             try:
-                k = int(classf_opts[1])
                 return KNN(k)
-            except ValueError():
+            except ValueError:
                 logger.warning(
                     "KNN classifiers should be given a k value. Pass knn_? where ? is an int"
                 )
@@ -98,7 +108,7 @@ def get_classifier(classifier_name: str) -> Classifier:
 def create_classification_dataframe(
     similarities: pl.LazyFrame, classifier: Classifier
 ) -> pl.LazyFrame:
-    data = {"src": [], "classifier": [], "labelled_as": []}
+    data = {col: [] for col in CLASSIFICATIONS_SCHEMA}
 
     src_df = similarities.select("src", "src_label").unique(maintain_order=True)
     src_names = pl.Series(src_df.select("src").collect()).to_list()
@@ -106,10 +116,12 @@ def create_classification_dataframe(
     classifications = [classifier(similarities, src).labelled_as for src in src_names]
 
     data["src"] = src_names
+    data["src_label"] = pl.Series(src_df.select("src_label").collect()).to_list()
     data["classifier"] = [classifier.name() for _ in range(len(src_names))]
     data["labelled_as"] = classifications
 
-    return src_df.join(pl.LazyFrame(data), on="src")
+    # src_df.join(pl.LazyFrame(data), on="src")
+    return pl.LazyFrame(data, schema=CLASSIFICATIONS_SCHEMA)
 
 
 def check_classification(class_df: pl.LazyFrame, src: str) -> bool:
@@ -154,7 +166,8 @@ def get_confusion_matrix(class_df: pl.LazyFrame) -> pl.LazyFrame:
             "true_neg": true_neg,
             "false_pos": false_pos,
             "false_neg": false_neg,
-        }
+        },
+        schema=CONFUSION_SCHEMA,
     )
 
 
@@ -171,7 +184,7 @@ def get_performance_overview(class_df: pl.LazyFrame) -> pl.LazyFrame:
     false_neg = summed_cols.select("false_neg").collect().item()
 
     total_population = sum(
-        [summed_cols.collect().select(c).item() for c in summed_cols.collect().columns]
+        [summed_cols.select(c).collect().item() for c in summed_cols.collect().columns]
     )
 
     # Accuracy
@@ -199,7 +212,4 @@ def get_performance_overview(class_df: pl.LazyFrame) -> pl.LazyFrame:
         "F1": [f_score],
     }
 
-    return pl.LazyFrame(overview)
-
-    # AUC
-    #
+    return pl.LazyFrame(overview, schema=PERFORMANCE_SCHEMA)

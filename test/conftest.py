@@ -29,7 +29,7 @@ def testfiles(testdir):
 
 @pytest.fixture(scope="session")
 def similaritiesfile():
-    path = Path("test/analyses/NCD_zstd_similarities.parquet")
+    path = Path("test/analyses/NCD-zstd_clvl_1-similarities.parquet")
     return load_parquet(path)
 
 
@@ -39,9 +39,14 @@ def datafilesDF():
     return collect_datafiles(testdir)
 
 
+@pytest.fixture(params=[i for i in range(1, 2)])
+def compression_lvl(request):
+    return f"clvl_{request.param}"
+
+
 @pytest.fixture(params=["zstd", "zstandard", "gzip"])
-def compressorname(request):
-    return request.param
+def compressorname(request, compression_lvl):
+    return f"{request.param}_{compression_lvl}"
 
 
 @pytest.fixture(params=["bm", "knn_10"])

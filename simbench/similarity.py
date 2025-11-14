@@ -2,11 +2,11 @@ from abc import abstractmethod
 from dataclasses import dataclass
 import io
 from typing import Protocol
-import polars as pl
 from pathlib import Path
+from .data import File, AnalysisSimDF, SIMILARITIES_SCHEMA
 
-from .data import File, AnalysisSimDF
-
+from loguru import logger
+import polars as pl
 import zstd
 import gzip
 import zstandard
@@ -34,10 +34,7 @@ class Zstd:
         out.write(zstd.compress(file, self.compression_lvl))
 
     def name(self) -> str:
-        return "zstd"
-
-    def options(self) -> str:
-        return f"comp_lvl: {self.compression_lvl}"
+        return f"zstd_clvl_{self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -54,10 +51,7 @@ class Zstandard:
         out.write(zstandard.compress(file, self.compression_lvl))
 
     def name(self) -> str:
-        return "zstandard"
-
-    def options(self) -> str:
-        return f"comp_lvl: {self.compression_lvl}"
+        return f"zstandard_clvl_{self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -74,10 +68,7 @@ class Zlib:
         out.write(zlib.compress(file, self.compression_lvl))
 
     def name(self) -> str:
-        return "zlib"
-
-    def options(self) -> str:
-        return f"comp_lvl: {self.compression_lvl}"
+        return f"zlib_clvl_{self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -94,10 +85,7 @@ class Gzip:
         out.write(gzip.compress(file, self.compression_lvl))
 
     def name(self) -> str:
-        return "gzip"
-
-    def options(self) -> str:
-        return f"comp_lvl: {self.compression_lvl}"
+        return f"gzip_clvl_{self.compression_lvl}"
 
     def __post_init__(self):
         assert isinstance(self.compression_lvl, int)
@@ -109,9 +97,6 @@ class SimilarityMetric(Protocol):
 
     @abstractmethod
     def name(self) -> str: ...
-
-    @abstractmethod
-    def options(self) -> str: ...
 
 
 @dataclass(frozen=True)
@@ -135,22 +120,30 @@ class NCD(SimilarityMetric):
         return 1 - (cab - min(ca, cb)) / max(ca, cb)
 
     def name(self):
-        return f"NCD_{self.compressor.name()}"
-
-    def options(self):
-        return self.compressor.options()
+        return f"NCD-{self.compressor.name()}"
 
 
-def parse_compressor(comp_name: str) -> Compress | None:
-    match comp_name:
+def parse_compressor(compstr: str) -> Compress | None:
+    parts = compstr.split("_")
+
+    name = parts[0]
+    clvl = 1
+
+    if len(parts) > 1:
+        assert parts[1] == "clvl", (
+            f'Second part of compressor string {compstr} must be "clvl"'
+        )
+        clvl = int(parts[2])
+
+    match name:
         case "zstd":
-            return Zstd(compression_lvl=1)
+            return Zstd(compression_lvl=clvl)
         case "gzip":
-            return Gzip(compression_lvl=1)
+            return Gzip(compression_lvl=clvl)
         case "zstandard":
-            return Zstandard(compression_lvl=1)
+            return Zstandard(compression_lvl=clvl)
         case "zlib":
-            return Zlib(compression_lvl=1)
+            return Zlib(compression_lvl=clvl)
         case e:
             raise ValueError(f"{e} is not a valid compressor name")
 
@@ -165,10 +158,13 @@ def metric(metric_name: str, compressor: Compress) -> SimilarityMetric | None:
 
 def get_metric(metric_name: str, compressor_name: str) -> SimilarityMetric | None:
     comp = parse_compressor(compressor_name)
+    assert comp, f"Failed to instantiate compressor from {compressor_name}"
     return metric(metric_name, comp)
 
 
-def get_similarities(metric: SimilarityMetric, afile: File, bfiles: [File]) -> [float]:
+def get_similarities(
+    metric: SimilarityMetric, afile: File, bfiles: list[File]
+) -> list[float]:
     similarities = []
     for bfile in bfiles:
         similarities.append(metric(afile.get_bytes(), bfile.get_bytes()))
@@ -176,8 +172,10 @@ def get_similarities(metric: SimilarityMetric, afile: File, bfiles: [File]) -> [
     return similarities
 
 
-def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> AnalysisSimDF:
-    data = {"src": [], "src_label": [], "target": [], "tool_name": [], "similarity": []}
+def create_similarity_matrix(
+    metric: SimilarityMetric, files: list[File]
+) -> AnalysisSimDF:
+    data = {col: [] for col in SIMILARITIES_SCHEMA}
 
     assert isinstance(files[0], File), (
         "Can only create similarity matrix from File list"
@@ -191,7 +189,7 @@ def create_similarity_matrix(metric: SimilarityMetric, files: [File]) -> Analysi
             data["tool_name"].append(metric.name())
             data["similarity"].append(metric(src.get_bytes(), target.get_bytes()))
 
-    return pl.LazyFrame(data)
+    return pl.LazyFrame(data, schema=SIMILARITIES_SCHEMA)
 
 
 def similarities_from_data(metric: SimilarityMetric, df: pl.LazyFrame) -> pl.LazyFrame:

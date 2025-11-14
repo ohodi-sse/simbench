@@ -2,7 +2,7 @@ from pathlib import Path
 
 import numpy as np
 import polars as pl
-from typing import TypedDict, Required  # , Generic, TypeVarTuple, Tuple, NewType
+from typing import TypedDict, Required, NewType
 from sklearn.model_selection import train_test_split
 from loguru import logger
 
@@ -34,24 +34,61 @@ class File:
         return self._bytes
 
 
-class FileInfoDF(TypedDict, total=False):
-    src: Required[str]
-    src_label: Required[str]
+FILEINFO_SCHEMA = {
+    "src": pl.String(),
+    "src_label": pl.String(),
+    "src_file": pl.String(),
+}
+
+FileInfoDF = NewType("FileInfoDF", pl.LazyFrame(schema=FILEINFO_SCHEMA))
 
 
-class AnalysisSimDF(TypedDict, total=False):
-    src: Required[str]
-    target: Required[str]
-    src_label: Required[str]
-    tool_name: Required[str]
-    similarity: Required[float]
-    options: str  # Maybe it should be a subtype
+SIMILARITIES_SCHEMA = pl.Schema(
+    {
+        "src": pl.String(),
+        "target": pl.String(),
+        "src_label": pl.String(),
+        "tool_name": pl.String(),
+        "similarity": pl.Float32(),
+    }
+)
+
+AnalysisSimDF = NewType("AnalysisSimDF", pl.LazyFrame(schema=SIMILARITIES_SCHEMA))
+
+CLASSIFICATIONS_SCHEMA = pl.Schema(
+    {
+        "src": pl.String(),
+        "src_label": pl.String(),
+        "classifier": pl.String(),
+        "labelled_as": pl.String(),
+    }
+)
+CONFUSION_SCHEMA = pl.Schema(
+    {
+        "class": pl.String(),
+        "true_pos": pl.UInt64(),
+        "true_neg": pl.UInt64(),
+        "false_pos": pl.UInt64(),
+        "false_neg": pl.UInt64(),
+    }
+)
+
+PERFORMANCE_SCHEMA = pl.Schema(
+    {
+        "FP": pl.UInt64(),
+        "FN": pl.UInt64(),
+        "Acc": pl.Float32(),
+        "Prec": pl.Float32(),
+        "Rec": pl.Float32(),
+        "F1": pl.Float32(),
+    }
+)
 
 
 def collect_datafiles(dir: Path) -> FileInfoDF:
     # This functions expects the dir to point to a directory,
     # containing folders each containing samples with one specific label.
-    data = {"src": [], "src_label": [], "src_file": []}
+    data = {col: [] for col in FILEINFO_SCHEMA}
 
     logger.debug(f"Collecting data from {str(dir)}")
     dirs = dir.iterdir()
@@ -69,7 +106,8 @@ def collect_datafiles(dir: Path) -> FileInfoDF:
             )
 
     assert data["src"], "Failed to collect any files in the specified directory"
-    return pl.LazyFrame(data)
+
+    return pl.LazyFrame(data, schema=FILEINFO_SCHEMA)
 
 
 def join_on_src_target():

@@ -1,7 +1,9 @@
 import click
 from pathlib import Path
 
-from .data import load_parquet, collect_datafiles
+from simbench.plots import create_nclass_classification_plot
+
+from .data import CLASSIFICATIONS_SCHEMA, load_parquet, collect_datafiles
 from .analysis import run_analysis
 from .classification import get_classifier
 from . import similarity as sim
@@ -90,14 +92,15 @@ def analyse(dir: str, compressor: str, classifier: str, write: bool):
     dirpath = Path(dir)
     logger.debug("Instantiating similarity metric")
     metric = sim.get_metric("NCD", compressor)
+
+    assert metric, f"Failed to initialize metric from {compressor}"
     logger.debug(f"Metric initialized as: {metric.name()}")
 
-    classifier = get_classifier(classifier)
-    logger.debug(f"Classifier initialized as: {classifier.name()}")
+    classif = get_classifier(classifier)
+    assert classif, f"Failed to initialize classifier from {classifier}"
+    logger.debug(f"Classifier initialized as: {classif.name()}")
 
-    (data_df, sim_df, class_df, perf_df) = run_analysis(
-        dirpath, metric, classifier, write
-    )
+    (data_df, sim_df, class_df, perf_df) = run_analysis(dirpath, metric, classif, write)
 
     click.echo(f"Data overview: \n{data_df.collect()}")
     click.echo(f"Similarities: \n{sim_df.collect()}")
@@ -106,6 +109,29 @@ def analyse(dir: str, compressor: str, classifier: str, write: bool):
     click.echo("Done")
 
 
+@click.command("plot")
+@click.option(
+    "-f",
+    "--file",
+    help="Specify path to the data. It loads files in all subdirectories, and labels files according to their subdirectory",
+)
+def plot_classification(file: str) -> None:
+    filepath = Path(file)
+    assert filepath.is_file(), f"Filepath {filepath} is invalid"
+
+    classifications = load_parquet(filepath)
+    logger.debug(classifications.collect_schema())
+    logger.debug(CLASSIFICATIONS_SCHEMA)
+    assert classifications.collect_schema() == CLASSIFICATIONS_SCHEMA, (
+        "Must provide a classification file for this plot"
+    )
+
+    create_nclass_classification_plot(classifications)
+
+    click.echo("Done")
+
+
 cli.add_command(get_similarities)
 cli.add_command(collect_data)
 cli.add_command(analyse)
+cli.add_command(plot_classification)
