@@ -70,6 +70,8 @@ def choose_data():
 @pytest.fixture(scope="session")
 def choose_predata():
     datapath = Path.cwd() / "predata"
-    classes = [d.name for d in datapath.iterdir() if d.name != "analyses"]
+    classes = [
+        d.name for d in datapath.iterdir() if d.is_dir() and d.name != "analyses"
+    ]
 
     return classes

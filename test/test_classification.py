@@ -1,5 +1,6 @@
 from numpy import extract
 import polars as pl
+from pathlib import Path
 from loguru import logger
 import pytest
 
@@ -13,6 +14,7 @@ from simbench.classification import (
     get_confusion_matrix,
     get_performance_overview,
 )
+from simbench.data import load_parquet
 
 
 def test_best_match_classify(similaritiesfile):
@@ -120,3 +122,13 @@ def test_extract_bad_matches(similaritiesfile):
     bad_matches = extract_bad_matches(similaritiesfile)
 
     assert bad_matches == []
+
+
+@pytest.mark.slow
+def test_extract_bad_matches_real():
+    path = Path("predata/analyses/NCD-zstd_clvl_1-similarities.parquet")
+    similarities_df = load_parquet(path)
+    bad_matches = extract_bad_matches(similarities_df)
+
+    assert all(bad_matches)
+    assert all([s != t for (s, t) in bad_matches])

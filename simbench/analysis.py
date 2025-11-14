@@ -108,20 +108,24 @@ def extract_bad_matches(similarity_df: pl.LazyFrame) -> pl.LazyFrame:
     bad_srcs = pl.Series(class_df.filter(expr).select("src").collect()).to_list()
 
     bad_srcs_list = [
-        similarity_df.filter(pl.col("src") == bad_src)
+        similarity_df.filter(
+            (pl.col("src") == bad_src) & (pl.col("src") != pl.col("target"))
+        )
         .sort(by="similarity", descending=True)
         .select("src")
         .collect()
-        .item()
+        .item(0, "src")
         for bad_src in bad_srcs
     ]
 
     bad_targets_list = [
-        similarity_df.filter(pl.col("src") == bad_src)
+        similarity_df.filter(
+            (pl.col("src") == bad_src) & (pl.col("src") != pl.col("target"))
+        )
         .sort(by="similarity", descending=True)
         .select("target")
         .collect()
-        .item()
+        .item(0, "target")
         for bad_src in bad_srcs
     ]
 
