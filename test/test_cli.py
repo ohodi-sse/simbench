@@ -2,6 +2,7 @@ from simbench.cli import cli
 from click.testing import CliRunner
 from loguru import logger
 from pathlib import Path
+import polars as pl
 from simbench.classification import get_classifier
 
 
@@ -9,7 +10,7 @@ def test_collect_data(testdir, compressorname):
     runner = CliRunner()
     logger.debug(f"Running from {Path.cwd()}")
     result = runner.invoke(
-        cli, ["collect-data", "--dir", testdir.parent, "--compressor", compressorname]
+        cli, ["collect-data", str(testdir.parent), "--compressor", compressorname]
     )
 
     assert result.exit_code == 0, f"Cli failed with {result.exception}"
@@ -27,8 +28,7 @@ def test_analyse(testdir, compressorname, classifiername):
         cli,
         [
             "analyse",
-            "--dir",
-            testdir.parent,
+            str(testdir.parent),
             "--compressor",
             compressorname,
             "--classifier",
@@ -40,7 +40,28 @@ def test_analyse(testdir, compressorname, classifiername):
 
     logger.debug(f"Cli outputs: \n{result.output}")
 
-    classifierstr = get_classifier(classifiername).name()
+    classifier = get_classifier(classifiername)
+    assert classifier, "Failed to instantiate classifier"
+    classifierstr = classifier.name()
 
     assert compressorname in result.output
     assert classifierstr in result.output
+
+
+def test_merge_functions(testdir):
+    runner = CliRunner()
+
+    analysispath = testdir.parent / "analyses"
+
+    result = runner.invoke(
+        cli,
+        [
+            "merge-many",
+            str(analysispath),
+            "performance_overview.parquet",
+        ],
+    )
+
+    assert result.exit_code == 0, f"Cli failed with {result.exception}"
+
+    assert "Done" in result.output

@@ -11,7 +11,7 @@ class File:
     name: str
     path: Path
     label: str = ""
-    _bytes: bytes = None
+    _bytes: bytes | None = None
 
     def __init__(self, name, label, filepath: Path):
         if not filepath.is_file():
@@ -59,6 +59,7 @@ CLASSIFICATIONS_SCHEMA = pl.Schema(
     {
         "src": pl.String(),
         "src_label": pl.String(),
+        "tool_name": pl.String(),
         "classifier": pl.String(),
         "labelled_as": pl.String(),
     }
@@ -75,6 +76,8 @@ CONFUSION_SCHEMA = pl.Schema(
 
 PERFORMANCE_SCHEMA = pl.Schema(
     {
+        "tool_name": pl.String(),
+        "classifier": pl.String(),
         "FP": pl.UInt64(),
         "FN": pl.UInt64(),
         "Acc": pl.Float32(),
@@ -119,7 +122,7 @@ def write_parquet(filename: Path, data: pl.LazyFrame) -> None:
 
 
 def load_parquet(filename: Path) -> pl.LazyFrame:
-    if not filename.is_file():
+    if not (filename.is_file() & filename.name.endswith(".parquet")):
         raise ValueError(f"Path {filename} is not a valid file.")
     df = pl.scan_parquet(filename)
     return df
@@ -144,6 +147,43 @@ def get_label(data_overview: pl.LazyFrame, src: str) -> str:
     assert isinstance(label, str), "get_label must return a string"
 
     return label
+
+
+def merge_dataframes(df1: pl.LazyFrame, df2: pl.LazyFrame) -> pl.DataFrame:
+    assert df1.collect_schema() == df2.collect_schema(), (
+        "Can only merge dataframes with the same schema"
+    )
+
+    return df1.collect().extend(df2.collect())
+
+
+def merge_many(dir: Path, suffix: str) -> pl.DataFrame:
+    """Takes a directory and tries to load and merge all dataframes with a certain suffix"""
+    assert suffix.endswith(".parquet"), "Suffix should end with .parquet"
+
+    eligible_files = [
+        f
+        for f in dir.iterdir()
+        if f.is_file() and f.name.endswith(suffix) and ("merged" not in f.name)
+    ]
+
+    assert eligible_files, (
+        f"No files found with suffix {suffix} in directory {str(dir)}"
+    )
+
+    df = pl.read_parquet(eligible_files[0])
+    df_schema = df.schema
+    if len(eligible_files) < 2:
+        return df
+
+    for f in eligible_files[1:]:
+        df_next = pl.read_parquet(f)
+        assert df_schema == df_next.schema, (
+            "Can only merge dataframes with the same schema"
+        )
+        df.extend(df_next)
+
+    return df
 
 
 ######## DATA SPLITTING #############

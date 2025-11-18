@@ -1,9 +1,16 @@
+from numpy._core.fromnumeric import sort
 import click
 from pathlib import Path
 
 from simbench.plots import create_nclass_classification_plot
 
-from .data import CLASSIFICATIONS_SCHEMA, load_parquet, collect_datafiles
+from .data import (
+    CLASSIFICATIONS_SCHEMA,
+    load_parquet,
+    collect_datafiles,
+    merge_dataframes,
+    merge_many,
+)
 from .analysis import run_analysis
 from .classification import get_classifier
 from . import similarity as sim
@@ -18,18 +25,16 @@ def cli():
 
 
 @click.command()
-@click.option("-lf", "--load_file", help="")
-def get_similarities(load_file: str) -> pl.DataFrame:
-    data = load_parquet(Path(load_file))
-    logger.info(data)
+@click.argument("file")
+def show_file(file: str) -> pl.DataFrame:
+    assert file.endswith(".parquet"), "Can only show parquet file"
+
+    data = load_parquet(Path(file))
+    logger.info(data.collect())
 
 
 @click.command()
-@click.option(
-    "-d",
-    "--dir",
-    help="Specify path to the data. It loads files in all subdirectories, and labels files according to their subdirectory",
-)
+@click.argument("dir")
 @click.option(
     "-c",
     "--compressor",
@@ -43,6 +48,8 @@ def collect_data(dir: str, write: bool, compressor: str) -> pl.DataFrame:
     logger.debug("Instantiating similarity metric")
 
     metric = sim.get_metric("NCD", compressor)
+    assert metric, f"Failed to instantiate metric from {compressor}"
+
     logger.debug("Metric initialized")
 
     dirpath = Path.cwd() / Path(dir)
@@ -50,9 +57,6 @@ def collect_data(dir: str, write: bool, compressor: str) -> pl.DataFrame:
     logger.debug(f"Collecting files for analysis from {dirpath}")
     files_to_analyze = collect_datafiles(dirpath)
 
-    # files_to_analyze.write_parquet(
-    #     (Path.cwd() / "analyses/datafile_overview.parquet").resolve()
-    # )
     logger.debug(f"Calculating similarities for {metric.name()}")
     similarity_df = sim.similarities_from_data(metric, files_to_analyze)
 
@@ -68,11 +72,7 @@ def collect_data(dir: str, write: bool, compressor: str) -> pl.DataFrame:
 
 
 @click.command()
-@click.option(
-    "-d",
-    "--dir",
-    help="Specify path to the data. It loads files in all subdirectories, and labels files according to their subdirectory",
-)
+@click.argument("dir")
 @click.option(
     "-c",
     "--compressor",
@@ -110,18 +110,12 @@ def analyse(dir: str, compressor: str, classifier: str, write: bool):
 
 
 @click.command("plot")
-@click.option(
-    "-f",
-    "--file",
-    help="Specify path to the data. It loads files in all subdirectories, and labels files according to their subdirectory",
-)
-def plot_classification(file: str) -> None:
-    filepath = Path(file)
-    assert filepath.is_file(), f"Filepath {filepath} is invalid"
+@click.argument("path")
+def plot_classification(path: str) -> None:
+    filepath = Path(path)
 
     classifications = load_parquet(filepath)
-    logger.debug(classifications.collect_schema())
-    logger.debug(CLASSIFICATIONS_SCHEMA)
+
     assert classifications.collect_schema() == CLASSIFICATIONS_SCHEMA, (
         "Must provide a classification file for this plot"
     )
@@ -131,7 +125,50 @@ def plot_classification(file: str) -> None:
     click.echo("Done")
 
 
-cli.add_command(get_similarities)
+@click.command("merge")
+@click.argument("path1")
+@click.argument("path2")
+def merge_parquet(path1: str, path2: str):
+    filepath1 = Path(path1)
+    filepath2 = Path(path2)
+
+    file1 = load_parquet(filepath1)
+    file2 = load_parquet(filepath2)
+
+    merged = merge_dataframes(file1, file2)
+
+    logger.debug(merged)
+    return merged
+
+
+@click.command("merge-many")
+@click.argument("dir")
+@click.argument("suffix")
+@click.option(
+    "-s", "--sort-by", default=None, help="Pick a key to sort the merged dataframes by"
+)
+@click.option("-w", "--write", default=False, help="Writes the merged data to a file")
+def merge_many_cli(dir: str, suffix: str, sort_by: str, write: bool):
+    dirpath = Path(dir)
+
+    merged = merge_many(dirpath, suffix)
+
+    if sort_by:
+        merged = merged.sort(by=sort_by, descending=True)
+
+    if write:
+        data_filepath = dirpath / f"merged_{suffix}"
+        logger.info(f"Writing to {str(data_filepath)}")
+        merged.write_parquet(data_filepath.resolve())
+    else:
+        click.echo(merged)
+
+    click.echo("Done")
+
+
+cli.add_command(show_file)
 cli.add_command(collect_data)
 cli.add_command(analyse)
 cli.add_command(plot_classification)
+cli.add_command(merge_parquet)
+cli.add_command(merge_many_cli)

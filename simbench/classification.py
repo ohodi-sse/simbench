@@ -82,6 +82,7 @@ class KNN(Classifier):
 
 
 def get_classifier(classifier_name: str) -> Classifier | None:
+    assert isinstance(classifier_name, str), "get_classifier takes a string as input"
     classf_opts = classifier_name.split("_")
 
     k = None
@@ -110,13 +111,16 @@ def create_classification_dataframe(
 ) -> pl.LazyFrame:
     data = {col: [] for col in CLASSIFICATIONS_SCHEMA}
 
-    src_df = similarities.select("src", "src_label").unique(maintain_order=True)
+    src_df = similarities.select("src", "src_label", "tool_name").unique(
+        maintain_order=True
+    )
     src_names = pl.Series(src_df.select("src").collect()).to_list()
 
     classifications = [classifier(similarities, src).labelled_as for src in src_names]
 
     data["src"] = src_names
     data["src_label"] = pl.Series(src_df.select("src_label").collect()).to_list()
+    data["tool_name"] = pl.Series(src_df.select("tool_name").collect()).to_list()
     data["classifier"] = [classifier.name() for _ in range(len(src_names))]
     data["labelled_as"] = classifications
 
@@ -203,7 +207,12 @@ def get_performance_overview(class_df: pl.LazyFrame) -> pl.LazyFrame:
         else 0
     )
 
+    toolname = pl.Series(class_df.select("tool_name").unique().collect()).item()
+    classifier = pl.Series(class_df.select("classifier").unique().collect()).item()
+
     overview = {
+        "tool_name": [toolname],
+        "classifier": [classifier],
         "FP": [false_pos],
         "FN": [false_neg],
         "Acc": [accuracy],

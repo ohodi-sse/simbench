@@ -17,9 +17,9 @@ def create_nclass_classification_plot(class_df: pl.LazyFrame):
 
     plots = []
 
-    classes = pl.Series(class_df.select("src_label").collect().unique()).to_list()
+    classifier_name = class_df.select("classifier").unique().collect().item()
+    classes = pl.Series(class_df.select("src_label").unique().collect()).to_list()
     n_classes = len(classes)
-    logger.debug(classes)
     logger.debug(class_df.collect())
     clfy_per_group = [
         [
@@ -32,7 +32,6 @@ def create_nclass_classification_plot(class_df: pl.LazyFrame):
         ]
         for clabel in classes
     ]
-    logger.debug(clfy_per_group)
     class_lists = [range(n_classes)] * 2
     mosaic_tuples = tuple(itertools.product(*class_lists))
 
@@ -87,7 +86,11 @@ def create_nclass_classification_plot(class_df: pl.LazyFrame):
     step = 1.0 / len(classes)
     ticks = np.arange(0 + step / 2, 1 + step / 2, step)
     ax.set_xticks(ticks, labels)
-    ax.set_title("Classification Report", fontdict=title_font_dict, pad=25)
+    ax.set_title(
+        f"Classification Report using {classifier_name}",
+        fontdict=title_font_dict,
+        pad=25,
+    )
     ax.set_xlabel("Observed Class", fontdict=axis_label_font_dict, labelpad=10)
     ax.set_ylabel("Predicted Class", fontdict=axis_label_font_dict, labelpad=35)
 
