@@ -215,7 +215,7 @@ def split_data(X, y):
 
 def split_collected_data(
     datafile: Path, classes: np.array
-) -> (np.array, np.array, np.array, np.array):
+) -> tuple[np.array, np.array, np.array, np.array]:
     df = load_parquet(datafile)
 
     # pick out the chosen classes to stratify on this level as well.
