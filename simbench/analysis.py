@@ -9,7 +9,7 @@ from simbench.classification import (
     Classifier,
     create_classification_dataframe,
     get_classifier,
-    get_performance_overview,
+    get_performance_scikit,
 )
 
 
@@ -77,7 +77,7 @@ def run_analysis(
         perf_df = data.load_parquet(perf_path)
     else:
         logger.debug(f"Calculating performance overview for {metric.name()}")
-        perf_df = get_performance_overview(class_df)
+        perf_df = get_performance_scikit(class_df)
 
     if write:
         logger.info(f"Writing data overview to {str(data_path)}")

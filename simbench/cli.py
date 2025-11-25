@@ -2,20 +2,21 @@ from numpy._core.fromnumeric import sort
 import click
 from pathlib import Path
 
-from simbench.plots import create_nclass_classification_plot
+from simbench.plots import create_nclass_classification_plot, f_score_plot, plot_mds
 
 from .data import (
     CLASSIFICATIONS_SCHEMA,
+    SIMILARITIES_SCHEMA,
     load_parquet,
     collect_datafiles,
     merge_dataframes,
     merge_many,
 )
 from .analysis import run_analysis
-from .classification import get_classifier
+from .classification import get_classifier, get_performance_scikit
 from . import similarity as sim
-import polars as pl
 
+import polars as pl
 from loguru import logger
 
 
@@ -109,7 +110,7 @@ def analyse(dir: str, compressor: str, classifier: str, write: bool):
     click.echo("Done")
 
 
-@click.command("plot")
+@click.command("plot-cl")
 @click.argument("path")
 def plot_classification(path: str) -> None:
     filepath = Path(path)
@@ -121,6 +122,39 @@ def plot_classification(path: str) -> None:
     )
 
     create_nclass_classification_plot(classifications)
+    f_score_plot(classifications)
+
+    click.echo("Done")
+
+
+@click.command("plot-f")
+@click.argument("path")
+def plot_fscore(path: str) -> None:
+    filepath = Path(path)
+
+    classifications = load_parquet(filepath)
+
+    assert classifications.collect_schema() == CLASSIFICATIONS_SCHEMA, (
+        "Must provide a classification file for this plot"
+    )
+
+    f_score_plot(classifications)
+
+    click.echo("Done")
+
+
+@click.command("plot-mds")
+@click.argument("path")
+def plot_mds_cli(path: str) -> None:
+    filepath = Path(path)
+
+    similarities = load_parquet(filepath)
+
+    assert similarities.collect_schema() == SIMILARITIES_SCHEMA, (
+        "Must provide a similarities file for this plot"
+    )
+
+    plot_mds(similarities)
 
     click.echo("Done")
 
@@ -166,9 +200,25 @@ def merge_many_cli(dir: str, suffix: str, sort_by: str, write: bool):
     click.echo("Done")
 
 
+@click.command()
+@click.argument("file")
+def fscore(file: str) -> None:
+    filepath = Path(file)
+
+    class_df = load_parquet(filepath)
+    assert class_df.collect_schema() == CLASSIFICATIONS_SCHEMA, (
+        "Can only calculate F-score from classification file"
+    )
+
+    get_performance_scikit(class_df)
+
+
 cli.add_command(show_file)
 cli.add_command(collect_data)
 cli.add_command(analyse)
 cli.add_command(plot_classification)
 cli.add_command(merge_parquet)
 cli.add_command(merge_many_cli)
+cli.add_command(plot_fscore)
+cli.add_command(plot_mds_cli)
+cli.add_command(fscore)

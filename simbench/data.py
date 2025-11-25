@@ -46,8 +46,9 @@ FileInfoDF = NewType("FileInfoDF", pl.LazyFrame(schema=FILEINFO_SCHEMA))
 SIMILARITIES_SCHEMA = pl.Schema(
     {
         "src": pl.String(),
-        "target": pl.String(),
+        "tgt": pl.String(),
         "src_label": pl.String(),
+        "tgt_label": pl.String(),
         "tool_name": pl.String(),
         "similarity": pl.Float32(),
     }
@@ -129,7 +130,7 @@ def load_parquet(filename: Path) -> pl.LazyFrame:
 
 
 def get_similarity(data: pl.LazyFrame, src: str, target: str) -> float:
-    filter_expr = (pl.col("src") == src) & (pl.col("target") == target)
+    filter_expr = (pl.col("src") == src) & (pl.col("tgt") == target)
     similarity = data.filter(filter_expr).select("similarity").collect()
 
     return similarity.item()

@@ -14,6 +14,8 @@ import zlib
 
 
 class Compress(Protocol):
+    compression_lvl: int
+
     @abstractmethod
     def __call__(self, file: bytes, out: io.BytesIO) -> None:
         pass
@@ -185,11 +187,13 @@ def create_similarity_matrix(
         for target in files:
             data["src"].append(src.name)
             data["src_label"].append(src.label)
-            data["target"].append(target.name)
+            data["tgt"].append(target.name)
+            data["tgt_label"].append(target.label)
             data["tool_name"].append(metric.name())
             data["similarity"].append(metric(src.get_bytes(), target.get_bytes()))
 
-    return pl.LazyFrame(data, schema=SIMILARITIES_SCHEMA)
+    df = pl.DataFrame(data, schema=SIMILARITIES_SCHEMA).sort(by="similarity")
+    return df.lazy()
 
 
 def similarities_from_data(metric: SimilarityMetric, df: pl.LazyFrame) -> pl.LazyFrame:
