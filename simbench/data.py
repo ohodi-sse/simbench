@@ -54,13 +54,47 @@ SIMILARITIES_SCHEMA = pl.Schema(
     }
 )
 
+COMP_CLASS_SCHEMA = pl.Schema(
+    {
+        "src": pl.String(),
+        "tgt": pl.String(),
+        "complen": pl.UInt64(),
+        "time": pl.Float64(),
+    }
+)
+
+COMP_FILE_SCHEMA = pl.Schema(
+    {
+        "src": pl.String(),
+        "complen": pl.UInt64(),
+        "time": pl.Float64(),
+    }
+)
+
+
+DISTANCE_SCHEMA = pl.Schema(
+    {
+        "src": pl.String(),
+        "tgt": pl.String(),
+        "src_label": pl.String(),
+        "tgt_label": pl.String(),
+        "metric": pl.String(),
+        "comp": pl.String(),
+        "comp_lvl": pl.UInt8(),
+        "distance": pl.Float32(),
+        "time": pl.Float32(),
+    }
+)
+
 AnalysisSimDF = NewType("AnalysisSimDF", pl.LazyFrame(schema=SIMILARITIES_SCHEMA))
 
 CLASSIFICATIONS_SCHEMA = pl.Schema(
     {
         "src": pl.String(),
         "src_label": pl.String(),
-        "tool_name": pl.String(),
+        "metric": pl.String(),
+        "comp": pl.String(),
+        "comp_lvl": pl.UInt8(),
         "classifier": pl.String(),
         "labelled_as": pl.String(),
     }
@@ -77,7 +111,9 @@ CONFUSION_SCHEMA = pl.Schema(
 
 PERFORMANCE_SCHEMA = pl.Schema(
     {
-        "tool_name": pl.String(),
+        "metric": pl.String(),
+        "comp": pl.String(),
+        "comp_lvl": pl.UInt8(),
         "classifier": pl.String(),
         "FP": pl.UInt64(),
         "FN": pl.UInt64(),
@@ -129,9 +165,18 @@ def load_parquet(filename: Path) -> pl.LazyFrame:
     return df
 
 
+def filelist_from_data(df: pl.LazyFrame) -> list[File]:
+    file_paths = [
+        Path(fp) for fp in pl.Series(df.select("src_file").collect()).to_list()
+    ]
+    files = [File(fp.name, fp.parent.stem, fp) for fp in file_paths]
+
+    return files
+
+
 def get_similarity(data: pl.LazyFrame, src: str, target: str) -> float:
     filter_expr = (pl.col("src") == src) & (pl.col("tgt") == target)
-    similarity = data.filter(filter_expr).select("similarity").collect()
+    similarity = data.filter(filter_expr).select("distance").collect()
 
     return similarity.item()
 
@@ -185,46 +230,3 @@ def merge_many(dir: Path, suffix: str) -> pl.DataFrame:
         df.extend(df_next)
 
     return df
-
-
-######## DATA SPLITTING #############
-
-
-def split_classes(classdir: Path) -> (np.array, np.array):
-    classes = [
-        int("".join([ch for ch in c if ch.isdigit()]))
-        for c in classdir.iterdir()
-        if c.is_dir()
-    ]
-
-    classes_train, classes_test = train_test_split(
-        classes, train_size=0.8, random_state=1, shuffle=True, stratify=None
-    )
-    return classes_train, classes_test
-
-
-def split_data(X, y):
-    X_train, X_test, y_train, y_test = train_test_split(
-        X, y, train_size=0.8, random_state=1, shuffle=True, stratify=None
-    )
-
-    print(f"Class distribution of train set: {y_train.value_counts()}")
-    print(f"Class distribution of test set: {y_test.value_counts()}")
-
-    return X_train, X_test, y_train, y_test
-
-
-def split_collected_data(
-    datafile: Path, classes: np.array
-) -> tuple[np.array, np.array, np.array, np.array]:
-    df = load_parquet(datafile)
-
-    # pick out the chosen classes to stratify on this level as well.
-    df = df[classes]
-
-    X = df.to_numpy().transpose()
-    y = df.columns
-
-    X_train, X_test, y_train, y_test = split_data(X, y)
-
-    return X_train, X_test, y_train, y_test

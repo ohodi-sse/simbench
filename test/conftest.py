@@ -29,7 +29,7 @@ def testfiles(testdir):
 
 @pytest.fixture(scope="session")
 def similaritiesfile():
-    path = Path("test/analyses/NCD-zstd_clvl_1-similarities.parquet")
+    path = Path("test/analyses/NCD_zstd_1-distances.parquet")
     return load_parquet(path)
 
 

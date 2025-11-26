@@ -1,11 +1,19 @@
 from numpy._core.fromnumeric import sort
+import matplotlib.pyplot as plt
 import click
 from pathlib import Path
 
-from simbench.plots import create_nclass_classification_plot, f_score_plot, plot_mds
+from simbench.plots import (
+    create_nclass_classification_plot,
+    f_score_plot,
+    f_score_radius_plot,
+    plot_mds,
+    f_score_knn_plot,
+)
 
 from .data import (
     CLASSIFICATIONS_SCHEMA,
+    DISTANCE_SCHEMA,
     SIMILARITIES_SCHEMA,
     load_parquet,
     collect_datafiles,
@@ -45,44 +53,6 @@ def show_file(file: str) -> pl.DataFrame:
 @click.option(
     "-w", "--write", default=False, help="Writes the collected data to a file"
 )
-def collect_data(dir: str, write: bool, compressor: str) -> pl.DataFrame:
-    logger.debug("Instantiating similarity metric")
-
-    metric = sim.get_metric("NCD", compressor)
-    assert metric, f"Failed to instantiate metric from {compressor}"
-
-    logger.debug("Metric initialized")
-
-    dirpath = Path.cwd() / Path(dir)
-
-    logger.debug(f"Collecting files for analysis from {dirpath}")
-    files_to_analyze = collect_datafiles(dirpath)
-
-    logger.debug(f"Calculating similarities for {metric.name()}")
-    similarity_df = sim.similarities_from_data(metric, files_to_analyze)
-
-    logger.debug(f"Similarities: {similarity_df}")
-    if write:
-        data_filepath = Path.cwd() / f"analyses/similarities_{metric.name()}.parquet"
-        logger.info(f"Writing to {str(data_filepath)}")
-        similarity_df.collect().write_parquet(data_filepath.resolve())
-    else:
-        click.echo(similarity_df.collect())
-
-    logger.info("Done")
-
-
-@click.command()
-@click.argument("dir")
-@click.option(
-    "-c",
-    "--compressor",
-    default="zstd",
-    help="Choose compressor: zstd, zstandard, gzip",
-)
-@click.option(
-    "-w", "--write", default=False, help="Writes the collected data to a file"
-)
 @click.option(
     "-cl",
     "--classifier",
@@ -101,7 +71,9 @@ def analyse(dir: str, compressor: str, classifier: str, write: bool):
     assert classif, f"Failed to initialize classifier from {classifier}"
     logger.debug(f"Classifier initialized as: {classif.name()}")
 
-    (data_df, sim_df, class_df, perf_df) = run_analysis(dirpath, metric, classif, write)
+    (data_df, compf_df, compc_df, sim_df, class_df, perf_df) = run_analysis(
+        dirpath, metric, classif, write
+    )
 
     click.echo(f"Data overview: \n{data_df.collect()}")
     click.echo(f"Similarities: \n{sim_df.collect()}")
@@ -132,13 +104,45 @@ def plot_classification(path: str) -> None:
 def plot_fscore(path: str) -> None:
     filepath = Path(path)
 
-    classifications = load_parquet(filepath)
+    distances = load_parquet(filepath)
 
-    assert classifications.collect_schema() == CLASSIFICATIONS_SCHEMA, (
-        "Must provide a classification file for this plot"
+    assert distances.collect_schema() == DISTANCE_SCHEMA, (
+        "Must provide a distance file for this plot"
     )
 
-    f_score_plot(classifications)
+    f_score_plot(distances)
+
+    click.echo("Done")
+
+
+@click.command("plot-knn")
+@click.argument("path")
+def plot_fscore_knn(path: str) -> None:
+    filepath = Path(path)
+
+    distances = load_parquet(filepath)
+
+    assert distances.collect_schema() == DISTANCE_SCHEMA, (
+        "Must provide a distance file for this plot"
+    )
+
+    f_score_knn_plot(distances)
+
+    click.echo("Done")
+
+
+@click.command("plot-thr")
+@click.argument("path")
+def plot_fscore_thr(path: str) -> None:
+    filepath = Path(path)
+
+    distances = load_parquet(filepath)
+
+    assert distances.collect_schema() == DISTANCE_SCHEMA, (
+        "Must provide a distance file for this plot"
+    )
+
+    f_score_radius_plot(distances)
 
     click.echo("Done")
 
@@ -150,7 +154,7 @@ def plot_mds_cli(path: str) -> None:
 
     similarities = load_parquet(filepath)
 
-    assert similarities.collect_schema() == SIMILARITIES_SCHEMA, (
+    assert similarities.collect_schema() == DISTANCE_SCHEMA, (
         "Must provide a similarities file for this plot"
     )
 
@@ -205,20 +209,23 @@ def merge_many_cli(dir: str, suffix: str, sort_by: str, write: bool):
 def fscore(file: str) -> None:
     filepath = Path(file)
 
-    class_df = load_parquet(filepath)
-    assert class_df.collect_schema() == CLASSIFICATIONS_SCHEMA, (
-        "Can only calculate F-score from classification file"
+    dist_df = load_parquet(filepath)
+    assert dist_df.collect_schema() == DISTANCE_SCHEMA, (
+        "Can only calculate F-score from distance file"
     )
 
-    get_performance_scikit(class_df)
+    plot = get_performance_scikit(dist_df)
+
+    plt.show()
 
 
 cli.add_command(show_file)
-cli.add_command(collect_data)
 cli.add_command(analyse)
 cli.add_command(plot_classification)
 cli.add_command(merge_parquet)
 cli.add_command(merge_many_cli)
 cli.add_command(plot_fscore)
+cli.add_command(plot_fscore_knn)
+cli.add_command(plot_fscore_thr)
 cli.add_command(plot_mds_cli)
 cli.add_command(fscore)

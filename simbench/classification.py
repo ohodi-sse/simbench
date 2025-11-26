@@ -35,7 +35,7 @@ class Classification:
 
 class Classifier:
     @abstractmethod
-    def __call__(self, similarity_df: pl.LazyFrame, src: str) -> Classification:
+    def __call__(self, similarity_df: pl.LazyFrame, src: str) -> Classification | None:
         pass
 
     @abstractmethod
@@ -47,9 +47,7 @@ class Classifier:
 class BestMatch(Classifier):
     def __call__(self, similarity_df: pl.LazyFrame, src: str) -> Classification:
         filter_expr = (pl.col("src") == src) & (pl.col("tgt") != src)
-        file_column = similarity_df.filter(filter_expr).sort(
-            "similarity", descending=True
-        )
+        file_column = similarity_df.filter(filter_expr).sort("distance")
 
         best_match_name = file_column.select("tgt").collect().item(0, 0)
         label = get_label(similarity_df, best_match_name)
@@ -60,25 +58,25 @@ class BestMatch(Classifier):
         return "BestMatch"
 
 
-def sort_pr_src(similarities: pl.LazyFrame) -> pl.LazyFrame:
-    return similarities.sort("src", "similarity", descending=[False, True])
+def sort_pr_src(distances: pl.LazyFrame) -> pl.LazyFrame:
+    return distances.sort("src", "distance", descending=[False, False])
 
 
 @dataclass(frozen=True)
 class KNN(Classifier):
     k: int
 
-    def __call__(self, similarities: pl.LazyFrame, src: str) -> Classification:
+    def __call__(self, distances: pl.LazyFrame, src: str) -> Classification:
         assert self.k > 0, "k must be positive"
-        sorted_sim = sort_pr_src(similarities)
+        sorted_sim = sort_pr_src(distances)
 
         filter_expr = (pl.col("src") == src) & (pl.col("tgt") != src)
-        src_sim = sorted_sim.filter(filter_expr).select(["tgt", "similarity"])
+        src_sim = sorted_sim.filter(filter_expr).select(["tgt", "distance"])
 
         k_best = src_sim.head(self.k)
 
         k_best_names = pl.Series(k_best.select("tgt").collect()).to_list()
-        labels = [get_label(similarities, filename) for filename in k_best_names]
+        labels = [get_label(distances, filename) for filename in k_best_names]
 
         label_counts = Counter(labels)
         label = max(label_counts)
@@ -96,30 +94,28 @@ class KNN(Classifier):
 class Threshold(Classifier):
     threshold: float
 
-    def __call__(self, similarities: pl.LazyFrame, src: str) -> Classification:
+    def __call__(self, distances: pl.LazyFrame, src: str) -> Classification | None:
         assert 0.0 <= self.threshold and self.threshold <= 1.0, (
             "Threshold must be between 0 and 1"
         )
-        sorted_sim = sort_pr_src(similarities)
+        sorted_sim = sort_pr_src(distances)
 
         filter_expr = (pl.col("src") == src) & (pl.col("tgt") != src)
-        src_sim = sorted_sim.filter(filter_expr).select(["tgt", "similarity"])
-        in_radius = src_sim.filter(pl.col("similarity") > self.threshold)
+        src_sim = sorted_sim.filter(filter_expr).select(["tgt", "distance"])
+        in_radius = src_sim.filter(pl.col("distance") < self.threshold)
 
         best_names = pl.Series(in_radius.select("tgt").collect()).to_list()
 
         if not best_names:
             logger.warning(
-                f"Did not find any files to compare with threshold: {self.threshold}. Defaulting to best match"
+                f"Did not find any files to compare with threshold: {self.threshold}."
             )
-            best_match_name = src_sim.select("tgt").collect().item(0, 0)
-            label = get_label(similarities, best_match_name)
-        else:
-            logger.debug("Found match inside radius")
-            labels = [get_label(similarities, filename) for filename in best_names]
+            return None
 
-            label_counts = Counter(labels)
-            label = max(label_counts)
+        labels = [get_label(distances, filename) for filename in best_names]
+
+        label_counts = Counter(labels)
+        label = max(label_counts)
 
         return Classification(src, label, best_names)
 
@@ -134,30 +130,28 @@ class Threshold(Classifier):
 class KThreshold(Classifier):
     threshold: float
 
-    def __call__(self, similarities: pl.LazyFrame, src: str) -> Classification:
+    def __call__(self, distances: pl.LazyFrame, src: str) -> Classification | None:
         assert 0.0 <= self.threshold and self.threshold <= 1.0, (
             "Threshold must be between 0 and 1"
         )
-        sorted_sim = sort_pr_src(similarities)
+        sorted_sim = sort_pr_src(distances)
 
         filter_expr = (pl.col("src") == src) & (pl.col("tgt") != src)
-        src_sim = sorted_sim.filter(filter_expr).select(["tgt", "similarity"])
-        in_radius = src_sim.filter(pl.col("similarity") > self.threshold)
+        src_sim = sorted_sim.filter(filter_expr).select(["tgt", "distance"])
+        in_radius = src_sim.filter(pl.col("distance") > self.threshold)
 
         best_names = pl.Series(in_radius.select("tgt").collect().head(10)).to_list()
 
         if not best_names:
             logger.warning(
-                f"Did not find any files to compare with threshold: {self.threshold}. Defaulting to best match"
+                f"Did not find any files to compare with threshold: {self.threshold}."
             )
-            best_match_name = src_sim.select("tgt").collect().item(0, 0)
-            label = get_label(similarities, best_match_name)
-        else:
-            logger.debug("Found match inside radius")
-            labels = [get_label(similarities, filename) for filename in best_names]
+            return None
 
-            label_counts = Counter(labels)
-            label = max(label_counts)
+        labels = [get_label(distances, filename) for filename in best_names]
+
+        label_counts = Counter(labels)
+        label = max(label_counts)
 
         return Classification(src, label, best_names)
 
@@ -194,7 +188,7 @@ def get_classifier(classifier_name: str) -> Classifier | None:
                 "Must provide the knn option as knn_? where ? is the number of nearest neighbours"
             )
             try:
-                return KThreshold(float(opt))
+                return Threshold(float(opt))
             except ValueError:
                 logger.warning(
                     "Threshold classifiers should be given a threshold value. Pass knn_? where ? is an int"
@@ -204,24 +198,63 @@ def get_classifier(classifier_name: str) -> Classifier | None:
 
 
 def create_classification_dataframe(
-    similarities: pl.LazyFrame, classifier: Classifier
+    distances: pl.LazyFrame, classifier: Classifier
 ) -> pl.LazyFrame:
     data = {col: [] for col in CLASSIFICATIONS_SCHEMA}
 
-    src_df = similarities.select("src", "src_label", "tool_name").unique(
+    src_df = distances.select("src", "src_label", "metric", "comp", "comp_lvl").unique(
+        maintain_order=True
+    )
+    src_names = pl.Series(src_df.select("src").collect()).to_list()
+    classifications = [classifier(distances, src).labelled_as for src in src_names]
+
+    data["src"] = src_names
+    data["src_label"] = pl.Series(src_df.select("src_label").collect()).to_list()
+    data["metric"] = pl.Series(src_df.select("metric").collect()).to_list()
+    data["comp"] = pl.Series(src_df.select("comp").collect()).to_list()
+    data["comp_lvl"] = pl.Series(src_df.select("comp_lvl").collect()).to_list()
+    data["classifier"] = [classifier.name() for _ in range(len(src_names))]
+    data["labelled_as"] = classifications
+
+    return pl.LazyFrame(data, schema=CLASSIFICATIONS_SCHEMA)
+
+
+def create_classification_dataframe_new(
+    distances: pl.LazyFrame, classifier: Classifier
+) -> pl.LazyFrame:
+    data = {col: [] for col in CLASSIFICATIONS_SCHEMA}
+
+    src_df = distances.select("src", "src_label", "metric", "comp", "comp_lvl").unique(
         maintain_order=True
     )
     src_names = pl.Series(src_df.select("src").collect()).to_list()
 
-    classifications = [classifier(similarities, src).labelled_as for src in src_names]
+    classified = [(src, classifier(distances, src)) for src in src_names]
 
-    data["src"] = src_names
-    data["src_label"] = pl.Series(src_df.select("src_label").collect()).to_list()
-    data["tool_name"] = pl.Series(src_df.select("tool_name").collect()).to_list()
-    data["classifier"] = [classifier.name() for _ in range(len(src_names))]
-    data["labelled_as"] = classifications
+    classifiable = [s for (s, c) in classified if c]
 
-    # src_df.join(pl.LazyFrame(data), on="src")
+    if classifiable:
+        classifications = [c.labelled_as for (_, c) in classified if c]
+        # logger.debug(src_df.collect())
+        src_df = src_df.collect().with_columns(
+            pl.when(pl.col("src").is_in(classifiable))
+            .then(True)
+            .otherwise(False)
+            .alias("classifiable")
+        )
+
+        # logger.debug(src_df)
+        classifiable_df = src_df.filter(pl.col("classifiable"))
+        # logger.debug(classifiable_df)
+        data["src"] = classifiable
+        data["src_label"] = pl.Series(classifiable_df.select("src_label")).to_list()
+        data["metric"] = pl.Series(classifiable_df.select("metric")).to_list()
+        data["comp"] = pl.Series(classifiable_df.select("comp")).to_list()
+        data["comp_lvl"] = pl.Series(classifiable_df.select("comp_lvl")).to_list()
+        data["classifier"] = [classifier.name() for _ in range(len(classifiable))]
+        data["labelled_as"] = classifications
+
+        # src_df.join(pl.LazyFrame(data), on="src")
     return pl.LazyFrame(data, schema=CLASSIFICATIONS_SCHEMA)
 
 
@@ -272,6 +305,52 @@ def get_confusion_matrix(class_df: pl.LazyFrame) -> pl.LazyFrame:
     )
 
 
+def get_performance_data(class_df: pl.LazyFrame) -> tuple[float, float, float, float]:
+    src_labels = pl.Series(class_df.select("src_label").collect()).to_list()
+    labelled_as = pl.Series(class_df.select("labelled_as").collect()).to_list()
+
+    averaging = "macro"
+
+    accuracy = accuracy_score(src_labels, labelled_as)
+    precision, recall, f_score, _ = precision_recall_fscore_support(
+        src_labels, labelled_as, average=averaging, zero_division=False
+    )
+
+    return accuracy, precision, recall, f_score
+
+
+def get_performance_scikit(class_df: pl.LazyFrame) -> pl.LazyFrame:
+    metric = pl.Series(class_df.select("metric").unique().collect()).item()
+    comp = pl.Series(class_df.select("comp").unique().collect()).item()
+    complvl = pl.Series(class_df.select("comp_lvl").unique().collect()).item()
+
+    classifier = pl.Series(class_df.select("classifier").unique().collect()).item()
+
+    src_labels = pl.Series(class_df.select("src_label").collect()).to_list()
+    labelled_as = pl.Series(class_df.select("labelled_as").collect()).to_list()
+
+    cm = confusion_matrix(src_labels, labelled_as)
+    FP = sum(cm.sum(axis=0) - np.diag(cm))
+    FN = sum(cm.sum(axis=1) - np.diag(cm))
+
+    accuracy, precision, recall, f_score = get_performance_data(class_df)
+
+    overview = {
+        "metric": [metric],
+        "comp": [comp],
+        "comp_lvl": [complvl],
+        "classifier": [classifier],
+        "FP": [FP],
+        "FN": [FN],
+        "Acc": [accuracy],
+        "Prec": [precision],
+        "Rec": [recall],
+        "F1": [f_score],
+    }
+
+    return pl.LazyFrame(overview, schema=PERFORMANCE_SCHEMA)
+
+
 def get_performance_overview(class_df: pl.LazyFrame) -> pl.LazyFrame:
     confusion_mat = get_confusion_matrix(class_df)
 
@@ -304,11 +383,15 @@ def get_performance_overview(class_df: pl.LazyFrame) -> pl.LazyFrame:
         else 0
     )
 
-    toolname = pl.Series(class_df.select("tool_name").unique().collect()).item()
+    metric = pl.Series(class_df.select("metric").unique().collect()).item()
+    comp = pl.Series(class_df.select("comp").unique().collect()).item()
+    complvl = pl.Series(class_df.select("comp_lvl").unique().collect()).item()
     classifier = pl.Series(class_df.select("classifier").unique().collect()).item()
 
     overview = {
-        "tool_name": [toolname],
+        "metric": [metric],
+        "comp": [comp],
+        "comp_lvl": [complvl],
         "classifier": [classifier],
         "FP": [false_pos],
         "FN": [false_neg],
@@ -317,41 +400,5 @@ def get_performance_overview(class_df: pl.LazyFrame) -> pl.LazyFrame:
         "Rec": [recall],
         "F1": [f_score],
     }
-
-    return pl.LazyFrame(overview, schema=PERFORMANCE_SCHEMA)
-
-
-def get_performance_scikit(class_df: pl.LazyFrame) -> pl.LazyFrame:
-    toolname = pl.Series(class_df.select("tool_name").unique().collect()).item()
-    classifier = pl.Series(class_df.select("classifier").unique().collect()).item()
-
-    src_labels = pl.Series(class_df.select("src_label").collect()).to_list()
-    labelled_as = pl.Series(class_df.select("labelled_as").collect()).to_list()
-    labels = list(set(src_labels))
-
-    averaging = "macro"
-    cm = confusion_matrix(src_labels, labelled_as, labels=labels)
-    FP = sum(cm.sum(axis=0) - np.diag(cm)).item()
-    FN = sum(cm.sum(axis=1) - np.diag(cm)).item()
-    # TP = np.diag(cm)
-    # TN = cm.sum() - (FP + FN + TP)
-
-    accuracy = accuracy_score(src_labels, labelled_as)
-    precision, recall, f_score, _ = precision_recall_fscore_support(
-        src_labels, labelled_as, average=averaging
-    )
-    overview = {
-        "tool_name": [toolname],
-        "classifier": [classifier],
-        "FP": [FP],
-        "FN": [FN],
-        "Acc": [accuracy],
-        "Prec": [precision],
-        "Rec": [recall],
-        "F1": [f_score],
-    }
-
-    logger.debug(overview)
-    plt.show()
 
     return pl.LazyFrame(overview, schema=PERFORMANCE_SCHEMA)

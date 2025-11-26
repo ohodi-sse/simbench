@@ -1,7 +1,12 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import polars as pl
-from simbench.data import CLASSIFICATIONS_SCHEMA, CONFUSION_SCHEMA
+from simbench.classification import (
+    create_classification_dataframe,
+    get_classifier,
+    get_performance_data,
+)
+from simbench.data import CLASSIFICATIONS_SCHEMA, CONFUSION_SCHEMA, DISTANCE_SCHEMA
 from statsmodels.graphics.mosaicplot import mosaic
 from sklearn.metrics import (
     confusion_matrix,
@@ -13,6 +18,8 @@ import itertools
 from collections import deque
 import matplotlib.colors as mcolors
 from loguru import logger
+
+from indicatif import ProgressBar, ProgressStyle
 
 
 def create_nclass_classification_plot(class_df: pl.LazyFrame):
@@ -125,17 +132,19 @@ def plot_confusion_matrix(class_df: pl.LazyFrame) -> None:
     plt.show()
 
 
-def f_score_plot(similarity_df: pl.LazyFrame) -> None:
-    sd = {score: [] for score in ["false_neg", "false_pos", "true_pos", "true_neg"]}
-    df = similarity_df.collect()
-    df = df.sort(by="similarity")
+def f_score_plot(distance_df: pl.LazyFrame) -> None:
+    assert distance_df.collect_schema() == DISTANCE_SCHEMA, (
+        "Must provide a distance file to plot f-score"
+    )
+    df = distance_df.collect()
+    df = df.sort(by="distance")
 
     Tot = df.height
 
     R = df["src_label"] == df["tgt_label"]
     F = df["src_label"] != df["tgt_label"]
 
-    S = df["similarity"]
+    S = df["distance"]
 
     TotRel = R.sum()
     FN = R.cum_sum()
@@ -161,23 +170,78 @@ def f_score_plot(similarity_df: pl.LazyFrame) -> None:
     plt.show()
 
 
-def plot_mds(similarity_df: pl.LazyFrame) -> None:
-    similarities = pl.Series(similarity_df.select("similarity").collect()).to_list()
+def f_score_knn_plot(distance_df: pl.LazyFrame) -> None:
+    data = {s: [] for s in ["Prec", "Recall", "F1"]}
+
+    k_range = range(1, 100, 5)
+
+    pb = ProgressBar(
+        len(k_range),
+        style=ProgressStyle(
+            template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
+            progress_chars="#>-",
+        ),
+    )
+
+    for k in k_range:
+        pb.inc(1)
+        classifier = get_classifier(f"knn_{k}")
+        assert classifier, f"Failed to instantiate knn from {k}"
+        class_df = create_classification_dataframe(distance_df, classifier)
+        accuracy, precision, recall, fscore = get_performance_data(class_df)
+        data["Prec"].append(precision)
+        data["Recall"].append(recall)
+        data["F1"].append(fscore)
+
+    pb.finish()
+    plt.plot(k_range, data["Prec"], label="Prec")
+    plt.plot(k_range, data["Recall"], label="Recall")
+    plt.plot(k_range, data["F1"], label="F1")
+
+    plt.legend()
+    plt.show()
+
+
+def f_score_radius_plot(distance_df: pl.LazyFrame) -> None:
+    data = {s: [] for s in ["Prec", "Recall", "F1"]}
+
+    t_range = np.arange(0.0, 1.0, 0.05)
+
+    for t in t_range:
+        classifier = get_classifier(f"thr_{t}")
+        assert classifier, f"Failed to instantiate threshold from {t}"
+        class_df = create_classification_dataframe(distance_df, classifier)
+        accuracy, precision, recall, fscore = get_performance_data(class_df)
+
+        data["Prec"].append(precision)
+        data["Recall"].append(recall)
+        data["F1"].append(fscore)
+
+    plt.plot(t_range, data["Prec"], label="Prec")
+    plt.plot(t_range, data["Recall"], label="Recall")
+    plt.plot(t_range, data["F1"], label="F1")
+
+    plt.legend()
+    plt.show()
+
+
+def plot_mds(distance_df: pl.LazyFrame) -> None:
+    similarities = pl.Series(distance_df.select("distance").collect()).to_list()
 
     X = []
 
-    srcs = pl.Series(similarity_df.select("src").collect().unique()).to_list()
+    srcs = pl.Series(distance_df.select("src").collect().unique()).to_list()
 
     for s in srcs:
         X.append(
             pl.Series(
-                similarity_df.filter(pl.col("src") == s).select("similarity").collect()
+                distance_df.filter(pl.col("src") == s).select("distance").collect()
             ).to_list()
         )
     X = np.array(X)  # The matrix is not symmetric due to the metric
 
     logger.debug(X)
-    n = similarity_df.select("src_label").collect().unique().height
+    n = distance_df.select("src_label").collect().unique().height
     mds = manifold.MDS(
         n_components=n,
         max_iter=3000,

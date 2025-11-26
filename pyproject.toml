@@ -21,6 +21,7 @@ dependencies = [
     "numpy>=2.3.4",
     "pandas>=2.3.3",
     "polars>=1.35.1",
+    "py-indicatif>=0.1.0",
     "pyarrow>=22.0.0",
     "pytest-profiling>=1.8.1",
     "pytest-xdist>=3.8.0",
