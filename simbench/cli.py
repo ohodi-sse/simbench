@@ -7,16 +7,13 @@ from simbench.plots import (
     create_nclass_classification_plot,
     f_score_plot,
     f_score_radius_plot,
-    plot_mds,
     f_score_knn_plot,
 )
 
 from .data import (
     CLASSIFICATIONS_SCHEMA,
     DISTANCE_SCHEMA,
-    SIMILARITIES_SCHEMA,
     load_parquet,
-    collect_datafiles,
     merge_dataframes,
     merge_many,
 )
@@ -36,7 +33,7 @@ def cli():
 @click.command()
 @click.argument("file")
 @click.option("-fl", "--filter", default=None, help="Filter on source")
-def show_file(file: str, filter) -> pl.DataFrame:
+def show_file(file: str, filter) -> None:
     assert file.endswith(".parquet"), "Can only show parquet file"
 
     data = load_parquet(Path(file))
@@ -152,20 +149,20 @@ def plot_fscore_thr(path: str) -> None:
     click.echo("Done")
 
 
-@click.command("plot-mds")
-@click.argument("path")
-def plot_mds_cli(path: str) -> None:
-    filepath = Path(path)
-
-    similarities = load_parquet(filepath)
-
-    assert similarities.collect_schema() == DISTANCE_SCHEMA, (
-        "Must provide a similarities file for this plot"
-    )
-
-    plot_mds(similarities)
-
-    click.echo("Done")
+# @click.command("plot-mds")
+# @click.argument("path")
+# def plot_mds_cli(path: str) -> None:
+#     filepath = Path(path)
+#
+#     similarities = load_parquet(filepath)
+#
+#     assert similarities.collect_schema() == DISTANCE_SCHEMA, (
+#         "Must provide a similarities file for this plot"
+#     )
+#
+#     plot_mds(similarities)
+#
+#     click.echo("Done")
 
 
 @click.command("merge")
@@ -232,5 +229,4 @@ cli.add_command(merge_many_cli)
 cli.add_command(plot_fscore)
 cli.add_command(plot_fscore_knn)
 cli.add_command(plot_fscore_thr)
-cli.add_command(plot_mds_cli)
 cli.add_command(fscore)

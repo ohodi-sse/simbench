@@ -1,9 +1,6 @@
 from pathlib import Path
 
-import numpy as np
 import polars as pl
-from typing import TypedDict, Required, NewType
-from sklearn.model_selection import train_test_split
 from loguru import logger
 
 
@@ -40,17 +37,19 @@ FILEINFO_SCHEMA = {
     "src_file": pl.String(),
 }
 
-FileInfoDF = NewType("FileInfoDF", pl.LazyFrame(schema=FILEINFO_SCHEMA))
 
-
-SIMILARITIES_SCHEMA = pl.Schema(
+METRIC_SCHEMA = pl.Schema(
     {
         "src": pl.String(),
-        "tgt": pl.String(),
+        "src_len": pl.UInt64(),
+        "src_time": pl.Float64(),
         "src_label": pl.String(),
+        "tgt": pl.String(),
+        "tgt_len": pl.UInt64(),
+        "tgt_time": pl.Float64(),
         "tgt_label": pl.String(),
-        "tool_name": pl.String(),
-        "similarity": pl.Float32(),
+        "srctgt_len": pl.UInt64(),
+        "srctgt_time": pl.Float64(),
     }
 )
 
@@ -58,16 +57,17 @@ COMP_CLASS_SCHEMA = pl.Schema(
     {
         "src": pl.String(),
         "tgt": pl.String(),
-        "complen": pl.UInt64(),
-        "time": pl.Float64(),
+        "srctgt_len": pl.UInt64(),
+        "srctgt_time": pl.Float64(),
     }
 )
 
 COMP_FILE_SCHEMA = pl.Schema(
     {
         "src": pl.String(),
-        "complen": pl.UInt64(),
-        "time": pl.Float64(),
+        "src_len": pl.UInt64(),
+        "src_time": pl.Float64(),
+        "src_label": pl.String(),
     }
 )
 
@@ -82,11 +82,10 @@ DISTANCE_SCHEMA = pl.Schema(
         "comp": pl.String(),
         "comp_lvl": pl.UInt8(),
         "distance": pl.Float32(),
-        "time": pl.Float32(),
+        "time": pl.Float64(),
     }
 )
 
-AnalysisSimDF = NewType("AnalysisSimDF", pl.LazyFrame(schema=SIMILARITIES_SCHEMA))
 
 CLASSIFICATIONS_SCHEMA = pl.Schema(
     {
@@ -125,7 +124,7 @@ PERFORMANCE_SCHEMA = pl.Schema(
 )
 
 
-def collect_datafiles(dir: Path) -> FileInfoDF:
+def collect_datafiles(dir: Path) -> pl.LazyFrame:
     # This functions expects the dir to point to a directory,
     # containing folders each containing samples with one specific label.
     data = {col: [] for col in FILEINFO_SCHEMA}

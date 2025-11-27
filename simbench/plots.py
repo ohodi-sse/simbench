@@ -7,7 +7,7 @@ from simbench.classification import (
     get_classifier,
     get_performance_data,
 )
-from simbench.data import CLASSIFICATIONS_SCHEMA, CONFUSION_SCHEMA, DISTANCE_SCHEMA
+from simbench.data import CLASSIFICATIONS_SCHEMA, DISTANCE_SCHEMA
 from statsmodels.graphics.mosaicplot import mosaic
 from sklearn.metrics import (
     confusion_matrix,
@@ -245,35 +245,35 @@ def f_score_radius_plot(distance_df: pl.LazyFrame) -> None:
     return
 
 
-def plot_mds(distance_df: pl.LazyFrame) -> None:
-    similarities = pl.Series(distance_df.select("distance").collect()).to_list()
-
-    X = []
-
-    srcs = pl.Series(distance_df.select("src").collect().unique()).to_list()
-
-    for s in srcs:
-        X.append(
-            pl.Series(
-                distance_df.filter(pl.col("src") == s).select("distance").collect()
-            ).to_list()
-        )
-    X = np.array(X)  # The matrix is not symmetric due to the metric
-
-    logger.debug(X)
-    n = distance_df.select("src_label").collect().unique().height
-    mds = manifold.MDS(
-        n_components=n,
-        max_iter=3000,
-        eps=1e-9,
-        n_init=1,
-        random_state=42,
-        dissimilarity="precomputed",
-        n_jobs=1,
-    )
-    X_mds = mds.fit(X).embedding_
-
-    plt.scatter(X_mds[:, 0], X_mds[:, 1], color="turquoise", s=100, lw=0, label="MDS")
+# def plot_mds(distance_df: pl.LazyFrame) -> None:
+#     similarities = pl.Series(distance_df.select("distance").collect()).to_list()
+#
+#     X = []
+#
+#     srcs = pl.Series(distance_df.select("src").collect().unique()).to_list()
+#
+#     for s in srcs:
+#         X.append(
+#             pl.Series(
+#                 distance_df.filter(pl.col("src") == s).select("distance").collect()
+#             ).to_list()
+#         )
+#     X = np.array(X)  # The matrix is not symmetric due to the metric
+#
+#     logger.debug(X)
+#     n = distance_df.select("src_label").collect().unique().height
+#     mds = manifold.MDS(
+#         n_components=n,
+#         max_iter=3000,
+#         eps=1e-9,
+#         n_init=1,
+#         random_state=42,
+#         dissimilarity="precomputed",
+#         n_jobs=1,
+#     )
+#     X_mds = mds.fit(X).embedding_
+#
+#     plt.scatter(X_mds[:, 0], X_mds[:, 1], color="turquoise", s=100, lw=0, label="MDS")
 
 
 # def plot_all_f()

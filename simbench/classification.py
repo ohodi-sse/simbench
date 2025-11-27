@@ -11,16 +11,11 @@ from dataclasses import dataclass
 import numpy as np
 from sklearn.metrics import (
     precision_recall_fscore_support,
-    precision_score,
     accuracy_score,
-    recall_score,
-    f1_score,
     confusion_matrix,
-    ConfusionMatrixDisplay,
 )
 from loguru import logger
 import polars as pl
-import matplotlib.pyplot as plt
 
 
 class Classification:
@@ -338,7 +333,7 @@ def get_performance_data(class_df: pl.LazyFrame) -> tuple[float, float, float, f
 
     accuracy = accuracy_score(src_labels, labelled_as)
     precision, recall, f_score, _ = precision_recall_fscore_support(
-        src_labels, labelled_as, average=averaging, zero_division=False
+        src_labels, labelled_as, average=averaging, zero_division=0.0
     )
 
     return accuracy, precision, recall, f_score

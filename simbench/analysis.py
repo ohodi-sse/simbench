@@ -94,7 +94,7 @@ def run_analysis(
     else:
         logger.debug(f"Calculating distances for {metric.name()}")
 
-        distance_df = sim.create_distance_file_polars(
+        distance_df = sim.create_distance_file(
             metric, compfile_df, compclass_df, filelist
         )
 
