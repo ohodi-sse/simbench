@@ -115,7 +115,7 @@ class SimilarityMetric(Protocol):
     compressor: Compress
 
     @abstractmethod
-    def __call__(self, len_src, len_tgt, len_src_tgt) -> float: ...
+    def __call__(self, len_src: int, len_tgt: int, len_src_tgt: int) -> float: ...
 
     @abstractmethod
     def name(self) -> str: ...
@@ -127,6 +127,9 @@ class NCD(SimilarityMetric):
 
     def __call__(self, len_src: int, len_tgt: int, len_src_tgt: int) -> float:
         return (len_src_tgt - min(len_src, len_tgt)) / max(len_src, len_tgt)
+
+    # def polars_expr(self, distances: pl.LazyFrame) -> pl.LazyFrame:
+    #     assert distances.collect_schema() == DISTANCE_SCHEMA
 
     def name(self):
         return "NCD"
@@ -268,9 +271,6 @@ def lookup_compressed_concat_len(
     return complen, timed
 
 
-""
-
-
 def create_distance_file_polars(
     metric: SimilarityMetric, comp_file_df, comp_class_df, files: list[File]
 ) -> pl.LazyFrame:
@@ -289,7 +289,6 @@ def create_distance_file_polars(
     src_df = comp_file_df.rename({"complen": "alen", "time": "atime"})
     tgt_df = comp_file_df.rename({"src": "tgt", "complen": "blen", "time": "btime"})
     comp_file_df = src_df.join(tgt_df, how="cross")
-    logger.debug(comp_file_df.collect())
 
     joined_df = comp_file_df.join(comp_class_df, on=["src", "tgt"], how="inner")
 
@@ -321,7 +320,7 @@ def create_distance_file_polars(
 
     data_df = pl.LazyFrame(data)
 
-    dist_df = data_df.join(calc_df, on=["src", "tgt"])
+    dist_df = data_df.join(calc_df, on=["src", "tgt"]).sort(by="distance")
     dist_df = dist_df.with_columns(pl.col("comp_lvl").cast(pl.UInt8))
 
     assert dist_df.collect_schema() == DISTANCE_SCHEMA, (
@@ -385,46 +384,3 @@ def create_distance_file(
     df = pl.DataFrame(data, schema=DISTANCE_SCHEMA).sort(by="distance")
     pb.finish()
     return df.lazy()
-
-
-#
-# def get_similarities(
-#     metric: SimilarityMetric, afile: File, bfiles: list[File]
-# ) -> list[float]:
-#     similarities = []
-#     for bfile in bfiles:
-#         similarities.append(metric(afile.get_bytes(), bfile.get_bytes()))
-#
-#     return similarities
-#
-#
-# def create_similarity_matrix(
-#     metric: SimilarityMetric, files: list[File]
-# ) -> AnalysisSimDF:
-#     data = {col: [] for col in SIMILARITIES_SCHEMA}
-#
-#     assert isinstance(files[0], File), (
-#         "Can only create similarity matrix from File list"
-#     )
-#
-#     for src in files:
-#         for target in files:
-#             data["src"].append(src.name)
-#             data["src_label"].append(src.label)
-#             data["tgt"].append(target.name)
-#             data["tgt_label"].append(target.label)
-#             data["tool_name"].append(metric.name())
-#             data["similarity"].append(metric(src.get_bytes(), target.get_bytes()))
-#
-#     df = pl.DataFrame(data, schema=SIMILARITIES_SCHEMA).sort(by="similarity")
-#     return df.lazy()
-#
-#
-# def similarities_from_data(metric: SimilarityMetric, df: pl.LazyFrame) -> pl.LazyFrame:
-#     file_paths = [
-#         Path(fp) for fp in pl.Series(df.select("src_file").collect()).to_list()
-#     ]
-#     files = [File(fp.name, fp.parent.stem, fp) for fp in file_paths]
-#     similarities = create_similarity_matrix(metric, files)
-#
-#     return similarities

@@ -35,10 +35,15 @@ def cli():
 
 @click.command()
 @click.argument("file")
-def show_file(file: str) -> pl.DataFrame:
+@click.option("-fl", "--filter", default=None, help="Filter on source")
+def show_file(file: str, filter) -> pl.DataFrame:
     assert file.endswith(".parquet"), "Can only show parquet file"
 
     data = load_parquet(Path(file))
+
+    if filter:
+        data = data.filter(pl.col("src") == filter)
+
     logger.info(data.collect())
 
 

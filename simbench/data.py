@@ -230,3 +230,20 @@ def merge_many(dir: Path, suffix: str) -> pl.DataFrame:
         df.extend(df_next)
 
     return df
+
+
+def display_diff(src1: str, src2: str, file_overview: pl.LazyFrame):
+    path1 = Path(
+        file_overview.filter(pl.col("src") == src1).select("src_file").collect().item()
+    )
+    path2 = Path(
+        file_overview.filter(pl.col("src") == src2).select("src_file").collect().item()
+    )
+
+    assert path1.exists() and path1.is_file(), f"{path1} is not a valid file"
+    assert path1.exists() and path2.is_file(), f"{path2} is not a valid file"
+
+    with open(path1, "r") as f1:
+        with open(path2, "r") as f2:
+            logger.info(f1)
+            logger.info(f2)

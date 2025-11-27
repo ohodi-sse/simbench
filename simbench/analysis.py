@@ -19,7 +19,7 @@ def get_data_overview_path(dir: Path) -> Path:
 
 
 def get_compfile_path(dir: Path, metric: SimilarityMetric) -> Path:
-    filename = f"{metric.name()}_{metric.compressor.name()}_{metric.compressor.compression_lvl}-compressions.parquet"
+    filename = f"{metric.compressor.name()}_{metric.compressor.compression_lvl}-compressions.parquet"
     return Path.cwd() / dir / "analyses" / filename
 
 
@@ -74,7 +74,7 @@ def run_analysis(
         logger.debug(f"Loading file compressions from {compfile_path}")
         compfile_df = data.load_parquet(compfile_path)
     else:
-        logger.debug(f"Calculating file compressions for {metric.name()}")
+        logger.debug(f"Calculating file compressions for {metric.compressor.name()}")
         compfile_df = sim.create_comp_file(metric.compressor, filelist)
 
     compclass_path = get_compclass_path(datadir, metric)
@@ -82,7 +82,9 @@ def run_analysis(
         logger.debug(f"Loading concatenated compressions from {compclass_path}")
         compclass_df = data.load_parquet(compclass_path)
     else:
-        logger.debug(f"Calculating concatenated compressions for {metric.name()}")
+        logger.debug(
+            f"Calculating concatenated compressions for {metric.compressor.name()}"
+        )
         compclass_df = sim.create_comp_class(metric.compressor, filelist)
 
     dist_path = get_dist_path(datadir, metric)

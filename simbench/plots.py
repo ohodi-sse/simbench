@@ -3,6 +3,7 @@ import numpy as np
 import polars as pl
 from simbench.classification import (
     create_classification_dataframe,
+    create_classification_dataframe_new,
     get_classifier,
     get_performance_data,
 )
@@ -151,7 +152,6 @@ def f_score_plot(distance_df: pl.LazyFrame) -> None:
     TotNRet = FN + F.cum_sum()
 
     print(TotNRet)
-    print(TotNRet)
 
     # FP = TotF - TN
     TP = TotRel - FN
@@ -166,6 +166,10 @@ def f_score_plot(distance_df: pl.LazyFrame) -> None:
     plt.plot(S, Recall, label="Recall")
     plt.plot(S, F1, label="F1")
 
+    plt.xlabel("Distance")
+    plt.ylabel("Score")
+    plt.title("Scoring using Best Match")
+
     plt.legend()
     plt.show()
 
@@ -173,7 +177,7 @@ def f_score_plot(distance_df: pl.LazyFrame) -> None:
 def f_score_knn_plot(distance_df: pl.LazyFrame) -> None:
     data = {s: [] for s in ["Prec", "Recall", "F1"]}
 
-    k_range = range(1, 100, 5)
+    k_range = range(1, 300, 30)
 
     pb = ProgressBar(
         len(k_range),
@@ -198,6 +202,10 @@ def f_score_knn_plot(distance_df: pl.LazyFrame) -> None:
     plt.plot(k_range, data["Recall"], label="Recall")
     plt.plot(k_range, data["F1"], label="F1")
 
+    plt.xlabel("K")
+    plt.ylabel("Score")
+    plt.title("Scoring using K Nearest Neighbours")
+
     plt.legend()
     plt.show()
 
@@ -205,24 +213,36 @@ def f_score_knn_plot(distance_df: pl.LazyFrame) -> None:
 def f_score_radius_plot(distance_df: pl.LazyFrame) -> None:
     data = {s: [] for s in ["Prec", "Recall", "F1"]}
 
-    t_range = np.arange(0.0, 1.0, 0.05)
-
+    t_range = np.arange(0.1, 1.0, 0.1)
+    pb = ProgressBar(
+        len(t_range),
+        style=ProgressStyle(
+            template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
+            progress_chars="#>-",
+        ),
+    )
     for t in t_range:
+        pb.inc(1)
         classifier = get_classifier(f"thr_{t}")
         assert classifier, f"Failed to instantiate threshold from {t}"
-        class_df = create_classification_dataframe(distance_df, classifier)
+        class_df = create_classification_dataframe_new(distance_df, classifier)
         accuracy, precision, recall, fscore = get_performance_data(class_df)
 
         data["Prec"].append(precision)
         data["Recall"].append(recall)
         data["F1"].append(fscore)
 
+    pb.finish()
     plt.plot(t_range, data["Prec"], label="Prec")
     plt.plot(t_range, data["Recall"], label="Recall")
     plt.plot(t_range, data["F1"], label="F1")
 
+    plt.xlabel("Distance")
+    plt.ylabel("Score")
+    plt.title("Scoring using Radius Nearest Neighbours")
     plt.legend()
-    plt.show()
+
+    return
 
 
 def plot_mds(distance_df: pl.LazyFrame) -> None:
@@ -254,6 +274,9 @@ def plot_mds(distance_df: pl.LazyFrame) -> None:
     X_mds = mds.fit(X).embedding_
 
     plt.scatter(X_mds[:, 0], X_mds[:, 1], color="turquoise", s=100, lw=0, label="MDS")
+
+
+# def plot_all_f()
 
 
 def show_plots():

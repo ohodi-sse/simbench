@@ -3,6 +3,7 @@ from .data import (
     CLASSIFICATIONS_SCHEMA,
     PERFORMANCE_SCHEMA,
     CONFUSION_SCHEMA,
+    DISTANCE_SCHEMA,
 )
 from collections import Counter
 from abc import abstractmethod
@@ -45,12 +46,16 @@ class Classifier:
 
 @dataclass(frozen=True)
 class BestMatch(Classifier):
-    def __call__(self, similarity_df: pl.LazyFrame, src: str) -> Classification:
-        filter_expr = (pl.col("src") == src) & (pl.col("tgt") != src)
-        file_column = similarity_df.filter(filter_expr).sort("distance")
+    def __call__(self, distances: pl.LazyFrame, src: str) -> Classification:
+        assert distances.collect_schema() == DISTANCE_SCHEMA, (
+            "Must use a distance dataframe for classification"
+        )
 
-        best_match_name = file_column.select("tgt").collect().item(0, 0)
-        label = get_label(similarity_df, best_match_name)
+        filter_expr = (pl.col("src") == src) & (pl.col("tgt") != src)
+        src_sim = distances.filter(filter_expr).select(["tgt_label", "tgt"])
+        best = src_sim.head(1).collect()
+        label = best["tgt_label"][0]
+        best_match_name = best["tgt"][0]
 
         return Classification(src, label, [best_match_name])
 
@@ -68,19 +73,26 @@ class KNN(Classifier):
 
     def __call__(self, distances: pl.LazyFrame, src: str) -> Classification:
         assert self.k > 0, "k must be positive"
-        sorted_sim = sort_pr_src(distances)
+        assert distances.collect_schema() == DISTANCE_SCHEMA, (
+            "Must use a distance dataframe for classification"
+        )
 
         filter_expr = (pl.col("src") == src) & (pl.col("tgt") != src)
-        src_sim = sorted_sim.filter(filter_expr).select(["tgt", "distance"])
-
+        src_sim = distances.filter(filter_expr).select(["tgt_label", "tgt", "distance"])
         k_best = src_sim.head(self.k)
+        counts = (
+            k_best.group_by("tgt_label")
+            .agg(pl.len(), pl.col("distance").mean())
+            .sort(by=["len", "distance"], descending=[True, False])
+        )  # The sorting here takes care of the tie-breaking
+        # This means src is labelled as the closest label based on mean distance when given a tie
+
+        label = counts.select(pl.col("tgt_label")).collect()["tgt_label"][0]
+
+        # logger.debug(counts.collect())
+        # logger.debug(label)
 
         k_best_names = pl.Series(k_best.select("tgt").collect()).to_list()
-        labels = [get_label(distances, filename) for filename in k_best_names]
-
-        label_counts = Counter(labels)
-        label = max(label_counts)
-
         return Classification(src, label, k_best_names)
 
     def name(self) -> str:
@@ -98,24 +110,34 @@ class Threshold(Classifier):
         assert 0.0 <= self.threshold and self.threshold <= 1.0, (
             "Threshold must be between 0 and 1"
         )
-        sorted_sim = sort_pr_src(distances)
+        assert distances.collect_schema() == DISTANCE_SCHEMA, (
+            "Must use a distance dataframe for classification"
+        )
 
-        filter_expr = (pl.col("src") == src) & (pl.col("tgt") != src)
-        src_sim = sorted_sim.filter(filter_expr).select(["tgt", "distance"])
-        in_radius = src_sim.filter(pl.col("distance") < self.threshold)
+        filter_expr = (
+            (pl.col("src") == src)
+            & (pl.col("tgt") != src)
+            & (pl.col("distance") < self.threshold)
+        )
+        in_radius = distances.filter(filter_expr).select(
+            ["tgt_label", "tgt", "distance"]
+        )
 
         best_names = pl.Series(in_radius.select("tgt").collect()).to_list()
 
         if not best_names:
-            logger.warning(
-                f"Did not find any files to compare with threshold: {self.threshold}."
-            )
+            # logger.debug(
+            #     f"Did not find any files to compare with threshold: {self.threshold}."
+            # )
             return None
 
-        labels = [get_label(distances, filename) for filename in best_names]
+        counts = in_radius.group_by("tgt_label").agg(pl.len())
 
-        label_counts = Counter(labels)
-        label = max(label_counts)
+        label = (
+            counts.sort(by="len", descending=True)
+            .select(pl.col("tgt_label"))
+            .collect()["tgt_label"][0]
+        )
 
         return Classification(src, label, best_names)
 
@@ -133,6 +155,9 @@ class KThreshold(Classifier):
     def __call__(self, distances: pl.LazyFrame, src: str) -> Classification | None:
         assert 0.0 <= self.threshold and self.threshold <= 1.0, (
             "Threshold must be between 0 and 1"
+        )
+        assert distances.collect_schema() == DISTANCE_SCHEMA, (
+            "Must provide a distance dataframe to KNN plotting"
         )
         sorted_sim = sort_pr_src(distances)
 
