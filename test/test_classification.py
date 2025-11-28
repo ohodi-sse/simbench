@@ -5,7 +5,7 @@ from loguru import logger
 import pytest
 
 
-from simbench.analysis import extract_bad_matches
+from simbench.analysis import extract_bad_matches, get_performance_scores
 from simbench.classification import (
     BestMatch,
     KNN,
@@ -132,3 +132,9 @@ def test_extract_bad_matches_real():
 
     assert all(bad_matches)
     assert all([s != t for (s, t) in bad_matches])
+
+
+def test_get_performance_scores(similaritiesfile):
+    perf = get_performance_scores(similaritiesfile)
+
+    assert isinstance(perf, pl.LazyFrame)

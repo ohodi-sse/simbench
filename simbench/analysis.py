@@ -1,13 +1,16 @@
 from loguru import logger
 from pathlib import Path
 import polars as pl
-
+from numpy import arange
 from simbench.similarity import SimilarityMetric
 import simbench.similarity as sim
 import simbench.data as data
+from indicatif import ProgressBar, ProgressStyle
 from simbench.classification import (
     Classifier,
     create_classification_dataframe,
+    create_classification_dataframe_new,
+    get_performance_data,
     get_classifier,
     get_performance_scikit,
 )
@@ -111,8 +114,10 @@ def run_analysis(
         logger.debug(f"Loading performance overview from {perf_path}")
         perf_df = data.load_parquet(perf_path)
     else:
-        logger.debug(f"Calculating performance overview for {metric.name()}")
-        perf_df = get_performance_scikit(class_df)
+        logger.debug(
+            f"Calculating performance overview for {metric.name()}\nThis may take a while..."
+        )
+        perf_df = get_performance_scores(distance_df)
 
     if write:
         logger.info(f"Writing data overview to {str(data_path)}")
@@ -138,7 +143,7 @@ def run_analysis(
         return (data_df, compfile_df, compclass_df, distance_df, class_df, perf_df)
 
 
-def extract_bad_matches(dist_df: pl.LazyFrame) -> pl.LazyFrame:
+def extract_bad_matches(dist_df: pl.LazyFrame) -> list[tuple[str, str]]:
     assert dist_df.collect_schema() == data.DISTANCE_SCHEMA, (
         "Can only extract bad matches from distance file"
     )
@@ -172,3 +177,58 @@ def extract_bad_matches(dist_df: pl.LazyFrame) -> pl.LazyFrame:
     logger.debug(bad_matches)
 
     return bad_matches
+
+
+def get_performance_scores(
+    distance_df: pl.LazyFrame, iterations: int = 10
+) -> pl.LazyFrame:
+    assert distance_df.collect_schema() == data.DISTANCE_SCHEMA
+
+    perf = pl.LazyFrame(
+        {col: [] for col in data.PERFORMANCE_SCHEMA}, schema=data.PERFORMANCE_SCHEMA
+    )
+
+    pb = ProgressBar(
+        iterations,
+        style=ProgressStyle(
+            template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
+            progress_chars="#>-",
+        ),
+    )
+
+    for i in range(1, 300, int(300 / iterations)):
+        classifier = get_classifier(f"knn_{i}")
+        assert classifier, "Failed to instantiate knn from {i}"
+        class_df = create_classification_dataframe_new(distance_df, classifier)
+        perf_tmp = get_performance_scikit(class_df)
+
+        perf = pl.concat([perf, perf_tmp])
+        pb.inc(1)
+
+    pb.finish()
+
+    pb = ProgressBar(
+        iterations,
+        style=ProgressStyle(
+            template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
+            progress_chars="#>-",
+        ),
+    )
+
+    for i in arange(0.0, 1.0, 1.0 / iterations):
+        try:
+            classifier = get_classifier(f"thr_{round(i, 3)}")
+            assert classifier, "Failed to instantiate threshold from {i}"
+            class_df = create_classification_dataframe_new(distance_df, classifier)
+            perf_tmp = get_performance_scikit(class_df)
+
+            perf = pl.concat([perf, perf_tmp])
+
+            pb.inc(1)
+        except:
+            logger.debug(f"Failed to classify for threshold {i}")
+            pb.inc(1)
+
+    pb.finish()
+    logger.debug(perf.collect())
+    return perf

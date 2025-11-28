@@ -5,6 +5,7 @@ from pathlib import Path
 
 from simbench.plots import (
     create_nclass_classification_plot,
+    f_score_classification_plot,
     f_score_plot,
     f_score_radius_plot,
     f_score_knn_plot,
@@ -13,6 +14,7 @@ from simbench.plots import (
 from .data import (
     CLASSIFICATIONS_SCHEMA,
     DISTANCE_SCHEMA,
+    PERFORMANCE_SCHEMA,
     load_parquet,
     merge_dataframes,
     merge_many,
@@ -78,7 +80,7 @@ def analyse(dir: str, compressor: str, classifier: str, write: bool):
     )
 
     click.echo(f"Data overview: \n{data_df.collect()}")
-    click.echo(f"Similarities: \n{sim_df.collect()}")
+    # click.echo(f"Similarities: \n{sim_df.collect()}")
     click.echo(f"Classifications: \n{class_df.collect()}")
     click.echo(f"Performance overview: \n{perf_df.collect()}")
     click.echo("Done")
@@ -108,12 +110,13 @@ def plot_fscore(path: str) -> None:
 
     distances = load_parquet(filepath)
 
-    assert distances.collect_schema() == DISTANCE_SCHEMA, (
-        "Must provide a distance file for this plot"
+    assert distances.collect_schema() == PERFORMANCE_SCHEMA, (
+        "Must provide a performance file for this plot"
     )
 
-    f_score_plot(distances)
+    fig, ax = f_score_classification_plot(distances)
 
+    plt.show()
     click.echo("Done")
 
 

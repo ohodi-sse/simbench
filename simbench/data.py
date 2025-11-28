@@ -95,6 +95,7 @@ CLASSIFICATIONS_SCHEMA = pl.Schema(
         "comp": pl.String(),
         "comp_lvl": pl.UInt8(),
         "classifier": pl.String(),
+        "class_param": pl.String(),
         "labelled_as": pl.String(),
     }
 )
@@ -114,6 +115,7 @@ PERFORMANCE_SCHEMA = pl.Schema(
         "comp": pl.String(),
         "comp_lvl": pl.UInt8(),
         "classifier": pl.String(),
+        "class_param": pl.String(),
         "FP": pl.UInt64(),
         "FN": pl.UInt64(),
         "Acc": pl.Float32(),

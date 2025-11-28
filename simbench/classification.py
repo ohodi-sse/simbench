@@ -38,6 +38,10 @@ class Classifier:
     def name(self) -> str:
         pass
 
+    @abstractmethod
+    def param(self) -> str:
+        pass
+
 
 @dataclass(frozen=True)
 class BestMatch(Classifier):
@@ -55,7 +59,10 @@ class BestMatch(Classifier):
         return Classification(src, label, [best_match_name])
 
     def name(self) -> str:
-        return "BestMatch"
+        return "bm"
+
+    def param(self) -> str:
+        return "none"
 
 
 def sort_pr_src(distances: pl.LazyFrame) -> pl.LazyFrame:
@@ -91,7 +98,10 @@ class KNN(Classifier):
         return Classification(src, label, k_best_names)
 
     def name(self) -> str:
-        return f"knn_{self.k}"
+        return "knn"
+
+    def param(self) -> str:
+        return str(self.k)
 
     def __post_init__(self):
         assert isinstance(self.k, int)
@@ -137,7 +147,10 @@ class Threshold(Classifier):
         return Classification(src, label, best_names)
 
     def name(self) -> str:
-        return f"thrsh_{self.threshold}"
+        return "thrsh"
+
+    def param(self) -> str:
+        return str(self.threshold)
 
     def __post_init__(self):
         assert isinstance(self.threshold, float)
@@ -176,7 +189,10 @@ class KThreshold(Classifier):
         return Classification(src, label, best_names)
 
     def name(self) -> str:
-        return f"thrsh_{self.threshold}"
+        return "KThrsh"
+
+    def param(self) -> str:
+        return str(self.threshold)
 
     def __post_init__(self):
         assert isinstance(self.threshold, float)
@@ -234,6 +250,7 @@ def create_classification_dataframe(
     data["comp"] = pl.Series(src_df.select("comp").collect()).to_list()
     data["comp_lvl"] = pl.Series(src_df.select("comp_lvl").collect()).to_list()
     data["classifier"] = [classifier.name() for _ in range(len(src_names))]
+    data["class_param"] = [classifier.param() for _ in range(len(src_names))]
     data["labelled_as"] = classifications
 
     return pl.LazyFrame(data, schema=CLASSIFICATIONS_SCHEMA)
@@ -272,6 +289,7 @@ def create_classification_dataframe_new(
         data["comp"] = pl.Series(classifiable_df.select("comp")).to_list()
         data["comp_lvl"] = pl.Series(classifiable_df.select("comp_lvl")).to_list()
         data["classifier"] = [classifier.name() for _ in range(len(classifiable))]
+        data["class_param"] = [classifier.param() for _ in range(len(classifiable))]
         data["labelled_as"] = classifications
 
         # src_df.join(pl.LazyFrame(data), on="src")
@@ -345,7 +363,7 @@ def get_performance_scikit(class_df: pl.LazyFrame) -> pl.LazyFrame:
     complvl = pl.Series(class_df.select("comp_lvl").unique().collect()).item()
 
     classifier = pl.Series(class_df.select("classifier").unique().collect()).item()
-
+    class_param = pl.Series(class_df.select("class_param").unique().collect()).item()
     src_labels = pl.Series(class_df.select("src_label").collect()).to_list()
     labelled_as = pl.Series(class_df.select("labelled_as").collect()).to_list()
 
@@ -360,6 +378,7 @@ def get_performance_scikit(class_df: pl.LazyFrame) -> pl.LazyFrame:
         "comp": [comp],
         "comp_lvl": [complvl],
         "classifier": [classifier],
+        "class_param": [class_param],
         "FP": [FP],
         "FN": [FN],
         "Acc": [accuracy],

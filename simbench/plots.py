@@ -6,6 +6,7 @@ from simbench.classification import (
     create_classification_dataframe_new,
     get_classifier,
     get_performance_data,
+    Classifier,
 )
 from simbench.data import CLASSIFICATIONS_SCHEMA, DISTANCE_SCHEMA
 from statsmodels.graphics.mosaicplot import mosaic
@@ -241,8 +242,44 @@ def f_score_radius_plot(distance_df: pl.LazyFrame) -> None:
     plt.ylabel("Score")
     plt.title("Scoring using Radius Nearest Neighbours")
     plt.legend()
+    plt.show()
 
-    return
+
+def f_score_classification_plot(
+    performance_df: pl.LazyFrame,
+) -> None:  # tuple[Any, Any]:
+    plots = []
+
+    unique_classifiers = pl.Series(
+        performance_df.select("classifier").unique().collect()
+    ).to_list()
+
+    fig, ax = plt.subplots(len(unique_classifiers))
+
+    for i, classifier in enumerate(unique_classifiers):
+        class_perf_df = performance_df.filter(pl.col("classifier") == classifier)
+
+        Acc = pl.Series(class_perf_df.select(pl.col("Acc")).collect()).to_list()
+        Prec = pl.Series(class_perf_df.select(pl.col("Prec")).collect()).to_list()
+        Recall = pl.Series(class_perf_df.select(pl.col("Rec")).collect()).to_list()
+        F1 = pl.Series(class_perf_df.select(pl.col("F1")).collect()).to_list()
+        t_range = pl.Series(
+            class_perf_df.select(pl.col("class_param")).collect()
+        ).to_list()  # [i for i in range(0, len(F1))]
+        t_range = [float(i) for i in t_range]
+
+        ax[i].plot(t_range, Prec, label="Prec")
+        ax[i].plot(t_range, Acc, label="Acc")
+        ax[i].plot(t_range, Recall, label="Recall")
+        ax[i].plot(t_range, F1, label="F1")
+
+        ax[i].set_title(classifier)
+        ax[i].set_xlabel("Distance")
+        ax[i].set_ylabel("Score")
+        # ax[i].title("Scoring using Radius Nearest Neighbours")
+        ax[i].legend()
+
+    return fig, ax
 
 
 # def plot_mds(distance_df: pl.LazyFrame) -> None:
