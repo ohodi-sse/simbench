@@ -3,6 +3,8 @@ from pathlib import Path
 import polars as pl
 from loguru import logger
 
+from typing import get_type_hints
+
 from dataclasses import dataclass
 
 
@@ -94,16 +96,25 @@ COMP_FILE_SCHEMA = pl.Schema(
 )
 
 
-class CompressionTable:
-    schema = COMP_FILE_SCHEMA
+class Table:
+    @classmethod
+    def schema(cls):
+        return get_type_hints(cls)
 
     @classmethod
     def scan(cls, *args, **kwargs):
-        return pl.scan_parquet(*args, schema=cls.schema, **kwargs)
+        return pl.scan_parquet(*args, schema=cls.schema(), **kwargs)
 
     @classmethod
     def dataframe(cls, *args, **kwargs):
-        return pl.DataFrame(*args, schema=cls.schema, **kwargs)
+        return pl.DataFrame(*args, schema=cls.schema(), **kwargs)
+
+
+class CompressionTable(Table):
+    src: pl.String
+    src_len: pl.UInt64
+    src_time: pl.UInt64
+    src_label: pl.String
 
 
 DISTANCE_SCHEMA = pl.Schema(
