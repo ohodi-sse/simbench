@@ -3,6 +3,28 @@ from pathlib import Path
 import polars as pl
 from loguru import logger
 
+from dataclasses import dataclass
+
+
+@dataclass(frozen=True)
+class Source:
+    path: Path
+
+    @property
+    def name(self):
+        return self.path.name
+
+    @property
+    def label(self):
+        return self.path.parent.name
+
+    def __post_init__(self):
+        if not self.path.is_file():
+            raise ValueError(f"Path {self.filepath} is not a file.")
+
+    def get_bytes(self) -> bytes:
+        return self.path.read_bytes()
+
 
 class File:
     name: str
@@ -66,10 +88,22 @@ COMP_FILE_SCHEMA = pl.Schema(
     {
         "src": pl.String(),
         "src_len": pl.UInt64(),
-        "src_time": pl.Float64(),
+        "src_time": pl.UInt64(),
         "src_label": pl.String(),
     }
 )
+
+
+class CompressionTable:
+    schema = COMP_FILE_SCHEMA
+
+    @classmethod
+    def scan(cls, *args, **kwargs):
+        return pl.scan_parquet(*args, schema=cls.schema, **kwargs)
+
+    @classmethod
+    def dataframe(cls, *args, **kwargs):
+        return pl.DataFrame(*args, schema=cls.schema, **kwargs)
 
 
 DISTANCE_SCHEMA = pl.Schema(

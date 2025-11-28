@@ -1,4 +1,7 @@
 from numpy._core.fromnumeric import sort
+import io
+import itertools
+import zstd
 import matplotlib.pyplot as plt
 import click
 from pathlib import Path
@@ -10,6 +13,7 @@ from simbench.plots import (
     f_score_radius_plot,
     f_score_knn_plot,
 )
+from . import data
 
 from .data import (
     CLASSIFICATIONS_SCHEMA,
@@ -26,10 +30,138 @@ from . import similarity as sim
 import polars as pl
 from loguru import logger
 
+from dataclasses import dataclass, field
+
+from abc import ABC, abstractmethod
+
+
+@dataclass
+class Tool(ABC):
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
+
+    def matches(self, match):
+        import re
+
+        return re.fullmatch(match, self.name) is not None
+
+
+class CompressionMetric(ABC):
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
+
+
+@dataclass
+class NCD(CompressionMetric):
+    name = "ncd"
+
+
+@dataclass
+class Zstd(Tool):
+    level: int
+    metric: CompressionMetric
+
+    def __post_init__(self):
+        assert isinstance(self.level, int)
+        assert self.level in range(1, 20), (
+            f"Compression level {self.level} is out of range"
+        )
+        assert isinstance(self.metric, CompressionMetric)
+
+    @property
+    def name(self):
+        return f"zstd-{self.level}-{self.metric.name}"
+
+    def compress(self, file: bytes, out: io.BytesIO):
+        out.write(zstd.compress(file, self.level))
+
+    def distances(self): ...
+
+
+@dataclass
+class Analysis:
+    suite: Path
+    tool: Tool
+
+    @property
+    def path(self):
+        return self.suite / "results" / self.tool.name
+
+    @property
+    def compression_file(self):
+        return self.path / "compressions.parquet"
+
+    def problems(self):
+        return (self.suite / "data").iterdir()
+
+    def sources(self):
+        return itertools.chain.from_iterable(
+            (data.Source(s) for s in p.iterdir()) for p in self.problems()
+        )
+
+    def compressions(self, update=False) -> data.CompressionTable:
+        import time
+
+        file = self.compression_file
+
+        if file.exists():
+            df = data.CompressionTable.scan(file)
+        else:
+            file.parent.mkdir(parents=True, exist_ok=True)
+
+        df = data.CompressionTable.dataframe([])
+
+        changed = []
+        for src in self.sources():
+            if src.name in df["src"] and not update:
+                continue
+            changed.append(src)
+
+        new = []
+        for src in changed:
+            src_bytes = src.get_bytes()
+            buffer = io.BytesIO()
+
+            best = None
+
+            for i in range(3):
+                starttime = time.perf_counter_ns()
+                self.tool.compress(src_bytes, buffer)
+                complen = buffer.getbuffer().nbytes
+                comptime = time.perf_counter_ns() - starttime
+                best = comptime if best is None else min(best, comptime)
+
+            new.append(
+                {
+                    "src": src.name,
+                    "src_time": best,
+                    "src_len": complen,
+                    "src_label": src.label,
+                }
+            )
+
+        if changed:
+            df = pl.concat([df, data.CompressionTable.dataframe(new)])
+            df.write_parquet(file)
+
+        return df.lazy()
+
+
+@dataclass
+class Config:
+    log: logger
+    tools: list[Tool] = field(default_factory=list)
+
 
 @click.group()
-def cli():
-    pass
+@click.pass_context
+def cli(ctx):
+    ctx.obj = Config(
+        logger,
+        tools=[Zstd(10, NCD())],
+    )
 
 
 @click.command()
@@ -47,43 +179,43 @@ def show_file(file: str, filter) -> None:
 
 
 @click.command()
-@click.argument("dir")
+@click.argument("suite", type=click.Path(file_okay=False, path_type=Path))
+@click.option("--tool", "tool_pattern", help="filter the tools to be run", default=".*")
 @click.option(
-    "-c",
-    "--compressor",
-    default="zstd",
-    help="Choose compressor: zstd, zstandard, gzip",
+    "-f", "--force", is_flag=True, default=False, help="force update of files"
 )
-@click.option(
-    "-w", "--write", default=False, help="Writes the collected data to a file"
-)
-@click.option(
-    "-cl",
-    "--classifier",
-    default="bm",
-    help="Choose one of the following classifiers: bm, knn_?",
-)
-def analyse(dir: str, compressor: str, classifier: str, write: bool):
-    dirpath = Path(dir)
-    logger.debug("Instantiating similarity metric")
-    metric = sim.get_metric("NCD", compressor)
+@click.option("--classifier", help="filter on which classifiers to run", default=".*")
+@click.pass_obj
+def analyse(cfg, suite, tool_pattern, classifier, force):
+    for tool in cfg.tools:
+        if not tool.matches(tool_pattern):
+            cfg.log.debug(f"Skipping {tool}")
 
-    assert metric, f"Failed to initialize metric from {compressor}"
-    logger.debug(f"Metric initialized as: {metric.name()}")
+        analysis = Analysis(suite, tool)
+        cfg.log.info(f"Working on {analysis.path}, force={force}")
+        x = analysis.compressions(update=force)
 
-    classif = get_classifier(classifier)
-    assert classif, f"Failed to initialize classifier from {classifier}"
-    logger.debug(f"Classifier initialized as: {classif.name()}")
+        print(x.collect())
 
-    (data_df, compf_df, compc_df, sim_df, class_df, perf_df) = run_analysis(
-        dirpath, metric, classif, write
-    )
+    # logger.debug("Instantiating similarity metric")
+    # metric = sim.get_metric("NCD", compressor)
 
-    click.echo(f"Data overview: \n{data_df.collect()}")
-    # click.echo(f"Similarities: \n{sim_df.collect()}")
-    click.echo(f"Classifications: \n{class_df.collect()}")
-    click.echo(f"Performance overview: \n{perf_df.collect()}")
-    click.echo("Done")
+    # assert metric, f"Failed to initialize metric from {compressor}"
+    # logger.debug(f"Metric initialized as: {metric.name()}")
+
+    # classif = get_classifier(classifier)
+    # assert classif, f"Failed to initialize classifier from {classifier}"
+    # logger.debug(f"Classifier initialized as: {classif.name()}")
+
+    # (data_df, compf_df, compc_df, sim_df, class_df, perf_df) = run_analysis(
+    #     dirpath, metric, classif, write
+    # )
+
+    # click.echo(f"Data overview: \n{data_df.collect()}")
+    # # click.echo(f"Similarities: \n{sim_df.collect()}")
+    # click.echo(f"Classifications: \n{class_df.collect()}")
+    # click.echo(f"Performance overview: \n{perf_df.collect()}")
+    # click.echo("Done")
 
 
 @click.command("plot-cl")
