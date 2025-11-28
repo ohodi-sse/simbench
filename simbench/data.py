@@ -112,7 +112,9 @@ class Table:
 
 class CompressionTable(Table):
     src: pl.String
-    src_len: pl.UInt64
+    src_comp: pl.UInt64
+    src_size: pl.UInt64
+    src_ratio: pl.Float64
     src_time: pl.UInt64
     src_label: pl.String
 

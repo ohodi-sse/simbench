@@ -1,5 +1,6 @@
 from numpy._core.fromnumeric import sort
 import io
+import sys
 import itertools
 import zstd
 import matplotlib.pyplot as plt
@@ -113,20 +114,22 @@ class Analysis:
 
         df = data.CompressionTable.dataframe([])
 
-        changed = []
-        for src in self.sources():
-            if src.name in df["src"] and not update:
-                continue
-            changed.append(src)
+        if update:
+            changed = list(self.sources())
+        else:
+            changed = []
+            for src in self.sources():
+                if src.name in df["src"]:
+                    continue
+                changed.append(src)
 
         new = []
         for src in changed:
             src_bytes = src.get_bytes()
-            buffer = io.BytesIO()
 
             best = None
-
             for i in range(3):
+                buffer = io.BytesIO()
                 starttime = time.perf_counter_ns()
                 self.tool.compress(src_bytes, buffer)
                 complen = buffer.getbuffer().nbytes
@@ -137,13 +140,19 @@ class Analysis:
                 {
                     "src": src.name,
                     "src_time": best,
-                    "src_len": complen,
+                    "src_comp": complen,
+                    "src_size": len(src_bytes),
+                    "src_ratio": complen / len(src_bytes),
                     "src_label": src.label,
                 }
             )
 
-        if changed:
+        if not update:
             df = pl.concat([df, data.CompressionTable.dataframe(new)])
+        else:
+            df = data.CompressionTable.dataframe(new)
+
+        if changed:
             df.write_parquet(file)
 
         return df.lazy()
@@ -195,7 +204,7 @@ def analyse(cfg, suite, tool_pattern, classifier, force):
         cfg.log.info(f"Working on {analysis.path}, force={force}")
         x = analysis.compressions(update=force)
 
-        print(x.collect())
+        x.collect().write_csv(sys.stdout)
 
     # logger.debug("Instantiating similarity metric")
     # metric = sim.get_metric("NCD", compressor)
