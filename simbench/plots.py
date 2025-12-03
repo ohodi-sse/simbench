@@ -1,13 +1,7 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import polars as pl
-from simbench.classification import (
-    create_classification_dataframe,
-    create_classification_dataframe_new,
-    get_classifier,
-    get_performance_data,
-    Classifier,
-)
+import simbench.classification as cla
 from . import data as dt
 from statsmodels.graphics.mosaicplot import mosaic
 from sklearn.metrics import (
@@ -172,76 +166,6 @@ def f_score_plot(distance_df: pl.LazyFrame) -> None:
     plt.ylabel("Score")
     plt.title("Scoring using Best Match")
 
-    plt.legend()
-    plt.show()
-
-
-def f_score_knn_plot(distance_df: pl.LazyFrame) -> None:
-    data = {s: [] for s in ["Prec", "Recall", "F1"]}
-
-    k_range = range(1, 300, 30)
-
-    pb = ProgressBar(
-        len(k_range),
-        style=ProgressStyle(
-            template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
-            progress_chars="#>-",
-        ),
-    )
-
-    for k in k_range:
-        pb.inc(1)
-        classifier = get_classifier(f"knn_{k}")
-        assert classifier, f"Failed to instantiate knn from {k}"
-        classification_df = create_classification_dataframe(distance_df, classifier)
-        accuracy, precision, recall, fscore = get_performance_data(classification_df)
-        data["Prec"].append(precision)
-        data["Recall"].append(recall)
-        data["F1"].append(fscore)
-
-    pb.finish()
-    plt.plot(k_range, data["Prec"], label="Prec")
-    plt.plot(k_range, data["Recall"], label="Recall")
-    plt.plot(k_range, data["F1"], label="F1")
-
-    plt.xlabel("K")
-    plt.ylabel("Score")
-    plt.title("Scoring using K Nearest Neighbours")
-
-    plt.legend()
-    plt.show()
-
-
-def f_score_radius_plot(distance_df: pl.LazyFrame) -> None:
-    data = {s: [] for s in ["Prec", "Recall", "F1"]}
-
-    t_range = np.arange(0.1, 1.0, 0.1)
-    pb = ProgressBar(
-        len(t_range),
-        style=ProgressStyle(
-            template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
-            progress_chars="#>-",
-        ),
-    )
-    for t in t_range:
-        pb.inc(1)
-        classifier = get_classifier(f"thr_{t}")
-        assert classifier, f"Failed to instantiate threshold from {t}"
-        classification_df = create_classification_dataframe_new(distance_df, classifier)
-        accuracy, precision, recall, fscore = get_performance_data(classification_df)
-
-        data["Prec"].append(precision)
-        data["Recall"].append(recall)
-        data["F1"].append(fscore)
-
-    pb.finish()
-    plt.plot(t_range, data["Prec"], label="Prec")
-    plt.plot(t_range, data["Recall"], label="Recall")
-    plt.plot(t_range, data["F1"], label="F1")
-
-    plt.xlabel("Distance")
-    plt.ylabel("Score")
-    plt.title("Scoring using Radius Nearest Neighbours")
     plt.legend()
     plt.show()
 

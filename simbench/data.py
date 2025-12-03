@@ -117,50 +117,6 @@ class PerformanceTable(Table):
     F1: pl.Float32
 
 
-def get_similarity(data: pl.LazyFrame, src: str, target: str) -> float:
-    filter_expr = (pl.col("src") == src) & (pl.col("tgt") == target)
-    similarity = data.filter(filter_expr).select("distance").collect()
-
-    return similarity.item()
-
-
-def merge_dataframes(df1: pl.LazyFrame, df2: pl.LazyFrame) -> pl.DataFrame:
-    assert df1.collect_schema() == df2.collect_schema(), (
-        "Can only merge dataframes with the same schema"
-    )
-
-    return df1.collect().extend(df2.collect())
-
-
-def merge_many(dir: Path, suffix: str) -> pl.DataFrame:
-    """Takes a directory and tries to load and merge all dataframes with a certain suffix"""
-    assert suffix.endswith(".parquet"), "Suffix should end with .parquet"
-
-    eligible_files = [
-        f
-        for f in dir.iterdir()
-        if f.is_file() and f.name.endswith(suffix) and ("merged" not in f.name)
-    ]
-
-    assert eligible_files, (
-        f"No files found with suffix {suffix} in directory {str(dir)}"
-    )
-
-    df = pl.read_parquet(eligible_files[0])
-    df_schema = df.schema
-    if len(eligible_files) < 2:
-        return df
-
-    for f in eligible_files[1:]:
-        df_next = pl.read_parquet(f)
-        assert df_schema == df_next.schema, (
-            "Can only merge dataframes with the same schema"
-        )
-        df.extend(df_next)
-
-    return df
-
-
 def display_diff(src1: str, src2: str, file_overview: pl.LazyFrame):
     path1 = Path(
         file_overview.filter(pl.col("src") == src1).select("src_file").collect().item()

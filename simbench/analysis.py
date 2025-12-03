@@ -13,14 +13,7 @@ import time
 import io
 from loguru import logger
 
-
-from simbench.classification import (
-    create_classification_dataframe,
-    create_classification_dataframe_new,
-    get_classifier,
-    get_performance_scikit,
-)
-
+from simbench.classification import Classifier
 
 Logger = type(logger)
 
@@ -60,6 +53,16 @@ def get_all_tools():
             tools.append(CompressionTool(m, c))
 
     return tools
+
+
+def get_all_classifiers():
+    from simbench.classification import BestMatch, KNN, Threshold
+
+    thrsh = [Threshold(t) for t in arange(0.0, 1.0, 0.1)]
+    knn = [KNN(k) for k in range(0, 300, 30)]
+    classifiers = [KNN(10)]
+
+    return classifiers
 
 
 @dataclass
@@ -234,7 +237,7 @@ class Analysis:
         dist_df = None
         if file.exists():
             dist_df = data.DistanceTable.scan(file)
-            logger.info(f"Loaded pairwise compressions from {file}")
+            logger.info(f"Loaded distances from {file}")
         else:
             file.parent.mkdir(parents=True, exist_ok=True)
             update = True
@@ -270,10 +273,12 @@ class Analysis:
 class Config:
     log: Logger
     tools: list[Tool] = field(default_factory=list)
+    classifiers: list[Classifier] = field(default_factory=list)
 
     def __init__(self):
         self.log = logger
         self.tools = get_all_tools()
+        self.classifiers = get_all_classifiers()
 
 
 def extract_bad_matches(dist_df: pl.LazyFrame) -> list[tuple[str, str]]:
