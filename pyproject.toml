@@ -31,7 +31,7 @@ dependencies = [
     "zstd>=1.5.7.2",
 ]
 authors = [
-  { name = "Oskar", email = "ohodi@dtu.dk" },
+  { name = "Oskar Hovmøller Dinesen", email = "ohodi@dtu.dk" },
   { name = "Christian Gram Kalhauge", email = "chrg@dtu.dk" }
 ]
 classifiers = [

@@ -1,10 +1,4 @@
-from .data import (
-    get_label,
-    CLASSIFICATIONS_SCHEMA,
-    PERFORMANCE_SCHEMA,
-    CONFUSION_SCHEMA,
-    DISTANCE_SCHEMA,
-)
+import simbench.data as data
 from collections import Counter
 from abc import abstractmethod
 from dataclasses import dataclass
@@ -46,7 +40,7 @@ class Classifier:
 @dataclass(frozen=True)
 class BestMatch(Classifier):
     def __call__(self, distances: pl.LazyFrame, src: str) -> Classification:
-        assert distances.collect_schema() == DISTANCE_SCHEMA, (
+        assert distances.collect_schema() == data.DistanceTable.schema, (
             "Must use a distance dataframe for classification"
         )
 
@@ -75,7 +69,7 @@ class KNN(Classifier):
 
     def __call__(self, distances: pl.LazyFrame, src: str) -> Classification:
         assert self.k > 0, "k must be positive"
-        assert distances.collect_schema() == DISTANCE_SCHEMA, (
+        assert distances.collect_schema() == data.DistanceTable.schema, (
             "Must use a distance dataframe for classification"
         )
 
@@ -115,7 +109,7 @@ class Threshold(Classifier):
         assert 0.0 <= self.threshold and self.threshold <= 1.0, (
             "Threshold must be between 0 and 1"
         )
-        assert distances.collect_schema() == DISTANCE_SCHEMA, (
+        assert distances.collect_schema() == data.DistanceTable.schema, (
             "Must use a distance dataframe for classification"
         )
 
@@ -148,48 +142,6 @@ class Threshold(Classifier):
 
     def name(self) -> str:
         return "thrsh"
-
-    def param(self) -> str:
-        return str(self.threshold)
-
-    def __post_init__(self):
-        assert isinstance(self.threshold, float)
-
-
-@dataclass(frozen=True)
-class KThreshold(Classifier):
-    threshold: float
-
-    def __call__(self, distances: pl.LazyFrame, src: str) -> Classification | None:
-        assert 0.0 <= self.threshold and self.threshold <= 1.0, (
-            "Threshold must be between 0 and 1"
-        )
-        assert distances.collect_schema() == DISTANCE_SCHEMA, (
-            "Must provide a distance dataframe to KNN plotting"
-        )
-        sorted_sim = sort_pr_src(distances)
-
-        filter_expr = (pl.col("src") == src) & (pl.col("tgt") != src)
-        src_sim = sorted_sim.filter(filter_expr).select(["tgt", "distance"])
-        in_radius = src_sim.filter(pl.col("distance") > self.threshold)
-
-        best_names = pl.Series(in_radius.select("tgt").collect().head(10)).to_list()
-
-        if not best_names:
-            logger.warning(
-                f"Did not find any files to compare with threshold: {self.threshold}."
-            )
-            return None
-
-        labels = [get_label(distances, filename) for filename in best_names]
-
-        label_counts = Counter(labels)
-        label = max(label_counts)
-
-        return Classification(src, label, best_names)
-
-    def name(self) -> str:
-        return "KThrsh"
 
     def param(self) -> str:
         return str(self.threshold)
@@ -236,30 +188,32 @@ def get_classifier(classifier_name: str) -> Classifier | None:
 def create_classification_dataframe(
     distances: pl.LazyFrame, classifier: Classifier
 ) -> pl.LazyFrame:
-    data = {col: [] for col in CLASSIFICATIONS_SCHEMA}
+    df = data.ClassificationTable.dataframe()
 
     src_df = distances.select("src", "src_label", "metric", "comp", "comp_lvl").unique(
         maintain_order=True
     )
     src_names = pl.Series(src_df.select("src").collect()).to_list()
-    classifications = [classifier(distances, src).labelled_as for src in src_names]
+    classifications = [
+        c.labelled_as for c in [classifier(distances, src) for src in src_names] if c
+    ]
 
-    data["src"] = src_names
-    data["src_label"] = pl.Series(src_df.select("src_label").collect()).to_list()
-    data["metric"] = pl.Series(src_df.select("metric").collect()).to_list()
-    data["comp"] = pl.Series(src_df.select("comp").collect()).to_list()
-    data["comp_lvl"] = pl.Series(src_df.select("comp_lvl").collect()).to_list()
-    data["classifier"] = [classifier.name() for _ in range(len(src_names))]
-    data["class_param"] = [classifier.param() for _ in range(len(src_names))]
-    data["labelled_as"] = classifications
+    df["src"] = src_names
+    df["src_label"] = pl.Series(src_df.select("src_label").collect()).to_list()
+    df["metric"] = pl.Series(src_df.select("metric").collect()).to_list()
+    df["comp"] = pl.Series(src_df.select("comp").collect()).to_list()
+    df["comp_lvl"] = pl.Series(src_df.select("comp_lvl").collect()).to_list()
+    df["classifier"] = [classifier.name() for _ in range(len(src_names))]
+    df["class_param"] = [classifier.param() for _ in range(len(src_names))]
+    df["labelled_as"] = classifications
 
-    return pl.LazyFrame(data, schema=CLASSIFICATIONS_SCHEMA)
+    return df.lazy()
 
 
 def create_classification_dataframe_new(
     distances: pl.LazyFrame, classifier: Classifier
 ) -> pl.LazyFrame:
-    data = {col: [] for col in CLASSIFICATIONS_SCHEMA}
+    df = data.ClassificationTable.dataframe()
 
     src_df = distances.select("src", "src_label", "metric", "comp", "comp_lvl").unique(
         maintain_order=True
@@ -272,7 +226,6 @@ def create_classification_dataframe_new(
 
     if classifiable:
         classifications = [c.labelled_as for (_, c) in classified if c]
-        # logger.debug(src_df.collect())
         src_df = src_df.collect().with_columns(
             pl.when(pl.col("src").is_in(classifiable))
             .then(True)
@@ -280,20 +233,17 @@ def create_classification_dataframe_new(
             .alias("classifiable")
         )
 
-        # logger.debug(src_df)
         classifiable_df = src_df.filter(pl.col("classifiable"))
-        # logger.debug(classifiable_df)
-        data["src"] = classifiable
-        data["src_label"] = pl.Series(classifiable_df.select("src_label")).to_list()
-        data["metric"] = pl.Series(classifiable_df.select("metric")).to_list()
-        data["comp"] = pl.Series(classifiable_df.select("comp")).to_list()
-        data["comp_lvl"] = pl.Series(classifiable_df.select("comp_lvl")).to_list()
-        data["classifier"] = [classifier.name() for _ in range(len(classifiable))]
-        data["class_param"] = [classifier.param() for _ in range(len(classifiable))]
-        data["labelled_as"] = classifications
+        df["src"] = classifiable
+        df["src_label"] = pl.Series(classifiable_df.select("src_label")).to_list()
+        df["metric"] = pl.Series(classifiable_df.select("metric")).to_list()
+        df["comp"] = pl.Series(classifiable_df.select("comp")).to_list()
+        df["comp_lvl"] = pl.Series(classifiable_df.select("comp_lvl")).to_list()
+        df["classifier"] = [classifier.name() for _ in range(len(classifiable))]
+        df["class_param"] = [classifier.param() for _ in range(len(classifiable))]
+        df["labelled_as"] = classifications
 
-        # src_df.join(pl.LazyFrame(data), on="src")
-    return pl.LazyFrame(data, schema=CLASSIFICATIONS_SCHEMA)
+    return df.lazy()
 
 
 def check_classification(class_df: pl.LazyFrame, src: str) -> bool:
@@ -303,44 +253,6 @@ def check_classification(class_df: pl.LazyFrame, src: str) -> bool:
     )
 
     return classification.item(row=0, column=0) == classification.item(row=0, column=1)
-
-
-def get_confusion_matrix(class_df: pl.LazyFrame) -> pl.LazyFrame:
-    classes = pl.Series(class_df.select("src_label").unique().collect()).to_list()
-
-    eq_class = class_df.filter(pl.col("src_label") == pl.col("labelled_as"))
-    neq_class = class_df.filter(pl.col("src_label") != pl.col("labelled_as"))
-
-    true_pos = [
-        eq_class.filter((pl.col("labelled_as") == label)).collect().height
-        for label in classes
-    ]
-
-    true_neg = [
-        eq_class.filter((pl.col("labelled_as") != label)).collect().height
-        for label in classes
-    ]
-
-    false_neg = [
-        neq_class.filter((pl.col("labelled_as") != label)).collect().height
-        for label in classes
-    ]
-
-    false_pos = [
-        neq_class.filter((pl.col("labelled_as") == label)).collect().height
-        for label in classes
-    ]
-
-    return pl.LazyFrame(
-        {
-            "class": classes,
-            "true_pos": true_pos,
-            "true_neg": true_neg,
-            "false_pos": false_pos,
-            "false_neg": false_neg,
-        },
-        schema=CONFUSION_SCHEMA,
-    )
 
 
 def get_performance_data(class_df: pl.LazyFrame) -> tuple[float, float, float, float]:
@@ -387,57 +299,4 @@ def get_performance_scikit(class_df: pl.LazyFrame) -> pl.LazyFrame:
         "F1": [f_score],
     }
 
-    return pl.LazyFrame(overview, schema=PERFORMANCE_SCHEMA)
-
-
-def get_performance_overview(class_df: pl.LazyFrame) -> pl.LazyFrame:
-    confusion_mat = get_confusion_matrix(class_df)
-
-    summed_cols = confusion_mat.select(
-        "true_pos", "true_neg", "false_pos", "false_neg"
-    ).sum()
-
-    true_pos = summed_cols.select("true_pos").collect().item()
-    true_neg = summed_cols.select("true_neg").collect().item()
-    false_pos = summed_cols.select("false_pos").collect().item()
-    false_neg = summed_cols.select("false_neg").collect().item()
-
-    total_population = sum(
-        [summed_cols.select(c).collect().item() for c in summed_cols.collect().columns]
-    )
-
-    # Accuracy
-    accuracy = (true_pos + true_neg) / total_population
-
-    # Precision
-    precision = true_pos / (true_pos + false_pos)
-
-    # Recall
-    recall = true_pos / (true_pos + false_neg)
-
-    # F-Score
-    f_score = (
-        (2 * precision * recall) / (precision + recall)
-        if (precision + recall) > 0
-        else 0
-    )
-
-    metric = pl.Series(class_df.select("metric").unique().collect()).item()
-    comp = pl.Series(class_df.select("comp").unique().collect()).item()
-    complvl = pl.Series(class_df.select("comp_lvl").unique().collect()).item()
-    classifier = pl.Series(class_df.select("classifier").unique().collect()).item()
-
-    overview = {
-        "metric": [metric],
-        "comp": [comp],
-        "comp_lvl": [complvl],
-        "classifier": [classifier],
-        "FP": [false_pos],
-        "FN": [false_neg],
-        "Acc": [accuracy],
-        "Prec": [precision],
-        "Rec": [recall],
-        "F1": [f_score],
-    }
-
-    return pl.LazyFrame(overview, schema=PERFORMANCE_SCHEMA)
+    return data.PerformanceTable.lazyframe(overview)

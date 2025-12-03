@@ -1,150 +1,283 @@
-from loguru import logger
-from pathlib import Path
 import polars as pl
+import itertools
 from numpy import arange
-from simbench.similarity import SimilarityMetric
-import simbench.similarity as sim
 import simbench.data as data
 from indicatif import ProgressBar, ProgressStyle
+
+from dataclasses import dataclass, field
+from abc import ABC, abstractmethod
+from simbench.compressors import Compressor
+from simbench.metrics import CompressionMetric
+from pathlib import Path
+import time
+import io
+from loguru import logger
+
+
 from simbench.classification import (
-    Classifier,
     create_classification_dataframe,
     create_classification_dataframe_new,
-    get_performance_data,
     get_classifier,
     get_performance_scikit,
 )
 
 
-def get_data_overview_path(dir: Path) -> Path:
-    data_filename = f"{dir.name}_file_overview.parquet"
-    return Path.cwd() / dir / data_filename
+Logger = type(logger)
 
 
-def get_compfile_path(dir: Path, metric: SimilarityMetric) -> Path:
-    filename = f"{metric.compressor.name()}_{metric.compressor.compression_lvl}-compressions.parquet"
-    return Path.cwd() / dir / "analyses" / filename
+@dataclass
+class Tool(ABC):
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
+
+    def matches(self, match):
+        import re
+
+        return re.fullmatch(match, self.name) is not None
 
 
-def get_compclass_path(dir: Path, metric: SimilarityMetric) -> Path:
-    filename = f"{metric.compressor.name()}_{metric.compressor.compression_lvl}-concat_compressions.parquet"
-    return Path.cwd() / dir / "analyses" / filename
+@dataclass
+class CompressionTool(Tool):
+    metric: CompressionMetric
+    compressor: Compressor
+
+    @property
+    def name(self):
+        return f"{self.compressor.name}-{self.compressor.level}-{self.metric.name}"
 
 
-def get_dist_path(dir: Path, metric: SimilarityMetric) -> Path:
-    sim_filename = f"{metric.name()}_{metric.compressor.name()}_{metric.compressor.compression_lvl}-distances.parquet"
-    return Path.cwd() / dir / "analyses" / sim_filename
+def get_all_tools():
+    from simbench.compressors import Zstd, Gzip, Zstandard, Zlib
+    from simbench.metrics import NCD
+
+    compressors = [Zstd(1), Gzip(1), Zstandard(1), Zlib(1)]
+    metrics = [NCD()]
+
+    tools = []
+    for m in metrics:
+        for c in compressors:
+            tools.append(CompressionTool(m, c))
+
+    return tools
 
 
-def get_classification_path(
-    dir: Path, metric: SimilarityMetric, classifier: Classifier
-) -> Path:
-    classf_filename = f"{metric.name()}_{metric.compressor.name()}_{metric.compressor.compression_lvl}-{classifier.name()}-classifications.parquet"
-    return Path.cwd() / dir / "analyses" / classf_filename
+@dataclass
+class Analysis:
+    suite: Path
+    tool: CompressionTool
 
+    @property
+    def path(self):
+        return self.suite / "results" / self.tool.name
 
-def get_performance_overview_path(
-    dir: Path, metric: SimilarityMetric, classifier: Classifier
-) -> Path:
-    filename = f"{metric.name()}_{metric.compressor.name()}_{metric.compressor.compression_lvl}-{classifier.name()}-performance_overview.parquet"
-    return Path.cwd() / dir / "analyses" / filename
+    @property
+    def compression_file(self):
+        return self.path / "compressions.parquet"
 
+    @property
+    def pairwise_compression_file(self):
+        return self.path / "pairwise_compressions.parquet"
 
-def run_analysis(
-    datadir: Path, metric: SimilarityMetric, classifier: Classifier, write: bool
-) -> tuple[
-    pl.LazyFrame, pl.LazyFrame, pl.LazyFrame, pl.LazyFrame, pl.LazyFrame, pl.LazyFrame
-]:
-    assert isinstance(datadir, Path), "Run analysis has to be passed a Path object"
+    @property
+    def distance_file(self):
+        return self.path / "distances.parquet"
 
-    dirpath = Path.cwd() / datadir
-    assert dirpath.is_dir(), (
-        f"{dirpath} is not a valid path. The project should be run from the root folder of the project"
-    )
+    def problems(self):
+        return (self.suite / "data").iterdir()
 
-    data_path = get_data_overview_path(datadir)
-    if data_path.is_file():
-        logger.debug(f"Loading files for analysis from {data_path}")
-        data_df = data.load_parquet(data_path)
-    else:
-        logger.debug(f"Calculating data overview for {datadir.name}")
-        data_df = data.collect_datafiles(dirpath)
-
-    filelist = data.filelist_from_data(data_df)
-
-    compfile_path = get_compfile_path(datadir, metric)
-    if compfile_path.is_file():
-        logger.debug(f"Loading file compressions from {compfile_path}")
-        compfile_df = data.load_parquet(compfile_path)
-    else:
-        logger.debug(f"Calculating file compressions for {metric.compressor.name()}")
-        compfile_df = sim.create_comp_file(metric.compressor, filelist)
-
-    compclass_path = get_compclass_path(datadir, metric)
-    if compclass_path.is_file():
-        logger.debug(f"Loading concatenated compressions from {compclass_path}")
-        compclass_df = data.load_parquet(compclass_path)
-    else:
-        logger.debug(
-            f"Calculating concatenated compressions for {metric.compressor.name()}"
-        )
-        compclass_df = sim.create_comp_class(metric.compressor, filelist)
-
-    dist_path = get_dist_path(datadir, metric)
-    if dist_path.is_file():
-        logger.debug(f"Loading distances from {dist_path}")
-        distance_df = data.load_parquet(dist_path)
-    else:
-        logger.debug(f"Calculating distances for {metric.name()}")
-
-        distance_df = sim.create_distance_file(
-            metric, compfile_df, compclass_df, filelist
+    def sources(self):
+        return itertools.chain.from_iterable(
+            (data.Source(s) for s in p.iterdir()) for p in self.problems()
         )
 
-    classify_path = get_classification_path(datadir, metric, classifier)
-    if classify_path.is_file():
-        logger.debug(f"Loading classifications from {classify_path}")
-        class_df = data.load_parquet(classify_path)
-    else:
-        logger.debug(f"Classifying files with {classifier.name()}")
-        class_df = create_classification_dataframe(distance_df, classifier)
+    def compressions(self, update=False) -> pl.LazyFrame:  # data.CompressionTable:
+        import time
 
-    perf_path = get_performance_overview_path(datadir, metric, classifier)
-    if perf_path.is_file():
-        logger.debug(f"Loading performance overview from {perf_path}")
-        perf_df = data.load_parquet(perf_path)
-    else:
-        logger.debug(
-            f"Calculating performance overview for {metric.name()}\nThis may take a while..."
+        file = self.compression_file
+
+        if file.exists():
+            df = data.CompressionTable.scan(file)
+            logger.info(f"Loaded compressions from {file}")
+        else:
+            file.parent.mkdir(parents=True, exist_ok=True)
+            df = data.CompressionTable.lazyframe()
+
+        if update:
+            changed = list(self.sources())
+        else:
+            changed = []
+            for src in self.sources():
+                if src.name in df.collect()["src"]:
+                    continue
+                changed.append(src)
+
+        new = []
+        for src in changed:
+            src_bytes = src.get_bytes()
+
+            # best = None
+            # for _ in range(
+            #     3
+            # ):  # Running multiple times to warm up cache for timing results
+            buffer = io.BytesIO()
+            starttime = time.perf_counter_ns()
+            self.tool.compressor(src_bytes, buffer)
+            complen = buffer.getbuffer().nbytes
+            comptime = time.perf_counter_ns() - starttime
+            # best = comptime if best is None else min(best, comptime)
+
+            new.append(
+                {
+                    "src": src.name,
+                    "src_time": comptime,
+                    "src_comp": complen,
+                    "src_size": len(src_bytes),
+                    "src_ratio": complen / len(src_bytes),
+                    "src_label": src.label,
+                }
+            )
+
+        if not update:
+            df = pl.concat([df, data.CompressionTable.lazyframe(new)])
+        else:
+            df = data.CompressionTable.lazyframe(new)
+
+        if changed:
+            df.collect().write_parquet(file)
+            logger.success(f"Wrote data to {file}")
+
+        assert df.collect_schema() == data.CompressionTable.schema(), (
+            f"{df.collect_schema()}\n does not adhere to the compression schema:\n{data.CompressionTable.schema()}"
         )
-        perf_df = get_performance_scores(distance_df)
 
-    if write:
-        logger.info(f"Writing data overview to {str(data_path)}")
-        data_df.collect().write_parquet(data_path.resolve())
+        return df
 
-        logger.info(f"Writing compression data to {str(compfile_path)}")
-        compfile_df.collect().write_parquet(compfile_path.resolve())
+    def pairwise_compressions(self, update=False) -> pl.LazyFrame:
+        file = self.pairwise_compression_file
 
-        logger.info(f"Writing concatenated compression data to {str(compclass_path)}")
-        compclass_df.collect().write_parquet(compclass_path.resolve())
+        changed = False
+        if file.exists():
+            df = data.ComparisonCompressionTable.scan(file)
+            logger.info(f"Loaded pairwise compressions from {file}")
+        else:
+            file.parent.mkdir(parents=True, exist_ok=True)
+            df = data.ComparisonCompressionTable.lazyframe()
+            changed = True
 
-        logger.info(f"Writing distance data to {str(dist_path)}")
-        distance_df.collect().write_parquet(dist_path.resolve())
+        srcs = list(self.sources())
 
-        logger.info(f"Writing classifications to {str(classify_path)}")
-        class_df.collect().write_parquet(classify_path.resolve())
+        if not update:
+            logger.debug("Checking if data is updated")
+            original = pl.Series(df.collect()["src"].unique()).to_list()
+            if sorted(original) != sorted([src.name for src in list(self.sources())]):
+                changed = True
 
-        logger.info(f"Writing performance overview to {str(perf_path)}")
-        perf_df.collect().write_parquet(perf_path.resolve())
+        if update or changed:
+            logger.debug("Computing pairwise compressions")
+            pb = ProgressBar(
+                len(srcs),
+                style=ProgressStyle(
+                    template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
+                    progress_chars="#>-",
+                ),
+            )
 
-        return (data_df, compfile_df, compclass_df, distance_df, class_df, perf_df)
-    else:
-        return (data_df, compfile_df, compclass_df, distance_df, class_df, perf_df)
+            new = []
+            byte_lookup = {src.name: src.get_bytes() for src in srcs}  # For speed
+            for src in srcs:
+                pb.inc(1)
+                for tgt in srcs:
+                    concatbytes = byte_lookup[src.name] + byte_lookup[tgt.name]
+
+                    buffer = io.BytesIO()
+                    # best = None
+                    # for _ in range(
+                    #     3
+                    # ):  # Running multiple times to warm up cache for timing results
+                    buffer = io.BytesIO()
+                    starttime = time.perf_counter_ns()
+                    self.tool.compressor(concatbytes, buffer)
+                    complen = buffer.getbuffer().nbytes
+                    comptime = time.perf_counter_ns() - starttime
+                    # best = comptime if best is None else min(best, comptime)
+                    size = len(concatbytes)
+                    ratio = complen / size
+                    new.append(
+                        {
+                            "src": src.name,
+                            "tgt": tgt.name,
+                            "srctgt_comp": complen,
+                            "srctgt_size": size,
+                            "srctgt_ratio": ratio,
+                            "srctgt_time": comptime,
+                        }
+                    )
+
+            pb.finish()
+
+        if update:
+            df.collect().write_parquet(file)
+            logger.success(f"Wrote data to {file}")
+
+        assert df.collect_schema() == data.ComparisonCompressionTable.schema(), (
+            f"\n{df.collect_schema()}\n does not adhere to the compression schema:\n{data.ComparisonCompressionTable.schema()}"
+        )
+
+        return df
+
+    def distances(
+        self, comp_df: pl.LazyFrame, compare_comp_df: pl.LazyFrame, update=False
+    ) -> pl.LazyFrame:
+        file = self.distance_file
+
+        dist_df = None
+        if file.exists():
+            dist_df = data.DistanceTable.scan(file)
+            logger.info(f"Loaded pairwise compressions from {file}")
+        else:
+            file.parent.mkdir(parents=True, exist_ok=True)
+            update = True
+
+        if not update and dist_df is not None:
+            return dist_df
+
+        tgt_df = comp_df.rename(
+            {
+                "src": "tgt",
+                "src_comp": "tgt_comp",
+                "src_size": "tgt_size",
+                "src_time": "tgt_time",
+                "src_ratio": "tgt_ratio",
+                "src_label": "tgt_label",
+            }
+        )
+
+        comp_file_df = comp_df.join(tgt_df, how="cross")
+        metric_df = comp_file_df.join(compare_comp_df, on=["src", "tgt"], how="inner")
+
+        logger.info("Calculating metrics dataframe for metrics")
+        dist_df = self.tool.metric(metric_df)
+
+        if update:
+            dist_df.collect().write_parquet(file)
+            logger.success(f"Wrote data to {file}")
+
+        return dist_df
+
+
+@dataclass
+class Config:
+    log: Logger
+    tools: list[Tool] = field(default_factory=list)
+
+    def __init__(self):
+        self.log = logger
+        self.tools = get_all_tools()
 
 
 def extract_bad_matches(dist_df: pl.LazyFrame) -> list[tuple[str, str]]:
-    assert dist_df.collect_schema() == data.DISTANCE_SCHEMA, (
+    assert dist_df.collect_schema() == data.DistanceTable.schema, (
         "Can only extract bad matches from distance file"
     )
 
@@ -156,7 +289,7 @@ def extract_bad_matches(dist_df: pl.LazyFrame) -> list[tuple[str, str]]:
     bad_srcs = pl.Series(class_df.filter(expr).select("src").collect()).to_list()
 
     bad_srcs_list = [
-        dist_df.filter((pl.col("src") == bad_src) & (pl.col("src") != pl.col("target")))
+        dist_df.filter((pl.col("src") == bad_src) & (pl.col("src") != pl.col("tgt")))
         .sort(by="similarity", descending=True)
         .select("src")
         .collect()
@@ -165,7 +298,7 @@ def extract_bad_matches(dist_df: pl.LazyFrame) -> list[tuple[str, str]]:
     ]
 
     bad_targets_list = [
-        dist_df.filter((pl.col("src") == bad_src) & (pl.col("src") != pl.col("target")))
+        dist_df.filter((pl.col("src") == bad_src) & (pl.col("src") != pl.col("tgt")))
         .sort(by="similarity", descending=True)
         .select("target")
         .collect()
@@ -182,11 +315,9 @@ def extract_bad_matches(dist_df: pl.LazyFrame) -> list[tuple[str, str]]:
 def get_performance_scores(
     distance_df: pl.LazyFrame, iterations: int = 10
 ) -> pl.LazyFrame:
-    assert distance_df.collect_schema() == data.DISTANCE_SCHEMA
+    assert distance_df.collect_schema() == data.DistanceTable.schema
 
-    perf = pl.LazyFrame(
-        {col: [] for col in data.PERFORMANCE_SCHEMA}, schema=data.PERFORMANCE_SCHEMA
-    )
+    perf = data.PerformanceTable.lazyframe()
 
     pb = ProgressBar(
         iterations,

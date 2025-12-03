@@ -8,36 +8,37 @@ from simbench.classification import (
     get_performance_data,
     Classifier,
 )
-from simbench.data import CLASSIFICATIONS_SCHEMA, DISTANCE_SCHEMA
+from . import data as dt
 from statsmodels.graphics.mosaicplot import mosaic
 from sklearn.metrics import (
     confusion_matrix,
     ConfusionMatrixDisplay,
 )
-from sklearn import manifold
+
 from matplotlib.patches import Patch
 import itertools
 from collections import deque
 import matplotlib.colors as mcolors
 from loguru import logger
-
 from indicatif import ProgressBar, ProgressStyle
 
 
-def create_nclass_classification_plot(class_df: pl.LazyFrame):
-    assert class_df.collect_schema() == CLASSIFICATIONS_SCHEMA, (
+def create_nclass_classification_plot(classification_df: pl.LazyFrame):
+    assert classification_df.collect_schema() == dt.ClassificationTable.schema, (
         "The provided data is not a valid confusion matrix"
     )
 
     plots = []
 
-    classifier_name = class_df.select("classifier").unique().collect().item()
-    classes = pl.Series(class_df.select("src_label").unique().collect()).to_list()
+    classifier_name = classification_df.select("classifier").unique().collect().item()
+    classes = pl.Series(
+        classification_df.select("src_label").unique().collect()
+    ).to_list()
     n_classes = len(classes)
-    logger.debug(class_df.collect())
+    logger.debug(classification_df.collect())
     clfy_per_group = [
         [
-            class_df.filter(
+            classification_df.filter(
                 (pl.col("src_label") == clabel) & (pl.col("labelled_as") == label)
             )
             .collect()
@@ -121,9 +122,9 @@ def create_nclass_classification_plot(class_df: pl.LazyFrame):
     return plots
 
 
-def plot_confusion_matrix(class_df: pl.LazyFrame) -> None:
-    src_labels = pl.Series(class_df.select("src_label").collect()).to_list()
-    labelled_as = pl.Series(class_df.select("labelled_as").collect()).to_list()
+def plot_confusion_matrix(classification_df: pl.LazyFrame) -> None:
+    src_labels = pl.Series(classification_df.select("src_label").collect()).to_list()
+    labelled_as = pl.Series(classification_df.select("labelled_as").collect()).to_list()
     labels = list(set(src_labels))
     logger.debug(labels)
 
@@ -135,7 +136,7 @@ def plot_confusion_matrix(class_df: pl.LazyFrame) -> None:
 
 
 def f_score_plot(distance_df: pl.LazyFrame) -> None:
-    assert distance_df.collect_schema() == DISTANCE_SCHEMA, (
+    assert distance_df.collect_schema() == dt.DistanceTable.schema, (
         "Must provide a distance file to plot f-score"
     )
     df = distance_df.collect()
@@ -192,8 +193,8 @@ def f_score_knn_plot(distance_df: pl.LazyFrame) -> None:
         pb.inc(1)
         classifier = get_classifier(f"knn_{k}")
         assert classifier, f"Failed to instantiate knn from {k}"
-        class_df = create_classification_dataframe(distance_df, classifier)
-        accuracy, precision, recall, fscore = get_performance_data(class_df)
+        classification_df = create_classification_dataframe(distance_df, classifier)
+        accuracy, precision, recall, fscore = get_performance_data(classification_df)
         data["Prec"].append(precision)
         data["Recall"].append(recall)
         data["F1"].append(fscore)
@@ -226,8 +227,8 @@ def f_score_radius_plot(distance_df: pl.LazyFrame) -> None:
         pb.inc(1)
         classifier = get_classifier(f"thr_{t}")
         assert classifier, f"Failed to instantiate threshold from {t}"
-        class_df = create_classification_dataframe_new(distance_df, classifier)
-        accuracy, precision, recall, fscore = get_performance_data(class_df)
+        classification_df = create_classification_dataframe_new(distance_df, classifier)
+        accuracy, precision, recall, fscore = get_performance_data(classification_df)
 
         data["Prec"].append(precision)
         data["Recall"].append(recall)
