@@ -2,7 +2,6 @@ import polars as pl
 import itertools
 from numpy import arange
 import simbench.data as data
-from indicatif import ProgressBar, ProgressStyle
 
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
@@ -60,7 +59,7 @@ def get_all_classifiers():
 
     thrsh = [Threshold(t) for t in arange(0.0, 1.0, 0.1)]
     knn = [KNN(k) for k in range(0, 300, 30)]
-    classifiers = [KNN(10)]
+    classifiers = [KNN(k) for k in range(10, 210, 70)]
 
     return classifiers
 
@@ -178,14 +177,7 @@ class Analysis:
 
         if update or changed:
             logger.debug("Computing pairwise compressions")
-            pb = ProgressBar(
-                len(srcs),
-                style=ProgressStyle(
-                    template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
-                    progress_chars="#>-",
-                ),
-            )
-
+            pb = data.get_progressbar(len(srcs))
             new = []
             byte_lookup = {src.name: src.get_bytes() for src in srcs}  # For speed
             for src in srcs:
@@ -324,13 +316,7 @@ def get_performance_scores(
 
     perf = data.PerformanceTable.lazyframe()
 
-    pb = ProgressBar(
-        iterations,
-        style=ProgressStyle(
-            template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
-            progress_chars="#>-",
-        ),
-    )
+    pb = data.get_progressbar(iterations)
 
     for i in range(1, 300, int(300 / iterations)):
         classifier = get_classifier(f"knn_{i}")
@@ -343,14 +329,7 @@ def get_performance_scores(
 
     pb.finish()
 
-    pb = ProgressBar(
-        iterations,
-        style=ProgressStyle(
-            template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
-            progress_chars="#>-",
-        ),
-    )
-
+    pb = data.get_progressbar(iterations)
     for i in arange(0.0, 1.0, 1.0 / iterations):
         try:
             classifier = get_classifier(f"thr_{round(i, 3)}")

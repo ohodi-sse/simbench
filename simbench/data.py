@@ -7,6 +7,8 @@ from typing import get_type_hints
 
 from dataclasses import dataclass
 
+from indicatif import ProgressBar, ProgressStyle
+
 
 @dataclass(frozen=True)
 class Source:
@@ -95,18 +97,12 @@ class DistanceTable(Table):
 class ClassificationTable(Table):
     src: pl.String
     src_label: pl.String
-    metric: pl.String
-    comp: pl.String
-    comp_lvl: pl.UInt8
     classifier: pl.String
     class_param: pl.String
     labelled_as: pl.String
 
 
 class PerformanceTable(Table):
-    metric: pl.String
-    comp: pl.String
-    comp_lvl: pl.UInt8
     classifier: pl.String
     class_param: pl.String
     FP: pl.UInt64
@@ -115,6 +111,16 @@ class PerformanceTable(Table):
     Prec: pl.Float32
     Rec: pl.Float32
     F1: pl.Float32
+
+
+def get_progressbar(iterations: int):
+    return ProgressBar(
+        iterations,
+        style=ProgressStyle(
+            template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
+            progress_chars="#>-",
+        ),
+    )
 
 
 def display_diff(src1: str, src2: str, file_overview: pl.LazyFrame):

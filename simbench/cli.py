@@ -5,10 +5,12 @@ from pathlib import Path
 
 from simbench.plots import (
     create_nclass_classification_plot,
+    f_score_classification_plot,
     f_score_plot,
 )
 from . import data
 from simbench.analysis import Config, Analysis
+from simbench.classification import get_performance
 
 import polars as pl
 from loguru import logger
@@ -50,7 +52,6 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
     for tool in cfg.tools:
         if not tool.matches(tool_pattern):
             cfg.log.debug(f"Skipping {tool}")
-            logger.debug(f"Skipping {tool}")
             continue
 
         analysis = Analysis(suite, tool)
@@ -60,12 +61,19 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
         pair_comp_df = analysis.pairwise_compressions(update=force)
         dist_df = analysis.distances(comp_df, pair_comp_df, update=force)
 
+        class_df = data.ClassificationTable.lazyframe()
         for classifier in cfg.classifiers:
             if not classifier.matches(classifier_pattern):
                 continue
 
-            class_df = classifier.classifications(dist_df)
-            logger.debug(class_df.collect())
+            class_df = pl.concat([class_df, classifier.classifications(dist_df)])
+
+        logger.debug(class_df.collect())
+
+        perf_df = get_performance(class_df)
+        logger.debug(f"Performance:\n {perf_df.collect()}")
+        f_score_classification_plot(perf_df)
+        plt.show()
 
 
 @click.command("plot-cl")

@@ -2,7 +2,7 @@ from matplotlib import pyplot as plt
 import numpy as np
 import polars as pl
 import simbench.classification as cla
-from . import data as dt
+from . import data as data
 from statsmodels.graphics.mosaicplot import mosaic
 from sklearn.metrics import (
     confusion_matrix,
@@ -14,11 +14,10 @@ import itertools
 from collections import deque
 import matplotlib.colors as mcolors
 from loguru import logger
-from indicatif import ProgressBar, ProgressStyle
 
 
 def create_nclass_classification_plot(classification_df: pl.LazyFrame):
-    assert classification_df.collect_schema() == dt.ClassificationTable.schema, (
+    assert classification_df.collect_schema() == data.ClassificationTable.schema(), (
         "The provided data is not a valid confusion matrix"
     )
 
@@ -53,7 +52,7 @@ def create_nclass_classification_plot(classification_df: pl.LazyFrame):
             tmp.rotate(-i)
             res_list += tmp
 
-    data = {t: res_list[i] for i, t in enumerate(mosaic_tuples)}
+    data_dict = {t: res_list[i] for i, t in enumerate(mosaic_tuples)}
 
     fig, ax = plt.subplots(figsize=(11, 10))
     plt.rcParams.update({"font.size": 16})
@@ -76,7 +75,7 @@ def create_nclass_classification_plot(classification_df: pl.LazyFrame):
         for i, (a, b) in enumerate(mosaic_tuples)
     }
 
-    mosaic(data, labelizer=lambda k: "", properties=props, ax=ax)
+    mosaic(data_dict, labelizer=lambda k: "", properties=props, ax=ax)
 
     title_font_dict = {
         "fontsize": 20,
@@ -130,7 +129,7 @@ def plot_confusion_matrix(classification_df: pl.LazyFrame) -> None:
 
 
 def f_score_plot(distance_df: pl.LazyFrame) -> None:
-    assert distance_df.collect_schema() == dt.DistanceTable.schema, (
+    assert distance_df.collect_schema() == data.DistanceTable.schema, (
         "Must provide a distance file to plot f-score"
     )
     df = distance_df.collect()
@@ -178,6 +177,7 @@ def f_score_classification_plot(
     unique_classifiers = pl.Series(
         performance_df.select("classifier").unique().collect()
     ).to_list()
+    logger.debug(unique_classifiers)
 
     fig, ax = plt.subplots(len(unique_classifiers))
 
@@ -198,13 +198,13 @@ def f_score_classification_plot(
         ax[i].plot(t_range, Recall, label="Recall")
         ax[i].plot(t_range, F1, label="F1")
 
-        ax[i].set_title(classifier)
-        ax[i].set_xlabel("Distance")
+        ax[i].set_title(f"Scoring using {classifier}")
+        ax[i].set_xlabel(classifier)
         ax[i].set_ylabel("Score")
-        # ax[i].title("Scoring using Radius Nearest Neighbours")
         ax[i].legend()
 
-    return fig, ax
+    plt.show()
+    # return fig, ax
 
 
 # def plot_mds(distance_df: pl.LazyFrame) -> None:
