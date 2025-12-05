@@ -55,11 +55,11 @@ def get_all_tools():
 
 
 def get_all_classifiers():
-    from simbench.classification import BestMatch, KNN, Threshold
+    from simbench.classification import KNN, Threshold
 
     thrsh = [Threshold(t) for t in arange(0.0, 1.0, 0.1)]
     knn = [KNN(k) for k in range(0, 300, 30)]
-    classifiers = [KNN(k) for k in range(10, 210, 70)]
+    classifiers = [KNN(k) for k in range(10, 50, 20)]
 
     return classifiers
 
@@ -163,8 +163,8 @@ class Analysis:
             df = data.ComparisonCompressionTable.scan(file)
             logger.info(f"Loaded pairwise compressions from {file}")
         else:
-            file.parent.mkdir(parents=True, exist_ok=True)
             df = data.ComparisonCompressionTable.lazyframe()
+            file.parent.mkdir(parents=True, exist_ok=True)
             changed = True
 
         srcs = list(self.sources())
@@ -211,13 +211,15 @@ class Analysis:
 
             pb.finish()
 
-        if update:
-            df.collect().write_parquet(file)
-            logger.success(f"Wrote data to {file}")
+            df = data.ComparisonCompressionTable.lazyframe(new)
 
-        assert df.collect_schema() == data.ComparisonCompressionTable.schema(), (
-            f"\n{df.collect_schema()}\n does not adhere to the compression schema:\n{data.ComparisonCompressionTable.schema()}"
-        )
+            assert df.collect_schema() == data.ComparisonCompressionTable.schema(), (
+                f"\n{df.collect_schema()}\n does not adhere to the compression schema:\n{data.ComparisonCompressionTable.schema()}"
+            )
+
+            if update:
+                df.collect().write_parquet(file)
+                logger.success(f"Wrote data to {file}")
 
         return df
 
@@ -226,16 +228,11 @@ class Analysis:
     ) -> pl.LazyFrame:
         file = self.distance_file
 
-        dist_df = None
         if file.exists():
             dist_df = data.DistanceTable.scan(file)
             logger.info(f"Loaded distances from {file}")
         else:
             file.parent.mkdir(parents=True, exist_ok=True)
-            update = True
-
-        if not update and dist_df is not None:
-            return dist_df
 
         tgt_df = comp_df.rename(
             {
@@ -247,7 +244,6 @@ class Analysis:
                 "src_label": "tgt_label",
             }
         )
-
         comp_file_df = comp_df.join(tgt_df, how="cross")
         metric_df = comp_file_df.join(compare_comp_df, on=["src", "tgt"], how="inner")
 
@@ -271,6 +267,9 @@ class Config:
         self.log = logger
         self.tools = get_all_tools()
         self.classifiers = get_all_classifiers()
+
+
+#### EXPERIMENTAL ######
 
 
 def extract_bad_matches(dist_df: pl.LazyFrame) -> list[tuple[str, str]]:
@@ -307,43 +306,3 @@ def extract_bad_matches(dist_df: pl.LazyFrame) -> list[tuple[str, str]]:
     logger.debug(bad_matches)
 
     return bad_matches
-
-
-def get_performance_scores(
-    distance_df: pl.LazyFrame, iterations: int = 10
-) -> pl.LazyFrame:
-    assert distance_df.collect_schema() == data.DistanceTable.schema
-
-    perf = data.PerformanceTable.lazyframe()
-
-    pb = data.get_progressbar(iterations)
-
-    for i in range(1, 300, int(300 / iterations)):
-        classifier = get_classifier(f"knn_{i}")
-        assert classifier, "Failed to instantiate knn from {i}"
-        class_df = create_classification_dataframe_new(distance_df, classifier)
-        perf_tmp = get_performance_scikit(class_df)
-
-        perf = pl.concat([perf, perf_tmp])
-        pb.inc(1)
-
-    pb.finish()
-
-    pb = data.get_progressbar(iterations)
-    for i in arange(0.0, 1.0, 1.0 / iterations):
-        try:
-            classifier = get_classifier(f"thr_{round(i, 3)}")
-            assert classifier, "Failed to instantiate threshold from {i}"
-            class_df = create_classification_dataframe_new(distance_df, classifier)
-            perf_tmp = get_performance_scikit(class_df)
-
-            perf = pl.concat([perf, perf_tmp])
-
-            pb.inc(1)
-        except:
-            logger.debug(f"Failed to classify for threshold {i}")
-            pb.inc(1)
-
-    pb.finish()
-    logger.debug(perf.collect())
-    return perf

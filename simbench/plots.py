@@ -15,6 +15,10 @@ from collections import deque
 import matplotlib.colors as mcolors
 from loguru import logger
 
+import plotly.express as px
+from plotly.subplots import make_subplots
+import plotly.graph_objects as go
+
 
 def create_nclass_classification_plot(classification_df: pl.LazyFrame):
     assert classification_df.collect_schema() == data.ClassificationTable.schema(), (
@@ -128,8 +132,48 @@ def plot_confusion_matrix(classification_df: pl.LazyFrame) -> None:
     plt.show()
 
 
+def f_score_plotly(distance_df: pl.LazyFrame) -> None:
+    assert distance_df.collect_schema() == data.DistanceTable.schema(), (
+        "Must provide a distance file to plot f-score"
+    )
+    df = distance_df.collect()
+    df = df.sort(by="distance")
+
+    Tot = df.height
+
+    R = df["src_label"] == df["tgt_label"]
+    F = df["src_label"] != df["tgt_label"]
+
+    S = df["distance"]
+
+    R_sum = R.sum()
+    FN = R.cum_sum()
+    TotNRet = FN + F.cum_sum()
+
+    # FP = TotF - TN
+    # TP = TotRel - FN
+    n_classes = pl.Series(df["src_label"].unique).to_list()
+    TP = len(df["src_label"]) / len(n_classes)
+
+    Prec = TP / (Tot - TotNRet)
+    Recall = TP / TotRel
+
+    # F-Score
+    F1 = [2 * p * c / (p + c) if p + c > 0 else 0 for (p, c) in zip(Prec, Recall)]
+
+    plt.plot(S, Prec, label="Prec")
+    plt.plot(S, Recall, label="Recall")
+    plt.plot(S, F1, label="F1")
+
+    plt.xlabel("Distance")
+    plt.ylabel("Score")
+
+    plt.legend()
+    plt.show()
+
+
 def f_score_plot(distance_df: pl.LazyFrame) -> None:
-    assert distance_df.collect_schema() == data.DistanceTable.schema, (
+    assert distance_df.collect_schema() == data.DistanceTable.schema(), (
         "Must provide a distance file to plot f-score"
     )
     df = distance_df.collect()
@@ -146,8 +190,6 @@ def f_score_plot(distance_df: pl.LazyFrame) -> None:
     FN = R.cum_sum()
     TotNRet = FN + F.cum_sum()
 
-    print(TotNRet)
-
     # FP = TotF - TN
     TP = TotRel - FN
 
@@ -163,7 +205,6 @@ def f_score_plot(distance_df: pl.LazyFrame) -> None:
 
     plt.xlabel("Distance")
     plt.ylabel("Score")
-    plt.title("Scoring using Best Match")
 
     plt.legend()
     plt.show()
@@ -174,37 +215,26 @@ def f_score_classification_plot(
 ) -> None:  # tuple[Any, Any]:
     plots = []
 
-    unique_classifiers = pl.Series(
-        performance_df.select("classifier").unique().collect()
-    ).to_list()
-    logger.debug(unique_classifiers)
+    perf_df = performance_df.collect()
+    fig = px.line(perf_df, x=perf_df["class_param"], y=["Acc", "Prec", "Rec", "F1"])
+    fig.show()
 
-    fig, ax = plt.subplots(len(unique_classifiers))
-
-    for i, classifier in enumerate(unique_classifiers):
-        class_perf_df = performance_df.filter(pl.col("classifier") == classifier)
-
-        Acc = pl.Series(class_perf_df.select(pl.col("Acc")).collect()).to_list()
-        Prec = pl.Series(class_perf_df.select(pl.col("Prec")).collect()).to_list()
-        Recall = pl.Series(class_perf_df.select(pl.col("Rec")).collect()).to_list()
-        F1 = pl.Series(class_perf_df.select(pl.col("F1")).collect()).to_list()
-        t_range = pl.Series(
-            class_perf_df.select(pl.col("class_param")).collect()
-        ).to_list()  # [i for i in range(0, len(F1))]
-        t_range = [float(i) for i in t_range]
-
-        ax[i].plot(t_range, Prec, label="Prec")
-        ax[i].plot(t_range, Acc, label="Acc")
-        ax[i].plot(t_range, Recall, label="Recall")
-        ax[i].plot(t_range, F1, label="F1")
-
-        ax[i].set_title(f"Scoring using {classifier}")
-        ax[i].set_xlabel(classifier)
-        ax[i].set_ylabel("Score")
-        ax[i].legend()
-
-    plt.show()
-    # return fig, ax
+    # THE following is an attempt to make subplots for a performance_df containing multiple classifier types
+    # fig = make_subplots(rows=len(unique_classifiers), cols=1)
+    # unique_classifiers = pl.Series(
+    #     performance_df.select("classifier").unique().collect()
+    # ).to_list()
+    #
+    # for i, classifier in enumerate(unique_classifiers):
+    #     class_perf_df = performance_df.filter(pl.col("classifier") == classifier)
+    #
+    #     t_range = pl.Series(
+    #         class_perf_df.select(pl.col("class_param")).collect()
+    #     ).to_list()
+    #
+    #     logger.debug(t_range)
+    #     px.line(perf_df, x=t_range, y=["Acc", "Prec", "Rec", "F1"])
+    #     fig.show()
 
 
 # def plot_mds(distance_df: pl.LazyFrame) -> None:

@@ -73,6 +73,8 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
         perf_df = get_performance(class_df)
         logger.debug(f"Performance:\n {perf_df.collect()}")
         f_score_classification_plot(perf_df)
+
+        f_score_plot(dist_df)
         plt.show()
 
 

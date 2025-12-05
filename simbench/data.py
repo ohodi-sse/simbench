@@ -98,13 +98,13 @@ class ClassificationTable(Table):
     src: pl.String
     src_label: pl.String
     classifier: pl.String
-    class_param: pl.String
+    class_param: pl.Float32
     labelled_as: pl.String
 
 
 class PerformanceTable(Table):
     classifier: pl.String
-    class_param: pl.String
+    class_param: pl.Float32
     FP: pl.UInt64
     FN: pl.UInt64
     Acc: pl.Float32
