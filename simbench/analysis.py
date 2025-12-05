@@ -3,6 +3,8 @@ import itertools
 from numpy import arange
 import simbench.data as data
 
+from contextlib import contextmanager
+
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 from simbench.compressors import Compressor
@@ -92,68 +94,6 @@ class Analysis:
         return itertools.chain.from_iterable(
             (data.Source(s) for s in p.iterdir()) for p in self.problems()
         )
-
-    def compressions(self, update=False) -> pl.LazyFrame:  # data.CompressionTable:
-        import time
-
-        file = self.compression_file
-
-        if file.exists():
-            df = data.CompressionTable.scan(file)
-            logger.info(f"Loaded compressions from {file}")
-        else:
-            file.parent.mkdir(parents=True, exist_ok=True)
-            df = data.CompressionTable.lazyframe()
-
-        if update:
-            changed = list(self.sources())
-        else:
-            changed = []
-            for src in self.sources():
-                if src.name in df.collect()["src"]:
-                    continue
-                changed.append(src)
-
-        new = []
-        for src in changed:
-            src_bytes = src.get_bytes()
-
-            # best = None
-            # for _ in range(
-            #     3
-            # ):  # Running multiple times to warm up cache for timing results
-            buffer = io.BytesIO()
-            starttime = time.perf_counter_ns()
-            self.tool.compressor(src_bytes, buffer)
-            complen = buffer.getbuffer().nbytes
-            comptime = time.perf_counter_ns() - starttime
-            # best = comptime if best is None else min(best, comptime)
-
-            new.append(
-                {
-                    "src": src.name,
-                    "src_time": comptime,
-                    "src_comp": complen,
-                    "src_size": len(src_bytes),
-                    "src_ratio": complen / len(src_bytes),
-                    "src_label": src.label,
-                }
-            )
-
-        if not update:
-            df = pl.concat([df, data.CompressionTable.lazyframe(new)])
-        else:
-            df = data.CompressionTable.lazyframe(new)
-
-        if changed:
-            df.collect().write_parquet(file)
-            logger.success(f"Wrote data to {file}")
-
-        assert df.collect_schema() == data.CompressionTable.schema(), (
-            f"{df.collect_schema()}\n does not adhere to the compression schema:\n{data.CompressionTable.schema()}"
-        )
-
-        return df
 
     def pairwise_compressions(self, update=False) -> pl.LazyFrame:
         file = self.pairwise_compression_file
@@ -267,6 +207,51 @@ class Config:
         self.log = logger
         self.tools = get_all_tools()
         self.classifiers = get_all_classifiers()
+
+    @contextmanager
+    def profile(self, *name):
+        self.log.info(f"Started {'/'.join(str(a) for a in name)}")
+        starttime = time.perf_counter_ns()
+        timer = object()
+        yield timer
+        timer.time = time.perf_counter_ns() - starttime
+        self.log.info(f"Stopped {'/'.join(str(a) for a in name)} took {timer.time}")
+
+
+@dataclass
+class Compression(data.Table):
+    class Table(data.Table):
+        data: pl.LazyFrame
+
+    class Row(data.Table):
+        src: pl.String
+        src_comp: pl.UInt64
+        src_size: pl.UInt64
+        src_ratio: pl.Float64
+        src_time: pl.UInt64
+        src_label: pl.String
+
+    analysis: Analysis
+
+    def compute_row(self, src: data.Source, cfg: Config):
+        src_bytes = src.get_bytes()
+
+        with cfg.profile("compress", self.analysis.name, src.name) as p:
+            complen = self.analysis.tool.compressor.compress_length(src_bytes)
+
+        return {
+            "src": src.name,
+            "src_time": p.time,
+            "src_comp": complen,
+            "src_size": len(src_bytes),
+            "src_ratio": complen / len(src_bytes),
+            "src_label": src.label,
+        }
+
+    def compute(self, cfg: Config):
+        return self.lazyframe(
+            [self.compute_row(src, cfg) for src in self.analysis.sources()]
+        )
 
 
 #### EXPERIMENTAL ######

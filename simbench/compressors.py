@@ -15,6 +15,11 @@ class Compressor(ABC):
     @abstractmethod
     def __call__(self, file: bytes, out: io.BytesIO) -> None: ...
 
+    def compress_length(self, content: bytes) -> int:
+        buffer = io.BytesIO()
+        self(content, buffer)
+        return buffer.getbuffer().nbytes
+
     @property
     @abstractmethod
     def name(self) -> str: ...
