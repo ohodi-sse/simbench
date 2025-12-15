@@ -15,13 +15,9 @@ from collections import deque
 import matplotlib.colors as mcolors
 from loguru import logger
 
-import plotly.express as px
-from plotly.subplots import make_subplots
-import plotly.graph_objects as go
-
 
 def create_nclass_classification_plot(classification_df: pl.LazyFrame):
-    assert classification_df.collect_schema() == data.ClassificationTable.schema(), (
+    assert classification_df.collect_schema() == data.ClassificationTable.schema, (
         "The provided data is not a valid confusion matrix"
     )
 
@@ -132,48 +128,8 @@ def plot_confusion_matrix(classification_df: pl.LazyFrame) -> None:
     plt.show()
 
 
-def f_score_plotly(distance_df: pl.LazyFrame) -> None:
-    assert distance_df.collect_schema() == data.DistanceTable.schema(), (
-        "Must provide a distance file to plot f-score"
-    )
-    df = distance_df.collect()
-    df = df.sort(by="distance")
-
-    Tot = df.height
-
-    R = df["src_label"] == df["tgt_label"]
-    F = df["src_label"] != df["tgt_label"]
-
-    S = df["distance"]
-
-    R_sum = R.sum()
-    FN = R.cum_sum()
-    TotNRet = FN + F.cum_sum()
-
-    # FP = TotF - TN
-    # TP = TotRel - FN
-    n_classes = pl.Series(df["src_label"].unique).to_list()
-    TP = len(df["src_label"]) / len(n_classes)
-
-    Prec = TP / (Tot - TotNRet)
-    Recall = TP / TotRel
-
-    # F-Score
-    F1 = [2 * p * c / (p + c) if p + c > 0 else 0 for (p, c) in zip(Prec, Recall)]
-
-    plt.plot(S, Prec, label="Prec")
-    plt.plot(S, Recall, label="Recall")
-    plt.plot(S, F1, label="F1")
-
-    plt.xlabel("Distance")
-    plt.ylabel("Score")
-
-    plt.legend()
-    plt.show()
-
-
 def f_score_plot(distance_df: pl.LazyFrame) -> None:
-    assert distance_df.collect_schema() == data.DistanceTable.schema(), (
+    assert distance_df.collect_schema() == data.DistanceTable.schema, (
         "Must provide a distance file to plot f-score"
     )
     df = distance_df.collect()
@@ -216,9 +172,17 @@ def f_score_classification_plot(
     plots = []
 
     perf_df = performance_df.collect()
-    fig = px.line(perf_df, x=perf_df["class_param"], y=["Acc", "Prec", "Rec", "F1"])
-    fig.show()
 
+    params = perf_df["class_param"]
+    plt.plot(params, perf_df["Prec"], label="Prec")
+    plt.plot(params, perf_df["Rec"], label="Recall")
+    plt.plot(params, perf_df["F1"], label="F1")
+
+    plt.xlabel("Distance")
+    plt.ylabel("Score")
+    plt.title("Scoring using Radius Nearest Neighbours")
+    plt.legend()
+    plt.show()
     # THE following is an attempt to make subplots for a performance_df containing multiple classifier types
     # fig = make_subplots(rows=len(unique_classifiers), cols=1)
     # unique_classifiers = pl.Series(

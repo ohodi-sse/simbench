@@ -1,3 +1,4 @@
+from typing import Sequence, get_type_hints
 import polars as pl
 import itertools
 from numpy import arange
@@ -11,10 +12,9 @@ from simbench.compressors import Compressor
 from simbench.metrics import CompressionMetric
 from pathlib import Path
 import time
-import io
 from loguru import logger
 
-from simbench.classification import Classifier
+import simbench.classification as cl
 
 Logger = type(logger)
 
@@ -42,10 +42,10 @@ class CompressionTool(Tool):
 
 
 def get_all_tools():
-    from simbench.compressors import Zstd, Gzip, Zstandard, Zlib
+    from simbench.compressors import Zstd, Gzip, Zlib
     from simbench.metrics import NCD
 
-    compressors = [Zstd(1), Gzip(1), Zstandard(1), Zlib(1)]
+    compressors = [Zstd(1), Gzip(1), Zlib(1)]
     metrics = [NCD()]
 
     tools = []
@@ -56,14 +56,34 @@ def get_all_tools():
     return tools
 
 
-def get_all_classifiers():
+def get_all_classifiers() -> Sequence[cl.Classifier]:
     from simbench.classification import KNN, Threshold
 
-    thrsh = [Threshold(t) for t in arange(0.0, 1.0, 0.1)]
+    # thrsh = [Threshold(t) for t in arange(0.0, 1.0, 0.1)]
     knn = [KNN(k) for k in range(0, 300, 30)]
     classifiers = [KNN(k) for k in range(10, 50, 20)]
 
     return classifiers
+
+
+@dataclass
+class Config:
+    log: Logger
+    tools: list[Tool] = field(default_factory=list)
+    classifiers: Sequence[cl.Classifier] = field(default_factory=list)
+
+    def __init__(self):
+        self.log = logger
+        self.tools = get_all_tools()
+        self.classifiers = get_all_classifiers()
+
+    @contextmanager
+    def profile(self, *name):
+        # self.log.debug(f"Started {'/'.join(str(a) for a in name)}")
+        starttime = endtime = time.perf_counter_ns()
+        yield lambda: endtime - starttime
+        endtime = time.perf_counter_ns()
+        # self.log.debug(f"Stopped {'/'.join(str(a) for a in name)} took {endtime}")
 
 
 @dataclass
@@ -95,85 +115,214 @@ class Analysis:
             (data.Source(s) for s in p.iterdir()) for p in self.problems()
         )
 
-    def pairwise_compressions(self, update=False) -> pl.LazyFrame:
-        file = self.pairwise_compression_file
-
-        changed = False
-        if file.exists():
-            df = data.ComparisonCompressionTable.scan(file)
-            logger.info(f"Loaded pairwise compressions from {file}")
+    def compressions(self, cfg: Config, update: bool = False):
+        compression = CompressionTable(self)
+        if self.compression_file.exists() and not update:
+            comp_df = pl.scan_parquet(self.compression_file)
         else:
-            df = data.ComparisonCompressionTable.lazyframe()
-            file.parent.mkdir(parents=True, exist_ok=True)
-            changed = True
+            comp_df = compression.compute(cfg)
 
-        srcs = list(self.sources())
+        if update:
+            comp_df.collect().write_parquet(self.compression_file)
 
-        if not update:
-            logger.debug("Checking if data is updated")
-            original = pl.Series(df.collect()["src"].unique()).to_list()
-            if sorted(original) != sorted([src.name for src in list(self.sources())]):
-                changed = True
+        return comp_df
 
-        if update or changed:
-            logger.debug("Computing pairwise compressions")
-            pb = data.get_progressbar(len(srcs))
-            new = []
-            byte_lookup = {src.name: src.get_bytes() for src in srcs}  # For speed
-            for src in srcs:
-                pb.inc(1)
-                for tgt in srcs:
-                    concatbytes = byte_lookup[src.name] + byte_lookup[tgt.name]
+    def pairwise_compressions(self, cfg: Config, update: bool = False):
+        pair_comp = PairwiseCompressionTable(self)
+        if self.pairwise_compression_file.exists() and not update:
+            pair_comp_df = pl.scan_parquet(self.pairwise_compression_file)
+        else:
+            pair_comp_df = pair_comp.compute(cfg)
 
-                    buffer = io.BytesIO()
-                    # best = None
-                    # for _ in range(
-                    #     3
-                    # ):  # Running multiple times to warm up cache for timing results
-                    buffer = io.BytesIO()
-                    starttime = time.perf_counter_ns()
-                    self.tool.compressor(concatbytes, buffer)
-                    complen = buffer.getbuffer().nbytes
-                    comptime = time.perf_counter_ns() - starttime
-                    # best = comptime if best is None else min(best, comptime)
-                    size = len(concatbytes)
-                    ratio = complen / size
-                    new.append(
-                        {
-                            "src": src.name,
-                            "tgt": tgt.name,
-                            "srctgt_comp": complen,
-                            "srctgt_size": size,
-                            "srctgt_ratio": ratio,
-                            "srctgt_time": comptime,
-                        }
-                    )
-
-            pb.finish()
-
-            df = data.ComparisonCompressionTable.lazyframe(new)
-
-            assert df.collect_schema() == data.ComparisonCompressionTable.schema(), (
-                f"\n{df.collect_schema()}\n does not adhere to the compression schema:\n{data.ComparisonCompressionTable.schema()}"
-            )
-
-            if update:
-                df.collect().write_parquet(file)
-                logger.success(f"Wrote data to {file}")
-
-        return df
+        if update:
+            pair_comp_df.collect().write_parquet(self.pairwise_compression_file)
+        print(update)
+        print(pair_comp_df.collect())
+        return pair_comp_df
 
     def distances(
-        self, comp_df: pl.LazyFrame, compare_comp_df: pl.LazyFrame, update=False
-    ) -> pl.LazyFrame:
-        file = self.distance_file
-
-        if file.exists():
-            dist_df = data.DistanceTable.scan(file)
-            logger.info(f"Loaded distances from {file}")
+        self,
+        comp_df: pl.LazyFrame,
+        pair_comp_df: pl.LazyFrame,
+        update: bool = False,
+    ):
+        if self.distance_file.exists() and not update:
+            dist_df = pl.scan_parquet(self.distance_file)
         else:
-            file.parent.mkdir(parents=True, exist_ok=True)
+            dist_df = DistanceTable(self)
+            dist_df = dist_df.compute(comp_df, pair_comp_df)
 
+        if update:
+            dist_df.collect().write_parquet(self.distance_file)
+
+        return dist_df
+
+
+class Table(ABC):
+    @classmethod
+    @abstractmethod
+    def schema(cls) -> pl.Schema: ...
+
+    @classmethod
+    def scan(cls, *args, **kwargs):
+        return pl.scan_parquet(*args, schema=cls.schema(), **kwargs)
+
+    @classmethod
+    def dataframe(cls, *args, **kwargs):
+        return pl.DataFrame(*args, schema=cls.schema(), **kwargs)
+
+    @classmethod
+    def lazyframe(cls, *args, **kwargs):
+        return pl.LazyFrame(*args, schema=cls.schema(), **kwargs)
+
+
+# class CompressionTable(Data):
+#     src: pl.String
+#     src_comp: pl.UInt64
+#     src_size: pl.UInt64
+#     src_ratio: pl.Float64
+#     src_time: pl.UInt64
+#     src_label: pl.String
+#
+#     @classmethod
+#     def builder(cls, compute):
+#         pass
+#
+# @CompressionTable.builder
+# def compute_compression(suite : Suite, compressor: Compressor, config: Config) -> pl.LazyFrame:
+#
+
+
+@dataclass
+class CompressionTable(Table):
+    analysis: Analysis
+
+    @classmethod
+    def schema(cls) -> pl.Schema:
+        return pl.Schema(
+            {
+                "src": pl.String,
+                "src_comp": pl.UInt64,
+                "src_size": pl.UInt64,
+                "src_ratio": pl.Float64,
+                "src_time": pl.UInt64,
+                "src_label": pl.String,
+            }
+        )
+
+    def compute_row(self, src: data.Source, cfg: Config):
+        src_bytes = src.get_bytes()
+
+        with cfg.profile(
+            "compress", self.analysis.tool.compressor.name, src.name
+        ) as timed:
+            complen = self.analysis.tool.compressor.compress_length(src_bytes)
+
+        return {
+            "src": src.name,
+            "src_comp": complen,
+            "src_size": len(src_bytes),
+            "src_ratio": complen / len(src_bytes),
+            "src_time": timed(),
+            "src_label": src.label,
+        }
+
+    def compute(self, cfg: Config):
+        rows = [self.compute_row(src, cfg) for src in self.analysis.sources()]
+        data_dict = {k: [] for k, _ in self.schema().items()}
+        for row in rows:
+            for k, v in row.items():
+                data_dict[k].append(v)
+
+        return self.lazyframe(data_dict)
+
+
+@dataclass
+class PairwiseCompressionTable(Table):
+    analysis: Analysis
+
+    @classmethod
+    def schema(cls) -> pl.Schema:
+        return pl.Schema(
+            {
+                "src": pl.String,
+                "tgt": pl.String,
+                "srctgt_size": pl.UInt64,
+                "srctgt_comp": pl.UInt64,
+                "srctgt_ratio": pl.Float64,
+                "srctgt_time": pl.UInt64,
+            }
+        )
+
+    def compute_row(
+        self,
+        src: data.Source,
+        tgt: data.Source,
+        byte_lookup: dict[str, bytes],
+        cfg: Config,
+    ):
+        concat_bytes = byte_lookup[src.name] + byte_lookup[tgt.name]
+
+        with cfg.profile(
+            "paircompress", self.analysis.tool.compressor.name, src.name, tgt.name
+        ) as timed:
+            complen = self.analysis.tool.compressor.compress_length(concat_bytes)
+
+        size = len(concat_bytes)
+        ratio = complen / size
+        return {
+            "src": src.name,
+            "tgt": tgt.name,
+            "srctgt_comp": complen,
+            "srctgt_size": size,
+            "srctgt_ratio": ratio,
+            "srctgt_time": timed(),
+        }
+
+    def compute(self, cfg: Config):
+        byte_lookup = {
+            src.name: src.get_bytes() for src in self.analysis.sources()
+        }  # For speed
+
+        srcs = list(self.analysis.sources())
+        pb = data.get_progressbar(len(byte_lookup))
+        data_list = []
+
+        for src in srcs:
+            pb.inc(1)
+            for tgt in srcs:
+                data_list.append(self.compute_row(src, tgt, byte_lookup, cfg))
+
+        data_dict = {k: [] for k, _ in self.schema().items()}
+        for row in data_list:
+            for k, v in row.items():
+                data_dict[k].append(v)
+
+        pb.finish()
+
+        return self.lazyframe(data_dict)
+
+
+@dataclass
+class DistanceTable(Table):
+    analysis: Analysis
+
+    @classmethod
+    def schema(cls) -> pl.Schema:
+        return pl.Schema(
+            {
+                "src": pl.String,
+                "tgt": pl.String,
+                "src_label": pl.String,
+                "tgt_label": pl.String,
+                "distance": pl.Float32,
+                "time": pl.UInt64,
+            }
+        )
+
+    def compute(
+        self, comp_df: pl.LazyFrame, compare_comp_df: pl.LazyFrame
+    ) -> pl.LazyFrame:
         tgt_df = comp_df.rename(
             {
                 "src": "tgt",
@@ -186,108 +335,50 @@ class Analysis:
         )
         comp_file_df = comp_df.join(tgt_df, how="cross")
         metric_df = comp_file_df.join(compare_comp_df, on=["src", "tgt"], how="inner")
-
-        logger.info("Calculating metrics dataframe for metrics")
-        dist_df = self.tool.metric(metric_df)
-
-        if update:
-            dist_df.collect().write_parquet(file)
-            logger.success(f"Wrote data to {file}")
+        dist_df = self.analysis.tool.metric(metric_df)
 
         return dist_df
 
 
-@dataclass
-class Config:
-    log: Logger
-    tools: list[Tool] = field(default_factory=list)
-    classifiers: list[Classifier] = field(default_factory=list)
-
-    def __init__(self):
-        self.log = logger
-        self.tools = get_all_tools()
-        self.classifiers = get_all_classifiers()
-
-    @contextmanager
-    def profile(self, *name):
-        self.log.info(f"Started {'/'.join(str(a) for a in name)}")
-        starttime = time.perf_counter_ns()
-        timer = object()
-        yield timer
-        timer.time = time.perf_counter_ns() - starttime
-        self.log.info(f"Stopped {'/'.join(str(a) for a in name)} took {timer.time}")
-
-
-@dataclass
-class Compression(data.Table):
-    class Table(data.Table):
-        data: pl.LazyFrame
-
-    class Row(data.Table):
-        src: pl.String
-        src_comp: pl.UInt64
-        src_size: pl.UInt64
-        src_ratio: pl.Float64
-        src_time: pl.UInt64
-        src_label: pl.String
-
+class ClassificationTable(Table):
     analysis: Analysis
 
-    def compute_row(self, src: data.Source, cfg: Config):
-        src_bytes = src.get_bytes()
-
-        with cfg.profile("compress", self.analysis.name, src.name) as p:
-            complen = self.analysis.tool.compressor.compress_length(src_bytes)
-
-        return {
-            "src": src.name,
-            "src_time": p.time,
-            "src_comp": complen,
-            "src_size": len(src_bytes),
-            "src_ratio": complen / len(src_bytes),
-            "src_label": src.label,
-        }
-
-    def compute(self, cfg: Config):
-        return self.lazyframe(
-            [self.compute_row(src, cfg) for src in self.analysis.sources()]
+    @classmethod
+    def schema(cls) -> pl.Schema:
+        return pl.Schema(
+            {
+                "src": pl.String,
+                "src_label": pl.String,
+                "classifier": pl.String,
+                "class_param": pl.Float32,
+                "labelled_as": pl.String,
+            }
         )
+
+    def compute(self, cfg: Config, dist_df: pl.LazyFrame) -> pl.LazyFrame:
+        logger.debug(class_df.collect())
 
 
 #### EXPERIMENTAL ######
 
 
-def extract_bad_matches(dist_df: pl.LazyFrame) -> list[tuple[str, str]]:
+def extract_bad_matches(
+    dist_df: pl.LazyFrame, class_df: pl.LazyFrame
+) -> list[tuple[str, str]]:
     assert dist_df.collect_schema() == data.DistanceTable.schema, (
         "Can only extract bad matches from distance file"
     )
 
-    classifier = get_classifier("bm")
-    assert classifier
-
-    class_df = create_classification_dataframe(dist_df, classifier)
-    expr = pl.col("src_label") != pl.col("labelled_as")
+    total_df = dist_df.join(class_df, on=["src", "tgt"])
+    expr = (pl.col("src_label") != pl.col("labelled_as")) & (
+        pl.col("src") != pl.col("tgt")
+    )
     bad_srcs = pl.Series(class_df.filter(expr).select("src").collect()).to_list()
 
-    bad_srcs_list = [
-        dist_df.filter((pl.col("src") == bad_src) & (pl.col("src") != pl.col("tgt")))
-        .sort(by="similarity", descending=True)
-        .select("src")
-        .collect()
-        .item(0, "src")
-        for bad_src in bad_srcs
-    ]
+    total_df.filter(expr).sort(by="distance", descending=True).select(
+        "src", "tgt"
+    ).collect()
 
-    bad_targets_list = [
-        dist_df.filter((pl.col("src") == bad_src) & (pl.col("src") != pl.col("tgt")))
-        .sort(by="similarity", descending=True)
-        .select("target")
-        .collect()
-        .item(0, "target")
-        for bad_src in bad_srcs
-    ]
-
-    bad_matches = [(s, t) for (s, t) in zip(bad_srcs_list, bad_targets_list)]
     logger.debug(bad_matches)
 
     return bad_matches

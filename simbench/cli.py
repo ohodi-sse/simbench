@@ -57,18 +57,21 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
         analysis = Analysis(suite, tool)
         cfg.log.info(f"Working on {analysis.path}, force={force}")
 
-        comp_df = analysis.compressions(update=force)
-        pair_comp_df = analysis.pairwise_compressions(update=force)
+        cfg.log.info("Computing compressions")
+        comp_df = analysis.compressions(cfg, update=force)
+        cfg.log.info(comp_df.collect())
+        cfg.log.info("Computing pairwise compressions")
+        pair_comp_df = analysis.pairwise_compressions(cfg, update=force)
+        cfg.log.info("Extrapolating distances")
         dist_df = analysis.distances(comp_df, pair_comp_df, update=force)
 
         class_df = data.ClassificationTable.lazyframe()
         for classifier in cfg.classifiers:
             if not classifier.matches(classifier_pattern):
+                cfg.log.debug(f"Skipping {classifier}")
                 continue
 
             class_df = pl.concat([class_df, classifier.classifications(dist_df)])
-
-        logger.debug(class_df.collect())
 
         perf_df = get_performance(class_df)
         logger.debug(f"Performance:\n {perf_df.collect()}")

@@ -95,6 +95,7 @@ class KNN(Classifier):
         src_sim = distance_df.filter(filter_expr).select(
             ["tgt_label", "tgt", "distance"]
         )
+
         k_best = src_sim.head(self.k)
         counts = (
             k_best.group_by("tgt_label")
@@ -104,9 +105,6 @@ class KNN(Classifier):
         # This means src is labelled as the closest label based on mean distance when given a tie
 
         label = counts.select("tgt_label").collect()["tgt_label"][0]
-
-        # logger.debug(counts.collect())
-        # logger.debug(label)
 
         k_best_names = pl.Series(k_best.select("tgt").collect()).to_list()
         return Classification(src, label, k_best_names)
@@ -131,7 +129,7 @@ class Threshold(Classifier):
         assert 0.0 <= self.threshold and self.threshold <= 1.0, (
             "Threshold must be between 0 and 1"
         )
-        assert distance_df.collect_schema() == data.DistanceTable.schema, (
+        assert distance_df.collect_schema() == data.DistanceTable.schema(), (
             "Must use a distance dataframe for classification"
         )
 
@@ -163,11 +161,13 @@ class Threshold(Classifier):
         assert isinstance(self.threshold, float)
 
 
-def compute_performance_data(
-    class_df: pl.LazyFrame,
-) -> tuple[float, float, float, float]:
+def get_performance_row(class_df: pl.LazyFrame):
     src_labels = pl.Series(class_df.select("src_label").collect()).to_list()
     labelled_as = pl.Series(class_df.select("labelled_as").collect()).to_list()
+
+    cm = confusion_matrix(src_labels, labelled_as)
+    FP = sum(cm.sum(axis=0) - np.diag(cm))
+    FN = sum(cm.sum(axis=1) - np.diag(cm))
 
     averaging = "macro"
 
@@ -176,26 +176,15 @@ def compute_performance_data(
         src_labels, labelled_as, average=averaging, zero_division=0.0
     )
 
-    return accuracy, precision, recall, f_score
+    return FP, FN, accuracy, precision, recall, f_score
 
 
 def get_performance(class_df: pl.LazyFrame) -> pl.LazyFrame:
-    # metric = pl.Series(class_df.select("metric").unique().collect()).item()
-    # comp = pl.Series(class_df.select("comp").unique().collect()).item()
-    # complvl = pl.Series(class_df.select("comp_lvl").unique().collect()).item()
-
     classifier = pl.Series(
         class_df.select("classifier", "class_param").unique().collect()
     ).to_list()
 
-    class_ls = []
-    param_ls = []
-    fp_ls = []
-    fn_ls = []
-    acc_ls = []
-    prec_ls = []
-    rec_ls = []
-    f1_ls = []
+    data_dict = {k: [] for k in data.PerformanceTable.schema()}
 
     for cl in classifier:
         logger.debug(
@@ -206,35 +195,18 @@ def get_performance(class_df: pl.LazyFrame) -> pl.LazyFrame:
         )
         pr_class_df = class_df.filter(expr)
 
-        src_labels = pl.Series(pr_class_df.select("src_label").collect()).to_list()
-        labelled_as = pl.Series(pr_class_df.select("labelled_as").collect()).to_list()
+        FP, FN, accuracy, precision, recall, f_score = get_performance_row(pr_class_df)
 
-        cm = confusion_matrix(src_labels, labelled_as)
-        FP = sum(cm.sum(axis=0) - np.diag(cm))
-        FN = sum(cm.sum(axis=1) - np.diag(cm))
+        data_dict["classifier"].append(cl["classifier"])
+        data_dict["class_param"].append(cl["class_param"])
+        data_dict["FP"].append(FP)
+        data_dict["FN"].append(FN)
+        data_dict["Acc"].append(accuracy)
+        data_dict["Prec"].append(precision)
+        data_dict["Rec"].append(recall)
+        data_dict["F1"].append(f_score)
 
-        accuracy, precision, recall, f_score = compute_performance_data(pr_class_df)
-        class_ls.append(cl["classifier"])
-        param_ls.append(cl["class_param"])
-        fp_ls.append(FP)
-        fn_ls.append(FN)
-        acc_ls.append(accuracy)
-        prec_ls.append(precision)
-        rec_ls.append(recall)
-        f1_ls.append(f_score)
-
-    overview = {
-        "classifier": class_ls,
-        "class_param": param_ls,
-        "FP": fp_ls,
-        "FN": fn_ls,
-        "Acc": acc_ls,
-        "Prec": prec_ls,
-        "Rec": rec_ls,
-        "F1": f1_ls,
-    }
-
-    perf_df = data.PerformanceTable.lazyframe(overview).sort(
+    perf_df = data.PerformanceTable.lazyframe(data_dict).sort(
         by=["classifier", "class_param"], descending=[False, True]
     )
 

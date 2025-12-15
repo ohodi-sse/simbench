@@ -6,6 +6,7 @@ from loguru import logger
 from typing import get_type_hints
 
 from dataclasses import dataclass
+from abc import ABC, abstractmethod
 
 from indicatif import ProgressBar, ProgressStyle
 
@@ -30,7 +31,7 @@ class Source:
         return self.path.read_bytes()
 
 
-class Table:
+class Table(ABC):
     @classmethod
     def schema(cls):
         return get_type_hints(cls)
