@@ -355,9 +355,6 @@ class ClassificationTable(Table):
             }
         )
 
-    def compute(self, cfg: Config, dist_df: pl.LazyFrame) -> pl.LazyFrame:
-        logger.debug(class_df.collect())
-
 
 #### EXPERIMENTAL ######
 
