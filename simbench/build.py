@@ -1,5 +1,6 @@
 from dataclasses import dataclass, field
 import time
+import functools
 from pathlib import Path
 import json
 from typing import Self, Callable, get_type_hints
@@ -153,86 +154,74 @@ class Suite:
                 (data.Source(s) for s in p.iterdir()) for p in self.problems()
         )
 
-class Table(ABC):
-    @classmethod
-    def schema(cls):
-        return get_type_hints(cls)
-
-    @classmethod
-    def scan(cls, *args, **kwargs):
-        return pl.scan_parquet(*args, schema=cls.schema(), **kwargs)
-
-    @classmethod
-    def dataframe(cls, *args, **kwargs):
-        return pl.DataFrame(*args, schema=cls.schema(), **kwargs)
-
-    @classmethod
-    def lazyframe(cls, *args, **kwargs):
-        return pl.LazyFrame(*args, schema=cls.schema(), **kwargs)
-
 
 @dataclass
-class TableBuilder[T]:
-    schema: T
+class TableBuilder:
+    schema: pl.Schema
     columns: dict[str, list[object]] = field(init=False)
 
     def __post_init__(self):
-        self.columns = { k : [] for k in self.schema.columns().keys() }
+        self.columns = { k : [] for k in self.schema.keys() }
 
     def add(self, **kwargs):
-        assert kwargs.keys() == self.schema.columns().keys(), kwargs
+        assert kwargs.keys() == self.schema.keys(), kwargs
         for k, v in kwargs.items():
             self.columns[k].append(v)
 
     def getvalue(self):
-        return pl.LazyFrame(self.columns, schema=self.schema.schema())
+        return pl.LazyFrame(self.columns, schema=self.schema)
 
-class CompressionSchema:
-    src: pl.String()
-    src_comp: pl.UInt64()
-    src_size: pl.UInt64()
-    src_ratio: pl.Float64()
-    src_time: pl.UInt64()
-    src_label: pl.String()
+def tablenode(type):
+    columns = get_type_hints(type.Schema)
+    schema = pl.Schema(columns)
+
+    def wrapper(path, **dependencies):
+        return Node(functools.partial(type.action, schema), ParquetStore(path, schema), dependencies)
+
+    return wrapper
+
+
+@tablenode
+class Compression:
+
+    class Schema:
+        src: pl.String()
+        src_comp: pl.UInt64()
+        src_size: pl.UInt64()
+        src_ratio: pl.Float64()
+        src_time: pl.UInt64()
+        src_label: pl.String()
+
     
-    @classmethod
-    def schema(cls):
-        return pl.Schema(cls.columns())
-    
-    @classmethod
-    def columns(cls):
-        return get_type_hints(cls)
+    def action(schema, bld : Builder, compressor : Compressor, suite: Suite):
+        out = TableBuilder(schema)
+
+        for src in suite.sources():
+            src_bytes = src.get_bytes()
+
+            with bld.profile("compress", compressor.name, src.name) as timed:
+                complen: int = compressor.compress_length(src_bytes)
+
+            out.add(
+                src= src.name,
+                src_comp= complen,
+                src_size=  len(src_bytes),
+                src_ratio= complen / len(src_bytes),
+                src_time= timed(),
+                src_label= src.label,
+            )
+
+        return out.getvalue()
 
 
 
+    # node = Node(compression_table, ParquetStore(Path("test.parquet"), CompressionSchema.schema()), 
+    #     dependencies = { "compressor": Constant(Zstd(1)), 
+    #                     "suite" : Constant(Suite(Path("suites/predata/")))
+    #                     } )
+node = Compression(Path("test2.parquet"), compressor= Constant(Zstd(1)), suite=  Constant(Suite(Path("suites/predata/"))))
 
-def compression(bld : Builder, compressor : Compressor, suite: Suite):
-
-    out = TableBuilder(CompressionSchema())
-
-    for src in suite.sources():
-        src_bytes = src.get_bytes()
-
-        with bld.profile("compress", compressor.name, src.name) as timed:
-            complen: int = compressor.compress_length(src_bytes)
-
-        out.add(
-            src= src.name,
-            src_comp= complen,
-            src_size=  len(src_bytes),
-            src_ratio= complen / len(src_bytes),
-            src_time= timed(),
-            src_label= src.label,
-        )
-
-    return out.getvalue()
-
-
-
-node = Node(compression_table, ParquetStore(Path("test.parquet"), CompressionSchema.schema()), 
-    dependencies = { "compressor": Constant(Zstd(1)), 
-                    "suite" : Constant(Suite(Path("suites/predata/")))
-                    } )
+print(node)
 
 bld = Builder(logger)
 x = node.pull(bld)
