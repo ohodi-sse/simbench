@@ -56,9 +56,9 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
             continue
 
         analysis = Analysis(suite, tool)
-        comp_node, pair_node, dist_node = analysis.get_nodes(bld)
+        # comp_node, pair_node, dist_node = analysis.get_nodes(bld)
 
-        dist_node.pull(bld)
+        # dist_node.pull(bld)
 
 
 @click.command("plot-cl")

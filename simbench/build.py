@@ -1,8 +1,8 @@
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 import time
 from pathlib import Path
 import json
-from typing import Self, Callable
+from typing import Self, Callable, get_type_hints
 from abc import ABC, abstractmethod
 from contextlib import contextmanager
 import itertools
@@ -12,7 +12,7 @@ import simbench.data as data
 from loguru import logger
 
 from simbench.analysis import CompressionTool, Config
-from simbench.compressors import Compressor
+from simbench.compressors import Compressor, Zstd
 from simbench.data import Source
 
 
@@ -22,17 +22,23 @@ class Builder:
 
     @contextmanager
     def profile(self, *message):
-        # self.log.info(f"Started {'/'.join(str(m) for m in message)}")
+        #self.log.info(f"Started {'/'.join(str(m) for m in message)}")
         starttime = endtime = time.perf_counter_ns()
         yield lambda: endtime - starttime
         endtime = time.perf_counter_ns()
-        # self.log.info(f"Done with {'/'.join(str(m) for m in message)}")
+        #self.log.info(f"Done with {'/'.join(str(m) for m in message)}")
 
 
 class Pullable[A](ABC):
     @abstractmethod
     def pull(self, bld) -> A: ...
 
+@dataclass
+class Constant[A]:
+    data : A
+
+    def pull(self, bld) -> A: 
+        return self.data
 
 class Store[A](ABC):
     @abstractmethod
@@ -48,13 +54,13 @@ class JsonStore[A](Store[A], Pullable[A]):
 
     def load(self, bld):
         if self.file.exists():
-            return json.loads(self.file.read_text())
+            return self.pull(bld)
+    
+    def store(self, item, bld):
+        self.file.write_text(json.dumps(item))
 
     def pull(self, bld):
         return json.loads(self.file.read_text())
-
-    def store(self, item, bld):
-        return self.file.write_text(json.dumps(item))
 
 
 @dataclass
@@ -63,47 +69,44 @@ class ByteStore[bytes](Store[bytes], Pullable[bytes]):
 
     def load(self, bld) -> bytes | None:
         if self.file.exists():
-            return self.file.read_bytes()
+            return self.pull(self, bld)
         return
+    
+    def store(self, item: bytes, bld):
+        self.file.write_bytes(item)
 
     def pull(self, bld) -> bytes:
         return self.file.read_bytes()
 
-    def store(self, item: bytes, bld):
-        return self.file.write_bytes(item)
 
 
 @dataclass
-class SourceStore[Source](Store[Source], Pullable[Source]):
+class SourceStore(Pullable[Source]):
     src: Source
-
-    def load(self, bld) -> Source | None:
-        if self.src.path.exists():
-            return self.src
-        return
 
     def pull(self, bld) -> Source:
         return self.src
 
-    def store(self, item: bytes, bld):
-        return self.src.path.write_bytes(item)
-
 
 @dataclass
-class ParquetStore[LazyFrame](Store[LazyFrame], Pullable[LazyFrame]):
+class ParquetStore(Store[pl.LazyFrame], Pullable[pl.LazyFrame]):
     file: Path
     schema: pl.Schema
 
-    def load(self, bld) -> LazyFrame | None:
+    def __post_init__(self):
+        assert self.file.parent.exists(), self.file.parent
+
+    def load(self, bld) -> pl.LazyFrame | None:
         if self.file.exists():
-            return pl.scan_parquet(self.file, schema=self.schema)
+            return self.pull(bld)
         return
+    
+    def store(self, item : pl.LazyFrame, bld):
+        item.collect().write_parquet(self.file)
 
     def pull(self, bld):
-        return pl.LazyFrame(self.file)
+        return pl.scan_parquet(self.file, schema=self.schema)
 
-    def store(self, item, bld):
-        return self.file.write_text(json.dumps(item))
 
 
 @dataclass
@@ -114,7 +117,7 @@ class Node[A](Pullable[A]):
 
     def pull(self, bld) -> A:
         if (a := self.store.load(bld)) is not None:
-            print(f"Found file: {self.store.file}")
+            bld.log.debug(f"Found file: {self.store.file}")
             return a
 
         outputs = {k: dep.pull(bld) for k, dep in self.dependencies.items()}
@@ -132,28 +135,151 @@ class Node[A](Pullable[A]):
         return inner
 
 
-@Node.from_action
-def the_answer(bld: Builder) -> int:
-    with bld.profile("compute the answer"):
-        return 42
+#
+#      src 
+#       |
+#  [ compression ]
+#
+
+@dataclass
+class Suite:
+    root: Path
+    
+    def problems(self):
+        return (self.root / "data").iterdir()
+
+    def sources(self):
+        return itertools.chain.from_iterable(
+                (data.Source(s) for s in p.iterdir()) for p in self.problems()
+        )
+
+class Table(ABC):
+    @classmethod
+    def schema(cls):
+        return get_type_hints(cls)
+
+    @classmethod
+    def scan(cls, *args, **kwargs):
+        return pl.scan_parquet(*args, schema=cls.schema(), **kwargs)
+
+    @classmethod
+    def dataframe(cls, *args, **kwargs):
+        return pl.DataFrame(*args, schema=cls.schema(), **kwargs)
+
+    @classmethod
+    def lazyframe(cls, *args, **kwargs):
+        return pl.LazyFrame(*args, schema=cls.schema(), **kwargs)
 
 
-answer = the_answer(JsonStore(Path("the_answer.json")))
+@dataclass
+class TableBuilder[T]:
+    schema: T
+    columns: dict[str, list[object]] = field(init=False)
+
+    def __post_init__(self):
+        self.columns = { k : [] for k in self.schema.columns().keys() }
+
+    def add(self, **kwargs):
+        assert kwargs.keys() == self.schema.columns().keys(), kwargs
+        for k, v in kwargs.items():
+            self.columns[k].append(v)
+
+    def getvalue(self):
+        return pl.LazyFrame(self.columns, schema=self.schema.schema())
+
+class CompressionSchema:
+    src: pl.String()
+    src_comp: pl.UInt64()
+    src_size: pl.UInt64()
+    src_ratio: pl.Float64()
+    src_time: pl.UInt64()
+    src_label: pl.String()
+    
+    @classmethod
+    def schema(cls):
+        return pl.Schema(cls.columns())
+    
+    @classmethod
+    def columns(cls):
+        return get_type_hints(cls)
+
+
+
+
+def compression(bld : Builder, compressor : Compressor, suite: Suite):
+
+    out = TableBuilder(CompressionSchema())
+
+    for src in suite.sources():
+        src_bytes = src.get_bytes()
+
+        with bld.profile("compress", compressor.name, src.name) as timed:
+            complen: int = compressor.compress_length(src_bytes)
+
+        out.add(
+            src= src.name,
+            src_comp= complen,
+            src_size=  len(src_bytes),
+            src_ratio= complen / len(src_bytes),
+            src_time= timed(),
+            src_label= src.label,
+        )
+
+    return out.getvalue()
+
+
+
+node = Node(compression_table, ParquetStore(Path("test.parquet"), CompressionSchema.schema()), 
+    dependencies = { "compressor": Constant(Zstd(1)), 
+                    "suite" : Constant(Suite(Path("suites/predata/")))
+                    } )
 
 bld = Builder(logger)
+x = node.pull(bld)
 
-bs = ByteStore(Path("flake.nix"))
+print(x.collect())
 
+def compute_compression(
+    bld: Builder,
+    tool: CompressionTool,
+    **kwargs,
+):
+    compressor = tool.compressor
 
-@Node.from_action
-def lines(bld: Builder, file: Pullable[bytes]) -> int:
-    with bld.profile("reading the lines of the file"):
-        return len(file.pull(bld).splitlines())
+    schema = pl.Schema(
+        {
+            "src": pl.String(),
+            "src_comp": pl.UInt64(),
+            "src_size": pl.UInt64(),
+            "src_ratio": pl.Float64(),
+            "src_time": pl.UInt64(),
+            "src_label": pl.String(),
+        }
+    )
 
+    def compute_row(src: data.Source):
+        src_bytes = src.get_bytes()
 
-node = lines(JsonStore(Path("lines.json")), file={"flake.nix": bs})
+        with bld.profile("compress", compressor.name, src.name) as timed:
+            complen: int = compressor.compress_length(src_bytes)
 
-# print(node.pull(bld))
+        return {
+            "src": src.name,
+            "src_comp": complen,
+            "src_size": len(src_bytes),
+            "src_ratio": complen / len(src_bytes),
+            "src_time": timed(),
+            "src_label": src.label,
+        }
+
+    rows = [compute_row(src) for k, src in kwargs.items()]
+    data_dict = {k: [] for k, _ in schema.items()}
+
+    for row in rows:
+        for k, v in row.items():
+            data_dict[k].append(v)
+
+    return data_dict
 
 
 @dataclass
@@ -182,7 +308,7 @@ class Analysis:
 
     def sources(self):
         return itertools.chain.from_iterable(
-                (s.name : Sour for s in p.iterdir()) for p in self.problems()
+                (s for s in p.iterdir()) for p in self.problems()
         )
 
     def get_comp_node(self, bld: Builder):
@@ -223,6 +349,9 @@ class Analysis:
         dist_node = dist(dist_st, **dist_deps)
 
         return comp_node, pairwise_node, dist_node
+
+
+
 
 
 def compute_compression(
