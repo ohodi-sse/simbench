@@ -1,4 +1,5 @@
 from dataclasses import dataclass, field
+from inspect import signature
 import time
 import functools
 from pathlib import Path
@@ -171,55 +172,48 @@ class TableBuilder:
     def getvalue(self):
         return pl.LazyFrame(self.columns, schema=self.schema)
 
-def tablenode(type):
-    columns = get_type_hints(type.Schema)
+def tablenode(schema):
+    def outer(fn):
+        def wrapper(path, **dependencies):
+            return Node(functools.partial(fn, schema), ParquetStore(path, schema), dependencies)
+        return wrapper
+    return outer
+
+def schema(tabledef):
+    columns = get_type_hints(tabledef)
     schema = pl.Schema(columns)
+    return schema
 
-    def wrapper(path, **dependencies):
-        return Node(functools.partial(type.action, schema), ParquetStore(path, schema), dependencies)
+class CompressionTable:
+    src: pl.String()
+    src_comp: pl.UInt64()
+    src_size: pl.UInt64()
+    src_ratio: pl.Float64()
+    src_time: pl.UInt64()
+    src_label: pl.String()
 
-    return wrapper
+@tablenode(schema(CompressionTable))
+def compression(schema : pl.Schema, bld : Builder, compressor : Compressor, suite: Suite):
+    out = TableBuilder(schema)
 
+    for src in suite.sources():
+        src_bytes = src.get_bytes()
 
-@tablenode
-class Compression:
+        with bld.profile("compress", compressor.name, src.name) as timed:
+            complen: int = compressor.compress_length(src_bytes)
 
-    class Schema:
-        src: pl.String()
-        src_comp: pl.UInt64()
-        src_size: pl.UInt64()
-        src_ratio: pl.Float64()
-        src_time: pl.UInt64()
-        src_label: pl.String()
+        out.add(
+            src= src.name,
+            src_comp= complen,
+            src_size=  len(src_bytes),
+            src_ratio= complen / len(src_bytes),
+            src_time= timed(),
+            src_label= src.label,
+        )
 
-    
-    def action(schema, bld : Builder, compressor : Compressor, suite: Suite):
-        out = TableBuilder(schema)
+    return out.getvalue()
 
-        for src in suite.sources():
-            src_bytes = src.get_bytes()
-
-            with bld.profile("compress", compressor.name, src.name) as timed:
-                complen: int = compressor.compress_length(src_bytes)
-
-            out.add(
-                src= src.name,
-                src_comp= complen,
-                src_size=  len(src_bytes),
-                src_ratio= complen / len(src_bytes),
-                src_time= timed(),
-                src_label= src.label,
-            )
-
-        return out.getvalue()
-
-
-
-    # node = Node(compression_table, ParquetStore(Path("test.parquet"), CompressionSchema.schema()), 
-    #     dependencies = { "compressor": Constant(Zstd(1)), 
-    #                     "suite" : Constant(Suite(Path("suites/predata/")))
-    #                     } )
-node = Compression(Path("test2.parquet"), compressor= Constant(Zstd(1)), suite=  Constant(Suite(Path("suites/predata/"))))
+node = compression(Path("test3.parquet"), compressor= Constant(Zstd(1)), suite=  Constant(Suite(Path("suites/predata/"))))
 
 print(node)
 
