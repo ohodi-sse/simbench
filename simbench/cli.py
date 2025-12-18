@@ -1,25 +1,16 @@
-import sys
-import matplotlib.pyplot as plt
 import click
 from pathlib import Path
 
 from simbench.build import (
     Builder,
-    ParquetStore,
-    compute_compression,
-    compute_pairwise_compressions,
-    compute_distance,
-    SourceStore,
+    Analysis,
 )
 from simbench.plots import (
     create_nclass_classification_plot,
-    f_score_classification_plot,
     f_score_plot,
 )
 from . import data
-from simbench.analysis import Config, Analysis
-from simbench.classification import get_performance
-from simbench.build import Node
+from simbench.analysis import Config
 import polars as pl
 from loguru import logger
 
@@ -65,44 +56,9 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
             continue
 
         analysis = Analysis(suite, tool)
-        sources = list(analysis.sources())
-        comp_st = ParquetStore(
-            analysis.compression_file, pl.Schema(data.CompressionTable.schema())
-        )
+        comp_node, pair_node, dist_node = analysis.get_nodes(bld)
 
-        dependencies = {
-            s.name: SourceStore(data.Source(s.path)) for s in analysis.sources()
-        }
-
-        @Node.from_action
-        def comp(bld, **kwargs):
-            compute_compression(bld, tool, **kwargs)
-
-        comp_node = comp(comp_st, **dependencies)
-        print("Calculated compressions")
-
-        pair_st = ParquetStore(
-            analysis.pairwise_compression_file,
-            pl.Schema(data.ComparisonCompressionTable.schema()),
-        )
-
-        @Node.from_action
-        def pairwise(bld, **kwargs):
-            compute_pairwise_compressions(bld, tool, **kwargs)
-
-        pairwise_node = pairwise(pair_st, **dependencies)
-
-        dist_deps = {"comp_df": comp_node, "compare_comp_df": pairwise_node}
-
-        @Node.from_action
-        def dist(bld, **kwargs):
-            compute_distance(bld, tool, **kwargs)
-
-        dist_st = ParquetStore(
-            analysis.distance_file, pl.Schema(data.DistanceTable.schema())
-        )
-
-        dist_node = dist(dist_st, **dist_deps).pull(bld)
+        dist_node.pull(bld)
 
 
 @click.command("plot-cl")

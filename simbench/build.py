@@ -182,8 +182,47 @@ class Analysis:
 
     def sources(self):
         return itertools.chain.from_iterable(
-            (ByteStore(s) for s in p.iterdir()) for p in self.problems()
+                (s.name : Sour for s in p.iterdir()) for p in self.problems()
         )
+
+    def get_comp_node(self, bld: Builder):
+        comp_st = ParquetStore(
+            self.compression_file, pl.Schema(data.CompressionTable.schema())
+        )
+
+        dependencies = {s.name: SourceStore(data.Source(s)) for s in self.sources()}
+
+        @Node.from_action
+        def comp(bld, **kwargs):
+            compute_compression(bld, self.tool, **kwargs)
+
+        return comp(comp_st, **dependencies)
+
+    def get_pair_node(self, bld: Builder):
+        pair_st = ParquetStore(
+            self.pairwise_compression_file,
+            pl.Schema(data.ComparisonCompressionTable.schema()),
+        )
+
+        @Node.from_action
+        def pairwise(bld, **kwargs):
+            compute_pairwise_compressions(bld, self.tool, **kwargs)
+
+        pairwise_node = pairwise(pair_st, **dependencies)
+
+        dist_deps = {"comp_df": comp_node, "compare_comp_df": pairwise_node}
+
+        @Node.from_action
+        def dist(bld, **kwargs):
+            compute_distance(bld, self.tool, **kwargs)
+
+        dist_st = ParquetStore(
+            self.distance_file, pl.Schema(data.DistanceTable.schema())
+        )
+
+        dist_node = dist(dist_st, **dist_deps)
+
+        return comp_node, pairwise_node, dist_node
 
 
 def compute_compression(
