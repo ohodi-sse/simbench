@@ -3,7 +3,8 @@ from pathlib import Path
 
 from simbench.build import (
     Builder,
-    Analysis,
+    Suite,
+    comp_tool_analysis,
 )
 from simbench.plots import (
     create_nclass_classification_plot,
@@ -54,11 +55,16 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
         if not tool.matches(tool_pattern):
             cfg.log.debug(f"Skipping {tool}")
             continue
+        cfg.log.info(f"Computing classifications for {tool}")
+        for classifier in cfg.classifiers:
+            if not classifier.matches(classifier_pattern):
+                cfg.log.debug(f"Skipping {classifier}")
+                continue
 
-        analysis = Analysis(suite, tool)
-        # comp_node, pair_node, dist_node = analysis.get_nodes(bld)
-
-        # dist_node.pull(bld)
+            classification_node = comp_tool_analysis(
+                tool=tool, classifier=classifier, suite=Suite(suite)
+            )
+            classification_node.pull(bld)
 
 
 @click.command("plot-cl")

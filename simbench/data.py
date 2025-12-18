@@ -8,8 +8,6 @@ from typing import get_type_hints
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
-from indicatif import ProgressBar, ProgressStyle
-
 
 @dataclass(frozen=True)
 class Source:
@@ -115,13 +113,7 @@ class PerformanceTable(Table):
 
 
 def get_progressbar(iterations: int):
-    return ProgressBar(
-        iterations,
-        style=ProgressStyle(
-            template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
-            progress_chars="#>-",
-        ),
-    )
+    return
 
 
 def display_diff(src1: str, src2: str, file_overview: pl.LazyFrame):
