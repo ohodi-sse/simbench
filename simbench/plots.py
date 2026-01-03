@@ -17,8 +17,8 @@ from loguru import logger
 
 
 def create_nclass_classification_plot(classification_df: pl.LazyFrame):
-    assert classification_df.collect_schema() == data.ClassificationTable.schema, (
-        "The provided data is not a valid confusion matrix"
+    assert classification_df.collect_schema() == data.ClassificationTable.schema(), (
+        "The provided data is not a classification dataframe"
     )
 
     plots = []
@@ -129,7 +129,7 @@ def plot_confusion_matrix(classification_df: pl.LazyFrame) -> None:
 
 
 def f_score_plot(distance_df: pl.LazyFrame) -> None:
-    assert distance_df.collect_schema() == data.DistanceTable.schema, (
+    assert distance_df.collect_schema() == data.DistanceTable.schema(), (
         "Must provide a distance file to plot f-score"
     )
     df = distance_df.collect()
@@ -146,7 +146,6 @@ def f_score_plot(distance_df: pl.LazyFrame) -> None:
     FN = R.cum_sum()
     TotNRet = FN + F.cum_sum()
 
-    # FP = TotF - TN
     TP = TotRel - FN
 
     Prec = TP / (Tot - TotNRet)
@@ -182,58 +181,4 @@ def f_score_classification_plot(
     plt.ylabel("Score")
     plt.title("Scoring using Radius Nearest Neighbours")
     plt.legend()
-    plt.show()
-    # THE following is an attempt to make subplots for a performance_df containing multiple classifier types
-    # fig = make_subplots(rows=len(unique_classifiers), cols=1)
-    # unique_classifiers = pl.Series(
-    #     performance_df.select("classifier").unique().collect()
-    # ).to_list()
-    #
-    # for i, classifier in enumerate(unique_classifiers):
-    #     class_perf_df = performance_df.filter(pl.col("classifier") == classifier)
-    #
-    #     t_range = pl.Series(
-    #         class_perf_df.select(pl.col("class_param")).collect()
-    #     ).to_list()
-    #
-    #     logger.debug(t_range)
-    #     px.line(perf_df, x=t_range, y=["Acc", "Prec", "Rec", "F1"])
-    #     fig.show()
-
-
-# def plot_mds(distance_df: pl.LazyFrame) -> None:
-#     similarities = pl.Series(distance_df.select("distance").collect()).to_list()
-#
-#     X = []
-#
-#     srcs = pl.Series(distance_df.select("src").collect().unique()).to_list()
-#
-#     for s in srcs:
-#         X.append(
-#             pl.Series(
-#                 distance_df.filter(pl.col("src") == s).select("distance").collect()
-#             ).to_list()
-#         )
-#     X = np.array(X)  # The matrix is not symmetric due to the metric
-#
-#     logger.debug(X)
-#     n = distance_df.select("src_label").collect().unique().height
-#     mds = manifold.MDS(
-#         n_components=n,
-#         max_iter=3000,
-#         eps=1e-9,
-#         n_init=1,
-#         random_state=42,
-#         dissimilarity="precomputed",
-#         n_jobs=1,
-#     )
-#     X_mds = mds.fit(X).embedding_
-#
-#     plt.scatter(X_mds[:, 0], X_mds[:, 1], color="turquoise", s=100, lw=0, label="MDS")
-
-
-# def plot_all_f()
-
-
-def show_plots():
     plt.show()

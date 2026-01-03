@@ -4,13 +4,15 @@ from pathlib import Path
 from simbench.build import (
     Builder,
     Suite,
+    analyse_classifications,
     comp_tool_analysis,
 )
 from simbench.plots import (
     create_nclass_classification_plot,
+    f_score_classification_plot,
     f_score_plot,
 )
-from . import data
+
 from simbench.analysis import Config
 import polars as pl
 from loguru import logger
@@ -56,6 +58,8 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
             cfg.log.debug(f"Skipping {tool}")
             continue
         cfg.log.info(f"Computing classifications for {tool}")
+
+        class_nodes = {}
         for classifier in cfg.classifiers:
             if not classifier.matches(classifier_pattern):
                 cfg.log.debug(f"Skipping {classifier}")
@@ -64,37 +68,39 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
             classification_node = comp_tool_analysis(
                 tool=tool, classifier=classifier, suite=Suite(suite)
             )
-            classification_node.pull(bld)
+
+            class_nodes[f"{classifier.name}-{classifier.param}"] = classification_node
+
+        performance_node = analyse_classifications(tool, Suite(suite), **class_nodes)
+        performance_node.pull(bld)
 
 
 @click.command("plot-cl")
 @click.argument("file", type=click.Path(exists=True))
 def plot_classification(file: Path) -> None:
     classifications = pl.scan_parquet(file)
-
-    assert classifications.collect_schema() == data.ClassificationTable.schema, (
-        "Must provide a classification file for this plot"
-    )
-
     create_nclass_classification_plot(classifications)
-    f_score_plot(classifications)
-
     click.echo("Done")
 
 
-# @click.command()
-# @click.argument("file", type=click.Path(exists=True))
-# def fscore(file: Path) -> None:
-#     dist_df = pl.scan_parquet(file)
-#     assert dist_df.collect_schema() == data.DistanceTable.schema, (
-#         "Can only calculate F-score from distance file"
-#     )
-#
-#     plot = get_performance_scikit(dist_df)
-#
-#     plt.show()
-#
+@click.command("plot-f")
+@click.argument("file", type=click.Path(exists=True))
+def plot_fscore(file: Path) -> None:
+    distances = pl.scan_parquet(file)
+    f_score_plot(distances)
+    click.echo("Done")
+
+
+@click.command("plot-fcl")
+@click.argument("file", type=click.Path(exists=True))
+def plot_fscore_cl(file: Path) -> None:
+    performances = pl.scan_parquet(file)
+    f_score_classification_plot(performances)
+    click.echo("Done")
+
 
 cli.add_command(show_file)
 cli.add_command(analyse)
 cli.add_command(plot_classification)
+cli.add_command(plot_fscore)
+cli.add_command(plot_fscore_cl)

@@ -112,10 +112,6 @@ class PerformanceTable(Table):
     F1: pl.Float32
 
 
-def get_progressbar(iterations: int):
-    return
-
-
 def display_diff(src1: str, src2: str, file_overview: pl.LazyFrame):
     path1 = Path(
         file_overview.filter(pl.col("src") == src1).select("src_file").collect().item()

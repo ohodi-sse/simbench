@@ -44,34 +44,6 @@ class Classifier(ABC):
 
         return re.fullmatch(match, self.name) is not None
 
-    def classifications(self, distances: pl.LazyFrame) -> pl.LazyFrame:
-        src_df = distances.select("src", "src_label").unique(maintain_order=True)
-        src_names = pl.Series(src_df.select("src").collect()).to_list()
-
-        logger.debug(f"Classifying using {self.name}-{self.param}")
-
-        pb = data.get_progressbar(len(src_names))
-        classifications = []
-        for src in src_names:
-            pb.inc(1)
-            c = self.classify(distances, src)
-            if c is not None:
-                classifications.append(c.labelled_as)
-
-        pb.finish()
-
-        class_data = {
-            "src": src_names,
-            "src_label": pl.Series(src_df.select("src_label").collect()).to_list(),
-            "classifier": [self.name for _ in range(len(src_names))],
-            "class_param": [self.param for _ in range(len(src_names))],
-            "labelled_as": classifications,
-        }
-
-        df = data.ClassificationTable.lazyframe(class_data)
-
-        return df.lazy()
-
 
 @dataclass
 class KNN(Classifier):

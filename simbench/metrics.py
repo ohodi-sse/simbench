@@ -1,6 +1,5 @@
 from dataclasses import dataclass
 
-from loguru import logger
 import polars as pl
 import simbench.data as data
 from abc import ABC, abstractmethod
