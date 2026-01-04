@@ -1,13 +1,5 @@
-import simbench.data as data
 from abc import abstractmethod
 from dataclasses import dataclass
-import numpy as np
-from sklearn.metrics import (
-    precision_recall_fscore_support,
-    accuracy_score,
-    confusion_matrix,
-)
-from loguru import logger
 import polars as pl
 
 from abc import ABC
@@ -58,8 +50,11 @@ class KNN(Classifier):
         return self.k
 
     def classify(self, distance_df: pl.LazyFrame, src: str) -> Classification:
+        from simbench.build import schema
+        from simbench.tables import DistanceTable
+
         assert self.k > 0, "k must be positive"
-        assert distance_df.collect_schema() == data.DistanceTable.schema(), (
+        assert distance_df.collect_schema() == schema(DistanceTable), (
             "Must use a distance dataframe for classification"
         )
 
@@ -98,10 +93,13 @@ class Threshold(Classifier):
         return self.threshold
 
     def classify(self, distance_df: pl.LazyFrame, src: str) -> Classification | None:
+        from simbench.build import schema
+        from simbench.tables import DistanceTable
+
         assert 0.0 <= self.threshold and self.threshold <= 1.0, (
             "Threshold must be between 0 and 1"
         )
-        assert distance_df.collect_schema() == data.DistanceTable.schema(), (
+        assert distance_df.collect_schema() == schema(DistanceTable), (
             "Must use a distance dataframe for classification"
         )
 
@@ -131,55 +129,3 @@ class Threshold(Classifier):
 
     def __post_init__(self):
         assert isinstance(self.threshold, float)
-
-
-def get_performance_row(class_df: pl.LazyFrame):
-    src_labels = pl.Series(class_df.select("src_label").collect()).to_list()
-    labelled_as = pl.Series(class_df.select("labelled_as").collect()).to_list()
-
-    cm = confusion_matrix(src_labels, labelled_as)
-    FP = sum(cm.sum(axis=0) - np.diag(cm))
-    FN = sum(cm.sum(axis=1) - np.diag(cm))
-
-    averaging = "macro"
-
-    accuracy = accuracy_score(src_labels, labelled_as)
-    precision, recall, f_score, _ = precision_recall_fscore_support(
-        src_labels, labelled_as, average=averaging, zero_division=0.0
-    )
-
-    return FP, FN, accuracy, precision, recall, f_score
-
-
-def get_performance(class_df: pl.LazyFrame) -> pl.LazyFrame:
-    classifier = pl.Series(
-        class_df.select("classifier", "class_param").unique().collect()
-    ).to_list()
-
-    data_dict = {k: [] for k in data.PerformanceTable.schema()}
-
-    for cl in classifier:
-        logger.debug(
-            f"Calculating performance of classifications using: {cl['classifier']}-{cl['class_param']}"
-        )
-        expr = (pl.col("classifier") == cl["classifier"]) & (
-            pl.col("class_param") == cl["class_param"]
-        )
-        pr_class_df = class_df.filter(expr)
-
-        FP, FN, accuracy, precision, recall, f_score = get_performance_row(pr_class_df)
-
-        data_dict["classifier"].append(cl["classifier"])
-        data_dict["class_param"].append(cl["class_param"])
-        data_dict["FP"].append(FP)
-        data_dict["FN"].append(FN)
-        data_dict["Acc"].append(accuracy)
-        data_dict["Prec"].append(precision)
-        data_dict["Rec"].append(recall)
-        data_dict["F1"].append(f_score)
-
-    perf_df = data.PerformanceTable.lazyframe(data_dict).sort(
-        by=["classifier", "class_param"], descending=[False, True]
-    )
-
-    return perf_df

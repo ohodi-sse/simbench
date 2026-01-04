@@ -2,36 +2,53 @@ from matplotlib import pyplot as plt
 import numpy as np
 import polars as pl
 import simbench.classification as cla
-from . import data as data
 from statsmodels.graphics.mosaicplot import mosaic
 from sklearn.metrics import (
     confusion_matrix,
     ConfusionMatrixDisplay,
 )
 
+from simbench.build import schema
+from simbench.tables import ClassificationTable, DistanceTable
+
 from matplotlib.patches import Patch
 import itertools
 from collections import deque
 import matplotlib.colors as mcolors
 from loguru import logger
+from simbench.build import plotnode, Builder
 
 
-def create_nclass_classification_plot(classification_df: pl.LazyFrame):
-    assert classification_df.collect_schema() == data.ClassificationTable.schema(), (
+@plotnode
+def plot_confusion_matrix(bld: Builder, classifications) -> None:
+    src_labels = pl.Series(classifications.select("src_label").collect()).to_list()
+    labelled_as = pl.Series(classifications.select("labelled_as").collect()).to_list()
+    labels = list(set(src_labels))
+    logger.debug(labels)
+
+    cm = confusion_matrix(src_labels, labelled_as, labels=labels)
+    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
+    disp.plot()
+    plt.show()
+
+
+@plotnode
+def plot_classification(bld: Builder, classifications):
+    assert classifications.collect_schema() == schema(ClassificationTable), (
         "The provided data is not a classification dataframe"
     )
 
     plots = []
 
-    classifier_name = classification_df.select("classifier").unique().collect().item()
+    classifier_name = classifications.select("classifier").unique().collect().item()
     classes = pl.Series(
-        classification_df.select("src_label").unique().collect()
+        classifications.select("src_label").unique().collect()
     ).to_list()
     n_classes = len(classes)
-    logger.debug(classification_df.collect())
+    logger.debug(classifications.collect())
     clfy_per_group = [
         [
-            classification_df.filter(
+            classifications.filter(
                 (pl.col("src_label") == clabel) & (pl.col("labelled_as") == label)
             )
             .collect()
@@ -115,43 +132,26 @@ def create_nclass_classification_plot(classification_df: pl.LazyFrame):
     return plots
 
 
-def plot_confusion_matrix(classification_df: pl.LazyFrame) -> None:
-    src_labels = pl.Series(classification_df.select("src_label").collect()).to_list()
-    labelled_as = pl.Series(classification_df.select("labelled_as").collect()).to_list()
-    labels = list(set(src_labels))
-    logger.debug(labels)
-
-    cm = confusion_matrix(src_labels, labelled_as, labels=labels)
-    disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
-
-    disp.plot()
-    plt.show()
-
-
-def f_score_plot(distance_df: pl.LazyFrame) -> None:
-    assert distance_df.collect_schema() == data.DistanceTable.schema(), (
+@plotnode
+def plot_fscore(bld: Builder, distances) -> None:
+    assert distances.collect_schema() == schema(DistanceTable), (
         "Must provide a distance file to plot f-score"
     )
-    df = distance_df.collect()
+    df = distances.collect()
     df = df.sort(by="distance")
 
     Tot = df.height
-
     R = df["src_label"] == df["tgt_label"]
     F = df["src_label"] != df["tgt_label"]
-
     S = df["distance"]
 
     TotRel = R.sum()
     FN = R.cum_sum()
     TotNRet = FN + F.cum_sum()
-
     TP = TotRel - FN
 
     Prec = TP / (Tot - TotNRet)
     Recall = TP / TotRel
-
-    # F-Score
     F1 = [2 * p * c / (p + c) if p + c > 0 else 0 for (p, c) in zip(Prec, Recall)]
 
     plt.plot(S, Prec, label="Prec")
@@ -165,11 +165,9 @@ def f_score_plot(distance_df: pl.LazyFrame) -> None:
     plt.show()
 
 
-def f_score_classification_plot(
+def plot_f_score_classification(
     performance_df: pl.LazyFrame,
-) -> None:  # tuple[Any, Any]:
-    plots = []
-
+) -> None:
     perf_df = performance_df.collect()
 
     params = perf_df["class_param"]

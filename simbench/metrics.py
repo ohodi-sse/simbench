@@ -1,7 +1,6 @@
 from dataclasses import dataclass
 
 import polars as pl
-import simbench.data as data
 from abc import ABC, abstractmethod
 from simbench.compressors import Compressor
 
@@ -17,6 +16,9 @@ class CompressionMetric(ABC):
     def metric_expr(self) -> pl.Expr: ...
 
     def __call__(self, metric_df: pl.LazyFrame) -> pl.LazyFrame:
+        from simbench.build import schema
+        from simbench.tables import DistanceTable
+
         metric_df = metric_df.select(
             pl.col(["src", "tgt", "src_label", "tgt_label"]),
             distance=self.metric_expr(),
@@ -24,8 +26,8 @@ class CompressionMetric(ABC):
         )
 
         dist_df = metric_df.sort(by="distance")
-        assert dist_df.collect_schema() == data.DistanceTable.schema(), (
-            f"\n{dist_df.collect_schema()}\n does not adhere to \n{data.DistanceTable.schema()}"
+        assert dist_df.collect_schema() == schema(DistanceTable), (
+            f"\n{dist_df.collect_schema()}\n does not adhere to \n{schema(DistanceTable)}"
         )
 
         return dist_df

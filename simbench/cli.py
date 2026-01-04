@@ -4,13 +4,11 @@ from pathlib import Path
 from simbench.build import (
     Builder,
     Suite,
+)
+
+from simbench.analysis import (
     analyse_classifications,
     comp_tool_analysis,
-)
-from simbench.plots import (
-    create_nclass_classification_plot,
-    f_score_classification_plot,
-    f_score_plot,
 )
 
 from simbench.analysis import Config
@@ -69,38 +67,40 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
                 tool=tool, classifier=classifier, suite=Suite(suite)
             )
 
+            classification_node.pull(bld)
             class_nodes[f"{classifier.name}-{classifier.param}"] = classification_node
 
         performance_node = analyse_classifications(tool, Suite(suite), **class_nodes)
         performance_node.pull(bld)
 
 
-@click.command("plot-cl")
-@click.argument("file", type=click.Path(exists=True))
-def plot_classification(file: Path) -> None:
-    classifications = pl.scan_parquet(file)
-    create_nclass_classification_plot(classifications)
-    click.echo("Done")
-
-
-@click.command("plot-f")
-@click.argument("file", type=click.Path(exists=True))
-def plot_fscore(file: Path) -> None:
-    distances = pl.scan_parquet(file)
-    f_score_plot(distances)
-    click.echo("Done")
-
-
-@click.command("plot-fcl")
-@click.argument("file", type=click.Path(exists=True))
-def plot_fscore_cl(file: Path) -> None:
-    performances = pl.scan_parquet(file)
-    f_score_classification_plot(performances)
-    click.echo("Done")
-
+#
+# @click.command("plot-cl")
+# @click.argument("file", type=click.Path(exists=True))
+# def plot_classification(file: Path) -> None:
+#     classifications = pl.scan_parquet(file)
+#     create_nclass_classification_plot(classifications)
+#     click.echo("Done")
+#
+#
+# @click.command("plot-f")
+# @click.argument("file", type=click.Path(exists=True))
+# def plot_fscore(file: Path) -> None:
+#     distances = pl.scan_parquet(file)
+#     f_score_plot(distances)
+#     click.echo("Done")
+#
+#
+# @click.command("plot-fcl")
+# @click.argument("file", type=click.Path(exists=True))
+# def plot_fscore_cl(file: Path) -> None:
+#     performances = pl.scan_parquet(file)
+#     f_score_classification_plot(performances)
+#     click.echo("Done")
+#
 
 cli.add_command(show_file)
 cli.add_command(analyse)
-cli.add_command(plot_classification)
-cli.add_command(plot_fscore)
-cli.add_command(plot_fscore_cl)
+# cli.add_command(plot_classification)
+# cli.add_command(plot_fscore)
+# cli.add_command(plot_fscore_cl)
