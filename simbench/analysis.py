@@ -10,7 +10,7 @@ from simbench.metrics import CompressionMetric
 import time
 from loguru import logger
 
-from simbench.build import Suite, Pullable, Constant
+from simbench.build import Suite, Constant
 from simbench.classification import Classifier
 from simbench.tables import (
     compressions,
@@ -19,7 +19,6 @@ from simbench.tables import (
     classifications,
     performance,
 )
-from simbench.plots import plot_classification, plot_confusion_matrix, plot_fscore
 
 Logger = type(logger)
 
@@ -89,55 +88,82 @@ class Config:
         endtime = time.perf_counter_ns()
 
 
-def comp_tool_analysis(tool: CompressionTool, classifier: Classifier, suite: Suite):
-    default_path = suite.root / "results" / tool.name
-    default_path.mkdir(parents=True, exist_ok=True)
+@dataclass
+class Analysis:
+    tool: CompressionTool
+    suite: Suite
+    classifiers: list[Classifier]
 
-    compression_file = default_path / "compressions.parquet"
+    @property
+    def default_path(self):
+        default_path = self.suite.root / "results" / self.tool.name
+        default_path.mkdir(parents=True, exist_ok=True)
+        return default_path
 
-    pairwise_compression_file = default_path / "pairwise_compressions.parquet"
+    @property
+    def compression_file(self):
+        return self.default_path / "compressions.parquet"
 
-    distance_file = default_path / "distances.parquet"
+    @property
+    def pairwise_compression_file(self):
+        return self.default_path / "pairwise_compressions.parquet"
 
-    classification_dir = default_path / "classifications"
-    classification_dir.mkdir(parents=True, exist_ok=True)
+    @property
+    def distance_file(self):
+        return self.default_path / "distances.parquet"
 
-    classification_file = (
-        classification_dir / f"{classifier.name}-{classifier.param}.parquet"
-    )
+    @property
+    def performance_file(self):
+        return self.default_path / "performances.parquet"
 
-    comp_node = compressions(
-        compression_file,
-        compressor=Constant(tool.compressor),
-        suite=Constant(suite),
-    )
+    @property
+    def classification_dir(self):
+        classification_dir = self.default_path / "classifications"
+        classification_dir.mkdir(parents=True, exist_ok=True)
 
-    pair_node = pairwise_compressions(
-        pairwise_compression_file,
-        compressor=Constant(tool.compressor),
-        suite=Constant(suite),
-    )
+        return classification_dir
 
-    dist_node = distances(
-        distance_file,
-        metric=Constant(tool.metric),
-        comp_df=comp_node,
-        compare_comp_df=pair_node,
-    )
-    classification_node = classifications(
-        classification_file, classifier=Constant(classifier), distances=dist_node
-    )
+    @property
+    def comp_node(self):
+        return compressions(
+            self.compression_file,
+            compressor=Constant(self.tool.compressor),
+            suite=Constant(self.suite),
+        )
 
-    cm_node = plot_confusion_matrix(classifications=classification_node)
+    @property
+    def pair_node(self):
+        return pairwise_compressions(
+            self.pairwise_compression_file,
+            compressor=Constant(self.tool.compressor),
+            suite=Constant(self.suite),
+        )
 
-    cm_node = plot_classification(classifications=classification_node)
+    @property
+    def distance_node(self):
+        return distances(
+            self.distance_file,
+            metric=Constant(self.tool.metric),
+            comp_df=self.comp_node,
+            compare_comp_df=self.pair_node,
+        )
 
-    cm_node = plot_fscore(distances=dist_node)
-    return cm_node
+    @property
+    def classification_nodes(self):
+        nodes = {}
+        for classifier in self.classifiers:
+            classification_file = (
+                self.classification_dir
+                / f"{classifier.name}-{classifier.param}.parquet"
+            )
+            nodes[f"{classifier.name}-{classifier.param}"] = classifications(
+                classification_file,
+                classifier=Constant(classifier),
+                distances=self.distance_node,
+            )
 
+        return nodes
 
-def analyse_classifications(tool: CompressionTool, suite: Suite, **deps: Pullable):
-    default_path = suite.root / "results" / tool.name
-    performance_file = default_path / "performances.parquet"
-
-    return performance(performance_file, **deps)
+    @property
+    def performance_node(self):
+        return performance(self.performance_file, **self.classification_nodes)

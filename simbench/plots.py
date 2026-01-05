@@ -1,7 +1,6 @@
 from matplotlib import pyplot as plt
 import numpy as np
 import polars as pl
-import simbench.classification as cla
 from statsmodels.graphics.mosaicplot import mosaic
 from sklearn.metrics import (
     confusion_matrix,
@@ -15,16 +14,14 @@ from matplotlib.patches import Patch
 import itertools
 from collections import deque
 import matplotlib.colors as mcolors
-from loguru import logger
 from simbench.build import plotnode, Builder
 
 
 @plotnode
-def plot_confusion_matrix(bld: Builder, classifications) -> None:
+def confusion_matrix_plot_node(bld: Builder, classifications) -> None:
     src_labels = pl.Series(classifications.select("src_label").collect()).to_list()
     labelled_as = pl.Series(classifications.select("labelled_as").collect()).to_list()
     labels = list(set(src_labels))
-    logger.debug(labels)
 
     cm = confusion_matrix(src_labels, labelled_as, labels=labels)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
@@ -33,19 +30,17 @@ def plot_confusion_matrix(bld: Builder, classifications) -> None:
 
 
 @plotnode
-def plot_classification(bld: Builder, classifications):
+def classification_plot_node(bld: Builder, classifications):
     assert classifications.collect_schema() == schema(ClassificationTable), (
         "The provided data is not a classification dataframe"
     )
-
-    plots = []
 
     classifier_name = classifications.select("classifier").unique().collect().item()
     classes = pl.Series(
         classifications.select("src_label").unique().collect()
     ).to_list()
     n_classes = len(classes)
-    logger.debug(classifications.collect())
+
     clfy_per_group = [
         [
             classifications.filter(
@@ -78,7 +73,6 @@ def plot_classification(bld: Builder, classifications):
 
     cmap = plt.get_cmap("nipy_spectral")
 
-    # Get n equally spaced colors from the colormap
     pallet = [mcolors.to_hex(cmap(i)) for i in np.linspace(0, 1, n_classes)]
     colors = deque(pallet[:n_classes])
     all_colors = []
@@ -126,14 +120,12 @@ def plot_classification(bld: Builder, classifications):
     ax.legend(handles=legend_elements, bbox_to_anchor=(1, 1.018), fontsize=16)
 
     plt.tight_layout()
-    plots.append((fig, ax))
 
     plt.show()
-    return plots
 
 
 @plotnode
-def plot_fscore(bld: Builder, distances) -> None:
+def fscore_plot_node(bld: Builder, distances) -> None:
     assert distances.collect_schema() == schema(DistanceTable), (
         "Must provide a distance file to plot f-score"
     )
@@ -160,23 +152,26 @@ def plot_fscore(bld: Builder, distances) -> None:
 
     plt.xlabel("Distance")
     plt.ylabel("Score")
-
+    plt.title("Performance scores")
     plt.legend()
     plt.show()
 
 
-def plot_f_score_classification(
-    performance_df: pl.LazyFrame,
+@plotnode
+def fscore_classification_plot_node(
+    bld: Builder,
+    performance: pl.LazyFrame,
 ) -> None:
-    perf_df = performance_df.collect()
+    perf_df = performance.collect()
 
+    classifier = perf_df["classifier"].item(0)
     params = perf_df["class_param"]
     plt.plot(params, perf_df["Prec"], label="Prec")
     plt.plot(params, perf_df["Rec"], label="Recall")
     plt.plot(params, perf_df["F1"], label="F1")
 
-    plt.xlabel("Distance")
+    plt.xlabel("Parameter")
     plt.ylabel("Score")
-    plt.title("Scoring using Radius Nearest Neighbours")
+    plt.title(f"Scoring using {classifier}")
     plt.legend()
     plt.show()

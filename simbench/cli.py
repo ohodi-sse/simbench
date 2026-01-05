@@ -7,8 +7,7 @@ from simbench.build import (
 )
 
 from simbench.analysis import (
-    analyse_classifications,
-    comp_tool_analysis,
+    Analysis,
 )
 
 from simbench.analysis import Config
@@ -39,16 +38,13 @@ def show_file(file: str, filter) -> None:
 @click.argument("suite", type=click.Path(file_okay=False, path_type=Path))
 @click.option("--tool", "tool_pattern", help="filter the tools to be run", default=".*")
 @click.option(
-    "-f", "--force", is_flag=True, default=False, help="force update of files"
-)
-@click.option(
     "--classifier",
     "classifier_pattern",
     help="filter on which classifiers to run",
     default=".*",
 )
 @click.pass_obj
-def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
+def analyse(cfg, suite, tool_pattern, classifier_pattern):
     bld = Builder(logger)
 
     for tool in cfg.tools:
@@ -57,50 +53,54 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern, force):
             continue
         cfg.log.info(f"Computing classifications for {tool}")
 
-        class_nodes = {}
-        for classifier in cfg.classifiers:
-            if not classifier.matches(classifier_pattern):
-                cfg.log.debug(f"Skipping {classifier}")
-                continue
+        filtered_classifiers = [
+            c for c in cfg.classifiers if c.matches(classifier_pattern)
+        ]
+        analysis = Analysis(tool, Suite(suite), filtered_classifiers)
 
-            classification_node = comp_tool_analysis(
-                tool=tool, classifier=classifier, suite=Suite(suite)
-            )
-
-            classification_node.pull(bld)
-            class_nodes[f"{classifier.name}-{classifier.param}"] = classification_node
-
-        performance_node = analyse_classifications(tool, Suite(suite), **class_nodes)
-        performance_node.pull(bld)
+        analysis.performance_node.pull(bld)
 
 
-#
-# @click.command("plot-cl")
-# @click.argument("file", type=click.Path(exists=True))
-# def plot_classification(file: Path) -> None:
-#     classifications = pl.scan_parquet(file)
-#     create_nclass_classification_plot(classifications)
-#     click.echo("Done")
-#
-#
-# @click.command("plot-f")
-# @click.argument("file", type=click.Path(exists=True))
-# def plot_fscore(file: Path) -> None:
-#     distances = pl.scan_parquet(file)
-#     f_score_plot(distances)
-#     click.echo("Done")
-#
-#
-# @click.command("plot-fcl")
-# @click.argument("file", type=click.Path(exists=True))
-# def plot_fscore_cl(file: Path) -> None:
-#     performances = pl.scan_parquet(file)
-#     f_score_classification_plot(performances)
-#     click.echo("Done")
-#
+@click.command()
+@click.argument("suite", type=click.Path(file_okay=False, path_type=Path))
+@click.option("--tool", "tool_pattern", help="filter the tools to be run", default=".*")
+@click.option(
+    "--classifier",
+    "classifier_pattern",
+    help="filter on which classifiers to run",
+    default=".*",
+)
+@click.pass_obj
+def plot(cfg, suite, tool_pattern, classifier_pattern) -> None:
+    from simbench.plots import (
+        fscore_plot_node,
+        classification_plot_node,
+        confusion_matrix_plot_node,
+        fscore_classification_plot_node,
+    )
+
+    bld = Builder(logger)
+
+    for tool in cfg.tools:
+        if not tool.matches(tool_pattern):
+            cfg.log.debug(f"Skipping {tool}")
+            continue
+
+        filtered_classifiers = [
+            c for c in cfg.classifiers if c.matches(classifier_pattern)
+        ]
+        analysis = Analysis(tool, Suite(suite), filtered_classifiers)
+
+        fscore_plot_node(distances=analysis.distance_node).pull(bld)
+
+        for _, classification_node in analysis.classification_nodes.items():
+            classification_plot_node(classifications=classification_node).pull(bld)
+            confusion_matrix_plot_node(classifications=classification_node).pull(bld)
+
+        fscore_classification_plot_node(performance=analysis.performance_node).pull(bld)
+    click.echo("Done")
+
 
 cli.add_command(show_file)
 cli.add_command(analyse)
-# cli.add_command(plot_classification)
-# cli.add_command(plot_fscore)
-# cli.add_command(plot_fscore_cl)
+cli.add_command(plot)
