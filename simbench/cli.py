@@ -13,6 +13,7 @@ from simbench.analysis import (
 from simbench.analysis import Config
 import polars as pl
 from loguru import logger
+import matplotlib.pyplot as plt
 
 
 @click.group()
@@ -91,13 +92,24 @@ def plot(cfg, suite, tool_pattern, classifier_pattern) -> None:
         ]
         analysis = Analysis(tool, Suite(suite), filtered_classifiers)
 
-        fscore_plot_node(distances=analysis.distance_node).pull(bld)
+        fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
+        fscore_plot_node(ax=ax1, distances=analysis.distance_node).pull(bld)
+        fscore_classification_plot_node(
+            ax=ax2, performance=analysis.performance_node
+        ).pull(bld)
 
-        for _, classification_node in analysis.classification_nodes.items():
-            classification_plot_node(classifications=classification_node).pull(bld)
-            confusion_matrix_plot_node(classifications=classification_node).pull(bld)
+        classification_nodes = analysis.classification_nodes
+        fig2, axes = plt.subplots(2, len(classification_nodes))
+        for i, (_, classification_node) in enumerate(classification_nodes.items()):
+            classification_plot_node(
+                ax=axes[i, 0], classifications=classification_node
+            ).pull(bld)
+            confusion_matrix_plot_node(
+                ax=axes[i, 1], classifications=classification_node
+            ).pull(bld)
 
-        fscore_classification_plot_node(performance=analysis.performance_node).pull(bld)
+        plt.show()
+
     click.echo("Done")
 
 

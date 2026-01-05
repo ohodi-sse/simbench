@@ -11,6 +11,7 @@ from simbench.build import schema
 from simbench.tables import ClassificationTable, DistanceTable
 
 from matplotlib.patches import Patch
+from matplotlib.axes import Axes
 import itertools
 from collections import deque
 import matplotlib.colors as mcolors
@@ -18,24 +19,32 @@ from simbench.build import plotnode, Builder
 
 
 @plotnode
-def confusion_matrix_plot_node(bld: Builder, classifications) -> None:
+def confusion_matrix_plot_node(
+    bld: Builder, ax: Axes, classifications: pl.LazyFrame
+) -> Axes:
     src_labels = pl.Series(classifications.select("src_label").collect()).to_list()
     labelled_as = pl.Series(classifications.select("labelled_as").collect()).to_list()
     labels = list(set(src_labels))
 
     cm = confusion_matrix(src_labels, labelled_as, labels=labels)
     disp = ConfusionMatrixDisplay(confusion_matrix=cm, display_labels=labels)
-    disp.plot()
-    plt.show()
+    disp.plot(ax=ax)
+    return ax
 
 
 @plotnode
-def classification_plot_node(bld: Builder, classifications):
+def classification_plot_node(
+    bld: Builder, ax: Axes, classifications: pl.LazyFrame
+) -> Axes:
     assert classifications.collect_schema() == schema(ClassificationTable), (
         "The provided data is not a classification dataframe"
     )
 
     classifier_name = classifications.select("classifier").unique().collect().item()
+    classifier_param = int(
+        classifications.select("class_param").unique().collect().item()
+    )
+
     classes = pl.Series(
         classifications.select("src_label").unique().collect()
     ).to_list()
@@ -66,7 +75,6 @@ def classification_plot_node(bld: Builder, classifications):
 
     data_dict = {t: res_list[i] for i, t in enumerate(mosaic_tuples)}
 
-    fig, ax = plt.subplots(figsize=(11, 10))
     plt.rcParams.update({"font.size": 16})
 
     font_color = "#2c3e50"
@@ -106,7 +114,7 @@ def classification_plot_node(bld: Builder, classifications):
     ticks = np.arange(0 + step / 2, 1 + step / 2, step)
     ax.set_xticks(ticks, labels)
     ax.set_title(
-        f"Classification Report using {classifier_name}",
+        f"Classification Report using {classifier_name}-{classifier_param}",
         fontdict=title_font_dict,
         pad=25,
     )
@@ -119,13 +127,11 @@ def classification_plot_node(bld: Builder, classifications):
     ]
     ax.legend(handles=legend_elements, bbox_to_anchor=(1, 1.018), fontsize=16)
 
-    plt.tight_layout()
-
-    plt.show()
+    return ax
 
 
 @plotnode
-def fscore_plot_node(bld: Builder, distances) -> None:
+def fscore_plot_node(bld: Builder, ax: Axes, distances: pl.LazyFrame) -> Axes:
     assert distances.collect_schema() == schema(DistanceTable), (
         "Must provide a distance file to plot f-score"
     )
@@ -146,32 +152,35 @@ def fscore_plot_node(bld: Builder, distances) -> None:
     Recall = TP / TotRel
     F1 = [2 * p * c / (p + c) if p + c > 0 else 0 for (p, c) in zip(Prec, Recall)]
 
-    plt.plot(S, Prec, label="Prec")
-    plt.plot(S, Recall, label="Recall")
-    plt.plot(S, F1, label="F1")
+    ax.plot(S, Prec, label="Prec")
+    ax.plot(S, Recall, label="Recall")
+    ax.plot(S, F1, label="F1")
 
-    plt.xlabel("Distance")
-    plt.ylabel("Score")
-    plt.title("Performance scores")
-    plt.legend()
-    plt.show()
+    ax.set_xlabel("Distance")
+    ax.set_ylabel("Score")
+    ax.legend()
+    ax.set_title("Scores for distances")
+
+    return ax
 
 
 @plotnode
 def fscore_classification_plot_node(
     bld: Builder,
+    ax: Axes,
     performance: pl.LazyFrame,
-) -> None:
+) -> Axes:
     perf_df = performance.collect()
 
     classifier = perf_df["classifier"].item(0)
     params = perf_df["class_param"]
-    plt.plot(params, perf_df["Prec"], label="Prec")
-    plt.plot(params, perf_df["Rec"], label="Recall")
-    plt.plot(params, perf_df["F1"], label="F1")
+    ax.plot(params, perf_df["Prec"], label="Prec")
+    ax.plot(params, perf_df["Rec"], label="Recall")
+    ax.plot(params, perf_df["F1"], label="F1")
 
-    plt.xlabel("Parameter")
-    plt.ylabel("Score")
-    plt.title(f"Scoring using {classifier}")
-    plt.legend()
-    plt.show()
+    ax.set_xlabel("Parameter")
+    ax.set_ylabel("Score")
+    ax.legend()
+    ax.set_title(f"Performance of {classifier}")
+
+    return ax

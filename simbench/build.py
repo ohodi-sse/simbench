@@ -9,6 +9,7 @@ from contextlib import contextmanager
 import itertools
 
 import polars as pl
+from matplotlib.axes import Axes
 from loguru import logger
 
 from indicatif import ProgressBar, ProgressStyle
@@ -215,19 +216,20 @@ def schema(tabledef):
 
 
 @dataclass
-class EndNode[A](Pullable[A]):
+class PlotNode[A](Pullable[A]):
     action: Callable
+    ax: Axes
     dependencies: dict[str, Pullable]
 
     def pull(self, bld) -> A:
         outputs = {k: dep.pull(bld) for k, dep in self.dependencies.items()}
-        a = self.action(bld=bld, **outputs)
+        a = self.action(bld=bld, ax=self.ax, **outputs)
 
         return a
 
 
 def plotnode(fn):
-    def outer(fn, **dependencies):
-        return EndNode(fn, dependencies)
+    def outer(fn, ax, **dependencies):
+        return PlotNode(fn, ax, dependencies)
 
     return functools.partial(outer, fn)
