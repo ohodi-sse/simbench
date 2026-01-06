@@ -24,7 +24,6 @@ def test_pair_node(test_analysis, test_bld):
 
     pair_df = pair_node.pull(test_bld)
     assert isinstance(pair_df, pl.LazyFrame)
-
     assert schema(PairwiseCompressionTable) == pair_df.collect().schema
 
 
@@ -43,7 +42,6 @@ def test_classification_node(test_analysis, test_bld):
 
     cl_df_list = [cl_df.pull(test_bld) for _, cl_df in cl_nodes.items()]
     assert all([isinstance(cl_df, pl.LazyFrame) for cl_df in cl_df_list])
-
     assert all(
         [schema(ClassificationTable) == cl_df.collect().schema for cl_df in cl_df_list]
     )
