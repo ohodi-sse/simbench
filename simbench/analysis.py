@@ -32,7 +32,7 @@ class Tool(ABC):
     def matches(self, match):
         import re
 
-        return re.fullmatch(match, self.name) is not None
+        return re.match(match, self.name) is not None
 
 
 @dataclass

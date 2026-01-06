@@ -50,7 +50,7 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern):
 
     for tool in cfg.tools:
         if not tool.matches(tool_pattern):
-            cfg.log.debug(f"Skipping {tool}")
+            cfg.log.debug(f"Skipping {tool} with name: {tool.name}")
             continue
         cfg.log.info(f"Computing classifications for {tool}")
 
@@ -84,7 +84,7 @@ def plot(cfg, suite, tool_pattern, classifier_pattern) -> None:
 
     for tool in cfg.tools:
         if not tool.matches(tool_pattern):
-            cfg.log.debug(f"Skipping {tool}")
+            cfg.log.debug(f"Skipping {tool} with name: {tool.name}")
             continue
 
         filtered_classifiers = [
@@ -99,7 +99,7 @@ def plot(cfg, suite, tool_pattern, classifier_pattern) -> None:
         ).pull(bld)
 
         classification_nodes = analysis.classification_nodes
-        fig2, axes = plt.subplots(2, len(classification_nodes))
+        fig, axes = plt.subplots(2, len(classification_nodes))
         for i, (_, classification_node) in enumerate(classification_nodes.items()):
             classification_plot_node(
                 ax=axes[i, 0], classifications=classification_node
