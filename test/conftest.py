@@ -26,8 +26,9 @@ def test_tool(request):
 
 
 @pytest.fixture(scope="session")
-def test_classifiers():
-    return get_all_classifiers()
+def test_classifiers(test_suite):
+    max_files = test_suite.sources()
+    return get_all_classifiers(len(list(max_files)))
 
 
 @pytest.fixture(scope="function")

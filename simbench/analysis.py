@@ -2,6 +2,7 @@ from typing import Sequence
 import polars as pl
 
 from contextlib import contextmanager
+from numpy import arange
 
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
@@ -60,12 +61,18 @@ def get_all_tools():
     return tools
 
 
-def get_all_classifiers() -> Sequence[Classifier]:
+def get_all_classifiers(*max_files) -> Sequence[Classifier]:
     from simbench.classification import KNN, Threshold
 
-    # thrsh = [Threshold(t) for t in arange(0.0, 1.0, 0.1)]
-    knn = [KNN(k) for k in range(0, 300, 30)]
-    classifiers = [KNN(k) for k in range(10, 50, 20)]
+    thrsh = [Threshold(round(t, 3)) for t in arange(0.1, 0.6, 0.1)]
+
+    if max_files:
+        step = max(1, int(max_files[0] / 10))
+        knn = [KNN(k) for k in range(1, max_files[0], step)]
+    else:
+        knn = [KNN(k) for k in range(1, 300, 30)]
+
+    classifiers = thrsh + knn
 
     return classifiers
 

@@ -202,6 +202,9 @@ def performance(schema: pl.Schema, bld: Builder, **classifications) -> pl.LazyFr
     for _, classification in classifications.items():
         assert isinstance(classification, pl.LazyFrame), f"Got: {classification}"
 
+        if classification.collect().is_empty():
+            continue
+
         classif, param, FP, FN, accuracy, precision, recall, f_score = (
             get_performance_row(classification)
         )

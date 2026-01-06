@@ -99,7 +99,7 @@ def plot(cfg, suite, tool_pattern, classifier_pattern) -> None:
         ).pull(bld)
 
         classification_nodes = analysis.classification_nodes
-        fig, axes = plt.subplots(2, len(classification_nodes))
+        fig, axes = plt.subplots(len(classification_nodes), 2)
         for i, (_, classification_node) in enumerate(classification_nodes.items()):
             classification_plot_node(
                 ax=axes[i, 0], classifications=classification_node
