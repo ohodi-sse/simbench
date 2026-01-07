@@ -73,13 +73,6 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern):
 )
 @click.pass_obj
 def plot(cfg, suite, tool_pattern, classifier_pattern) -> None:
-    from simbench.plots import (
-        fscore_plot_node,
-        classification_plot_node,
-        confusion_matrix_plot_node,
-        fscore_classification_plot_node,
-    )
-
     bld = Builder(logger)
 
     for tool in cfg.tools:
@@ -92,21 +85,8 @@ def plot(cfg, suite, tool_pattern, classifier_pattern) -> None:
         ]
         analysis = Analysis(tool, Suite(suite), filtered_classifiers)
 
-        fig, (ax1, ax2) = plt.subplots(1, 2, sharey=True)
-        fscore_plot_node(ax=ax1, distances=analysis.distance_node).pull(bld)
-        fscore_classification_plot_node(
-            ax=ax2, performance=analysis.performance_node
-        ).pull(bld)
-
-        classification_nodes = analysis.classification_nodes
-        fig, axes = plt.subplots(len(classification_nodes), 2)
-        for i, (_, classification_node) in enumerate(classification_nodes.items()):
-            classification_plot_node(
-                ax=axes[i, 0], classifications=classification_node
-            ).pull(bld)
-            confusion_matrix_plot_node(
-                ax=axes[i, 1], classifications=classification_node
-            ).pull(bld)
+        pdf = analysis.performance_pdf_node
+        pdf.pull(bld)
 
         plt.show()
 

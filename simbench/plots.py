@@ -7,7 +7,7 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay,
 )
 
-from simbench.build import schema
+from simbench.build import figurenode, schema
 from simbench.tables import ClassificationTable, DistanceTable
 
 from matplotlib.patches import Patch
@@ -15,13 +15,10 @@ from matplotlib.axes import Axes
 import itertools
 from collections import deque
 import matplotlib.colors as mcolors
-from simbench.build import plotnode, Builder
+from simbench.build import Builder
 
 
-@plotnode
-def confusion_matrix_plot_node(
-    bld: Builder, ax: Axes, classifications: pl.LazyFrame
-) -> Axes:
+def confusion_matrix_plot(ax: Axes, classifications: pl.LazyFrame) -> Axes:
     src_labels = pl.Series(classifications.select("src_label").collect()).to_list()
     labelled_as = pl.Series(classifications.select("labelled_as").collect()).to_list()
     labels = list(set(src_labels))
@@ -32,10 +29,7 @@ def confusion_matrix_plot_node(
     return ax
 
 
-@plotnode
-def classification_plot_node(
-    bld: Builder, ax: Axes, classifications: pl.LazyFrame
-) -> Axes:
+def classification_plot(ax: Axes, classifications: pl.LazyFrame) -> Axes:
     assert classifications.collect_schema() == schema(ClassificationTable), (
         "The provided data is not a classification dataframe"
     )
@@ -130,8 +124,7 @@ def classification_plot_node(
     return ax
 
 
-@plotnode
-def fscore_plot_node(bld: Builder, ax: Axes, distances: pl.LazyFrame) -> Axes:
+def fscore_plot_node(ax: Axes, distances: pl.LazyFrame) -> Axes:
     assert distances.collect_schema() == schema(DistanceTable), (
         "Must provide a distance file to plot f-score"
     )
@@ -158,15 +151,13 @@ def fscore_plot_node(bld: Builder, ax: Axes, distances: pl.LazyFrame) -> Axes:
 
     ax.set_xlabel("Distance")
     ax.set_ylabel("Score")
-    ax.legend()
+    ax.legend(loc="upper right")
     ax.set_title("Scores for distances")
 
     return ax
 
 
-@plotnode
 def fscore_classification_plot_node(
-    bld: Builder,
     ax: Axes,
     performance: pl.LazyFrame,
 ) -> Axes:
@@ -180,7 +171,41 @@ def fscore_classification_plot_node(
 
     ax.set_xlabel("Parameter")
     ax.set_ylabel("Score")
-    ax.legend()
+    ax.legend(loc="upper right")
     ax.set_title(f"Performance of {classifier}")
 
     return ax
+
+
+@figurenode
+def fscore_overview_figure(
+    bld: Builder,
+    distances,
+    performances,
+):
+    classifier_types = pl.Series(
+        performances.collect().select(pl.col("classifier")).unique()
+    ).to_list()
+
+    fig, axes = plt.subplots(
+        len(classifier_types) + 1, 1, sharey=True, layout="constrained"
+    )
+    fig.suptitle("Performance scores", fontsize=16)
+    fscore_plot_node(ax=axes[0], distances=distances)
+
+    for i, classifier in enumerate(classifier_types):
+        tmp_perf_df = performances.filter(pl.col("classifier") == classifier)
+        fscore_classification_plot_node(ax=axes[i + 1], performance=tmp_perf_df)
+
+    return fig
+
+
+@figurenode
+def classification_overview_figure(bld: Builder, **classifications):
+    fig, axes = plt.subplots(len(classifications), 2)
+
+    for i, (_, classification) in enumerate(classifications.items()):
+        classification_plot(ax=axes[i, 0], classifications=classification)
+        confusion_matrix_plot(ax=axes[i, 1], classifications=classification)
+
+    return fig

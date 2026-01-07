@@ -9,7 +9,7 @@ from contextlib import contextmanager
 import itertools
 
 import polars as pl
-from matplotlib.axes import Axes
+from matplotlib.figure import Figure
 from loguru import logger
 
 from indicatif import ProgressBar, ProgressStyle
@@ -144,6 +144,20 @@ class ParquetStore(Store[pl.LazyFrame], Pullable[pl.LazyFrame]):
 
 
 @dataclass
+class FigureStore(Store[Figure]):
+    file: Path
+
+    def load(self, bld):
+        return None  # Returning None will always overwrite the plot
+
+    def store(self, item: Figure, bld):
+        page_width, page_height = 8.3, 11.7  # A4 size in inches
+        item.set_size_inches(page_width, page_height)
+        item.savefig(self.file, format="pdf", bbox_inches="tight", pad_inches=1.5)
+        assert self.file.exists(), f"Failed to create file {self.file}"
+
+
+@dataclass
 class Node[A](Pullable[A]):
     action: Callable
     store: Store[A]
@@ -215,21 +229,8 @@ def schema(tabledef):
     return schema
 
 
-@dataclass
-class PlotNode[A](Pullable[A]):
-    action: Callable
-    ax: Axes
-    dependencies: dict[str, Pullable]
+def figurenode(fn):
+    def wrapper(path: Path, **dependencies):
+        return Node(fn, FigureStore(path), dependencies)
 
-    def pull(self, bld) -> A:
-        outputs = {k: dep.pull(bld) for k, dep in self.dependencies.items()}
-        a = self.action(bld=bld, ax=self.ax, **outputs)
-
-        return a
-
-
-def plotnode(fn):
-    def outer(fn, ax, **dependencies):
-        return PlotNode(fn, ax, dependencies)
-
-    return functools.partial(outer, fn)
+    return wrapper

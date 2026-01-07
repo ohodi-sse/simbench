@@ -20,6 +20,7 @@ from simbench.tables import (
     classifications,
     performance,
 )
+from simbench.plots import classification_overview_figure, fscore_overview_figure
 
 Logger = type(logger)
 
@@ -131,6 +132,14 @@ class Analysis:
         return classification_dir
 
     @property
+    def performance_overview_file(self):
+        return self.default_path / "performance_overview.pdf"
+
+    @property
+    def classification_plot_file(self):
+        return self.default_path / "classification_plots.pdf"
+
+    @property
     def comp_node(self):
         return compressions(
             self.compression_file,
@@ -174,3 +183,15 @@ class Analysis:
     @property
     def performance_node(self):
         return performance(self.performance_file, **self.classification_nodes)
+
+    @property
+    def performance_pdf_node(self):
+        return fscore_overview_figure(
+            self.performance_overview_file,
+            distances=self.distance_node,
+            performances=self.performance_node,
+        )
+
+    @property
+    def classification_plot(self):
+        return classification_overview_figure(self.classification_plot_file)
