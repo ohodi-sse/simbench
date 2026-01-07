@@ -74,11 +74,19 @@ class Constant[A]:
 
 
 class Store[A](ABC):
+    file: Path
+
     @abstractmethod
     def load(self, bld) -> A | None: ...
 
     @abstractmethod
     def store(self, item: A, bld: Builder): ...
+
+    @property
+    def store_time(self):
+        if self.file.exists():
+            return self.file.stat().st_mtime
+        return time.time()
 
 
 @dataclass
@@ -163,8 +171,25 @@ class Node[A](Pullable[A]):
     store: Store[A]
     dependencies: dict[str, Pullable]
 
+    def updated_dependencies(self):
+        status_pairs = [
+            (dep.store.store_time < self.store.store_time, dep)
+            for _, dep in self.dependencies.items()
+            if isinstance(dep, Node)
+        ]
+
+        is_updated = not all([st for (st, dep) in status_pairs])
+        # Below is for debugging:
+        # if is_updated:
+        #     print([dep for (st, dep) in status_pairs if not st])
+
+        return is_updated
+
     def pull(self, bld) -> A:
-        if (a := self.store.load(bld)) is not None:
+        if self.updated_dependencies():
+            bld.log.debug("Found updated dependencies")
+
+        if (a := self.store.load(bld)) is not None and not self.updated_dependencies():
             return a
 
         outputs = {k: dep.pull(bld) for k, dep in self.dependencies.items()}
