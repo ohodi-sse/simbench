@@ -173,21 +173,16 @@ class Node[A](Pullable[A]):
 
     def updated_dependencies(self):
         status_pairs = [
-            (dep.store.store_time < self.store.store_time, dep)
+            (dep.store.store_time < self.store.store_time, dep.store.file.name)
             for _, dep in self.dependencies.items()
             if isinstance(dep, Node)
         ]
 
-        is_updated = not all([st for (st, dep) in status_pairs])
-        # Below is for debugging:
-        # if is_updated:
-        #     print([dep for (st, dep) in status_pairs if not st])
-
-        return is_updated
+        return [file for (val, file) in status_pairs if not val]
 
     def pull(self, bld) -> A:
         if self.updated_dependencies():
-            bld.log.debug("Found updated dependencies")
+            bld.log.debug(f"Found updated dependencies: {self.updated_dependencies()}")
 
         if (a := self.store.load(bld)) is not None and not self.updated_dependencies():
             return a

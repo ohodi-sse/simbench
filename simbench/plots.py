@@ -130,24 +130,27 @@ def fscore_plot_node(ax: Axes, distances: pl.LazyFrame) -> Axes:
     )
     df = distances.collect()
     df = df.sort(by="distance")
+    print(df)
 
     Tot = df.height
-    R = df["src_label"] == df["tgt_label"]
+    print(Tot)
+    Relevant = df["src_label"] == df["tgt_label"]
     F = df["src_label"] != df["tgt_label"]
     S = df["distance"]
 
-    TotRel = R.sum()
-    FN = R.cum_sum()
-    TotNRet = FN + F.cum_sum()
-    TP = TotRel - FN
+    RelevantRet = Relevant.cum_sum()
+    TotRet = RelevantRet + F.cum_sum()
+    TotRelevant = Relevant.sum()
 
-    Prec = TP / (Tot - TotNRet)
-    Recall = TP / TotRel
+    Prec = RelevantRet / TotRet
+    Recall = RelevantRet / TotRelevant
+
     F1 = [2 * p * c / (p + c) if p + c > 0 else 0 for (p, c) in zip(Prec, Recall)]
 
     ax.plot(S, Prec, label="Prec")
     ax.plot(S, Recall, label="Recall")
     ax.plot(S, F1, label="F1")
+    ax.plot(S, RelevantRet / TotRelevant, label="Counted")
 
     ax.set_xlabel("Distance")
     ax.set_ylabel("Score")
@@ -162,10 +165,10 @@ def fscore_classification_plot_node(
     performance: pl.LazyFrame,
 ) -> Axes:
     perf_df = performance.collect()
-
+    print(perf_df.sort(by="F1", descending=True))
     classifier = perf_df["classifier"].item(0)
     params = perf_df["class_param"]
-    ax.plot(params, perf_df["Prec"], label="Prec")
+    ax.plot(params, perf_df["Prec"], label="Precision")
     ax.plot(params, perf_df["Rec"], label="Recall")
     ax.plot(params, perf_df["F1"], label="F1")
 

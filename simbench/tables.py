@@ -187,9 +187,9 @@ def performance(schema: pl.Schema, bld: Builder, **classifications) -> pl.LazyFr
         src_labels = pl.Series(class_df.select("src_label").collect()).to_list()
         labelled_as = pl.Series(class_df.select("labelled_as").collect()).to_list()
         cm = confusion_matrix(src_labels, labelled_as)
+
         FP = sum(cm.sum(axis=0) - np.diag(cm))
         FN = sum(cm.sum(axis=1) - np.diag(cm))
-
         averaging = "macro"
 
         accuracy = accuracy_score(src_labels, labelled_as)

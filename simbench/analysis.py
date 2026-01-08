@@ -65,13 +65,13 @@ def get_all_tools():
 def get_all_classifiers(*max_files) -> Sequence[Classifier]:
     from simbench.classification import KNN, Threshold
 
-    thrsh = [Threshold(round(t, 3)) for t in arange(0.1, 0.6, 0.1)]
+    thrsh = [Threshold(round(t, 3)) for t in arange(0.05, 1.0, 0.05)]
 
     if max_files:
         step = max(1, int(max_files[0] / 10))
         knn = [KNN(k) for k in range(1, max_files[0], step)]
     else:
-        knn = [KNN(k) for k in range(1, 300, 30)]
+        knn = [KNN(k) for k in range(1, 300, 10)]
 
     classifiers = thrsh + knn
 
