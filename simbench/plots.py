@@ -129,11 +129,8 @@ def fscore_plot_node(ax: Axes, distances: pl.LazyFrame) -> Axes:
         "Must provide a distance file to plot f-score"
     )
     df = distances.collect()
-    df = df.sort(by="distance")
-    print(df)
+    df = df.sort(by="distance").filter(pl.col("src") != pl.col("tgt"))
 
-    Tot = df.height
-    print(Tot)
     Relevant = df["src_label"] == df["tgt_label"]
     F = df["src_label"] != df["tgt_label"]
     S = df["distance"]
@@ -147,10 +144,11 @@ def fscore_plot_node(ax: Axes, distances: pl.LazyFrame) -> Axes:
 
     F1 = [2 * p * c / (p + c) if p + c > 0 else 0 for (p, c) in zip(Prec, Recall)]
 
+    print(df)
+    print(df.filter(pl.col("src") == "s022068995.java"))
     ax.plot(S, Prec, label="Prec")
     ax.plot(S, Recall, label="Recall")
     ax.plot(S, F1, label="F1")
-    ax.plot(S, RelevantRet / TotRelevant, label="Counted")
 
     ax.set_xlabel("Distance")
     ax.set_ylabel("Score")
