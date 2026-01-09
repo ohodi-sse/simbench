@@ -5,6 +5,7 @@ from pathlib import Path
 import json
 from typing import Callable, get_type_hints
 from abc import ABC, abstractmethod
+from typing import Protocol
 from contextlib import contextmanager
 import itertools
 
@@ -200,7 +201,7 @@ class Suite:
     root: Path
 
     def problems(self):
-        return (self.root / "data").iterdir()
+        return (self.root / "problems").iterdir()
 
     def sources(self):
         return itertools.chain.from_iterable(
@@ -250,7 +251,27 @@ def schema(tabledef):
 
 
 def figurenode(fn):
-    def wrapper(path: Path, **dependencies):
-        return Node(fn, FigureStore(path), dependencies)
+    def wrapper(path: Path, toolname, **dependencies):
+        return Node(
+            functools.partial(fn, toolname=toolname), FigureStore(path), dependencies
+        )
 
     return wrapper
+
+
+class Normalizer(Protocol):
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
+
+    @abstractmethod
+    def process(self, src: bytes) -> bytes: ...
+
+
+class IDNormalizer(Normalizer):
+    @property
+    def name(self) -> str:
+        return "unprocessed"
+
+    def process(self, src):
+        return src

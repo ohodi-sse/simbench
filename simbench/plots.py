@@ -181,6 +181,7 @@ def fscore_classification_plot_node(
 @figurenode
 def fscore_overview_figure(
     bld: Builder,
+    toolname,
     distances,
     performances,
 ):
@@ -191,7 +192,7 @@ def fscore_overview_figure(
     fig, axes = plt.subplots(
         len(classifier_types) + 1, 1, sharey=True, layout="constrained"
     )
-    fig.suptitle("Performance scores", fontsize=16)
+    fig.suptitle(f"Performance scores for {toolname}", fontsize=16)
     fscore_plot_node(ax=axes[0], distances=distances)
 
     for i, classifier in enumerate(classifier_types):

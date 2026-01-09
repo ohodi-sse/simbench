@@ -11,7 +11,7 @@ from simbench.metrics import CompressionMetric
 import time
 from loguru import logger
 
-from simbench.build import Suite, Constant
+from simbench.build import Normalizer, Suite, Constant
 from simbench.classification import Classifier
 from simbench.tables import (
     compressions,
@@ -71,7 +71,7 @@ def get_all_classifiers(*max_files) -> Sequence[Classifier]:
         step = max(1, int(max_files[0] / 10))
         knn = [KNN(k) for k in range(1, max_files[0], step)]
     else:
-        knn = [KNN(k) for k in range(1, 300, 10)]
+        knn = [KNN(k) for k in range(1, 1500, 100)]
 
     classifiers = thrsh + knn
 
@@ -101,10 +101,13 @@ class Analysis:
     tool: CompressionTool
     suite: Suite
     classifiers: list[Classifier]
+    normalizer: Normalizer
 
     @property
     def default_path(self):
-        default_path = self.suite.root / "results" / self.tool.name
+        default_path = (
+            self.suite.root / "results" / f"{self.normalizer.name}" / self.tool.name
+        )
         default_path.mkdir(parents=True, exist_ok=True)
         return default_path
 
@@ -188,6 +191,7 @@ class Analysis:
     def performance_pdf_node(self):
         return fscore_overview_figure(
             self.performance_overview_file,
+            self.tool.name,
             distances=self.distance_node,
             performances=self.performance_node,
         )

@@ -3,6 +3,7 @@ from pathlib import Path
 
 from simbench.build import (
     Builder,
+    IDNormalizer,
     Suite,
 )
 
@@ -57,7 +58,8 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern):
         filtered_classifiers = [
             c for c in cfg.classifiers if c.matches(classifier_pattern)
         ]
-        analysis = Analysis(tool, Suite(suite), filtered_classifiers)
+
+        analysis = Analysis(tool, Suite(suite), filtered_classifiers, IDNormalizer())
 
         analysis.performance_node.pull(bld)
 
@@ -83,7 +85,7 @@ def plot(cfg, suite, tool_pattern, classifier_pattern) -> None:
         filtered_classifiers = [
             c for c in cfg.classifiers if c.matches(classifier_pattern)
         ]
-        analysis = Analysis(tool, Suite(suite), filtered_classifiers)
+        analysis = Analysis(tool, Suite(suite), filtered_classifiers, IDNormalizer())
 
         pdf = analysis.performance_pdf_node
         pdf.pull(bld)
