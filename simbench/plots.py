@@ -151,6 +151,7 @@ def fscore_plot_node(ax: Axes, distances: pl.LazyFrame) -> Axes:
     ax.plot(S, F1, label="F1")
 
     ax.set_xlabel("Distance")
+    ax.set_xlim(0.0, 1.0)
     ax.set_ylabel("Score")
     ax.legend(loc="upper right")
     ax.set_title("Scores for distances")
@@ -173,6 +174,10 @@ def fscore_classification_plot_node(
     ax.set_xlabel("Parameter")
     ax.set_ylabel("Score")
     ax.legend(loc="upper right")
+    if classifier == "thrsh":
+        ax.set_xlim(0.0, 1.0)
+    else:
+        ax.set_xlim(0, 1500)
     ax.set_title(f"Performance of {classifier}")
 
     return ax
@@ -195,7 +200,8 @@ def fscore_overview_figure(
     fig.suptitle(f"Performance scores for {toolname}", fontsize=16)
     fscore_plot_node(ax=axes[0], distances=distances)
 
-    for i, classifier in enumerate(classifier_types):
+    for i, classifier in enumerate(reversed(sorted(classifier_types))):
+        print(classifier)
         tmp_perf_df = performances.filter(pl.col("classifier") == classifier)
         fscore_classification_plot_node(ax=axes[i + 1], performance=tmp_perf_df)
 
