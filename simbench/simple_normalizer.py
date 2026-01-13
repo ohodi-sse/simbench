@@ -54,7 +54,8 @@ class CompileDecompileNormalizer(Normalizer):
         )
 
         shutil.rmtree(tmp_dir)
+        assert not tmp_file.exists()
+
         assert processed_bytes.returncode == 0, f"{processed_bytes.stderr}"
 
-        assert not tmp_file.exists()
         return processed_bytes.stdout

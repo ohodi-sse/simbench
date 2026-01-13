@@ -32,21 +32,26 @@ def compressions(
     out = TableBuilder(schema)
 
     bld.log.info(f"Computing compression table for {compressor.name}")
-    for src in suite.sources():
-        src_bytes = normalizer.get_processed_bytes(src)
 
-        with bld.profile() as timed:
-            complen: int = compressor.compress_length(src_bytes)
+    n = len(list(suite.sources()))
+    with bld.progressbar(n) as pb:
+        for src in suite.sources():
+            pb.inc(1)
+            src_bytes = normalizer.get_processed_bytes(src)
 
-        out.add(
-            src=src.name,
-            src_comp=complen,
-            src_size=len(src_bytes),
-            src_ratio=complen / len(src_bytes),
-            src_time=timed(),
-            src_label=src.label,
-        )
+            with bld.profile() as timed:
+                complen: int = compressor.compress_length(src_bytes)
 
+            out.add(
+                src=src.name,
+                src_comp=complen,
+                src_size=len(src_bytes),
+                src_ratio=complen / len(src_bytes),
+                src_time=timed(),
+                src_label=src.label,
+            )
+
+    pb.finish()
     return out.getvalue()
 
 
