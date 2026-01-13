@@ -265,7 +265,7 @@ class Normalizer(Protocol):
     def name(self) -> str: ...
 
     @abstractmethod
-    def process(self, src: bytes) -> bytes: ...
+    def get_processed_bytes(self, src: Source) -> bytes: ...
 
 
 class IDNormalizer(Normalizer):
@@ -273,5 +273,5 @@ class IDNormalizer(Normalizer):
     def name(self) -> str:
         return "unprocessed"
 
-    def process(self, src):
-        return src
+    def get_processed_bytes(self, src: Source) -> bytes:
+        return src.get_bytes()

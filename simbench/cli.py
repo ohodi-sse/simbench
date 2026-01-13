@@ -16,6 +16,8 @@ import polars as pl
 from loguru import logger
 import matplotlib.pyplot as plt
 
+from simbench.simple_normalizer import CompileDecompileNormalizer
+
 
 @click.group()
 @click.pass_context
@@ -59,7 +61,9 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern):
             c for c in cfg.classifiers if c.matches(classifier_pattern)
         ]
 
-        analysis = Analysis(tool, Suite(suite), filtered_classifiers, IDNormalizer())
+        analysis = Analysis(
+            tool, Suite(suite), filtered_classifiers, CompileDecompileNormalizer()
+        )
 
         analysis.performance_node.pull(bld)
 
@@ -85,7 +89,9 @@ def plot(cfg, suite, tool_pattern, classifier_pattern) -> None:
         filtered_classifiers = [
             c for c in cfg.classifiers if c.matches(classifier_pattern)
         ]
-        analysis = Analysis(tool, Suite(suite), filtered_classifiers, IDNormalizer())
+        analysis = Analysis(
+            tool, Suite(suite), filtered_classifiers, CompileDecompileNormalizer()
+        )  # IDNormalizer())
 
         pdf = analysis.performance_pdf_node
         pdf.pull(bld)

@@ -148,6 +148,7 @@ class Analysis:
             self.compression_file,
             compressor=Constant(self.tool.compressor),
             suite=Constant(self.suite),
+            normalizer=Constant(self.normalizer),
         )
 
     @property
@@ -156,6 +157,7 @@ class Analysis:
             self.pairwise_compression_file,
             compressor=Constant(self.tool.compressor),
             suite=Constant(self.suite),
+            normalizer=Constant(self.normalizer),
         )
 
     @property

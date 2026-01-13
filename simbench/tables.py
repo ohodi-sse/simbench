@@ -7,7 +7,7 @@ from sklearn.metrics import (
 import numpy as np
 import itertools
 
-from simbench.build import TableBuilder, schema, tablenode, Builder, Suite
+from simbench.build import Normalizer, TableBuilder, schema, tablenode, Builder, Suite
 from simbench.compressors import Compressor
 from simbench.metrics import CompressionMetric
 
@@ -22,12 +22,18 @@ class CompressionTable:
 
 
 @tablenode(schema(CompressionTable))
-def compressions(schema: pl.Schema, bld: Builder, compressor: Compressor, suite: Suite):
+def compressions(
+    schema: pl.Schema,
+    bld: Builder,
+    compressor: Compressor,
+    suite: Suite,
+    normalizer: Normalizer,
+):
     out = TableBuilder(schema)
 
     bld.log.info(f"Computing compression table for {compressor.name}")
     for src in suite.sources():
-        src_bytes = src.get_bytes()
+        src_bytes = normalizer.get_processed_bytes(src)
 
         with bld.profile() as timed:
             complen: int = compressor.compress_length(src_bytes)
@@ -55,13 +61,19 @@ class PairwiseCompressionTable:
 
 @tablenode(schema(PairwiseCompressionTable))
 def pairwise_compressions(
-    schema: pl.Schema, bld: Builder, compressor: Compressor, suite: Suite
+    schema: pl.Schema,
+    bld: Builder,
+    compressor: Compressor,
+    suite: Suite,
+    normalizer: Normalizer,
 ):
     out = TableBuilder(schema)
 
     bld.log.info(f"Computing pairwise compressions table for {compressor.name}")
 
-    byte_lookup = {src.name: src.get_bytes() for src in suite.sources()}  # For speed
+    byte_lookup = {
+        src.name: normalizer.process(src.get_bytes()) for src in suite.sources()
+    }  # For speed
 
     n = len(byte_lookup) ** 2
     with bld.progressbar(n) as pb:

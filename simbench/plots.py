@@ -13,6 +13,7 @@ from simbench.tables import ClassificationTable, DistanceTable
 from matplotlib.patches import Patch
 from matplotlib.axes import Axes
 import itertools
+from math import log2
 from collections import deque
 import matplotlib.colors as mcolors
 from simbench.build import Builder
@@ -142,13 +143,44 @@ def fscore_plot_node(ax: Axes, distances: pl.LazyFrame) -> Axes:
     Prec = RelevantRet / TotRet
     Recall = RelevantRet / TotRelevant
 
+    # classes = pl.Series(df["src_label"].unique()).to_list()
+    # for d in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]:
+    #     probsn = {}
+    #     for c1 in classes:
+    #         for c2 in classes:
+    #             c12s = df.filter(
+    #                 (pl.col("src_label") == c1)
+    #                 & (pl.col("tgt_label") == c2)
+    #                 & (pl.col("distance") <= d)
+    #             )
+    #             probsn[c1 + c2] = c12s.height
+    #     probs = [p for _, p in probsn.items()]
+    #     print(
+    #         -sum(
+    #             [
+    #                 (p / sum(probs)) * log2(p / sum(probs)) if p != 0 else 0
+    #                 for p in probs
+    #             ]
+    #         )
+    #     )
+    #     print(
+    #         {
+    #             k: p / sum(probs)
+    #             for k, p in sorted(
+    #                 probsn.items(), key=lambda item: item[1], reverse=True
+    #             )
+    #         }
+    #     )
+
+    Entropy = [
+        (-px) * log2(px) - (1 - px) * log2(1 - px) if px != 1.0 else 0.0 for px in Prec
+    ]
     F1 = [2 * p * c / (p + c) if p + c > 0 else 0 for (p, c) in zip(Prec, Recall)]
 
-    print(df)
-    print(df.filter(pl.col("src") == "s022068995.java"))
     ax.plot(S, Prec, label="Prec")
     ax.plot(S, Recall, label="Recall")
     ax.plot(S, F1, label="F1")
+    ax.plot(S, Entropy, label="Entropy")
 
     ax.set_xlabel("Distance")
     ax.set_xlim(0.0, 1.0)
