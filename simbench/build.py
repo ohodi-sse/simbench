@@ -9,6 +9,7 @@ from typing import Protocol
 from contextlib import contextmanager
 import itertools
 
+from numpy import isin
 import polars as pl
 from matplotlib.figure import Figure
 from loguru import logger
@@ -30,9 +31,9 @@ class Source:
     def label(self):
         return self.path.parent.name
 
-    def __post_init__(self):
-        if not self.path.is_file():
-            raise ValueError(f"Path {self.path} is not a file.")
+    # def __post_init__(self):
+    #     if not self.path.is_file():
+    #         raise ValueError(f"Path {self.path} is not a file.")
 
     def get_bytes(self) -> bytes:
         return self.path.read_bytes()
@@ -111,8 +112,7 @@ class ByteStore[bytes](Store[bytes], Pullable[bytes]):
 
     def load(self, bld) -> bytes | None:
         if self.file.exists():
-            return self.pull(self, bld)
-        return
+            return self.pull(bld)
 
     def store(self, item: bytes, bld):
         self.file.write_bytes(item)
@@ -122,11 +122,27 @@ class ByteStore[bytes](Store[bytes], Pullable[bytes]):
 
 
 @dataclass
-class SourceStore(Pullable[Source]):
-    src: Source
+class SourceStore(Store[Source], Pullable[Source]):
+    file: Path
+    source: Source
+
+    def __init__(self, file: Path) -> None:
+        self.file = file
+        self.source = Source(file)
+
+    def load(self, bld) -> Source | None:
+        if self.source.path.exists():
+            return self.pull(bld)
+
+    def store(self, item: Source, bld):
+        assert isinstance(item, Source)
+        # self.file.touch(exist_ok=True)
+        # assert self.file.exists()
+        self.source.path.write_bytes(item.get_bytes())
+        assert self.source.path.exists()
 
     def pull(self, bld) -> Source:
-        return self.src
+        return self.source
 
 
 @dataclass
@@ -205,7 +221,7 @@ class Suite:
 
     def sources(self):
         return itertools.chain.from_iterable(
-            (Source(s) for s in p.iterdir()) for p in self.problems()
+            (Source(s) for s in p.iterdir() if s.is_file()) for p in self.problems()
         )
 
 
@@ -265,13 +281,47 @@ class Normalizer(Protocol):
     def name(self) -> str: ...
 
     @abstractmethod
-    def get_processed_bytes(self, src: Source) -> bytes: ...
+    def process(self, src: Source) -> Source: ...
+
+    def new_path(self, src: Source) -> Path:
+        label_dir = src.path.parent
+        problems_dir = label_dir.parent
+        root_dir = problems_dir.parent
+
+        processed_problems_dir = (
+            root_dir / f"{self.name}{'_' if self.name else ''}{problems_dir.name}"
+        )
+        processed_problems_dir.mkdir(parents=True, exist_ok=True)
+        new_path = processed_problems_dir / label_dir.name / src.name
+        return new_path
 
 
 class IDNormalizer(Normalizer):
     @property
     def name(self) -> str:
-        return "unprocessed"
+        return ""
 
-    def get_processed_bytes(self, src: Source) -> bytes:
-        return src.get_bytes()
+    def process(self, src: Source) -> Source:
+        return src
+
+
+@dataclass(frozen=True)
+class PullableSource(Pullable[Source]):
+    source: Source
+
+    def pull(self, bld) -> Source:
+        return self.source
+
+
+def source_node_builder(normalizer: Normalizer, src: PullableSource):
+    new_file = normalizer.new_path(src.source)
+
+    def dummybld(bld, **src):
+        src = [s for n, s in src.items()][0]
+        return normalizer.process(src)
+
+    return Node(
+        dummybld,
+        SourceStore(new_file),
+        dependencies={src.source.name: src},
+    )

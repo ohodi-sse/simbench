@@ -1,4 +1,5 @@
 from typing import Sequence
+from _pytest.nodes import Node
 import polars as pl
 
 from contextlib import contextmanager
@@ -11,7 +12,15 @@ from simbench.metrics import CompressionMetric
 import time
 from loguru import logger
 
-from simbench.build import Normalizer, Suite, Constant
+from simbench.build import (
+    Normalizer,
+    PullableSource,
+    Suite,
+    Constant,
+    Pullable,
+    SourceStore,
+    source_node_builder,
+)
 from simbench.classification import Classifier
 from simbench.tables import (
     compressions,
@@ -143,12 +152,20 @@ class Analysis:
         return self.default_path / "classification_plots.pdf"
 
     @property
+    def source_nodes(self) -> dict[str, Node]:
+        return {
+            src.name: source_node_builder(
+                normalizer=self.normalizer, src=PullableSource(src)
+            )
+            for src in self.suite.sources()
+        }
+
+    @property
     def comp_node(self):
         return compressions(
             self.compression_file,
             compressor=Constant(self.tool.compressor),
-            suite=Constant(self.suite),
-            normalizer=Constant(self.normalizer),
+            **self.source_nodes,
         )
 
     @property
@@ -156,8 +173,7 @@ class Analysis:
         return pairwise_compressions(
             self.pairwise_compression_file,
             compressor=Constant(self.tool.compressor),
-            suite=Constant(self.suite),
-            normalizer=Constant(self.normalizer),
+            **self.source_nodes,
         )
 
     @property

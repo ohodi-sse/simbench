@@ -1,0 +1,46 @@
+import java.io.IOException;
+import java.util.ArrayList;
+import java.io.Reader;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+import java.nio.charset.StandardCharsets;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8));
+        final String[] split = bufferedReader.readLine().split(" ");
+        final int int1 = Integer.parseInt(split[0]);
+        final int int2 = Integer.parseInt(split[1]);
+        if (int2 == 0) {
+            System.out.println(int1);
+        }
+        else {
+            final String[] split2 = bufferedReader.readLine().split(" ");
+            final ArrayList list = new ArrayList();
+            for (int i = 0; i < int2; ++i) {
+                list.add(Integer.parseInt(split2[i]));
+            }
+            if (!list.contains(int1)) {
+                System.out.println(int1);
+            }
+            else {
+                for (int j = 1; j < int2 + 1; ++j) {
+                    if (int1 > 0) {}
+                    if (!list.contains(int1 - j)) {
+                        System.out.println(int1 - j);
+                        break;
+                    }
+                    if (!list.contains(int1 + j)) {
+                        System.out.println(int1 + j);
+                        break;
+                    }
+                }
+            }
+        }
+    }
+}

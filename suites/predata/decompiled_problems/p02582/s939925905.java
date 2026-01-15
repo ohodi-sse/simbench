@@ -1,0 +1,101 @@
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final FastScanner fastScanner = new FastScanner(System.in);
+        final PrintWriter printWriter = new PrintWriter(System.out);
+        final String next = fastScanner.next();
+        if (next.contains("RRR")) {
+            printWriter.println(3);
+        }
+        else if (next.contains("RR")) {
+            printWriter.println(2);
+        }
+        else if (next.contains("R")) {
+            printWriter.println(1);
+        }
+        else {
+            printWriter.println(0);
+        }
+        printWriter.close();
+    }
+    
+    static class FastScanner
+    {
+        BufferedReader br;
+        StringTokenizer st;
+        
+        public FastScanner(final InputStream in) {
+            this.br = new BufferedReader(new InputStreamReader(in));
+            this.st = new StringTokenizer("");
+        }
+        
+        public String next() throws IOException {
+            if (this.st.hasMoreTokens()) {
+                return this.st.nextToken();
+            }
+            this.st = new StringTokenizer(this.br.readLine());
+            return this.next();
+        }
+        
+        public int nextInt() throws IOException {
+            return Integer.parseInt(this.next());
+        }
+        
+        public double nextDouble() throws IOException {
+            return Double.parseDouble(this.next());
+        }
+        
+        public long nextLong() throws IOException {
+            return Long.parseLong(this.next());
+        }
+        
+        public String nextLine() throws IOException {
+            if (!this.st.hasMoreTokens()) {
+                this.st = new StringTokenizer(this.br.readLine());
+                return this.nextLine();
+            }
+            String s = "";
+            while (this.st.hasMoreTokens()) {
+                s += this.st.nextToken();
+            }
+            return s;
+        }
+        
+        public int[] nextIntArr(final int n) throws IOException {
+            final int[] array = new int[n];
+            for (int i = 0; i < array.length; ++i) {
+                array[i] = this.nextInt();
+            }
+            return array;
+        }
+        
+        public long[] nextLongArr(final int n) throws IOException {
+            final long[] array = new long[n];
+            for (int i = 0; i < array.length; ++i) {
+                array[i] = this.nextLong();
+            }
+            return array;
+        }
+        
+        public double[] nextDoubleArr(final int n) throws IOException {
+            final double[] array = new double[n];
+            for (int i = 0; i < array.length; ++i) {
+                array[i] = this.nextDouble();
+            }
+            return array;
+        }
+    }
+}

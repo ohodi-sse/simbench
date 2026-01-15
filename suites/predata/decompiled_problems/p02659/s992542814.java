@@ -1,0 +1,15 @@
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final long nextLong = scanner.nextLong();
+        final String next = scanner.next();
+        System.out.println((nextLong * (next.charAt(0) - '0') * 100L + nextLong * (next.charAt(2) - '0') * 10L + nextLong * (next.charAt(3) - '0')) / 100L);
+    }
+}

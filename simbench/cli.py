@@ -61,9 +61,7 @@ def analyse(cfg, suite, tool_pattern, classifier_pattern):
             c for c in cfg.classifiers if c.matches(classifier_pattern)
         ]
 
-        analysis = Analysis(
-            tool, Suite(suite), filtered_classifiers, CompileDecompileNormalizer()
-        )
+        analysis = Analysis(tool, Suite(suite), filtered_classifiers, IDNormalizer())
 
         analysis.performance_node.pull(bld)
 
@@ -91,7 +89,7 @@ def plot(cfg, suite, tool_pattern, classifier_pattern) -> None:
         ]
         analysis = Analysis(
             tool, Suite(suite), filtered_classifiers, CompileDecompileNormalizer()
-        )  # IDNormalizer())
+        )
 
         pdf = analysis.performance_pdf_node
         pdf.pull(bld)

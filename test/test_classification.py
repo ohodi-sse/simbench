@@ -6,37 +6,54 @@ from simbench.classification import (
 )
 
 
-def test_best_match_classify(test_tool, test_suite, test_bld):
+def test_best_match_classify(test_tool, test_suite, test_bld, test_normalizer):
     test_src = "test1.java"
 
     bm_classifier = KNN(1)
 
-    analysis = Analysis(tool=test_tool, suite=test_suite, classifiers=[bm_classifier])
+    analysis = Analysis(
+        tool=test_tool,
+        suite=test_suite,
+        classifiers=[bm_classifier],
+        normalizer=test_normalizer,
+    )
     classifiers = analysis.classification_nodes
     assert len(classifiers) == 1
 
     cl_df = classifiers["knn-1"].pull(test_bld)
     classification = cl_df.filter(pl.col("src") == test_src).collect()
 
-    assert classification["labelled_as"].item() == "class1"
+    assert classification["labelled_as"].item() == "class2", f"{cl_df.collect()}"
 
 
-def test_knn_classify(test_tool, test_suite, test_bld):
+def test_knn_classify(test_tool, test_suite, test_bld, test_normalizer):
     test_src = "test2.java"
 
     classifier = KNN(3)
-    analysis = Analysis(tool=test_tool, suite=test_suite, classifiers=[classifier])
+    analysis = Analysis(
+        tool=test_tool,
+        suite=test_suite,
+        classifiers=[classifier],
+        normalizer=test_normalizer,
+    )
 
     classifiers = analysis.classification_nodes
     cl_df = classifiers["knn-3"].pull(test_bld)
 
     classification = cl_df.filter(pl.col("src") == test_src).collect()
 
-    assert classification["labelled_as"].item() == "class2"
+    assert classification["labelled_as"].item() == "class2", f"{cl_df.collect()}"
 
 
-def test_performance_overview(test_tool, test_suite, test_bld, test_classifiers):
-    analysis = Analysis(tool=test_tool, suite=test_suite, classifiers=test_classifiers)
+def test_performance_overview(
+    test_tool, test_suite, test_bld, test_classifiers, test_normalizer
+):
+    analysis = Analysis(
+        tool=test_tool,
+        suite=test_suite,
+        classifiers=test_classifiers,
+        normalizer=test_normalizer,
+    )
 
     perf_df = analysis.performance_node.pull(test_bld).collect()
 
