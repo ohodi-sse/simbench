@@ -37,3 +37,10 @@ public class Main
         System.out.println(0);
     }
 }
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class Monmo
+{
+}

@@ -8,13 +8,10 @@ import numpy as np
 import itertools
 
 from simbench.build import (
-    Normalizer,
     TableBuilder,
     schema,
     tablenode,
     Builder,
-    Suite,
-    Source,
 )
 from simbench.compressors import Compressor
 from simbench.metrics import CompressionMetric
@@ -34,7 +31,7 @@ def compressions(
     schema: pl.Schema,
     bld: Builder,
     compressor: Compressor,
-    **sources: dict[str, Source],
+    **sources,
 ):
     out = TableBuilder(schema)
 
@@ -42,7 +39,7 @@ def compressions(
 
     n = len(sources)
     with bld.progressbar(n) as pb:
-        for name, src in sources.items():
+        for _, src in sources.items():
             pb.inc(1)
             src_bytes = src.get_bytes()
 
@@ -76,7 +73,7 @@ def pairwise_compressions(
     schema: pl.Schema,
     bld: Builder,
     compressor: Compressor,
-    **sources: dict[str, Source],
+    **sources,
 ):
     out = TableBuilder(schema)
 

@@ -72,3 +72,49 @@ public class Main
         Main.out = new PrintWriter(System.out);
     }
 }
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class Reader
+{
+    BufferedReader reader;
+    StringTokenizer tokenizer;
+    
+    Reader() {
+        this.reader = new BufferedReader(new InputStreamReader(System.in));
+        this.tokenizer = new StringTokenizer("");
+    }
+    
+    String next() throws IOException {
+        while (!this.tokenizer.hasMoreTokens()) {
+            this.tokenizer = new StringTokenizer(this.reader.readLine());
+        }
+        return this.tokenizer.nextToken();
+    }
+    
+    int nextInt() throws IOException {
+        return Integer.parseInt(this.next());
+    }
+    
+    double nextDouble() throws IOException {
+        return Double.parseDouble(this.next());
+    }
+    
+    long nextLong() throws IOException {
+        return Long.parseLong(this.next());
+    }
+    
+    String nextLine() throws IOException {
+        return this.reader.readLine();
+    }
+    
+    void close() throws IOException {
+        this.reader.close();
+    }
+}

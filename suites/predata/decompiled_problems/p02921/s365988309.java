@@ -73,3 +73,57 @@ public class Main
         }
     }
 }
+import java.io.IOException;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class Scanner
+{
+    BufferedReader br;
+    StringTokenizer st;
+    
+    Scanner() {
+        this.br = new BufferedReader(new InputStreamReader(System.in));
+    }
+    
+    String next() throws IOException {
+        while (this.st == null || !this.st.hasMoreTokens()) {
+            this.st = new StringTokenizer(this.br.readLine());
+        }
+        return this.st.nextToken();
+    }
+    
+    int nextInt() throws IOException {
+        return Integer.parseInt(this.next());
+    }
+    
+    long nextLong() throws IOException {
+        return Long.parseLong(this.next());
+    }
+    
+    Integer[] nextIntegerArray(final int n) throws IOException {
+        final Integer[] array = new Integer[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.nextInt();
+        }
+        return array;
+    }
+    
+    double nextDouble() throws IOException {
+        return Double.parseDouble(this.next());
+    }
+    
+    int[] nextIntArray(final int n) throws IOException {
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.nextInt() - 1;
+        }
+        return array;
+    }
+}

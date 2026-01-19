@@ -1,6 +1,5 @@
 from typing import Sequence
 from _pytest.nodes import Node
-import polars as pl
 
 from contextlib import contextmanager
 from numpy import arange
@@ -13,15 +12,15 @@ import time
 from loguru import logger
 
 from simbench.build import (
+    IDNormalizer,
     Normalizer,
     PullableSource,
     Suite,
     Constant,
-    Pullable,
-    SourceStore,
     source_node_builder,
 )
 from simbench.classification import Classifier
+from simbench.simple_normalizer import CompileDecompileNormalizer
 from simbench.tables import (
     compressions,
     pairwise_compressions,
@@ -29,7 +28,11 @@ from simbench.tables import (
     classifications,
     performance,
 )
-from simbench.plots import classification_overview_figure, fscore_overview_figure
+from simbench.plots import (
+    classification_overview_figure,
+    fscore_overview_figure,
+    fscore_comparison_figure,
+)
 
 Logger = type(logger)
 
@@ -60,13 +63,15 @@ def get_all_tools():
     from simbench.compressors import Zstd, Gzip, Zlib
     from simbench.metrics import NCD
 
-    compressors = [Zstd(1), Gzip(1), Zlib(1)]
+    comp_lvls = [1, 2, 3, 5, 7, 9]
+    zlib = [Zlib(comp_lvl) for comp_lvl in comp_lvls]
+    gzip = [Gzip(comp_lvl) for comp_lvl in comp_lvls]
+    zstd = [Zstd(comp_lvl) for comp_lvl in comp_lvls]
+    compressors = zlib + gzip + zstd
+
     metrics = [NCD()]
 
-    tools = []
-    for m in metrics:
-        for c in compressors:
-            tools.append(CompressionTool(m, c))
+    tools = [CompressionTool(m, c) for c in compressors for m in metrics]
 
     return tools
 
@@ -80,11 +85,15 @@ def get_all_classifiers(*max_files) -> Sequence[Classifier]:
         step = max(1, int(max_files[0] / 10))
         knn = [KNN(k) for k in range(1, max_files[0], step)]
     else:
-        knn = [KNN(k) for k in range(1, 1500, 100)]
+        knn = [KNN(k) for k in range(1, 300, 20)]
 
     classifiers = thrsh + knn
 
     return classifiers
+
+
+def get_all_normalizers():
+    return [IDNormalizer(), CompileDecompileNormalizer()]
 
 
 @dataclass
@@ -92,11 +101,13 @@ class Config:
     log: Logger
     tools: list[Tool] = field(default_factory=list)
     classifiers: Sequence[Classifier] = field(default_factory=list)
+    normalizers: list[Tool] = field(default_factory=list)
 
     def __init__(self):
         self.log = logger
         self.tools = get_all_tools()
         self.classifiers = get_all_classifiers()
+        self.normalizers = get_all_normalizers()
 
     @contextmanager
     def profile(self, *name):
@@ -105,12 +116,19 @@ class Config:
         endtime = time.perf_counter_ns()
 
 
+# The analysis dataclass specifies the structure of the project, and how things are stored.
 @dataclass
 class Analysis:
     tool: CompressionTool
     suite: Suite
     classifiers: list[Classifier]
     normalizer: Normalizer
+
+    def __post_init__(self):
+        assert isinstance(self.suite, Suite), (
+            "Must provide a Suite object when creating an Analysis object."
+        )
+        assert isinstance(self.tool, CompressionTool)
 
     @property
     def default_path(self):
@@ -119,6 +137,10 @@ class Analysis:
         )
         default_path.mkdir(parents=True, exist_ok=True)
         return default_path
+
+    @property
+    def parameter_name(self):
+        return f"{self.normalizer.name}_{self.tool.name}"
 
     @property
     def compression_file(self):
@@ -152,7 +174,7 @@ class Analysis:
         return self.default_path / "classification_plots.pdf"
 
     @property
-    def source_nodes(self) -> dict[str, Node]:
+    def source_nodes(self):
         return {
             src.name: source_node_builder(
                 normalizer=self.normalizer, src=PullableSource(src)
@@ -209,11 +231,35 @@ class Analysis:
     def performance_pdf_node(self):
         return fscore_overview_figure(
             self.performance_overview_file,
-            self.tool.name,
             distances=self.distance_node,
             performances=self.performance_node,
+            normalizer=Constant(self.normalizer),
         )
 
     @property
     def classification_plot(self):
         return classification_overview_figure(self.classification_plot_file)
+
+
+@dataclass
+class AnalysisComparison:
+    suite: Suite
+    tools: list[CompressionTool]
+    classifiers: list[Classifier]
+    normalizers: list[Normalizer]
+
+    @property
+    def analyses(self):
+        analyses = [
+            Analysis(tool, self.suite, self.classifiers, normalizer)
+            for tool in self.tools
+            for normalizer in self.normalizers
+        ]
+        return {a.parameter_name: Constant(a) for a in analyses}
+
+    @property
+    def performance_comparison_pdf(self):
+        return fscore_comparison_figure(
+            path=self.suite.root / "results" / "performance_comparison.pdf",
+            **self.analyses,
+        )

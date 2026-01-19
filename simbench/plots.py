@@ -17,6 +17,7 @@ from math import log2
 from collections import deque
 import matplotlib.colors as mcolors
 from simbench.build import Builder
+from loguru import logger
 
 
 def confusion_matrix_plot(ax: Axes, classifications: pl.LazyFrame) -> Axes:
@@ -101,7 +102,7 @@ def classification_plot(ax: Axes, classifications: pl.LazyFrame) -> Axes:
     }
 
     ax.tick_params(axis="x", which="both", bottom=False, top=False)
-    ax.axes.yaxis.set_ticks([])
+    # ax.axes.yaxis.set_ticks([])
     ax.tick_params(axis="x", which="major", labelsize=14)
 
     labels = [n for n in classes]
@@ -125,7 +126,106 @@ def classification_plot(ax: Axes, classifications: pl.LazyFrame) -> Axes:
     return ax
 
 
-def fscore_plot_node(ax: Axes, distances: pl.LazyFrame) -> Axes:
+def classification_dist_v_elements_plot(
+    ax: Axes, toolname, linetype, linecolor, distances: pl.LazyFrame
+) -> Axes:
+    assert distances.collect_schema() == schema(DistanceTable), (
+        "Must provide a distance file to plot f-score"
+    )
+    df = distances.collect()
+    df = df.sort(by="distance").filter(pl.col("src") != pl.col("tgt"))
+
+    Relevant = df["src_label"] == df["tgt_label"]
+    F = df["src_label"] != df["tgt_label"]
+    S = Relevant.cum_sum() + F.cum_sum()
+
+    # ax.set_xscale("log")
+    ax.plot(
+        S,
+        df["distance"],
+        label=f"Distance d for {toolname if toolname else ''}",
+        linestyle="-.",
+        color=linecolor,
+        linewidth=2,
+    )
+    return ax
+
+
+def classification_probability_plot(
+    ax: Axes, toolname, linetype, linecolor, distances: pl.LazyFrame
+) -> Axes:
+    assert distances.collect_schema() == schema(DistanceTable), (
+        "Must provide a distance file to plot f-score"
+    )
+    df = distances.collect()
+    df = df.sort(by="distance").filter(pl.col("src") != pl.col("tgt"))
+
+    Relevant = df["src_label"] == df["tgt_label"]
+    F = df["src_label"] != df["tgt_label"]
+    S = Relevant.cum_sum() + F.cum_sum()
+    max_elements = len(df["distance"].to_list())
+
+    RelevantRet = Relevant.cum_sum()
+    TotRet = RelevantRet + F.cum_sum()
+    Prec = RelevantRet / TotRet
+
+    # TotRelevant = Relevant.sum()
+    # Recall = RelevantRet / TotRelevant
+    # F1 = [2 * p * c / (p + c) if p + c > 0 else 0 for (p, c) in zip(Prec, Recall)]
+    # ax.plot(S, F1, label=f"F1 {toolname if toolname else ''}")
+    ax.set_xscale("log")
+    ax.plot(
+        S,
+        Prec,
+        label=f"Score {toolname if toolname else ''}",
+        linestyle=linetype,
+        color=linecolor,
+        linewidth=2,
+    )
+
+    # ax.xaxis.set_major_formatter(StrMethodFormatter("{x:.0f}"))
+    ax.set_xlabel("n")
+    ax.grid(True)
+    ax.set_xlim(0.0, max_elements)
+    ax.set_ylim(0.0, 1.02)
+    ax.set_ylabel("P( a = b | dist(a,b) <= d)")
+    ax.legend(loc="upper right")
+
+    return ax
+
+
+def entropy_plot(ax: Axes, toolname: str | None, distances: pl.LazyFrame) -> Axes:
+    assert distances.collect_schema() == schema(DistanceTable), (
+        "Must provide a distance file to plot f-score"
+    )
+    df = distances.collect()
+    df = df.sort(by="distance").filter(pl.col("src") != pl.col("tgt"))
+
+    Relevant = df["src_label"] == df["tgt_label"]
+    F = df["src_label"] != df["tgt_label"]
+    S = df["distance"]
+
+    RelevantRet = Relevant.cum_sum()
+    TotRet = RelevantRet + F.cum_sum()
+    Prec = RelevantRet / TotRet
+
+    Entropy = [
+        (-px) * log2(px) - (1 - px) * log2(1 - px) if px != 1.0 else 0.0 for px in Prec
+    ]
+
+    ax.plot(S, Entropy, label=f"Entropy {toolname if toolname else ''}")
+
+    ax.set_xlabel("Distance")
+    ax.set_xlim(0.0, 1.0)
+    ax.grid(True)
+    ax.set_ylabel("Score")
+    ax.legend(loc="upper right")
+    ax.set_title("Scores for distances")
+
+    return ax
+
+
+def cluster_plot(ax: Axes, toolname: str | None, distances: pl.LazyFrame) -> Axes:
     assert distances.collect_schema() == schema(DistanceTable), (
         "Must provide a distance file to plot f-score"
     )
@@ -139,48 +239,10 @@ def fscore_plot_node(ax: Axes, distances: pl.LazyFrame) -> Axes:
     RelevantRet = Relevant.cum_sum()
     TotRet = RelevantRet + F.cum_sum()
     TotRelevant = Relevant.sum()
+    Total = TotRelevant + F.sum()
 
-    Prec = RelevantRet / TotRet
-    Recall = RelevantRet / TotRelevant
-
-    # classes = pl.Series(df["src_label"].unique()).to_list()
-    # for d in [0.1, 0.2, 0.3, 0.4, 0.5, 0.6, 0.7, 0.8, 0.9, 1.0]:
-    #     probsn = {}
-    #     for c1 in classes:
-    #         for c2 in classes:
-    #             c12s = df.filter(
-    #                 (pl.col("src_label") == c1)
-    #                 & (pl.col("tgt_label") == c2)
-    #                 & (pl.col("distance") <= d)
-    #             )
-    #             probsn[c1 + c2] = c12s.height
-    #     probs = [p for _, p in probsn.items()]
-    #     print(
-    #         -sum(
-    #             [
-    #                 (p / sum(probs)) * log2(p / sum(probs)) if p != 0 else 0
-    #                 for p in probs
-    #             ]
-    #         )
-    #     )
-    #     print(
-    #         {
-    #             k: p / sum(probs)
-    #             for k, p in sorted(
-    #                 probsn.items(), key=lambda item: item[1], reverse=True
-    #             )
-    #         }
-    #     )
-
-    Entropy = [
-        (-px) * log2(px) - (1 - px) * log2(1 - px) if px != 1.0 else 0.0 for px in Prec
-    ]
-    F1 = [2 * p * c / (p + c) if p + c > 0 else 0 for (p, c) in zip(Prec, Recall)]
-
-    ax.plot(S, Prec, label="Prec")
-    ax.plot(S, Recall, label="Recall")
-    ax.plot(S, F1, label="F1")
-    ax.plot(S, Entropy, label="Entropy")
+    avg_cluster_size = TotRet / Total
+    ax.plot(S, avg_cluster_size, label="Avg cluster size as % of all points")
 
     ax.set_xlabel("Distance")
     ax.set_xlim(0.0, 1.0)
@@ -191,7 +253,7 @@ def fscore_plot_node(ax: Axes, distances: pl.LazyFrame) -> Axes:
     return ax
 
 
-def fscore_classification_plot_node(
+def fscore_classification_plot(
     ax: Axes,
     performance: pl.LazyFrame,
 ) -> Axes:
@@ -202,14 +264,13 @@ def fscore_classification_plot_node(
     ax.plot(params, perf_df["Prec"], label="Precision")
     ax.plot(params, perf_df["Rec"], label="Recall")
     ax.plot(params, perf_df["F1"], label="F1")
-
     ax.set_xlabel("Parameter")
     ax.set_ylabel("Score")
     ax.legend(loc="upper right")
     if classifier == "thrsh":
         ax.set_xlim(0.0, 1.0)
     else:
-        ax.set_xlim(0, 1500)
+        ax.set_xlim(0, 100)
     ax.set_title(f"Performance of {classifier}")
 
     return ax
@@ -218,9 +279,9 @@ def fscore_classification_plot_node(
 @figurenode
 def fscore_overview_figure(
     bld: Builder,
-    toolname,
     distances,
     performances,
+    normalizer,
 ):
     classifier_types = pl.Series(
         performances.collect().select(pl.col("classifier")).unique()
@@ -229,13 +290,19 @@ def fscore_overview_figure(
     fig, axes = plt.subplots(
         len(classifier_types) + 1, 1, sharey=True, layout="constrained"
     )
-    fig.suptitle(f"Performance scores for {toolname}", fontsize=16)
-    fscore_plot_node(ax=axes[0], distances=distances)
-
+    fig.suptitle(f"Performance scores on {normalizer.name} data", fontsize=16)
+    entropy_plot(ax=axes[0], toolname=None, distances=distances)
+    cluster_plot(ax=axes[0], toolname=None, distances=distances)
+    classification_probability_plot(
+        ax=axes,
+        toolname="dummy",  # analysis.tool.name,
+        linetype=":",  # style[0],
+        linecolor="r",  # style[1],
+        distances=distances,
+    )
     for i, classifier in enumerate(reversed(sorted(classifier_types))):
-        print(classifier)
         tmp_perf_df = performances.filter(pl.col("classifier") == classifier)
-        fscore_classification_plot_node(ax=axes[i + 1], performance=tmp_perf_df)
+        fscore_classification_plot(ax=axes[i + 1], performance=tmp_perf_df)
 
     return fig
 
@@ -247,5 +314,60 @@ def classification_overview_figure(bld: Builder, **classifications):
     for i, (_, classification) in enumerate(classifications.items()):
         classification_plot(ax=axes[i, 0], classifications=classification)
         confusion_matrix_plot(ax=axes[i, 1], classifications=classification)
+
+    return fig
+
+
+def analysis_styling(analyses) -> dict[str, tuple[str, str]]:
+    styling = {}
+
+    colors = [
+        "#000000",
+        "#4477AA",
+        "#EE6677",
+        "#AA3377",
+        "#BBBBBB",
+        "#66CCEE",
+        "#228833",
+        "#CCBB44",
+    ]
+    colormap = {}
+    for i, analysis in enumerate(analyses):
+        linetype = ":" if "unprocessed" in analysis.normalizer.name else "-"
+        tool = analysis.tool.name
+        if tool not in colormap.keys():
+            colormap[tool] = colors[int(((i + 1) / 2) % len(colors))]
+
+        linecolor = colormap[tool]
+
+        if i > len(colors):
+            logger.warning("Ran out of colors!")
+
+        styling[analysis.parameter_name] = (linetype, linecolor)
+
+    return styling
+
+
+@figurenode
+def fscore_comparison_figure(
+    bld: Builder,
+    **analyses,
+):
+    fig, axes = plt.subplots(1, 1, sharey=True, layout="constrained")
+    fig.suptitle(
+        "Comparison of p( A classified as B | distance(A,B) <= d) across tools",
+        fontsize=16,
+    )
+    styles = analysis_styling([v for v in analyses.values()])
+
+    for name, analysis in analyses.items():
+        style = styles[name]
+        classification_probability_plot(
+            ax=axes,
+            toolname=analysis.tool.name,
+            linetype=style[0],
+            linecolor=style[1],
+            distances=analysis.distance_node.pull(bld),
+        )
 
     return fig

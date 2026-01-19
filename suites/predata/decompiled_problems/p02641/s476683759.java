@@ -1,3 +1,89 @@
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class Edge implements Comparable<Edge>
+{
+    public Node a;
+    public Node b;
+    public int weight;
+    
+    public Edge(final Node a, final Node b, final int weight) {
+        this.a = a;
+        this.b = b;
+        this.weight = weight;
+    }
+    
+    @Override
+    public int compareTo(final Edge edge) {
+        if (this.weight == edge.weight) {
+            return 0;
+        }
+        if (this.weight > edge.weight) {
+            return 1;
+        }
+        return -1;
+    }
+}
+import java.io.IOException;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public static class MyScanner
+{
+    BufferedReader br;
+    StringTokenizer st;
+    
+    public MyScanner() {
+        this.br = new BufferedReader(new InputStreamReader(System.in));
+    }
+    
+    String next() {
+        while (true) {
+            if (this.st != null) {
+                if (this.st.hasMoreElements()) {
+                    break;
+                }
+            }
+            try {
+                this.st = new StringTokenizer(this.br.readLine());
+            }
+            catch (final IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return this.st.nextToken();
+    }
+    
+    int nextInt() {
+        return Integer.parseInt(this.next());
+    }
+    
+    long nextLong() {
+        return Long.parseLong(this.next());
+    }
+    
+    double nextDouble() {
+        return Double.parseDouble(this.next());
+    }
+    
+    String nextLine() {
+        String line = "";
+        try {
+            line = this.br.readLine();
+        }
+        catch (final IOException ex) {
+            ex.printStackTrace();
+        }
+        return line;
+    }
+}
 import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;
@@ -314,5 +400,34 @@ public class Main
             }
             return line;
         }
+    }
+}
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class Node implements Comparable<Node>
+{
+    public int x;
+    public int y;
+    
+    public Node(final int x, final int y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    @Override
+    public int compareTo(final Node node) {
+        if (this.x == node.x) {
+            return 0;
+        }
+        if (this.x > node.x) {
+            return 1;
+        }
+        return -1;
+    }
+    
+    public boolean equals(final Node node) {
+        return this.x == node.x;
     }
 }

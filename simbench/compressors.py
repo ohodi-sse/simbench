@@ -5,6 +5,7 @@ import io
 import zstd
 import gzip
 import zlib
+import lzma
 
 
 @dataclass
@@ -52,6 +53,22 @@ class Zlib(Compressor):
     def __post_init__(self):
         assert isinstance(self.level, int)
         assert self.level in range(1, 20), (
+            f"Compression level {self.level} is out of range"
+        )
+
+
+@dataclass
+class LZMA(Compressor):
+    @property
+    def name(self) -> str:
+        return "LZMA"
+
+    def __call__(self, file: bytes, out: io.BytesIO) -> None:
+        out.write(lzma.compress(file, self.level))
+
+    def __post_init__(self):
+        assert isinstance(self.level, int)
+        assert self.level in range(1, 10), (
             f"Compression level {self.level} is out of range"
         )
 

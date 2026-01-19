@@ -1,5 +1,105 @@
 import java.io.IOException;
 import java.util.InputMismatchException;
+import java.io.InputStream;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class InputReader
+{
+    private InputStream stream;
+    private byte[] buf;
+    private int curChar;
+    private int numChars;
+    private SpaceCharFilter filter;
+    
+    public InputReader(final InputStream stream) {
+        this.buf = new byte[1024];
+        this.stream = stream;
+    }
+    
+    public int read() {
+        if (this.numChars == -1) {
+            throw new InputMismatchException();
+        }
+        if (this.curChar >= this.numChars) {
+            this.curChar = 0;
+            try {
+                this.numChars = this.stream.read(this.buf);
+            }
+            catch (final IOException ex) {
+                throw new InputMismatchException();
+            }
+            if (this.numChars <= 0) {
+                return -1;
+            }
+        }
+        return this.buf[this.curChar++];
+    }
+    
+    public long nextLong() {
+        int n;
+        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+        int n2 = 1;
+        if (n == 45) {
+            n2 = -1;
+            n = this.read();
+        }
+        long n3 = 0L;
+        while (n >= 48 && n <= 57) {
+            n3 = n3 * 10L + (n - 48);
+            n = this.read();
+            if (this.isSpaceChar(n)) {
+                return n3 * n2;
+            }
+        }
+        throw new InputMismatchException();
+    }
+    
+    public String nextString() {
+        int n;
+        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+        final StringBuilder sb = new StringBuilder();
+        do {
+            if (Character.isValidCodePoint(n)) {
+                sb.appendCodePoint(n);
+            }
+            n = this.read();
+        } while (!this.isSpaceChar(n));
+        return sb.toString();
+    }
+    
+    public boolean isSpaceChar(final int n) {
+        if (this.filter != null) {
+            return this.filter.isSpaceChar(n);
+        }
+        return isWhitespace(n);
+    }
+    
+    public static boolean isWhitespace(final int n) {
+        return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
+    }
+    
+    public String next() {
+        return this.nextString();
+    }
+    
+    public interface SpaceCharFilter
+    {
+        boolean isSpaceChar(final int p0);
+    }
+}
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public interface SpaceCharFilter
+{
+    boolean isSpaceChar(final int p0);
+}
+import java.io.IOException;
+import java.util.InputMismatchException;
 import java.io.PrintStream;
 import java.io.InputStream;
 import java.io.OutputStream;
@@ -112,5 +212,19 @@ public class Main
         {
             boolean isSpaceChar(final int p0);
         }
+    }
+}
+import java.io.PrintWriter;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class CMultiplication3
+{
+    public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
+        final long nextLong = inputReader.nextLong();
+        final String next = inputReader.next();
+        printWriter.println(nextLong * Long.parseLong(next.substring(0, 1) + next.substring(2, 4)) / 100L);
     }
 }

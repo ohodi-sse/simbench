@@ -1,6 +1,55 @@
 import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class InputReader
+{
+    private BufferedReader reader;
+    private StringTokenizer tokenizer;
+    
+    public InputReader(final InputStream in) {
+        this.tokenizer = new StringTokenizer("");
+        this.reader = new BufferedReader(new InputStreamReader(in));
+    }
+    
+    public String next() {
+        while (!this.tokenizer.hasMoreTokens()) {
+            try {
+                this.tokenizer = new StringTokenizer(this.reader.readLine());
+            }
+            catch (final IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return this.tokenizer.nextToken();
+    }
+    
+    public int nextInt() {
+        return Integer.parseInt(this.next());
+    }
+    
+    public long nextLong() {
+        return Long.parseLong(this.next());
+    }
+    
+    public int[] nextIntArray(final int n) {
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.nextInt();
+        }
+        return array;
+    }
+}
+import java.io.IOException;
+import java.io.Reader;
+import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.util.List;
@@ -93,5 +142,29 @@ public class Main
             }
             return array;
         }
+    }
+}
+import java.io.PrintWriter;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class TaskB
+{
+    public void solve(final InputReader inputReader, final PrintWriter printWriter) {
+        final String next = inputReader.next();
+        int b = 0;
+        int max = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (next.charAt(i) == 'R') {
+                ++b;
+            }
+            else {
+                b = 0;
+            }
+            max = Math.max(max, b);
+        }
+        printWriter.print(max);
     }
 }

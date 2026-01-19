@@ -1,3 +1,54 @@
+import java.io.IOException;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class MyReader extends BufferedReader
+{
+    MyReader() {
+        super(new InputStreamReader(System.in));
+    }
+    
+    String s() throws IOException {
+        return this.readLine();
+    }
+    
+    String[] ss() throws IOException {
+        return this.s().split(" ");
+    }
+    
+    int i() throws IOException {
+        return Main.Int(this.s());
+    }
+    
+    int[] ii() throws IOException {
+        final String[] ss = this.ss();
+        final int length = ss.length;
+        final int[] array = new int[length];
+        for (int i = 0; i < length; ++i) {
+            array[i] = Main.Int(ss[i]);
+        }
+        return array;
+    }
+    
+    long l() throws IOException {
+        return Main.Long(this.s());
+    }
+    
+    long[] ll() throws IOException {
+        final String[] ss = this.ss();
+        final int length = ss.length;
+        final long[] array = new long[length];
+        for (int i = 0; i < length; ++i) {
+            array[i] = Main.Long(ss[i]);
+        }
+        return array;
+    }
+}
 import java.io.Reader;
 import java.io.InputStreamReader;
 import java.io.BufferedReader;

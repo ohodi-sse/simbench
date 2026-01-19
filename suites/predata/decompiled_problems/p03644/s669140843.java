@@ -1,3 +1,17 @@
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class XY
+{
+    int h;
+    int c;
+    
+    XY(final int h, final int c) {
+        this.h = h;
+        this.c = c;
+    }
+}
 import java.util.Scanner;
 
 // 

@@ -1,3 +1,17 @@
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class Pair
+{
+    long a;
+    long b;
+    
+    Pair(final long a, final long b) {
+        this.a = a;
+        this.b = b;
+    }
+}
 import java.util.HashSet;
 import java.io.Reader;
 import java.io.BufferedReader;

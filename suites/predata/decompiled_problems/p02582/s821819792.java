@@ -1,3 +1,68 @@
+import java.io.IOException;
+import java.io.FileReader;
+import java.io.FileNotFoundException;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class AnotherReader
+{
+    BufferedReader br;
+    StringTokenizer st;
+    
+    AnotherReader() throws FileNotFoundException {
+        this.br = new BufferedReader(new InputStreamReader(System.in));
+    }
+    
+    AnotherReader(final int n) throws FileNotFoundException {
+        this.br = new BufferedReader(new FileReader("input.txt"));
+    }
+    
+    String next() throws IOException {
+        while (true) {
+            if (this.st != null) {
+                if (this.st.hasMoreElements()) {
+                    break;
+                }
+            }
+            try {
+                this.st = new StringTokenizer(this.br.readLine());
+            }
+            catch (final IOException ex) {
+                ex.printStackTrace();
+            }
+        }
+        return this.st.nextToken();
+    }
+    
+    int nextInt() throws IOException {
+        return Integer.parseInt(this.next());
+    }
+    
+    long nextLong() throws IOException {
+        return Long.parseLong(this.next());
+    }
+    
+    double nextDouble() throws IOException {
+        return Double.parseDouble(this.next());
+    }
+    
+    String nextLine() throws IOException {
+        String line = "";
+        try {
+            line = this.br.readLine();
+        }
+        catch (final IOException ex) {
+            ex.printStackTrace();
+        }
+        return line;
+    }
+}
 import java.io.FileReader;
 import java.io.FileNotFoundException;
 import java.io.Reader;

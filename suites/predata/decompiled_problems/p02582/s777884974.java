@@ -1,3 +1,22 @@
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class pair implements Comparable<pair>
+{
+    int x;
+    int y;
+    
+    public pair(final int x, final int y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    @Override
+    public int compareTo(final pair pair) {
+        return this.y - this.x - (pair.y - pair.x);
+    }
+}
 import java.util.HashMap;
 import java.util.TreeSet;
 import java.io.IOException;

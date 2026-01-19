@@ -50,3 +50,29 @@ public class Main extends Reader
         System.out.println(x);
     }
 }
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class Reader
+{
+    Scanner sc;
+    
+    Reader() {
+        this.sc = new Scanner(System.in);
+    }
+    
+    public int ini() {
+        return this.sc.nextInt();
+    }
+    
+    public int[] vi(final int n) {
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.sc.nextInt();
+        }
+        return array;
+    }
+}

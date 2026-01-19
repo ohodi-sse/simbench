@@ -39,3 +39,17 @@ public class Main
         }
     }
 }
+import java.io.OutputStream;
+import java.io.PrintStream;
+import java.io.PrintWriter;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+private static class Printer extends PrintWriter
+{
+    Printer(final PrintStream out) {
+        super(out);
+    }
+}

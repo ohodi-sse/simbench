@@ -31,3 +31,76 @@ class Main
         System.out.println(Arrays.deepToString(a));
     }
 }
+import java.util.NoSuchElementException;
+import java.io.IOException;
+import java.io.InputStream;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class FastScanner
+{
+    private final InputStream in;
+    private final byte[] buffer;
+    private int ptr;
+    private int buflen;
+    
+    FastScanner() {
+        this.in = System.in;
+        this.buffer = new byte[1024];
+        this.ptr = 0;
+        this.buflen = 0;
+    }
+    
+    private boolean hasNextByte() {
+        if (this.ptr < this.buflen) {
+            return true;
+        }
+        this.ptr = 0;
+        try {
+            this.buflen = this.in.read(this.buffer);
+        }
+        catch (final IOException ex) {
+            ex.printStackTrace();
+        }
+        return this.buflen > 0;
+    }
+    
+    private int readByte() {
+        if (this.hasNextByte()) {
+            return this.buffer[this.ptr++];
+        }
+        return -1;
+    }
+    
+    private static boolean isPrintableChar(final int n) {
+        return 33 <= n && n <= 126;
+    }
+    
+    public boolean hasNext() {
+        while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
+            ++this.ptr;
+        }
+        return this.hasNextByte();
+    }
+    
+    public String next() {
+        if (!this.hasNext()) {
+            throw new NoSuchElementException();
+        }
+        final StringBuilder sb = new StringBuilder();
+        for (int codePoint = this.readByte(); isPrintableChar(codePoint); codePoint = this.readByte()) {
+            sb.appendCodePoint(codePoint);
+        }
+        return sb.toString();
+    }
+    
+    public int nextInt() {
+        return Integer.parseInt(this.next());
+    }
+    
+    public long nextLong() {
+        return Long.parseLong(this.next());
+    }
+}

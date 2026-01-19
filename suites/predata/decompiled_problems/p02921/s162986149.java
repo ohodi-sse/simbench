@@ -1,3 +1,92 @@
+import java.util.Objects;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class Pair
+{
+    int x;
+    int y;
+    
+    Pair(final int x, final int y) {
+        this.x = x;
+        this.y = y;
+    }
+    
+    @Override
+    public boolean equals(final Object o) {
+        if (this == o) {
+            return true;
+        }
+        if (o == null || this.getClass() != o.getClass()) {
+            return false;
+        }
+        final Pair pair = (Pair)o;
+        return this.x == pair.x && this.y == pair.y;
+    }
+    
+    @Override
+    public int hashCode() {
+        return Objects.hash(this.x, this.y);
+    }
+}
+import java.io.IOException;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class InputReader
+{
+    public BufferedReader reader;
+    public StringTokenizer tokenizer;
+    
+    public InputReader(final InputStream in) {
+        this.reader = new BufferedReader(new InputStreamReader(in), 32768);
+        this.tokenizer = null;
+    }
+    
+    public String next() {
+        while (true) {
+            if (this.tokenizer != null) {
+                if (this.tokenizer.hasMoreTokens()) {
+                    break;
+                }
+            }
+            try {
+                this.tokenizer = new StringTokenizer(this.reader.readLine());
+                continue;
+            }
+            catch (final IOException cause) {
+                throw new RuntimeException(cause);
+            }
+            break;
+        }
+        return this.tokenizer.nextToken();
+    }
+    
+    public int nextInt() {
+        return Integer.parseInt(this.next());
+    }
+    
+    public long nextLong() {
+        return Long.parseLong(this.next());
+    }
+    
+    public int[] readIntArray(final int n) {
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.nextInt();
+        }
+        return array;
+    }
+}
 import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;

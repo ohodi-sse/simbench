@@ -124,3 +124,79 @@ public class Main
         }
     }
 }
+import java.io.IOException;
+import java.io.FileReader;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.io.InputStream;
+import java.io.BufferedReader;
+import java.util.StringTokenizer;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class Scanner
+{
+    StringTokenizer st;
+    BufferedReader br;
+    
+    public Scanner(final InputStream in) {
+        this.br = new BufferedReader(new InputStreamReader(in));
+    }
+    
+    public Scanner(final String fileName) throws Exception {
+        this.br = new BufferedReader(new FileReader(fileName));
+    }
+    
+    public String next() throws IOException {
+        while (this.st == null || !this.st.hasMoreTokens()) {
+            this.st = new StringTokenizer(this.br.readLine());
+        }
+        return this.st.nextToken();
+    }
+    
+    public String nextLine() throws IOException {
+        return this.br.readLine();
+    }
+    
+    public int nextInt() throws IOException {
+        return Integer.parseInt(this.next());
+    }
+    
+    public double nextDouble() throws IOException {
+        return Double.parseDouble(this.next());
+    }
+    
+    public char nextChar() throws IOException {
+        return this.next().charAt(0);
+    }
+    
+    public Long nextLong() throws IOException {
+        return Long.parseLong(this.next());
+    }
+    
+    public int[] nextArrInt(final int n) throws IOException {
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.nextInt();
+        }
+        return array;
+    }
+    
+    public long[] nextArrLong(final int n) throws IOException {
+        final long[] array = new long[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.nextLong();
+        }
+        return array;
+    }
+    
+    public boolean ready() throws IOException {
+        return this.br.ready();
+    }
+    
+    public void waitForInput() throws InterruptedException {
+        Thread.sleep(3000L);
+    }
+}

@@ -34,7 +34,7 @@ class Classifier(ABC):
     def matches(self, match):
         import re
 
-        return re.fullmatch(match, self.name) is not None
+        return re.fullmatch(match, f"{self.name}-{self.param}") is not None
 
 
 @dataclass

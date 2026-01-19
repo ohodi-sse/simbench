@@ -207,6 +207,7 @@ class Node[A](Pullable[A]):
         outputs = {k: dep.pull(bld) for k, dep in self.dependencies.items()}
 
         a = self.action(bld=bld, **outputs)
+        bld.log.debug(f"Storing result to {self.store.file}")
         self.store.store(a, bld=bld)
 
         return a
@@ -267,10 +268,8 @@ def schema(tabledef):
 
 
 def figurenode(fn):
-    def wrapper(path: Path, toolname, **dependencies):
-        return Node(
-            functools.partial(fn, toolname=toolname), FigureStore(path), dependencies
-        )
+    def wrapper(path: Path, **dependencies):
+        return Node(fn, FigureStore(path), dependencies)
 
     return wrapper
 
@@ -283,13 +282,19 @@ class Normalizer(Protocol):
     @abstractmethod
     def process(self, src: Source) -> Source: ...
 
+    def matches(self, match):
+        import re
+
+        return re.match(match, self.name) is not None
+
     def new_path(self, src: Source) -> Path:
         label_dir = src.path.parent
         problems_dir = label_dir.parent
         root_dir = problems_dir.parent
 
         processed_problems_dir = (
-            root_dir / f"{self.name}{'_' if self.name else ''}{problems_dir.name}"
+            root_dir
+            / f"{self.name + '_' if self.name != 'unprocessed' else ''}{problems_dir.name}"
         )
         processed_problems_dir.mkdir(parents=True, exist_ok=True)
         new_path = processed_problems_dir / label_dir.name / src.name
@@ -299,7 +304,7 @@ class Normalizer(Protocol):
 class IDNormalizer(Normalizer):
     @property
     def name(self) -> str:
-        return ""
+        return "unprocessed"
 
     def process(self, src: Source) -> Source:
         return src

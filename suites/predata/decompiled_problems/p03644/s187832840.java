@@ -100,3 +100,22 @@ public class Main
         }
     }
 }
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class Pair implements Comparable<Pair>
+{
+    int a;
+    int b;
+    
+    public Pair(final int a, final int b) {
+        this.a = a;
+        this.b = b;
+    }
+    
+    @Override
+    public int compareTo(final Pair pair) {
+        return this.a - pair.a;
+    }
+}

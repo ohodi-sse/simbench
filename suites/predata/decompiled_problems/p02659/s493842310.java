@@ -27,3 +27,17 @@ public class Main
         }
     }
 }
+import java.math.BigDecimal;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+static class Task
+{
+    public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
+        printWriter.println(new BigDecimal("" + scanner.nextDouble()).multiply(new BigDecimal("" + scanner.nextDouble())).toBigInteger());
+    }
+}

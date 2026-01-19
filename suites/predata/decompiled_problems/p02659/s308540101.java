@@ -11,3 +11,13 @@ public class Main
         System.out.print(scanner.nextLong() * (int)(Double.parseDouble(scanner.next()) * 100.0 + 0.01) / 100L);
     }
 }
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+interface aisatu
+{
+    public static final String str = "\u3053\u3093\u306b\u3061\u306f";
+    
+    void mesod();
+}

@@ -39,7 +39,7 @@ class CompileDecompileNormalizer(Normalizer):
 
         tmp_dir.mkdir(parents=True, exist_ok=True)
         tmp_file = tmp_dir / "Main.java"
-        # compiler_path = toolspath / "InMemoryCompiler" / "IMCompiler"
+
         tmp_file.write_bytes(src.get_bytes())
         logger.debug(f"Compiling {src.name}")
         compiled_bytes = subprocess.run(
@@ -47,18 +47,27 @@ class CompileDecompileNormalizer(Normalizer):
         )
         assert compiled_bytes.returncode == 0, f"{compiled_bytes.stderr}"
         decompiler_path = toolspath / "procyon-decompiler-0.6.0.jar"
-        compiled_file = tmp_dir / "Main.class"
+
+        processed_file = self.new_path(src)
+        processed_file.parent.mkdir(parents=True, exist_ok=True)
+        processed_file.touch()
 
         logger.debug(f"Decompiling {src.name}")
-        processed_bytes = subprocess.run(
-            ["java", "-jar", decompiler_path, compiled_file],
-            capture_output=True,
-        )
+        with open(processed_file, "ab") as outfile:
+            for filename in tmp_dir.iterdir():
+                if filename == processed_file or not filename.name.endswith(".class"):
+                    # don't want to copy the output into the output
+                    continue
+                logger.debug(f"Found class {filename.name}")
+                processed_bytes = subprocess.run(
+                    ["java", "-jar", decompiler_path, filename],
+                    capture_output=True,
+                )
+
+                assert processed_bytes.returncode == 0, f"{processed_bytes.stderr}"
+                outfile.write(processed_bytes.stdout)
+
         shutil.rmtree(tmp_dir)
         assert not tmp_file.exists()
-        assert processed_bytes.returncode == 0, f"{processed_bytes.stderr}"
 
-        new_file = self.new_path(src)
-        new_file.parent.mkdir(parents=True, exist_ok=True)
-        new_file.write_bytes(processed_bytes.stdout)
-        return Source(new_file)
+        return Source(processed_file)
