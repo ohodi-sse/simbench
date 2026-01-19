@@ -20,7 +20,7 @@ from simbench.build import (
     source_node_builder,
 )
 from simbench.classification import Classifier
-from simbench.simple_normalizer import CompileDecompileNormalizer
+from simbench.normalizers import CompileDecompileNormalizer
 from simbench.tables import (
     compressions,
     pairwise_compressions,

@@ -14,7 +14,7 @@ import polars as pl
 from loguru import logger
 import matplotlib.pyplot as plt
 
-from simbench.simple_normalizer import CompileDecompileNormalizer
+from simbench.normalizers import CompileDecompileNormalizer
 
 
 @click.group()

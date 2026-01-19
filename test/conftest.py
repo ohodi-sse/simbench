@@ -6,7 +6,7 @@ import shutil
 from simbench.analysis import Analysis, get_all_classifiers, get_all_tools
 from simbench.build import IDNormalizer, Suite, Builder
 from simbench.classification import KNN
-from simbench.simple_normalizer import CompileDecompileNormalizer
+from simbench.normalizers import CompileDecompileNormalizer
 
 
 @pytest.fixture(scope="session")
