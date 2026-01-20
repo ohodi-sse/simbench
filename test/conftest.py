@@ -4,7 +4,6 @@ from loguru import logger
 import shutil
 
 from simbench.analysis import (
-    CompressionAnalysis,
     init_analysis,
     get_all_classifiers,
     get_all_normalizers,
@@ -24,6 +23,7 @@ def test_suite():
     yield suite
     shutil.rmtree(suite.root / "results")
     shutil.rmtree(suite.root / "decompiled_problems")
+    shutil.rmtree(suite.root / "google_java_formatted_problems")
 
 
 @pytest.fixture(params=[tool for tool in get_all_tools()])

@@ -9,7 +9,6 @@ from typing import Protocol
 from contextlib import contextmanager
 import itertools
 
-from numpy import isin
 import polars as pl
 from matplotlib.figure import Figure
 from loguru import logger

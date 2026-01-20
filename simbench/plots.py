@@ -1,3 +1,4 @@
+from enum import unique
 from matplotlib import pyplot as plt
 import numpy as np
 import polars as pl
@@ -12,6 +13,8 @@ from simbench.tables import ClassificationTable, DistanceTable
 
 from matplotlib.patches import Patch
 from matplotlib.axes import Axes
+from matplotlib import font_manager
+
 import itertools
 from math import log2
 from collections import deque
@@ -152,7 +155,11 @@ def classification_dist_v_elements_plot(
 
 
 def classification_probability_plot(
-    ax: Axes, toolname, linetype, linecolor, distances: pl.LazyFrame
+    ax: Axes,
+    toolname,
+    linetype: str | None,
+    linecolor: str | None,
+    distances: pl.LazyFrame,
 ) -> Axes:
     assert distances.collect_schema() == schema(DistanceTable), (
         "Must provide a distance file to plot f-score"
@@ -178,11 +185,10 @@ def classification_probability_plot(
         S,
         Prec,
         label=f"{toolname if toolname else 'score'}",
-        linestyle=linetype,
+        linestyle=f"{linetype if linetype else '-'}",
         color=linecolor,
         linewidth=2,
     )
-
     # ax.xaxis.set_major_formatter(StrMethodFormatter("{x:.0f}"))
     ax.set_xlabel("n")
     ax.grid(True)
@@ -318,31 +324,30 @@ def classification_overview_figure(bld: Builder, **classifications):
     return fig
 
 
-def analysis_styling(analyses) -> dict[str, tuple[str, str]]:
+def analysis_styling(analyses, colors) -> dict[str, tuple[str, str]]:
     styling = {}
 
-    colors = [
-        "#000000",
-        "#4477AA",
-        "#EE6677",
-        "#AA3377",
-        "#BBBBBB",
-        "#66CCEE",
-        "#228833",
-        "#CCBB44",
-    ]
-    colormap = {}
-    for i, analysis in enumerate(analyses):
-        linetype = ":" if "unprocessed" in analysis.normalizer.name else "-"
+    linestyles = ["-", "--", "-.", ":", "None", " ", ""]
 
+    colormap = {}
+    linemap = {}
+    if len(analyses) > len(colors):
+        logger.warning("Not enough colors!")
+
+    n_norms = len(set([a.normalizer for a in analyses]))
+
+    for i, analysis in enumerate(analyses):
         tool = analysis.tool.name
+        norm = analysis.normalizer.name
+
+        if norm not in linemap.keys():
+            linemap[norm] = linestyles[int(i) % len(colors)]
+
         if tool not in colormap.keys():
-            colormap[tool] = colors[int(((i + 1) / 2) % len(colors))]
+            colormap[tool] = colors[int(i / n_norms) % len(colors)]
 
         linecolor = colormap[tool]
-
-        if i > len(colors):
-            logger.warning("Ran out of colors!")
+        linetype = linemap[norm]
 
         styling[analysis.parameter_name] = (linetype, linecolor)
 
@@ -354,21 +359,48 @@ def fscore_comparison_figure(
     bld: Builder,
     **analyses,
 ):
-    fig, axes = plt.subplots(1, 1, sharey=True, layout="constrained")
-    fig.suptitle(
-        "Classification comparison of unprocessed and compiled-decompiled code",
-        fontsize=16,
+    font_path = "/usr/share/fonts/truetype/atkinson-hyperlegible/Atkinson-Hyperlegible-Regular-102.ttf"
+    font_manager.fontManager.addfont(font_path)
+    plt.rcParams["font.family"] = "Atkinson Hyperlegible"
+
+    fig, axes = plt.subplots(
+        1, 1, sharey=True, layout="constrained", figsize=(10, 5.625)
     )
-    styles = analysis_styling([v for v in analyses.values()])
+    # fig.suptitle(
+    #     "Classification comparison of unprocessed and compiled-decompiled code",
+    #     fontsize=16,
+    # )
+    github_light_syntax_colors = [
+        "#CF222E",  # GitHub red
+        "#8250DF",  # purple for functions
+        "#116329",  # green for types
+        "#0550AE",  # blue for numeric constants
+        "#DBAB09",  # Yellow accents
+        "#1F2328",  # default text color
+        "#6A737D",  # neutral gray for comments
+    ]
 
-    for name, analysis in analyses.items():
-        style = styles[name]
-        classification_probability_plot(
-            ax=axes,
-            toolname=f"{analysis.tool.name} on {analysis.normalizer.name} data",
-            linetype=style[0],
-            linecolor=style[1],
-            distances=analysis.distance_node.pull(bld),
-        )
-
+    styles = analysis_styling(
+        [v for v in analyses.values()], github_light_syntax_colors
+    )
+    tools = set([a.tool.name for a in analyses.values()])
+    print(tools)
+    for i, (name, analysis) in enumerate(analyses.items()):
+        if len(tools) > 1:
+            style = styles[name]
+            classification_probability_plot(
+                ax=axes,
+                toolname=f"{analysis.tool.name} on {analysis.normalizer.name} data",
+                linetype=style[0],
+                linecolor=style[1],
+                distances=analysis.distance_node.pull(bld),
+            )
+        else:
+            classification_probability_plot(
+                ax=axes,
+                toolname=f"{analysis.tool.name} on {analysis.normalizer.name} data",
+                linetype=None,
+                linecolor=github_light_syntax_colors[i],
+                distances=analysis.distance_node.pull(bld),
+            )
     return fig

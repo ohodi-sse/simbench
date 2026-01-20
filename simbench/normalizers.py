@@ -1,8 +1,6 @@
-from time import time
-
 # import tree_sitter as ts
 # import tree_sitter_java as java
-from simbench.build import Normalizer, Source, Builder
+from simbench.build import Normalizer, Source
 from pathlib import Path
 import subprocess
 import shutil
@@ -28,13 +26,42 @@ from loguru import logger
 #             break
 #
 #
+
+
+class GoogleFormatter(Normalizer):
+    @property
+    def name(self):
+        return "google_java_formatted"
+
+    def process(self, src: Source) -> Source:
+        toolspath = Path("processing_tools") / "google_java_formatter"
+        formatter_path = toolspath / "google-java-format-1.33.0-all-deps.jar"
+        processed_file = self.new_path(src)
+        processed_file.parent.mkdir(parents=True, exist_ok=True)
+        processed_file.touch()
+
+        logger.debug(f"Formatting {src.name} using the Google Java Formatter")
+        with open(processed_file, "ab") as outfile:
+            processed_bytes = subprocess.run(
+                ["java", "-jar", formatter_path, src.path],
+                capture_output=True,
+            )
+            assert processed_bytes.returncode == 0, f"{processed_bytes.stderr}"
+            assert len(processed_bytes.stdout) > 0, (
+                f"No data was loaded from {src.path}"
+            )
+            outfile.write(processed_bytes.stdout)
+
+        return Source(processed_file)
+
+
 class CompileDecompileNormalizer(Normalizer):
     @property
     def name(self):
         return "decompiled"
 
     def process(self, src: Source) -> Source:
-        toolspath = Path("compiledecompile")
+        toolspath = Path("processing_tools") / "compiledecompile"
         tmp_dir = src.path.parent / Path(f"{src.name}-tmp")
 
         tmp_dir.mkdir(parents=True, exist_ok=True)

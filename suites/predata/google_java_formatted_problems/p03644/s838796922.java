@@ -1,0 +1,5 @@
+public class Main {
+  public static void main(String[] $) {
+    System.out.println(Integer.highestOneBit(new java.util.Scanner(System.in).nextInt()));
+  }
+}

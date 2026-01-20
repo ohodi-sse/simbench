@@ -42,7 +42,7 @@ def compressions(
         for _, src in sources.items():
             pb.inc(1)
             src_bytes = src.get_bytes()
-
+            assert src_bytes, f"Failed to load any data from {src.path}"
             with bld.profile() as timed:
                 complen: int = compressor.compress_length(src_bytes)
 

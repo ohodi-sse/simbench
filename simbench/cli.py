@@ -15,6 +15,7 @@ from simbench.analysis import (
     CompressionAnalysis,
     AnalysisComparison,
     Config,
+    get_all_normalizers,
     init_analysis,
 )
 from simbench.normalizers import CompileDecompileNormalizer
@@ -127,19 +128,30 @@ def plot(cfg, suite, tool_pattern, classifier_pattern, show) -> None:
     help="filter on which classifiers to run",
     default=".*",
 )
+@click.option(
+    "--normalizer",
+    "normalizer_pattern",
+    help="filter the normalizers to be run",
+    default=".*",
+)
 @click.option("--show/--no-show", default=False)
 @click.pass_obj
-def plot_comparison(cfg, suite, tool_pattern, classifier_pattern, show):
+def plot_comparison(
+    cfg, suite, tool_pattern, classifier_pattern, normalizer_pattern, show
+):
     bld = Builder(logger)
 
     filtered_tools = [t for t in cfg.tools if t.matches(tool_pattern)]
     filtered_classifiers = [c for c in cfg.classifiers if c.matches(classifier_pattern)]
+    normalizers = [
+        norm for norm in get_all_normalizers() if norm.matches(normalizer_pattern)
+    ]
 
-    normalizers = [IDNormalizer(), CompileDecompileNormalizer()]
     comparison = AnalysisComparison(
         Suite(suite), filtered_tools, filtered_classifiers, normalizers
     )
 
+    plt.rcParams.update({"figure.figsize": (10, 5.625), "font.size": 16})
     comparison.performance_comparison_pdf.pull(bld)
     if show:
         plt.show()

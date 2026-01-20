@@ -1,0 +1,13 @@
+import java.math.BigDecimal;
+import java.util.Scanner;
+
+public class Main {
+
+  public static void main(String[] args) {
+    Scanner sc = new Scanner(System.in);
+    BigDecimal n = sc.nextBigDecimal();
+    BigDecimal m = sc.nextBigDecimal();
+
+    System.out.println(n.multiply(m).setScale(0, BigDecimal.ROUND_DOWN));
+  }
+}

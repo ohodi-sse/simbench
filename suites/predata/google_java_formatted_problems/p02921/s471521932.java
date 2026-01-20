@@ -1,0 +1,24 @@
+/*
+	submission # - User: herp_sy
+	https://atcoder.jp/contests/
+*/
+
+import static java.lang.System.*;
+
+import java.io.*;
+import java.util.*;
+// sorting use
+
+public class Main {
+  public static void main(String[] args) {
+    int cnt = 0;
+    String s, t;
+    Scanner sc = new Scanner(System.in);
+    s = sc.next();
+    t = sc.next();
+    for (int i = 0; i < 3; ++i) {
+      if (s.charAt(i) == t.charAt(i)) ++cnt;
+    }
+    out.println(cnt);
+  }
+}

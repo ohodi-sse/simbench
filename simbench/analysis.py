@@ -22,7 +22,7 @@ from simbench.build import (
     source_node_builder,
 )
 from simbench.classification import Classifier
-from simbench.normalizers import CompileDecompileNormalizer
+from simbench.normalizers import CompileDecompileNormalizer, GoogleFormatter
 from simbench.tables import (
     compressions,
     pairwise_compressions,
@@ -82,7 +82,6 @@ def get_all_tools():
     zlib = [Zlib(comp_lvl) for comp_lvl in comp_lvls]
     gzip = [Gzip(comp_lvl) for comp_lvl in comp_lvls]
     zstd = [Zstd(comp_lvl) for comp_lvl in comp_lvls]
-    diffs = [Difflib()]
 
     compressors = zlib + gzip + zstd
     comp_metrics = [NCD()]
@@ -90,6 +89,7 @@ def get_all_tools():
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
     diff_tools = [DiffTool(DiffMetric(), Difflib())]
     tools = diff_tools + comp_tools
+
     return tools
 
 
@@ -110,13 +110,13 @@ def get_all_classifiers(*max_files) -> Sequence[Classifier]:
 
 
 def get_all_normalizers():
-    return [IDNormalizer(), CompileDecompileNormalizer()]
+    return [IDNormalizer(), CompileDecompileNormalizer(), GoogleFormatter()]
 
 
 @dataclass
 class Config:
     log: Logger
-    tools: list[Tool] = field(default_factory=list)
+    tools: Sequence[Tool] = field(default_factory=list)
     classifiers: Sequence[Classifier] = field(default_factory=list)
     normalizers: list[Tool] = field(default_factory=list)
 

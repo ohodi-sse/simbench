@@ -94,10 +94,10 @@ class Diff(ABC):
     @abstractmethod
     def __call__(self, file: bytes, file2: bytes) -> str: ...
 
-    def diff_length(self, content: bytes) -> int:
-        buffer = io.BytesIO()
-        self(content, buffer)
-        return buffer.getbuffer().nbytes
+    # def diff_length(self, content: bytes) -> int:
+    #     buffer = io.BytesIO()
+    #     self(content, buffer)
+    #     return buffer.getbuffer().nbytes
 
     @property
     @abstractmethod
