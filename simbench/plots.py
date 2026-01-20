@@ -177,7 +177,7 @@ def classification_probability_plot(
     ax.plot(
         S,
         Prec,
-        label=f"Score {toolname if toolname else ''}",
+        label=f"{toolname if toolname else 'score'}",
         linestyle=linetype,
         color=linecolor,
         linewidth=2,
@@ -189,7 +189,7 @@ def classification_probability_plot(
     ax.set_xlim(0.0, max_elements)
     ax.set_ylim(0.0, 1.02)
     ax.set_ylabel("P( a = b | dist(a,b) <= d)")
-    ax.legend(loc="upper right")
+    ax.legend(loc="lower left")
 
     return ax
 
@@ -334,6 +334,7 @@ def analysis_styling(analyses) -> dict[str, tuple[str, str]]:
     colormap = {}
     for i, analysis in enumerate(analyses):
         linetype = ":" if "unprocessed" in analysis.normalizer.name else "-"
+
         tool = analysis.tool.name
         if tool not in colormap.keys():
             colormap[tool] = colors[int(((i + 1) / 2) % len(colors))]
@@ -355,7 +356,7 @@ def fscore_comparison_figure(
 ):
     fig, axes = plt.subplots(1, 1, sharey=True, layout="constrained")
     fig.suptitle(
-        "Comparison of p( A classified as B | distance(A,B) <= d) across tools",
+        "Classification comparison of unprocessed and compiled-decompiled code",
         fontsize=16,
     )
     styles = analysis_styling([v for v in analyses.values()])
@@ -364,7 +365,7 @@ def fscore_comparison_figure(
         style = styles[name]
         classification_probability_plot(
             ax=axes,
-            toolname=analysis.tool.name,
+            toolname=f"{analysis.tool.name} on {analysis.normalizer.name} data",
             linetype=style[0],
             linecolor=style[1],
             distances=analysis.distance_node.pull(bld),

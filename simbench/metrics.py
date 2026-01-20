@@ -5,9 +5,7 @@ from abc import ABC, abstractmethod
 from simbench.compressors import Compressor
 
 
-class CompressionMetric(ABC):
-    compressor: Compressor
-
+class Metric(ABC):
     @property
     @abstractmethod
     def name(self) -> str: ...
@@ -32,12 +30,12 @@ class CompressionMetric(ABC):
 
         return dist_df
 
-    def time_expr(self):
-        return pl.col("src_time") + pl.col("tgt_time") + pl.col("srctgt_time")
+    @abstractmethod
+    def time_expr(self) -> pl.Expr: ...
 
 
 @dataclass(frozen=True)
-class NCD(CompressionMetric):
+class NCD(Metric):
     @property
     def name(self) -> str:
         return "ncd"
@@ -47,3 +45,20 @@ class NCD(CompressionMetric):
             (pl.col("srctgt_comp") - pl.min_horizontal("src_comp", "tgt_comp"))
             / pl.max_horizontal("src_comp", "tgt_comp")
         ).cast(pl.Float32)
+
+    def time_expr(self) -> pl.Expr:
+        return pl.col("src_time") + pl.col("tgt_time") + pl.col("srctgt_time")
+
+
+class DiffMetric(Metric):
+    @property
+    def name(self) -> str:
+        return "diffdistance"
+
+    def metric_expr(self) -> pl.Expr:
+        return (pl.min_horizontal("tgt_len", "diff_len") / pl.col("tgt_len")).cast(
+            pl.Float32
+        )
+
+    def time_expr(self) -> pl.Expr:
+        return pl.col("diff_time")

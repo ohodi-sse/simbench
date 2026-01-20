@@ -1,6 +1,6 @@
 import polars as pl
 
-from simbench.analysis import Analysis
+from simbench.analysis import init_analysis
 from simbench.classification import (
     KNN,
 )
@@ -11,7 +11,7 @@ def test_best_match_classify(test_tool, test_suite, test_bld, test_normalizer):
 
     bm_classifier = KNN(1)
 
-    analysis = Analysis(
+    analysis = init_analysis(
         tool=test_tool,
         suite=test_suite,
         classifiers=[bm_classifier],
@@ -30,7 +30,7 @@ def test_knn_classify(test_tool, test_suite, test_bld, test_normalizer):
     test_src = "test2.java"
 
     classifier = KNN(3)
-    analysis = Analysis(
+    analysis = init_analysis(
         tool=test_tool,
         suite=test_suite,
         classifiers=[classifier],
@@ -48,7 +48,7 @@ def test_knn_classify(test_tool, test_suite, test_bld, test_normalizer):
 def test_performance_overview(
     test_tool, test_suite, test_bld, test_classifiers, test_normalizer
 ):
-    analysis = Analysis(
+    analysis = init_analysis(
         tool=test_tool,
         suite=test_suite,
         classifiers=test_classifiers,

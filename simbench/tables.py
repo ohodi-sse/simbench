@@ -13,8 +13,8 @@ from simbench.build import (
     tablenode,
     Builder,
 )
-from simbench.compressors import Compressor
-from simbench.metrics import CompressionMetric
+from simbench.compressors import Compressor, Diff
+from simbench.metrics import Metric
 
 
 class CompressionTable:
@@ -106,6 +106,52 @@ def pairwise_compressions(
     return out.getvalue()
 
 
+class DiffTable:
+    src: pl.String
+    tgt: pl.String
+    src_label: pl.String
+    tgt_label: pl.String
+    tgt_len: pl.UInt64
+    diff_len: pl.UInt64
+    diff_time: pl.UInt64
+
+
+@tablenode(schema(DiffTable))
+def pairwise_diff(
+    schema: pl.Schema,
+    bld: Builder,
+    diff: Diff,
+    **sources,
+):
+    out = TableBuilder(schema)
+
+    bld.log.info(f"Computing pairwise diffs table for {diff.name}")
+
+    byte_lookup = {name: src.get_bytes() for name, src in sources.items()}  # For speed
+    srcs = [src for _, src in sources.items()]
+
+    n = len(byte_lookup) ** 2
+    with bld.progressbar(n) as pb:
+        for src, tgt in itertools.product(srcs, repeat=2):
+            pb.inc(1)
+
+            with bld.profile() as timed:
+                diffbytes = diff(byte_lookup[src.name], byte_lookup[tgt.name])
+            difflen = len(diffbytes)
+            tgtlen = len(byte_lookup[tgt.name].decode("utf-8"))
+            out.add(
+                src=src.name,
+                tgt=tgt.name,
+                src_label=src.label,
+                tgt_label=tgt.label,
+                tgt_len=tgtlen,
+                diff_len=difflen,
+                diff_time=timed(),
+            )
+
+    return out.getvalue()
+
+
 class DistanceTable:
     src: pl.String
     tgt: pl.String
@@ -116,10 +162,10 @@ class DistanceTable:
 
 
 @tablenode(schema(DistanceTable))
-def distances(
+def comp_distances(
     schema: pl.Schema,
     bld: Builder,
-    metric: CompressionMetric,
+    metric: Metric,
     comp_df: pl.LazyFrame,
     compare_comp_df: pl.LazyFrame,
 ) -> pl.LazyFrame:
@@ -141,6 +187,22 @@ def distances(
     metric_df = comp_file_df.join(compare_comp_df, on=["src", "tgt"], how="inner")
 
     out.from_lazyframe(metric(metric_df))
+
+    return out.getvalue()
+
+
+@tablenode(schema(DistanceTable))
+def diff_distances(
+    schema: pl.Schema,
+    bld: Builder,
+    metric: Metric,
+    diff_df: pl.LazyFrame,
+) -> pl.LazyFrame:
+    out = TableBuilder(schema)
+
+    bld.log.info(f"Computing distance using {metric.name}")
+
+    out.from_lazyframe(metric(diff_df))
 
     return out.getvalue()
 

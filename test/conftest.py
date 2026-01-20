@@ -3,10 +3,14 @@ from pathlib import Path
 from loguru import logger
 import shutil
 
-from simbench.analysis import Analysis, get_all_classifiers, get_all_tools
-from simbench.build import IDNormalizer, Suite, Builder
-from simbench.classification import KNN
-from simbench.normalizers import CompileDecompileNormalizer
+from simbench.analysis import (
+    CompressionAnalysis,
+    init_analysis,
+    get_all_classifiers,
+    get_all_normalizers,
+    get_all_tools,
+)
+from simbench.build import Suite, Builder
 
 
 @pytest.fixture(scope="session")
@@ -33,14 +37,14 @@ def test_classifiers(test_suite):
     return get_all_classifiers(len(list(max_files)))
 
 
-@pytest.fixture(params=[IDNormalizer(), CompileDecompileNormalizer()])
+@pytest.fixture(params=[n for n in get_all_normalizers()])
 def test_normalizer(request):
     return request.param
 
 
 @pytest.fixture(scope="function")
 def test_analysis(test_tool, test_suite, test_classifiers, test_normalizer):
-    analysis = Analysis(
+    analysis = init_analysis(
         tool=test_tool,
         suite=test_suite,
         classifiers=test_classifiers,

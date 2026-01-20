@@ -1,3 +1,4 @@
+from simbench.analysis import CompressionAnalysis
 from simbench.build import Node, schema
 from simbench.tables import (
     CompressionTable,
@@ -9,22 +10,24 @@ import polars as pl
 
 
 def test_comp_node(test_analysis, test_bld):
-    comp_node = test_analysis.comp_node
-    assert isinstance(comp_node, Node)
+    if isinstance(test_analysis, CompressionAnalysis):
+        comp_node = test_analysis.comp_node
+        assert isinstance(comp_node, Node)
 
-    comp_df = comp_node.pull(test_bld)
-    assert isinstance(comp_df, pl.LazyFrame)
+        comp_df = comp_node.pull(test_bld)
+        assert isinstance(comp_df, pl.LazyFrame)
 
-    assert schema(CompressionTable) == comp_df.collect().schema
+        assert schema(CompressionTable) == comp_df.collect().schema
 
 
 def test_pair_node(test_analysis, test_bld):
-    pair_node = test_analysis.pair_node
-    assert isinstance(pair_node, Node)
+    if isinstance(test_analysis, CompressionAnalysis):
+        pair_node = test_analysis.pair_node
+        assert isinstance(pair_node, Node)
 
-    pair_df = pair_node.pull(test_bld)
-    assert isinstance(pair_df, pl.LazyFrame)
-    assert schema(PairwiseCompressionTable) == pair_df.collect().schema
+        pair_df = pair_node.pull(test_bld)
+        assert isinstance(pair_df, pl.LazyFrame)
+        assert schema(PairwiseCompressionTable) == pair_df.collect().schema
 
 
 def test_dist_node(test_analysis, test_bld):

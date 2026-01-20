@@ -6,8 +6,10 @@ from numpy import arange
 
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
-from simbench.compressors import Compressor
-from simbench.metrics import CompressionMetric
+
+from pytest import Class
+from simbench.compressors import Compressor, Diff, Difflib
+from simbench.metrics import Metric
 import time
 from loguru import logger
 
@@ -24,7 +26,9 @@ from simbench.normalizers import CompileDecompileNormalizer
 from simbench.tables import (
     compressions,
     pairwise_compressions,
-    distances,
+    comp_distances,
+    diff_distances,
+    pairwise_diff,
     classifications,
     performance,
 )
@@ -39,6 +43,8 @@ Logger = type(logger)
 
 @dataclass
 class Tool(ABC):
+    metric: Metric
+
     @property
     @abstractmethod
     def name(self) -> str: ...
@@ -51,7 +57,6 @@ class Tool(ABC):
 
 @dataclass
 class CompressionTool(Tool):
-    metric: CompressionMetric
     compressor: Compressor
 
     @property
@@ -59,20 +64,32 @@ class CompressionTool(Tool):
         return f"{self.compressor.name}-{self.compressor.level}-{self.metric.name}"
 
 
+@dataclass
+class DiffTool(Tool):
+    diff: Diff
+
+    @property
+    def name(self):
+        return f"{self.diff.name}-{self.metric.name}"
+
+
 def get_all_tools():
     from simbench.compressors import Zstd, Gzip, Zlib
     from simbench.metrics import NCD
+    from simbench.metrics import DiffMetric
 
     comp_lvls = [1, 2, 3, 5, 7, 9]
     zlib = [Zlib(comp_lvl) for comp_lvl in comp_lvls]
     gzip = [Gzip(comp_lvl) for comp_lvl in comp_lvls]
     zstd = [Zstd(comp_lvl) for comp_lvl in comp_lvls]
+    diffs = [Difflib()]
+
     compressors = zlib + gzip + zstd
+    comp_metrics = [NCD()]
 
-    metrics = [NCD()]
-
-    tools = [CompressionTool(m, c) for c in compressors for m in metrics]
-
+    comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
+    diff_tools = [DiffTool(DiffMetric(), Difflib())]
+    tools = diff_tools + comp_tools
     return tools
 
 
@@ -118,8 +135,8 @@ class Config:
 
 # The analysis dataclass specifies the structure of the project, and how things are stored.
 @dataclass
-class Analysis:
-    tool: CompressionTool
+class Analysis(ABC):
+    tool: Tool
     suite: Suite
     classifiers: list[Classifier]
     normalizer: Normalizer
@@ -128,7 +145,7 @@ class Analysis:
         assert isinstance(self.suite, Suite), (
             "Must provide a Suite object when creating an Analysis object."
         )
-        assert isinstance(self.tool, CompressionTool)
+        assert isinstance(self.tool, Tool)
 
     @property
     def default_path(self):
@@ -141,14 +158,6 @@ class Analysis:
     @property
     def parameter_name(self):
         return f"{self.normalizer.name}_{self.tool.name}"
-
-    @property
-    def compression_file(self):
-        return self.default_path / "compressions.parquet"
-
-    @property
-    def pairwise_compression_file(self):
-        return self.default_path / "pairwise_compressions.parquet"
 
     @property
     def distance_file(self):
@@ -183,29 +192,8 @@ class Analysis:
         }
 
     @property
-    def comp_node(self):
-        return compressions(
-            self.compression_file,
-            compressor=Constant(self.tool.compressor),
-            **self.source_nodes,
-        )
-
-    @property
-    def pair_node(self):
-        return pairwise_compressions(
-            self.pairwise_compression_file,
-            compressor=Constant(self.tool.compressor),
-            **self.source_nodes,
-        )
-
-    @property
-    def distance_node(self):
-        return distances(
-            self.distance_file,
-            metric=Constant(self.tool.metric),
-            comp_df=self.comp_node,
-            compare_comp_df=self.pair_node,
-        )
+    @abstractmethod
+    def distance_node(self): ...
 
     @property
     def classification_nodes(self):
@@ -241,6 +229,81 @@ class Analysis:
         return classification_overview_figure(self.classification_plot_file)
 
 
+class CompressionAnalysis(Analysis):
+    def __post_init__(self):
+        assert isinstance(self.tool, CompressionTool)
+
+    @property
+    def compression_file(self):
+        return self.default_path / "compressions.parquet"
+
+    @property
+    def pairwise_compression_file(self):
+        return self.default_path / "pairwise_compressions.parquet"
+
+    @property
+    def comp_node(self):
+        return compressions(
+            self.compression_file,
+            compressor=Constant(self.tool.compressor),
+            **self.source_nodes,
+        )
+
+    @property
+    def pair_node(self):
+        return pairwise_compressions(
+            self.pairwise_compression_file,
+            compressor=Constant(self.tool.compressor),
+            **self.source_nodes,
+        )
+
+    @property
+    def distance_node(self):
+        return comp_distances(
+            self.distance_file,
+            metric=Constant(self.tool.metric),
+            comp_df=self.comp_node,
+            compare_comp_df=self.pair_node,
+        )
+
+
+class DiffAnalysis(Analysis):
+    def __post_init__(self):
+        assert isinstance(self.tool, DiffTool)
+
+    @property
+    def diff_file(self):
+        return self.default_path / "diffs.parquet"
+
+    @property
+    def diff_node(self):
+        return pairwise_diff(
+            self.diff_file,
+            diff=Constant(self.tool.diff),
+            **self.source_nodes,
+        )
+
+    @property
+    def distance_node(self):
+        return diff_distances(
+            self.distance_file,
+            metric=Constant(self.tool.metric),
+            diff_df=self.diff_node,
+        )
+
+
+def init_analysis(
+    tool: Tool, suite: Suite, classifiers: list[Classifier], normalizer: Normalizer
+):
+    if isinstance(tool, CompressionTool):
+        return CompressionAnalysis(tool, suite, classifiers, normalizer)
+
+    if isinstance(tool, DiffTool):
+        return DiffAnalysis(tool, suite, classifiers, normalizer)
+
+    assert False, f"Unrecognized tool type: {type(tool)}"
+
+
 @dataclass
 class AnalysisComparison:
     suite: Suite
@@ -251,7 +314,7 @@ class AnalysisComparison:
     @property
     def analyses(self):
         analyses = [
-            Analysis(tool, self.suite, self.classifiers, normalizer)
+            init_analysis(tool, self.suite, self.classifiers, normalizer)
             for tool in self.tools
             for normalizer in self.normalizers
         ]

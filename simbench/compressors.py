@@ -6,6 +6,7 @@ import zstd
 import gzip
 import zlib
 import lzma
+import difflib
 
 
 @dataclass
@@ -87,3 +88,29 @@ class Gzip(Compressor):
         assert self.level in range(1, 10), (
             f"Compression level {self.level} is out of range"
         )
+
+
+class Diff(ABC):
+    @abstractmethod
+    def __call__(self, file: bytes, file2: bytes) -> str: ...
+
+    def diff_length(self, content: bytes) -> int:
+        buffer = io.BytesIO()
+        self(content, buffer)
+        return buffer.getbuffer().nbytes
+
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
+
+
+class Difflib(Diff):
+    @property
+    def name(self) -> str:
+        return "difflib"
+
+    def __call__(self, file1: bytes, file2: bytes) -> str:
+        strls1 = file1.decode("utf-8").splitlines(keepends=True)
+        strls2 = file2.decode("utf-8").splitlines(keepends=True)
+        diff = difflib.unified_diff(strls1, strls2, n=0)
+        return "".join(diff)

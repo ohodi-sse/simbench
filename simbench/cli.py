@@ -1,5 +1,9 @@
 import click
 from pathlib import Path
+import polars as pl
+from loguru import logger
+import matplotlib.pyplot as plt
+
 
 from simbench.build import (
     Builder,
@@ -7,13 +11,12 @@ from simbench.build import (
     Suite,
 )
 
-from simbench.analysis import Analysis, AnalysisComparison
-
-from simbench.analysis import Config
-import polars as pl
-from loguru import logger
-import matplotlib.pyplot as plt
-
+from simbench.analysis import (
+    CompressionAnalysis,
+    AnalysisComparison,
+    Config,
+    init_analysis,
+)
 from simbench.normalizers import CompileDecompileNormalizer
 
 
@@ -70,7 +73,9 @@ def analyse(cfg, suite, tool_pattern, normalizer_pattern, classifier_pattern):
                 c for c in cfg.classifiers if c.matches(classifier_pattern)
             ]
             cfg.log.info(f"Using the following classifiers {filtered_classifiers}")
-            analysis = Analysis(tool, Suite(suite), filtered_classifiers, normalizer)
+            analysis = init_analysis(
+                tool, Suite(suite), filtered_classifiers, normalizer
+            )
 
             analysis.performance_node.pull(bld)
 
@@ -97,7 +102,7 @@ def plot(cfg, suite, tool_pattern, classifier_pattern, show) -> None:
         filtered_classifiers = [
             c for c in cfg.classifiers if c.matches(classifier_pattern)
         ]
-        analysis = Analysis(
+        analysis = init_analysis(
             tool,
             Suite(suite),
             filtered_classifiers,
