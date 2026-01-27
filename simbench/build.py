@@ -61,6 +61,15 @@ class Builder:
         pb.finish()
 
 
+class NamedCallable(Protocol):
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
+
+    @abstractmethod
+    def __call__(self, file1: bytes, file2: bytes) -> float: ...
+
+
 class Pullable[A](ABC):
     @abstractmethod
     def pull(self, bld) -> A: ...
@@ -175,8 +184,8 @@ class FigureStore(Store[Figure]):
         return None  # Returning None will always overwrite the plot
 
     def store(self, item: Figure, bld):
-        page_width, page_height = 8.3, 11.7  # A4 size in inches
-        item.set_size_inches(page_width, page_height)
+        # page_width, page_height = 8.3, 11.7  # A4 size in inches
+        # item.set_size_inches(page_width, page_height)
         item.savefig(self.file, format="pdf", bbox_inches="tight", pad_inches=1.5)
         assert self.file.exists(), f"Failed to create file {self.file}"
 

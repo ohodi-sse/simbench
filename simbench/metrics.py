@@ -62,3 +62,15 @@ class DiffMetric(Metric):
 
     def time_expr(self) -> pl.Expr:
         return pl.col("diff_time")
+
+
+class GenericMetric(Metric):
+    @property
+    def name(self) -> str:
+        return "derived"
+
+    def metric_expr(self) -> pl.Expr:
+        return pl.col("distance")
+
+    def time_expr(self) -> pl.Expr:
+        return pl.col("time")

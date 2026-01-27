@@ -1,0 +1,9 @@
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        int int1;
+        int i;
+        for (int1 = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine()), i = 128; i > int1; i /= 2) {}
+        System.out.println(i);
+    }
+}

@@ -1,0 +1,13 @@
+public class Main
+{
+    static double eps;
+    
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        System.out.println(scanner.nextLong() * (long)((Main.eps + scanner.nextDouble()) * 100.0) / 100L);
+    }
+    
+    static {
+        Main.eps = 1.0E-14;
+    }
+}

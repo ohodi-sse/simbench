@@ -1,0 +1,9 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final String plainString = new BigDecimal(String.valueOf(scanner.next())).multiply(new BigDecimal(String.valueOf(scanner.next()))).setScale(0, RoundingMode.DOWN).toPlainString();
+        scanner.close();
+        System.out.println(plainString);
+    }
+}

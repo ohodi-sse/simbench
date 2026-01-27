@@ -1,0 +1,19 @@
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        final String line = bufferedReader.readLine();
+        final String line2 = bufferedReader.readLine();
+        int x = 0;
+        if (line.substring(0, 1).equals(line2.substring(0, 1))) {
+            ++x;
+        }
+        if (line.substring(1, 2).equals(line2.substring(1, 2))) {
+            ++x;
+        }
+        if (line.substring(2, 3).equals(line2.substring(2, 3))) {
+            ++x;
+        }
+        System.out.println(x);
+    }
+}

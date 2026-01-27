@@ -1,0 +1,23 @@
+class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final String line = new BufferedReader(new InputStreamReader(System.in)).readLine();
+        int i = 0;
+        int x = 0;
+        int n = 0;
+        while (i < 3) {
+            if (line.charAt(i) == 'R') {
+                ++x;
+                ++n;
+            }
+            else if (x == 1) {
+                x = 0;
+            }
+            ++i;
+        }
+        if (x == 0 && n == 1) {
+            x = n;
+        }
+        System.out.println(x);
+    }
+}

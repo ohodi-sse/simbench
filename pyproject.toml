@@ -14,6 +14,7 @@ readme = "README.md"
 requires-python = ">=3.13"
 license = "BSD-3-Clause"
 dependencies = [
+    "bsdiff4>=1.2.6",
     "click>=8.3.0",
     "jupyter>=1.1.1",
     "loguru>=0.7.3",
@@ -28,6 +29,8 @@ dependencies = [
     "pytest-xdist>=3.8.0",
     "scikit-learn>=1.7.2",
     "statsmodels>=0.14.5",
+    "tree-sitter>=0.25.2",
+    "tree-sitter-java>=0.23.5",
     "zstandard>=0.25.0",
     "zstd>=1.5.7.2",
 ]

@@ -1,0 +1,28 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        final ArrayList list = new ArrayList();
+        int x = nextInt;
+        for (int i = 0; i < nextInt2; ++i) {
+            list.add(scanner.nextInt());
+        }
+        for (int j = 0; j <= nextInt2; ++j) {
+            if (!list.contains(nextInt - j)) {
+                x = nextInt - j;
+                break;
+            }
+            if (!list.contains(nextInt + j)) {
+                x = nextInt + j;
+                break;
+            }
+        }
+        if (nextInt2 > 100) {
+            System.out.println("error");
+        }
+        System.out.println(x);
+        scanner.close();
+    }
+}

@@ -1,0 +1,10 @@
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final String[] split = new BufferedReader(new InputStreamReader(System.in)).readLine().split(" ");
+        final long long1 = Long.parseLong(split[0]);
+        final double double1 = Double.parseDouble(split[1]);
+        final long n = (long)double1 * 100L;
+        System.out.println(long1 * (long)(double1 * 100.0 + 0.001) / 100L);
+    }
+}

@@ -1,5 +1,6 @@
-# import tree_sitter as ts
-# import tree_sitter_java as java
+import tree_sitter as ts
+import tree_sitter_java as tsjava
+
 from simbench.build import Normalizer, Source
 from pathlib import Path
 import subprocess
@@ -7,25 +8,60 @@ import shutil
 from loguru import logger
 
 
-# def treesitter_normalizer():
-#     ignore = ["comments", "imports"]
-#
-#     cursor = root.walk()
-#     godeeper = True
-#     while True:
-#         assert cursor.node is not None
-#         if godeeper and cursor.node.type not in ignore:
-#             if not cursor.goto_first_child():
-#                 print(cursor.text)
-#                 godeeper = False
-#         elif cursor.goto_next_sibling():
-#             godeeper = True
-#         elif cursor.goto_parent():
-#             godeeper = False
-#         else:
-#             break
-#
-#
+TOOLSPATH = Path("processing_tools")
+
+
+class ImportCommentRemover(Normalizer):
+    @property
+    def name(self):
+        return "imports_removed"
+
+    def process(self, src: Source) -> Source:
+        bs = src.get_bytes()
+
+        new_bytes = bytearray(bs)
+        parser = ts.Parser(ts.Language(tsjava.language()))
+        tree = parser.parse(bs)
+
+        query = ts.Query(
+            ts.Language(tsjava.language()),
+            "[(import_declaration) (line_comment)] @item",
+        )
+        queryCursor = ts.QueryCursor(query)
+        captures = queryCursor.captures(tree.root_node)
+        if captures:
+            ranges = [(node.start_byte, node.end_byte) for node in captures["item"]]
+
+            for start, end in sorted(ranges, reverse=True):
+                del new_bytes[start:end]
+
+        new_bytes = new_bytes.strip()
+        # cursor = tree.walk()
+        # godeeper = True
+        # while True:
+        #     assert cursor.node is not None
+        #     logger.debug(cursor.node)
+        #     if godeeper and cursor.node.type in ignore:
+        #         cursor.goto_next_sibling()
+        #         if not cursor.goto_first_child():
+        #             godeeper = False
+        #             logger.info(cursor.node)
+        #             new_bytes += cursor.node.text + b"\n" if cursor.node.text else b""
+        #     elif cursor.goto_next_sibling():
+        #         godeeper = True
+        #     elif cursor.goto_parent():
+        #         godeeper = False
+        #     else:
+        #         break
+
+        processed_file = self.new_path(src)
+        processed_file.parent.mkdir(parents=True, exist_ok=True)
+        processed_file.touch()
+        processed_file.write_bytes(bytes(new_bytes))
+
+        assert processed_file.exists()
+
+        return Source(processed_file)
 
 
 class GoogleFormatter(Normalizer):
@@ -34,7 +70,7 @@ class GoogleFormatter(Normalizer):
         return "google_java_formatted"
 
     def process(self, src: Source) -> Source:
-        toolspath = Path("processing_tools") / "google_java_formatter"
+        toolspath = TOOLSPATH / "google_java_formatter"
         formatter_path = toolspath / "google-java-format-1.33.0-all-deps.jar"
         processed_file = self.new_path(src)
         processed_file.parent.mkdir(parents=True, exist_ok=True)
@@ -61,7 +97,7 @@ class CompileDecompileNormalizer(Normalizer):
         return "decompiled"
 
     def process(self, src: Source) -> Source:
-        toolspath = Path("processing_tools") / "compiledecompile"
+        toolspath = TOOLSPATH / "compiledecompile"
         tmp_dir = src.path.parent / Path(f"{src.name}-tmp")
 
         tmp_dir.mkdir(parents=True, exist_ok=True)
@@ -93,6 +129,72 @@ class CompileDecompileNormalizer(Normalizer):
 
                 assert processed_bytes.returncode == 0, f"{processed_bytes.stderr}"
                 outfile.write(processed_bytes.stdout)
+
+        shutil.rmtree(tmp_dir)
+        assert not tmp_file.exists()
+
+        return Source(processed_file)
+
+
+class DecompileWOImports(Normalizer):
+    @property
+    def name(self):
+        return "decompiled_wo_imports"
+
+    def process(self, src: Source) -> Source:
+        toolspath = TOOLSPATH / "compiledecompile"
+        tmp_dir = src.path.parent / Path(f"{src.name}-tmp")
+
+        tmp_dir.mkdir(parents=True, exist_ok=True)
+        tmp_file = tmp_dir / "Main.java"
+
+        tmp_file.write_bytes(src.get_bytes())
+        logger.debug(f"Compiling {src.name}")
+        compiled_bytes = subprocess.run(
+            ["javac", "-d", tmp_dir, tmp_file], capture_output=True
+        )
+        assert compiled_bytes.returncode == 0, f"{compiled_bytes.stderr}"
+        decompiler_path = toolspath / "procyon-decompiler-0.6.0.jar"
+
+        processed_file = self.new_path(src)
+        processed_file.parent.mkdir(parents=True, exist_ok=True)
+        processed_file.touch()
+
+        logger.debug(f"Decompiling {src.name}")
+        with open(processed_file, "ab") as outfile:
+            for filename in tmp_dir.iterdir():
+                if filename == processed_file or not filename.name.endswith(".class"):
+                    # don't want to copy the output into the output
+                    continue
+                logger.debug(f"Found class {filename.name}")
+                processed_bytes = subprocess.run(
+                    ["java", "-jar", decompiler_path, filename],
+                    capture_output=True,
+                )
+
+                assert processed_bytes.returncode == 0, f"{processed_bytes.stderr}"
+
+                new_bytes = bytearray(processed_bytes.stdout)
+                parser = ts.Parser(ts.Language(tsjava.language()))
+                tree = parser.parse(processed_bytes.stdout)
+
+                query = ts.Query(
+                    ts.Language(tsjava.language()),
+                    "[(import_declaration) (line_comment)] @item",
+                )
+                queryCursor = ts.QueryCursor(query)
+                captures = queryCursor.captures(tree.root_node)
+                if captures:
+                    ranges = [
+                        (node.start_byte, node.end_byte) for node in captures["item"]
+                    ]
+
+                    for start, end in sorted(ranges, reverse=True):
+                        del new_bytes[start:end]
+
+                new_bytes = new_bytes.strip()
+
+                outfile.write(new_bytes)
 
         shutil.rmtree(tmp_dir)
         assert not tmp_file.exists()

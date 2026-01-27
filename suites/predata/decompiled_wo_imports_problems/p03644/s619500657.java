@@ -1,0 +1,21 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        int nextInt = new Scanner(System.in).nextInt();
+        if (nextInt % 2 == 1) {
+            --nextInt;
+        }
+        int n = 0;
+        int x = 1;
+        for (int i = 2; i <= nextInt; i += 2) {
+            int n2 = 0;
+            for (int n3 = i; n3 / 2 != 0; n3 /= 2, ++n2) {}
+            ++n2;
+            if (n < n2) {
+                n = n2;
+                x = i;
+            }
+        }
+        System.out.println(x);
+    }
+}

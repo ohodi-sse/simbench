@@ -1,0 +1,20 @@
+public class Main {
+
+	public static void main(String[] args) {
+		Scanner ob=new Scanner(System.in);
+		String s=ob.next();
+		int a[]=new int[s.length()];
+		int k=0;
+		for (int i=0; i<s.length(); i++) {
+			if (s.charAt(i)=='R') {
+				a[k]++;
+			}
+			else {
+				k++;
+			}
+		}
+	                   Vector  v=new Vector ();
+		for(int i=0;i<a.length;i++){v.add(a[i]);}
+		System.out.println(Collections.max(v));
+	}
+}

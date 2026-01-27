@@ -1,0 +1,27 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        final String next = new Scanner(System.in).next();
+        int x = 0;
+        int n = 0;
+        final char[] array2 = new char[3];
+        for (int i = 0; i < 3; ++i) {
+            array2[i] = next.charAt(i);
+        }
+        for (int j = 0; j < 3; ++j) {
+            if (array2[j] == 'R') {
+                ++n;
+                if (x < n) {
+                    x = n;
+                }
+            }
+            else {
+                if (x < n) {
+                    x = n;
+                }
+                n = 0;
+            }
+        }
+        System.out.println(x);
+    }
+}

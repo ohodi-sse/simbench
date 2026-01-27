@@ -1,0 +1,16 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        final int nextInt = new Scanner(System.in).nextInt();
+        int x = 2;
+        if (nextInt == 1) {
+            System.out.println(1);
+        }
+        else {
+            while (x * 2 <= nextInt) {
+                x *= 2;
+            }
+            System.out.println(x);
+        }
+    }
+}

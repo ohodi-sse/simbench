@@ -1,0 +1,20 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final String next = scanner.next();
+        final String next2 = scanner.next();
+        scanner.close();
+        final String[] array2 = new String[3];
+        final String[] array3 = new String[3];
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            array2[i] = next.substring(i, i + 1);
+            array3[i] = next2.substring(i, i + 1);
+            if (array2[i].equals(array3[i])) {
+                ++x;
+            }
+        }
+        System.out.println(x);
+    }
+}

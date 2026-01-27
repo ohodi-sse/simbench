@@ -1,0 +1,19 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final String next = scanner.next();
+        int x = 0;
+        for (int i = 0; i < next.length(); ++i) {
+            if (next.charAt(i) == 'R') {
+                int n;
+                for (n = 0; i < next.length() && next.charAt(i) == 'R'; ++i, ++n) {}
+                if (x < n) {
+                    x = n;
+                }
+            }
+        }
+        System.out.println(x);
+        scanner.close();
+    }
+}

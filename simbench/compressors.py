@@ -1,6 +1,7 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 import io
+from simbench.build import NamedCallable
 
 import zstd
 import gzip
@@ -92,25 +93,39 @@ class Gzip(Compressor):
 
 class Diff(ABC):
     @abstractmethod
-    def __call__(self, file: bytes, file2: bytes) -> str: ...
+    def __call__(self, file: bytes, file2: bytes, out: io.BytesIO) -> None: ...
 
-    # def diff_length(self, content: bytes) -> int:
-    #     buffer = io.BytesIO()
-    #     self(content, buffer)
-    #     return buffer.getbuffer().nbytes
+    def diff_length(self, file: bytes, file2: bytes) -> int:
+        buffer = io.BytesIO()
+        self(file, file2, buffer)
+        return buffer.getbuffer().nbytes
 
     @property
     @abstractmethod
     def name(self) -> str: ...
 
 
-class Difflib(Diff):
+class BSDiff(Diff):
+    @property
+    def name(self) -> str:
+        return "bsdiff"
+
+    def __call__(self, file: bytes, file2: bytes, out: io.BytesIO) -> None:
+        import bsdiff4
+
+        out.write(bsdiff4.diff(file, file2))
+
+
+class Difflib(NamedCallable):
     @property
     def name(self) -> str:
         return "difflib"
 
-    def __call__(self, file1: bytes, file2: bytes) -> str:
+    def __call__(self, file1: bytes, file2: bytes) -> float:
         strls1 = file1.decode("utf-8").splitlines(keepends=True)
         strls2 = file2.decode("utf-8").splitlines(keepends=True)
-        diff = difflib.unified_diff(strls1, strls2, n=0)
-        return "".join(diff)
+        # diff = difflib.unified_diff(strls1, strls2, n=0)
+        similarity = difflib.SequenceMatcher(None, strls1, strls2).ratio()
+        distance = 1 - similarity
+
+        return distance

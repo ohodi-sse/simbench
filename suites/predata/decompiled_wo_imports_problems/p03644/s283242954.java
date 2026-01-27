@@ -1,0 +1,6 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        System.out.println((int)Math.pow(2.0, (int)(Math.log(new Scanner(System.in).nextInt()) / Math.log(2.0))));
+    }
+}

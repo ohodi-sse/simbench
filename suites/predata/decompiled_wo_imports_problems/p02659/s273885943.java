@@ -1,0 +1,19 @@
+public class Main
+{
+    static BigDecimal A;
+    static BigDecimal B;
+    
+    public static void main(final String[] array) throws NumberFormatException, IOException {
+        read();
+    }
+    
+    private static void read() throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        final String[] split = bufferedReader.readLine().split(" ");
+        Main.A = BigDecimal.valueOf(Double.valueOf(split[0]));
+        Main.B = BigDecimal.valueOf(Double.valueOf(split[1]));
+        Main.A = Main.A.multiply(Main.B);
+        System.out.println(Main.A.longValue());
+        bufferedReader.close();
+    }
+}

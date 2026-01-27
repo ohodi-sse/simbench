@@ -1,0 +1,24 @@
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        final String[] split = bufferedReader.readLine().split(" ");
+        final int int1 = Integer.parseInt(split[0]);
+        final int int2 = Integer.parseInt(split[1]);
+        final String[] split2 = bufferedReader.readLine().split(" ");
+        final HashSet set = new HashSet();
+        for (int i = 0; i < int2; ++i) {
+            set.add(Integer.parseInt(split2[i]));
+        }
+        for (int j = 0; j <= 200; ++j) {
+            if (!set.contains(int1 - j)) {
+                System.out.println(int1 - j);
+                return;
+            }
+            if (!set.contains(int1 + j)) {
+                System.out.println(int1 + j);
+                return;
+            }
+        }
+    }
+}

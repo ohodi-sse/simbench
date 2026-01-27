@@ -1,5 +1,4 @@
 from typing import Sequence
-from _pytest.nodes import Node
 
 from contextlib import contextmanager
 from numpy import arange
@@ -7,8 +6,8 @@ from numpy import arange
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 
-from pytest import Class
-from simbench.compressors import Compressor, Diff, Difflib
+
+from simbench.compressors import BSDiff, Compressor, Diff
 from simbench.metrics import Metric
 import time
 from loguru import logger
@@ -22,7 +21,12 @@ from simbench.build import (
     source_node_builder,
 )
 from simbench.classification import Classifier
-from simbench.normalizers import CompileDecompileNormalizer, GoogleFormatter
+from simbench.normalizers import (
+    CompileDecompileNormalizer,
+    GoogleFormatter,
+    ImportCommentRemover,
+    DecompileWOImports,
+)
 from simbench.tables import (
     compressions,
     pairwise_compressions,
@@ -73,10 +77,24 @@ class DiffTool(Tool):
         return f"{self.diff.name}-{self.metric.name}"
 
 
+@dataclass
+class GenericTool(Tool):
+    from simbench.build import NamedCallable
+
+    generic: NamedCallable
+
+    @property
+    def name(self):
+        return f"{self.generic.name}-{self.metric.name}"
+
+    def __call__(self):
+        return self.generic
+
+
 def get_all_tools():
-    from simbench.compressors import Zstd, Gzip, Zlib
+    from simbench.compressors import Zstd, Gzip, Zlib, Difflib, BSDiff
     from simbench.metrics import NCD
-    from simbench.metrics import DiffMetric
+    from simbench.metrics import GenericMetric, DiffMetric
 
     comp_lvls = [1, 2, 3, 5, 7, 9]
     zlib = [Zlib(comp_lvl) for comp_lvl in comp_lvls]
@@ -87,8 +105,9 @@ def get_all_tools():
     comp_metrics = [NCD()]
 
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
-    diff_tools = [DiffTool(DiffMetric(), Difflib())]
-    tools = diff_tools + comp_tools
+    diff_tools = [DiffTool(DiffMetric(), BSDiff())]
+    other_tools = [GenericTool(GenericMetric(), Difflib())]
+    tools = diff_tools + other_tools + comp_tools
 
     return tools
 
@@ -110,7 +129,13 @@ def get_all_classifiers(*max_files) -> Sequence[Classifier]:
 
 
 def get_all_normalizers():
-    return [IDNormalizer(), CompileDecompileNormalizer(), GoogleFormatter()]
+    return [
+        IDNormalizer(),
+        GoogleFormatter(),
+        CompileDecompileNormalizer(),
+        ImportCommentRemover(),
+        DecompileWOImports(),
+    ]
 
 
 @dataclass
@@ -292,6 +317,22 @@ class DiffAnalysis(Analysis):
         )
 
 
+class GenericAnalysis(Analysis):
+    def __post_init__(self):
+        assert isinstance(self.tool, GenericTool)
+
+    @property
+    def distance_node(self):
+        from simbench.tables import generic_distances
+
+        assert isinstance(self.tool, GenericTool)
+        return generic_distances(
+            self.distance_file,
+            tool=Constant(self.tool.generic),
+            **self.source_nodes,
+        )
+
+
 def init_analysis(
     tool: Tool, suite: Suite, classifiers: list[Classifier], normalizer: Normalizer
 ):
@@ -300,6 +341,9 @@ def init_analysis(
 
     if isinstance(tool, DiffTool):
         return DiffAnalysis(tool, suite, classifiers, normalizer)
+
+    if isinstance(tool, GenericTool):
+        return GenericAnalysis(tool, suite, classifiers, normalizer)
 
     assert False, f"Unrecognized tool type: {type(tool)}"
 

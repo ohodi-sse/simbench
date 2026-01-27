@@ -1,0 +1,13 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final String next = scanner.next();
+        final String next2 = scanner.next();
+        final BigDecimal bigDecimal = new BigDecimal(next);
+        bigDecimal.setScale(0);
+        final BigDecimal multiplicand = new BigDecimal(next2);
+        multiplicand.setScale(2, RoundingMode.DOWN);
+        System.out.println(bigDecimal.multiply(multiplicand).longValue());
+    }
+}

@@ -8,7 +8,7 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay,
 )
 
-from simbench.build import figurenode, schema
+from simbench.build import IDNormalizer, figurenode, schema
 from simbench.tables import ClassificationTable, DistanceTable
 
 from matplotlib.patches import Patch
@@ -190,12 +190,13 @@ def classification_probability_plot(
         linewidth=2,
     )
     # ax.xaxis.set_major_formatter(StrMethodFormatter("{x:.0f}"))
-    ax.set_xlabel("n")
-    ax.grid(True)
+
+    ax.grid(True, which="both")
     ax.set_xlim(0.0, max_elements)
     ax.set_ylim(0.0, 1.02)
-    ax.set_ylabel("P( a = b | dist(a,b) <= d)")
-    ax.legend(loc="lower left")
+    ax.set_xlabel("n", fontsize=24)
+    ax.set_ylabel("P( a = b | dist(a,b) <= d)", fontsize=24)
+    ax.legend(loc="lower left", fontsize=24)
 
     return ax
 
@@ -253,7 +254,7 @@ def cluster_plot(ax: Axes, toolname: str | None, distances: pl.LazyFrame) -> Axe
     ax.set_xlabel("Distance")
     ax.set_xlim(0.0, 1.0)
     ax.set_ylabel("Score")
-    ax.legend(loc="upper right")
+    ax.legend(loc="upper right", fontsize=48)
     ax.set_title("Scores for distances")
 
     return ax
@@ -354,6 +355,15 @@ def analysis_styling(analyses, colors) -> dict[str, tuple[str, str]]:
     return styling
 
 
+def plot_critical_line(ax: Axes) -> Axes:
+    from numpy import arange
+
+    y = [r for r in arange(0.0, 1.2, 0.1)]
+    ax.plot([448500 for _ in y], y, linestyle=":", color="r")
+
+    return ax
+
+
 @figurenode
 def fscore_comparison_figure(
     bld: Builder,
@@ -363,13 +373,15 @@ def fscore_comparison_figure(
     font_manager.fontManager.addfont(font_path)
     plt.rcParams["font.family"] = "Atkinson Hyperlegible"
 
+    size_mul = 2
     fig, axes = plt.subplots(
-        1, 1, sharey=True, layout="constrained", figsize=(10, 5.625)
+        1,
+        1,
+        sharey=True,
+        layout="constrained",
+        figsize=(size_mul * 10, size_mul * 5.625),
     )
-    # fig.suptitle(
-    #     "Classification comparison of unprocessed and compiled-decompiled code",
-    #     fontsize=16,
-    # )
+
     github_light_syntax_colors = [
         "#CF222E",  # GitHub red
         "#8250DF",  # purple for functions
@@ -384,13 +396,14 @@ def fscore_comparison_figure(
         [v for v in analyses.values()], github_light_syntax_colors
     )
     tools = set([a.tool.name for a in analyses.values()])
-    print(tools)
+    plot_critical_line(ax=axes)
     for i, (name, analysis) in enumerate(analyses.items()):
+        naming = f"{analysis.tool.name} on {analysis.normalizer.name} data"
         if len(tools) > 1:
             style = styles[name]
             classification_probability_plot(
                 ax=axes,
-                toolname=f"{analysis.tool.name} on {analysis.normalizer.name} data",
+                toolname=naming,
                 linetype=style[0],
                 linecolor=style[1],
                 distances=analysis.distance_node.pull(bld),
@@ -398,9 +411,10 @@ def fscore_comparison_figure(
         else:
             classification_probability_plot(
                 ax=axes,
-                toolname=f"{analysis.tool.name} on {analysis.normalizer.name} data",
+                toolname=naming,
                 linetype=None,
                 linecolor=github_light_syntax_colors[i],
                 distances=analysis.distance_node.pull(bld),
             )
+
     return fig

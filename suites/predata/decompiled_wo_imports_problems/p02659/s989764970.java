@@ -1,0 +1,278 @@
+public class Main
+{
+    static Reader sc;
+    static BufferedWriter bw;
+    
+    public static void main(final String[] array) throws IOException {
+        println(String.valueOf(BigDecimal.valueOf(inputLong()).multiply(BigDecimal.valueOf(inputDouble())).setScale(0, RoundingMode.FLOOR)));
+        Main.bw.flush();
+        Main.bw.close();
+    }
+    
+    public static int inputInt() throws IOException {
+        return Main.sc.nextInt();
+    }
+    
+    public static long inputLong() throws IOException {
+        return Main.sc.nextLong();
+    }
+    
+    public static double inputDouble() throws IOException {
+        return Main.sc.nextDouble();
+    }
+    
+    public static String inputString() throws IOException {
+        return Main.sc.readLine();
+    }
+    
+    public static void print(final String str) throws IOException {
+        Main.bw.write(str);
+    }
+    
+    public static void printSp(final String s) throws IOException {
+        Main.bw.write(s);
+    }
+    
+    public static void println(final String s) throws IOException {
+        Main.bw.write(s);
+    }
+    
+    static {
+        Main.sc = new Reader();
+        Main.bw = new BufferedWriter(new OutputStreamWriter(System.out));
+    }
+    
+    static class Reader
+    {
+        private final int BUFFER_SIZE = 65536;
+        private DataInputStream din;
+        private byte[] buffer;
+        private int bufferPointer;
+        private int bytesRead;
+        
+        public Reader() {
+            this.din = new DataInputStream(System.in);
+            this.buffer = new byte[65536];
+            final int n = 0;
+            this.bytesRead = n;
+            this.bufferPointer = n;
+        }
+        
+        public Reader(final String name) throws IOException {
+            this.din = new DataInputStream(new FileInputStream(name));
+            this.buffer = new byte[65536];
+            final int n = 0;
+            this.bytesRead = n;
+            this.bufferPointer = n;
+        }
+        
+        public String readLine() throws IOException {
+            final byte[] bytes = new byte[64];
+            int length = 0;
+            byte read;
+            while ((read = this.read()) != -1 && read != 10) {
+                bytes[length++] = read;
+            }
+            return new String(bytes, 0, length);
+        }
+        
+        public int nextInt() throws IOException {
+            int n = 0;
+            byte b;
+            for (b = this.read(); b <= 32; b = this.read()) {}
+            final boolean b2 = b == 45;
+            if (b2) {
+                b = this.read();
+            }
+            do {
+                n = n * 10 + b - 48;
+            } while ((b = this.read()) >= 48 && b <= 57);
+            if (b2) {
+                return -n;
+            }
+            return n;
+        }
+        
+        public long nextLong() throws IOException {
+            long n = 0L;
+            byte b;
+            for (b = this.read(); b <= 32; b = this.read()) {}
+            final boolean b2 = b == 45;
+            if (b2) {
+                b = this.read();
+            }
+            do {
+                n = n * 10L + b - 48L;
+            } while ((b = this.read()) >= 48 && b <= 57);
+            if (b2) {
+                return -n;
+            }
+            return n;
+        }
+        
+        public double nextDouble() throws IOException {
+            double n = 0.0;
+            double n2 = 1.0;
+            byte b;
+            for (b = this.read(); b <= 32; b = this.read()) {}
+            final boolean b2 = b == 45;
+            if (b2) {
+                b = this.read();
+            }
+            do {
+                n = n * 10.0 + b - 48.0;
+            } while ((b = this.read()) >= 48 && b <= 57);
+            if (b == 46) {
+                byte read;
+                while ((read = this.read()) >= 48 && read <= 57) {
+                    n += (read - 48) / (n2 *= 10.0);
+                }
+            }
+            if (b2) {
+                return -n;
+            }
+            return n;
+        }
+        
+        private void fillBuffer() throws IOException {
+            final DataInputStream din = this.din;
+            final byte[] buffer = this.buffer;
+            final int n = 0;
+            this.bufferPointer = n;
+            this.bytesRead = din.read(buffer, n, 65536);
+            if (this.bytesRead == -1) {
+                this.buffer[0] = -1;
+            }
+        }
+        
+        private byte read() throws IOException {
+            if (this.bufferPointer == this.bytesRead) {
+                this.fillBuffer();
+            }
+            return this.buffer[this.bufferPointer++];
+        }
+        
+        public void close() throws IOException {
+            if (this.din == null) {
+                return;
+            }
+            this.din.close();
+        }
+    }
+}static class Reader
+{
+    private final int BUFFER_SIZE = 65536;
+    private DataInputStream din;
+    private byte[] buffer;
+    private int bufferPointer;
+    private int bytesRead;
+    
+    public Reader() {
+        this.din = new DataInputStream(System.in);
+        this.buffer = new byte[65536];
+        final int n = 0;
+        this.bytesRead = n;
+        this.bufferPointer = n;
+    }
+    
+    public Reader(final String name) throws IOException {
+        this.din = new DataInputStream(new FileInputStream(name));
+        this.buffer = new byte[65536];
+        final int n = 0;
+        this.bytesRead = n;
+        this.bufferPointer = n;
+    }
+    
+    public String readLine() throws IOException {
+        final byte[] bytes = new byte[64];
+        int length = 0;
+        byte read;
+        while ((read = this.read()) != -1 && read != 10) {
+            bytes[length++] = read;
+        }
+        return new String(bytes, 0, length);
+    }
+    
+    public int nextInt() throws IOException {
+        int n = 0;
+        byte b;
+        for (b = this.read(); b <= 32; b = this.read()) {}
+        final boolean b2 = b == 45;
+        if (b2) {
+            b = this.read();
+        }
+        do {
+            n = n * 10 + b - 48;
+        } while ((b = this.read()) >= 48 && b <= 57);
+        if (b2) {
+            return -n;
+        }
+        return n;
+    }
+    
+    public long nextLong() throws IOException {
+        long n = 0L;
+        byte b;
+        for (b = this.read(); b <= 32; b = this.read()) {}
+        final boolean b2 = b == 45;
+        if (b2) {
+            b = this.read();
+        }
+        do {
+            n = n * 10L + b - 48L;
+        } while ((b = this.read()) >= 48 && b <= 57);
+        if (b2) {
+            return -n;
+        }
+        return n;
+    }
+    
+    public double nextDouble() throws IOException {
+        double n = 0.0;
+        double n2 = 1.0;
+        byte b;
+        for (b = this.read(); b <= 32; b = this.read()) {}
+        final boolean b2 = b == 45;
+        if (b2) {
+            b = this.read();
+        }
+        do {
+            n = n * 10.0 + b - 48.0;
+        } while ((b = this.read()) >= 48 && b <= 57);
+        if (b == 46) {
+            byte read;
+            while ((read = this.read()) >= 48 && read <= 57) {
+                n += (read - 48) / (n2 *= 10.0);
+            }
+        }
+        if (b2) {
+            return -n;
+        }
+        return n;
+    }
+    
+    private void fillBuffer() throws IOException {
+        final DataInputStream din = this.din;
+        final byte[] buffer = this.buffer;
+        final int n = 0;
+        this.bufferPointer = n;
+        this.bytesRead = din.read(buffer, n, 65536);
+        if (this.bytesRead == -1) {
+            this.buffer[0] = -1;
+        }
+    }
+    
+    private byte read() throws IOException {
+        if (this.bufferPointer == this.bytesRead) {
+            this.fillBuffer();
+        }
+        return this.buffer[this.bufferPointer++];
+    }
+    
+    public void close() throws IOException {
+        if (this.din == null) {
+            return;
+        }
+        this.din.close();
+    }
+}

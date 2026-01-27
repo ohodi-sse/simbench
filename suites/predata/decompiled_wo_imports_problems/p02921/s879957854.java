@@ -1,0 +1,16 @@
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        final String[] split = bufferedReader.readLine().split("");
+        final String[] split2 = bufferedReader.readLine().split("");
+        final int[] array2 = new int[split.length];
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (split[i].equals(split2[i])) {
+                ++x;
+            }
+        }
+        System.out.println(x);
+    }
+}

@@ -1,0 +1,26 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        final int nextInt = new Scanner(System.in).nextInt();
+        int i = 1;
+        int n = 0;
+        int x = 1;
+        while (i <= nextInt) {
+            int n2 = i;
+            int n3 = 0;
+            while (n2 % 2 == 0) {
+                ++n3;
+                n2 /= 2;
+            }
+            if (n3 > n) {
+                x = i;
+                n = n3;
+                ++i;
+            }
+            else {
+                ++i;
+            }
+        }
+        System.out.println(x);
+    }
+}

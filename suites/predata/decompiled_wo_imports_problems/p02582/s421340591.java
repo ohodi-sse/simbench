@@ -1,0 +1,88 @@
+class Main
+{
+    static BufferedReader f;
+    static PrintWriter out;
+    static StringTokenizer st;
+    
+    public static void main(final String[] array) throws IOException {
+        setIO();
+        final char[] charArray = Main.f.readLine().toCharArray();
+        int max = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (charArray[i] == 'R') {
+                int n;
+                for (n = i; n < 2 && charArray[n + 1] == 'R'; ++n) {}
+                max = Math.max(max, n - i + 1);
+            }
+        }
+        Main.out.println(max);
+        Main.f.close();
+        Main.out.close();
+    }
+    
+    static boolean[] generate(final int n, final int n2) {
+        final boolean[] array = new boolean[n2];
+        for (int i = 0; i < n2; ++i) {
+            array[i] = ((n & 1 << i) >> i == 1);
+        }
+        return array;
+    }
+    
+    static boolean valid(int n, final char[][] array, final boolean[] array2, final boolean[] array3) {
+        for (int i = 0; i < array2.length; ++i) {
+            for (int j = 0; j < array3.length; ++j) {
+                if (array2[i] && array3[i] && array[i][j] == '#') {
+                    --n;
+                }
+            }
+        }
+        return n == 0;
+    }
+    
+    static int ni(final StringTokenizer stringTokenizer) {
+        return Integer.parseInt(stringTokenizer.nextToken());
+    }
+    
+    static int ni() throws IOException {
+        return Integer.parseInt(Main.f.readLine());
+    }
+    
+    static StringTokenizer nl() throws IOException {
+        return new StringTokenizer(Main.f.readLine());
+    }
+    
+    static int[] nia(final int n) throws IOException {
+        final StringTokenizer nl = nl();
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = ni(nl);
+        }
+        return array;
+    }
+    
+    static void setIn(final String fileName) throws IOException {
+        Main.f = new BufferedReader(new FileReader(fileName));
+    }
+    
+    static void setOut(final String fileName) throws IOException {
+        Main.out = new PrintWriter(new FileWriter(fileName));
+    }
+    
+    static void setIn() {
+        Main.f = new BufferedReader(new InputStreamReader(System.in));
+    }
+    
+    static void setOut() {
+        Main.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
+    }
+    
+    static void setIO(final String s) throws IOException {
+        setIn(s + ".in");
+        setOut(s + ".out");
+    }
+    
+    static void setIO() {
+        setIn();
+        setOut();
+    }
+}

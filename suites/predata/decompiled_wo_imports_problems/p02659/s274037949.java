@@ -1,0 +1,11 @@
+public class Main
+{
+    public Main() {
+        final Scanner scanner = new Scanner(System.in);
+        System.out.println(new BigDecimal(scanner.next()).multiply(new BigDecimal(scanner.next())).longValue());
+    }
+    
+    public static void main(final String[] array) {
+        new Main();
+    }
+}

@@ -7,12 +7,7 @@ from sklearn.metrics import (
 import numpy as np
 import itertools
 
-from simbench.build import (
-    TableBuilder,
-    schema,
-    tablenode,
-    Builder,
-)
+from simbench.build import TableBuilder, schema, tablenode, Builder, NamedCallable
 from simbench.compressors import Compressor, Diff
 from simbench.metrics import Metric
 
@@ -136,9 +131,9 @@ def pairwise_diff(
             pb.inc(1)
 
             with bld.profile() as timed:
-                diffbytes = diff(byte_lookup[src.name], byte_lookup[tgt.name])
-            difflen = len(diffbytes)
-            tgtlen = len(byte_lookup[tgt.name].decode("utf-8"))
+                difflen = diff.diff_length(byte_lookup[src.name], byte_lookup[tgt.name])
+
+            tgtlen = len(byte_lookup[tgt.name])
             out.add(
                 src=src.name,
                 tgt=tgt.name,
@@ -187,6 +182,38 @@ def comp_distances(
     metric_df = comp_file_df.join(compare_comp_df, on=["src", "tgt"], how="inner")
 
     out.from_lazyframe(metric(metric_df))
+
+    return out.getvalue()
+
+
+@tablenode(schema(DistanceTable))
+def generic_distances(
+    schema: pl.Schema,
+    bld: Builder,
+    tool: NamedCallable,
+    **sources,
+) -> pl.LazyFrame:
+    out = TableBuilder(schema)
+
+    byte_lookup = {name: src.get_bytes() for name, src in sources.items()}  # For speed
+    srcs = [src for _, src in sources.items()]
+
+    n = len(byte_lookup) ** 2
+    with bld.progressbar(n) as pb:
+        for src, tgt in itertools.product(srcs, repeat=2):
+            pb.inc(1)
+
+            with bld.profile() as timed:
+                dist = tool(byte_lookup[src.name], byte_lookup[tgt.name])
+
+            out.add(
+                src=src.name,
+                tgt=tgt.name,
+                src_label=src.label,
+                tgt_label=tgt.label,
+                distance=dist,
+                time=timed(),
+            )
 
     return out.getvalue()
 

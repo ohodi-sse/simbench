@@ -1,0 +1,15 @@
+public class Main
+{
+    public static void main(final String[] array) throws Exception {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        final String[] split = bufferedReader.readLine().split("");
+        final String[] split2 = bufferedReader.readLine().split("");
+        int x = 0;
+        for (int i = 0; i < split.length; ++i) {
+            if (split[i].equals(split2[i])) {
+                ++x;
+            }
+        }
+        System.out.println(x);
+    }
+}

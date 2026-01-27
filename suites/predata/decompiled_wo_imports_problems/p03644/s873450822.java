@@ -1,0 +1,20 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        int x = 0;
+        int n = 0;
+        for (int i = 1; i <= nextInt; ++i) {
+            int n2;
+            int n3;
+            for (n2 = i, n3 = 0; n2 % 2 == 0; n2 /= 2, ++n3) {}
+            if (n3 >= n) {
+                n = n3;
+                x = i;
+            }
+        }
+        System.out.println(x);
+        scanner.close();
+    }
+}

@@ -1,0 +1,15 @@
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        final char[] charArray = bufferedReader.readLine().toCharArray();
+        final char[] charArray2 = bufferedReader.readLine().toCharArray();
+        int x = 0;
+        for (int i = 0; i < charArray.length; ++i) {
+            if (charArray[i] == charArray2[i]) {
+                ++x;
+            }
+        }
+        System.out.println(x);
+    }
+}

@@ -1,0 +1,7 @@
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        System.out.println(scanner.nextLong() * (int)Math.round(100.0 * scanner.nextDouble()) / 100L);
+    }
+}
