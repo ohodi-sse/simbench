@@ -2,7 +2,6 @@ from dataclasses import dataclass
 
 import polars as pl
 from abc import ABC, abstractmethod
-from simbench.compressors import Compressor
 
 
 class Metric(ABC):

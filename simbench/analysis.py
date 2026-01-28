@@ -1,5 +1,6 @@
-from typing import Sequence
+from __future__ import annotations
 
+from typing import Sequence
 from contextlib import contextmanager
 from numpy import arange
 
@@ -7,9 +8,11 @@ from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 
 
-from simbench.compressors import BSDiff, Compressor, Diff
+from simbench.compressors import Compressor, Diff
 from simbench.metrics import Metric
 import time
+
+import loguru
 from loguru import logger
 
 from simbench.build import (
@@ -41,8 +44,6 @@ from simbench.plots import (
     fscore_overview_figure,
     fscore_comparison_figure,
 )
-
-Logger = type(logger)
 
 
 @dataclass
@@ -105,7 +106,7 @@ def get_all_tools():
     comp_metrics = [NCD()]
 
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
-    diff_tools = [DiffTool(DiffMetric(), BSDiff())]
+    diff_tools = []  # [DiffTool(DiffMetric(), BSDiff())] BSDiff is veeeery slooow
     other_tools = [GenericTool(GenericMetric(), Difflib())]
     tools = diff_tools + other_tools + comp_tools
 
@@ -140,7 +141,7 @@ def get_all_normalizers():
 
 @dataclass
 class Config:
-    log: Logger
+    log: loguru.Logger
     tools: Sequence[Tool] = field(default_factory=list)
     classifiers: Sequence[Classifier] = field(default_factory=list)
     normalizers: list[Tool] = field(default_factory=list)
@@ -268,6 +269,7 @@ class CompressionAnalysis(Analysis):
 
     @property
     def comp_node(self):
+        assert isinstance(self.tool, CompressionTool)
         return compressions(
             self.compression_file,
             compressor=Constant(self.tool.compressor),
@@ -276,6 +278,7 @@ class CompressionAnalysis(Analysis):
 
     @property
     def pair_node(self):
+        assert isinstance(self.tool, CompressionTool)
         return pairwise_compressions(
             self.pairwise_compression_file,
             compressor=Constant(self.tool.compressor),
@@ -302,6 +305,7 @@ class DiffAnalysis(Analysis):
 
     @property
     def diff_node(self):
+        assert isinstance(self.tool, DiffTool)
         return pairwise_diff(
             self.diff_file,
             diff=Constant(self.tool.diff),

@@ -122,10 +122,10 @@ class Difflib(NamedCallable):
         return "difflib"
 
     def __call__(self, file1: bytes, file2: bytes) -> float:
-        strls1 = file1.decode("utf-8").splitlines(keepends=True)
-        strls2 = file2.decode("utf-8").splitlines(keepends=True)
+        # strls1 = file1.decode("utf-8").splitlines(keepends=True)
+        # strls2 = file2.decode("utf-8").splitlines(keepends=True)
         # diff = difflib.unified_diff(strls1, strls2, n=0)
-        similarity = difflib.SequenceMatcher(None, strls1, strls2).ratio()
+        similarity = difflib.SequenceMatcher(None, file1, file2).ratio()
         distance = 1 - similarity
 
         return distance

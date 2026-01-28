@@ -12,13 +12,11 @@ from simbench.build import (
 )
 
 from simbench.analysis import (
-    CompressionAnalysis,
     AnalysisComparison,
     Config,
     get_all_normalizers,
     init_analysis,
 )
-from simbench.normalizers import CompileDecompileNormalizer
 
 
 @click.group()

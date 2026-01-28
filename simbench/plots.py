@@ -1,4 +1,3 @@
-from enum import unique
 from matplotlib import pyplot as plt
 import numpy as np
 import polars as pl
@@ -8,7 +7,7 @@ from sklearn.metrics import (
     ConfusionMatrixDisplay,
 )
 
-from simbench.build import IDNormalizer, figurenode, schema
+from simbench.build import figurenode, schema
 from simbench.tables import ClassificationTable, DistanceTable
 
 from matplotlib.patches import Patch

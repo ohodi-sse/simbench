@@ -10,6 +10,7 @@ import itertools
 from simbench.build import TableBuilder, schema, tablenode, Builder, NamedCallable
 from simbench.compressors import Compressor, Diff
 from simbench.metrics import Metric
+from simbench.classification import Classifier
 
 
 class CompressionTable:
@@ -240,9 +241,6 @@ class ClassificationTable:
     classifier: pl.String
     class_param: pl.Float32
     labelled_as: pl.String
-
-
-from simbench.classification import Classifier
 
 
 @tablenode(schema(ClassificationTable))
