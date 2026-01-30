@@ -1,3 +1,4 @@
+from sklearn.tree.tests.test_export import w
 import click
 from pathlib import Path
 import polars as pl
@@ -167,6 +168,20 @@ def diff_class(classification1, classification2):
     print(df)
 
 
+@click.command()
+@click.argument("suite", type=click.Path(file_okay=False, path_type=Path))
+def rust_compression(suite):
+    import rust_src as rs
+
+    s = Suite(suite)
+    paths = [str(src.path) for src in s.sources()][:200]
+
+    # print(rs.py_compressions(paths))
+
+    print(rs.py_pairwise_compressions(paths))
+
+
+cli.add_command(rust_compression)
 cli.add_command(diff_class)
 cli.add_command(show_file)
 cli.add_command(analyse)
