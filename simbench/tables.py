@@ -11,6 +11,7 @@ from simbench.build import TableBuilder, schema, tablenode, Builder, NamedCallab
 from simbench.compressors import Compressor, Diff
 from simbench.metrics import Metric
 from simbench.classification import Classifier
+from rust_src import rust_compressions, rust_pairwise_compressions
 
 
 class CompressionTable:
@@ -33,25 +34,9 @@ def compressions(
 
     bld.log.info(f"Computing compression table for {compressor.name}")
 
-    n = len(sources)
-    with bld.progressbar(n) as pb:
-        for _, src in sources.items():
-            pb.inc(1)
-            src_bytes = src.get_bytes()
-            assert src_bytes, f"Failed to load any data from {src.path}"
-            with bld.profile() as timed:
-                complen: int = compressor.compress_length(src_bytes)
-
-            out.add(
-                src=src.name,
-                src_comp=complen,
-                src_size=len(src_bytes),
-                src_ratio=complen / len(src_bytes),
-                src_time=timed(),
-                src_label=src.label,
-            )
-
-    pb.finish()
+    paths = [str(s.path) for _, s in sources.items()]
+    rust_df = rust_compressions(compressor.name, compressor.level, paths).lazy()
+    out.from_lazyframe(rust_df)
     return out.getvalue()
 
 
@@ -74,31 +59,12 @@ def pairwise_compressions(
     out = TableBuilder(schema)
 
     bld.log.info(f"Computing pairwise compressions table for {compressor.name}")
+    paths = [str(s.path) for _, s in sources.items()]
+    rust_df = rust_pairwise_compressions(
+        compressor.name, compressor.level, paths
+    ).lazy()
 
-    byte_lookup = {name: src.get_bytes() for name, src in sources.items()}  # For speed
-    srcs = [src for _, src in sources.items()]
-
-    n = len(byte_lookup) ** 2
-    with bld.progressbar(n) as pb:
-        for src, tgt in itertools.product(srcs, repeat=2):
-            pb.inc(1)
-            concat_bytes = byte_lookup[src.name] + byte_lookup[tgt.name]
-
-            with bld.profile() as timed:
-                complen = compressor.compress_length(concat_bytes)
-
-            size = len(concat_bytes)
-            ratio = complen / size
-
-            out.add(
-                src=src.name,
-                tgt=tgt.name,
-                srctgt_comp=complen,
-                srctgt_size=size,
-                srctgt_ratio=ratio,
-                srctgt_time=timed(),
-            )
-
+    out.from_lazyframe(rust_df)
     return out.getvalue()
 
 

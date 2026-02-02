@@ -1,6 +1,5 @@
 use color_eyre::Result;
 use color_eyre::eyre::eyre;
-use duct::cmd;
 use flate2::Compression;
 use flate2::write::GzEncoder;
 use flate2::write::ZlibEncoder;
@@ -8,17 +7,13 @@ use indicatif::ParallelProgressIterator as _;
 use polars::df;
 use polars::prelude::*;
 use rayon::prelude::*;
-use std::io::Read;
 use std::io::prelude::*;
-use std::os::unix::ffi::OsStringExt;
 use std::path::PathBuf;
-use std::process::{Command, Stdio};
 use std::time::*;
 
 pub struct Source {
     name: String,
     label: String,
-    path: PathBuf,
     bytes: Vec<u8>,
 }
 
@@ -29,21 +24,18 @@ impl Source {
             path.file_name()
                 .ok_or(eyre!("Path does not exist"))?
                 .to_str()
-                .ok_or(eyre!("Hello stupid"))?,
+                .ok_or(eyre!("Cannot convert file name to str"))?,
         );
         let label = String::from(
             path.parent()
                 .ok_or(eyre!("Path does not exist"))?
+                .file_name()
+                .ok_or(eyre!("Cannot extract label from path"))?
                 .to_str()
-                .ok_or(eyre!("Cannot"))?,
+                .ok_or(eyre!("Cannot convert label name to str"))?,
         );
 
-        Ok(Source {
-            name,
-            label,
-            path,
-            bytes,
-        })
+        Ok(Source { name, label, bytes })
     }
 }
 
@@ -97,12 +89,10 @@ macro_rules! dataframe_from_struct {
     };
 }
 
-pub fn compression(srcs: Vec<Source>) -> Result<DataFrame> {
-    //let bar = ProgressBar::new(srcs.len() as u64);
-
+pub fn compressions(compressor: Compressor, srcs: Vec<Source>) -> Result<DataFrame> {
     let result_rows: Result<Vec<CompressionTable>> = srcs
         .iter()
-        .map(|s| -> Result<CompressionTable> { compute_comp_row(s) })
+        .map(|s| -> Result<CompressionTable> { compute_comp_row(compressor, s) })
         .collect();
 
     let result_rows = result_rows?;
@@ -115,26 +105,39 @@ pub fn compression(srcs: Vec<Source>) -> Result<DataFrame> {
     Ok(dataframe?)
 }
 
-fn compute_comp_row(s: &Source) -> Result<CompressionTable> {
+fn compute_comp_row(compressor: Compressor, s: &Source) -> Result<CompressionTable> {
     let buffer = &s.bytes;
-    //let comp_lvl: i32 = 3;
-    //let mut dstbuffer: Vec<u8> = vec![0; 10000];
+
+    let srclen = buffer.len() as u64;
 
     let now = Instant::now();
 
-    let stdout = cmd!("zstd", "-c", OsString::from_vec(buffer.clone())).read()?;
-
-    //let result = zstd_safe::compress(dstbuffer.as_mut_slice(), buffer.as_slice(), comp_lvl);
-    let optlen = stdout.len();
+    let complen: usize = match compressor {
+        Compressor::Zstd(lvl) => {
+            let mut dstbuffer = [0; 50000];
+            let result =
+                zstd_safe::compress(dstbuffer.as_mut_slice(), buffer.as_slice(), lvl as i32).ok();
+            result.ok_or(eyre!("Failed to store concatenated files in buffer"))?
+        }
+        Compressor::Zlib(lvl) => {
+            let mut e = ZlibEncoder::new(Vec::new(), Compression::new(lvl));
+            e.write_all(buffer)?;
+            e.finish()?.len()
+        }
+        Compressor::Gzip(lvl) => {
+            let mut e = GzEncoder::new(Vec::new(), Compression::new(lvl));
+            e.write_all(buffer)?;
+            e.finish()?.len()
+        }
+    };
 
     let timed = now.elapsed();
-    let srclen = buffer.len() as u64;
 
     Ok(CompressionTable {
         src: s.name.clone(),
-        src_comp: optlen as u64,
+        src_comp: complen as u64,
         src_size: srclen,
-        src_ratio: (optlen as f64) / (srclen as f64),
+        src_ratio: (complen as f64) / (srclen as f64),
         src_time: timed.as_nanos() as u64,
         src_label: s.label.clone(),
     })
@@ -218,33 +221,3 @@ fn compute_pair_row(
         srctgt_time: timed.as_nanos() as u64,
     })
 }
-
-fn compute_pair_row_ext(s1: &Source, s2: &Source) -> Result<PairwiseCompressionTable> {
-    let mut buffer: Vec<u8> = Vec::with_capacity(s1.bytes.len() + s2.bytes.len());
-    buffer.extend(&s1.bytes);
-    buffer.extend(&s2.bytes);
-
-    //let comp_lvl: i32 = 3;
-
-    let srclen = buffer.len() as u64;
-    let now = Instant::now();
-
-    let command = cmd!("zstd", "-c", "-")
-        .stdin_bytes(buffer)
-        .stdout_capture()
-        .run()?;
-
-    let complen = command.stdout.bytes().count(); //bytes().count();
-    let timed = now.elapsed();
-    println!("{:?}", timed);
-    Ok(PairwiseCompressionTable {
-        src: s1.name.clone(),
-        tgt: s2.name.clone(),
-        srctgt_comp: complen as u64,
-        srctgt_size: srclen,
-        srctgt_ratio: (complen as f64) / (srclen as f64),
-        srctgt_time: timed.as_nanos() as u64,
-    })
-}
-
-// #[test]

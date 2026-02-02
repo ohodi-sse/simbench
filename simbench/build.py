@@ -233,6 +233,9 @@ class Suite:
             (Source(s) for s in p.iterdir() if s.is_file()) for p in self.problems()
         )
 
+    def paths_as_strs(self):
+        return [str(src.path) for src in self.sources()]
+
 
 @dataclass
 class TableBuilder:
