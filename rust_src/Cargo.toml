@@ -13,6 +13,7 @@ anyhow = "1.0.100"
 bytes = "1.11.0"
 color-eyre = "0.6.5"
 duct = "1.1.1"
+flate2 = "1.1.8"
 indicatif = { version = "0.18.3", features = ["rayon"] }
 itertools = "0.14.0"
 polars = "0.52.0"

@@ -1,4 +1,3 @@
-from sklearn.tree.tests.test_export import w
 import click
 from pathlib import Path
 import polars as pl
@@ -174,7 +173,7 @@ def rust_compression(suite):
     import rust_src as rs
 
     s = Suite(suite)
-    paths = [str(src.path) for src in s.sources()][:200]
+    paths = [str(src.path) for src in s.sources()]
 
     # print(rs.py_compressions(paths))
 

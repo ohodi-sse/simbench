@@ -1,14 +1,18 @@
 use color_eyre::Result;
 use color_eyre::eyre::eyre;
-use duct::ReaderHandle;
 use duct::cmd;
+use flate2::Compression;
+use flate2::write::GzEncoder;
+use flate2::write::ZlibEncoder;
 use indicatif::ParallelProgressIterator as _;
 use polars::df;
 use polars::prelude::*;
 use rayon::prelude::*;
 use std::io::Read;
+use std::io::prelude::*;
 use std::os::unix::ffi::OsStringExt;
 use std::path::PathBuf;
+use std::process::{Command, Stdio};
 use std::time::*;
 
 pub struct Source {
@@ -40,6 +44,22 @@ impl Source {
             path,
             bytes,
         })
+    }
+}
+
+#[derive(Debug, Clone, Copy)]
+pub enum Compressor {
+    Zstd(u32),
+    Zlib(u32),
+    Gzip(u32),
+}
+
+pub fn parse_compressor(compressor_name: &str, compression_lvl: u32) -> Result<Compressor> {
+    match compressor_name {
+        "zstd" => Ok(Compressor::Zstd(compression_lvl)),
+        "zlib" => Ok(Compressor::Zlib(compression_lvl)),
+        "gzip" => Ok(Compressor::Gzip(compression_lvl)),
+        _ => Err(eyre!("Failed to parse compressor")),
     }
 }
 
@@ -101,32 +121,13 @@ fn compute_comp_row(s: &Source) -> Result<CompressionTable> {
     //let mut dstbuffer: Vec<u8> = vec![0; 10000];
 
     let now = Instant::now();
-    //
-    // let mut zstd_process = Command::new("zstd")
-    //     .arg("-c")
-    //     .arg(format!("-{:?}", comp_lvl))
-    //     .stdin(Stdio::piped())
-    //     .stderr(Stdio::inherit())
-    //     .spawn()?;
-    //
-    // let mut stdin = zstd_process.stdin.take().unwrap();
-    // stdin.write_all(buffer.as_slice())?;
+
     let stdout = cmd!("zstd", "-c", OsString::from_vec(buffer.clone())).read()?;
 
     //let result = zstd_safe::compress(dstbuffer.as_mut_slice(), buffer.as_slice(), comp_lvl);
     let optlen = stdout.len();
 
     let timed = now.elapsed();
-
-    // let optlen = match result {
-    //     Ok(complen) => complen,
-    //     Err(e) => {
-    //         return Err(eyre!(
-    //             "Buffer of size {e} could not contain the compressed file"
-    //         ));
-    //     }
-    // };
-
     let srclen = buffer.len() as u64;
 
     Ok(CompressionTable {
@@ -148,13 +149,14 @@ struct PairwiseCompressionTable {
     srctgt_time: u64,
 }
 
-pub fn pairwise_compressions(srcs: Vec<Source>) -> Result<DataFrame> {
-    //let bar = ProgressBar::new(srcs.len() as u64);
-
+pub fn pairwise_compressions(compressor: Compressor, srcs: Vec<Source>) -> Result<DataFrame> {
     let result_rows: Result<Vec<PairwiseCompressionTable>> = srcs
         .par_iter()
         .progress()
-        .flat_map(|s1| srcs.par_iter().map(|s2| compute_pair_row(s1, s2)))
+        .flat_map(|s1| {
+            srcs.par_iter()
+                .map(|s2| compute_pair_row(compressor, s1, s2))
+        })
         .collect();
 
     let result_rows = result_rows?;
@@ -164,8 +166,8 @@ pub fn pairwise_compressions(srcs: Vec<Source>) -> Result<DataFrame> {
         [
             src,
             tgt,
-            srctgt_comp,
             srctgt_size,
+            srctgt_comp,
             srctgt_ratio,
             srctgt_time
         ]
@@ -174,36 +176,75 @@ pub fn pairwise_compressions(srcs: Vec<Source>) -> Result<DataFrame> {
     Ok(dataframe?)
 }
 
-fn compute_pair_row(s1: &Source, s2: &Source) -> Result<PairwiseCompressionTable> {
+// Fast version using only zstd safe
+fn compute_pair_row(
+    compressor: Compressor,
+    s1: &Source,
+    s2: &Source,
+) -> Result<PairwiseCompressionTable> {
     let mut buffer = Vec::with_capacity(s1.bytes.len() + s2.bytes.len());
     buffer.extend(&s1.bytes);
     buffer.extend(&s2.bytes);
 
-    let dstbuffer = [0; 1000];
-    let comp_lvl: i32 = 3;
-
+    let srclen = buffer.len() as u64;
     let now = Instant::now();
-    let result = zstd_safe::compress(dstbuffer.as_mut_slice(), buffer.as_slice(), comp_lvl);
+    let complen: usize = match compressor {
+        Compressor::Zstd(lvl) => {
+            let mut dstbuffer = [0; 10000];
+            let result =
+                zstd_safe::compress(dstbuffer.as_mut_slice(), buffer.as_slice(), lvl as i32).ok();
+            result.ok_or(eyre!("Failed to store concatenated files in buffer"))?
+        }
+        Compressor::Zlib(lvl) => {
+            let mut e = ZlibEncoder::new(Vec::new(), Compression::new(lvl));
+            e.write_all(&buffer)?;
+            e.finish()?.len()
+        }
+        Compressor::Gzip(lvl) => {
+            let mut e = GzEncoder::new(Vec::new(), Compression::new(lvl));
+            e.write_all(&buffer)?;
+            e.finish()?.len()
+        }
+    };
 
-    // let srclen = buffer.len() as u64;
-    // let process: ReaderHandle = cmd!("zstd", "-c", format!("-{:?}", comp_lvl), "-")
-    //     .stdin_bytes(buffer)
-    //     .reader?;
-    //
-    // let result: Result<Vec<u8>> = process.bytes().collect();
-
-    //println!("{:?}", stdout);
-    let optlen = result.len();
-
-    //let result = zstd_safe::compress(dstbuffer.as_mut_slice(), buffer.as_slice(), comp_lvl);
     let timed = now.elapsed();
 
     Ok(PairwiseCompressionTable {
         src: s1.name.clone(),
         tgt: s2.name.clone(),
+        srctgt_comp: complen as u64,
         srctgt_size: srclen,
-        srctgt_comp: optlen as u64,
-        srctgt_ratio: (optlen as f64) / (srclen as f64),
+        srctgt_ratio: (complen as f64) / (srclen as f64),
         srctgt_time: timed.as_nanos() as u64,
     })
 }
+
+fn compute_pair_row_ext(s1: &Source, s2: &Source) -> Result<PairwiseCompressionTable> {
+    let mut buffer: Vec<u8> = Vec::with_capacity(s1.bytes.len() + s2.bytes.len());
+    buffer.extend(&s1.bytes);
+    buffer.extend(&s2.bytes);
+
+    //let comp_lvl: i32 = 3;
+
+    let srclen = buffer.len() as u64;
+    let now = Instant::now();
+
+    let command = cmd!("zstd", "-c", "-")
+        .stdin_bytes(buffer)
+        .stdout_capture()
+        .run()?;
+
+    let complen = command.stdout.bytes().count(); //bytes().count();
+    let timed = now.elapsed();
+    println!("{:?}", timed);
+    Ok(PairwiseCompressionTable {
+        src: s1.name.clone(),
+        tgt: s2.name.clone(),
+        srctgt_comp: complen as u64,
+        srctgt_size: srclen,
+        srctgt_ratio: (complen as f64) / (srclen as f64),
+        srctgt_time: timed.as_nanos() as u64,
+    })
+}
+
+// #[test]
