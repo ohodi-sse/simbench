@@ -69,6 +69,9 @@ class NamedCallable(Protocol):
     @abstractmethod
     def __call__(self, file1: bytes, file2: bytes) -> float: ...
 
+    @abstractmethod
+    def preprocess(self, src: Source): ...
+
 
 class Pullable[A](ABC):
     @abstractmethod
@@ -332,12 +335,12 @@ class PullableSource(Pullable[Source]):
 def source_node_builder(normalizer: Normalizer, src: PullableSource):
     new_file = normalizer.new_path(src.source)
 
-    def dummybld(bld, **src):
+    def normalization_action(bld, **src):
         src = [s for n, s in src.items()][0]
         return normalizer.process(src)
 
     return Node(
-        dummybld,
+        normalization_action,
         SourceStore(new_file),
         dependencies={src.source.name: src},
     )

@@ -1,4 +1,5 @@
 use pyo3::prelude::*;
+mod normalizers;
 mod tables;
 
 #[pymodule]

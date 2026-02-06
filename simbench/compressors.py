@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from abc import ABC, abstractmethod
 import io
-from simbench.build import NamedCallable
+from simbench.build import NamedCallable, Source
 
 import zstd
 import gzip
@@ -129,3 +129,6 @@ class Difflib(NamedCallable):
         distance = 1 - similarity
 
         return distance
+
+    def preprocess(self, src: Source):
+        return src.get_bytes()

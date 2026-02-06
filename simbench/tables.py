@@ -162,16 +162,23 @@ def generic_distances(
 ) -> pl.LazyFrame:
     out = TableBuilder(schema)
 
-    byte_lookup = {name: src.get_bytes() for name, src in sources.items()}  # For speed
-    srcs = [src for _, src in sources.items()]
+    bld.log.debug("Preprocessing files. This may take a while!")
 
-    n = len(byte_lookup) ** 2
+    preprocess_lookup = {}
+
+    srcs = [src for _, src in sources.items()]
+    with bld.progressbar(len(srcs)) as pb:
+        for name, src in sources.items():
+            preprocess_lookup[name] = tool.preprocess(src)
+            pb.inc(1)
+
+    n = len(preprocess_lookup) ** 2
     with bld.progressbar(n) as pb:
         for src, tgt in itertools.product(srcs, repeat=2):
             pb.inc(1)
 
             with bld.profile() as timed:
-                dist = tool(byte_lookup[src.name], byte_lookup[tgt.name])
+                dist = tool(preprocess_lookup[src.name], preprocess_lookup[tgt.name])
 
             out.add(
                 src=src.name,

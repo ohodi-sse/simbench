@@ -1,4 +1,5 @@
 from __future__ import annotations
+from simbench.codeBERT import CodeBERT, GraphCodeBERT
 
 from typing import Sequence
 from contextlib import contextmanager
@@ -108,7 +109,12 @@ def get_all_tools():
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
     diff_tools = []  # [DiffTool(DiffMetric(), BSDiff())] BSDiff is veeeery slooow
     other_tools = [GenericTool(GenericMetric(), Difflib())]
-    tools = diff_tools + other_tools + comp_tools
+    ai_tools = [
+        GenericTool(GenericMetric(), CodeBERT()),
+        GenericTool(GenericMetric(), GraphCodeBERT()),
+    ]
+
+    tools = ai_tools + comp_tools + diff_tools  # + other_tools
 
     return tools
 

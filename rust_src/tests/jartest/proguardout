@@ -1,0 +1,358 @@
+_____________________________________________________________________
++ Program class: Main
+  Superclass:    java/lang/Object
+  Major version: 0x45
+  Minor version: 0x0
+    = target 25
+  Access flags:  0x21
+    = public class Main extends java.lang.Object
+
+Interfaces (count = 0):
+
+Constant Pool (count = 54):
+  + Class [Main]
+  + Class [Main$FastScanner]
+  + Class [java/io/PrintStream]
+  + Class [java/lang/Math]
+  + Class [java/lang/Object]
+  + Class [java/lang/String]
+  + Class [java/lang/System]
+  + Fieldref [Main.fs LMain$FastScanner;]
+  + Fieldref [java/lang/System.out Ljava/io/PrintStream;]
+  + Methodref [Main$FastScanner.<init> ()V]
+  + Methodref [Main$FastScanner.next ()Ljava/lang/String;]
+  + Methodref [java/io/PrintStream.println (I)V]
+  + Methodref [java/lang/Math.max (II)I]
+  + Methodref [java/lang/Object.<init> ()V]
+  + Methodref [java/lang/String.charAt (I)C]
+  + NameAndType [<init> ()V]
+  + NameAndType [charAt (I)C]
+  + NameAndType [fs LMain$FastScanner;]
+  + NameAndType [max (II)I]
+  + NameAndType [next ()Ljava/lang/String;]
+  + NameAndType [out Ljava/io/PrintStream;]
+  + NameAndType [println (I)V]
+  + Utf8 [()Ljava/lang/String;]
+  + Utf8 [()V]
+  + Utf8 [(I)C]
+  + Utf8 [(I)V]
+  + Utf8 [(II)I]
+  + Utf8 [([Ljava/lang/String;)V]
+  + Utf8 [<clinit>]
+  + Utf8 [<init>]
+  + Utf8 [Code]
+  + Utf8 [FastScanner]
+  + Utf8 [InnerClasses]
+  + Utf8 [LMain$FastScanner;]
+  + Utf8 [LineNumberTable]
+  + Utf8 [Ljava/io/PrintStream;]
+  + Utf8 [Main]
+  + Utf8 [Main$FastScanner]
+  + Utf8 [Main.java]
+  + Utf8 [NestMembers]
+  + Utf8 [SourceFile]
+  + Utf8 [charAt]
+  + Utf8 [fs]
+  + Utf8 [java/io/PrintStream]
+  + Utf8 [java/lang/Math]
+  + Utf8 [java/lang/Object]
+  + Utf8 [java/lang/String]
+  + Utf8 [java/lang/System]
+  + Utf8 [main]
+  + Utf8 [max]
+  + Utf8 [next]
+  + Utf8 [out]
+  + Utf8 [println]
+
+Fields (count = 1):
+  + Field:        fs LMain$FastScanner;
+    Access flags: 0xa
+      = private static Main$FastScanner fs
+
+Methods (count = 3):
+  + Method:       <init>()V
+    Access flags: 0x1
+      = public Main()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 5, locals = 1, stack = 1):
+      [0] aload_0 v0
+      [1] invokespecial #14 = Methodref(java/lang/Object.<init>()V)
+      [4] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 1):
+      + Line number table attribute (count = 1):
+        [0] -> line 10
+  + Method:       main([Ljava/lang/String;)V
+    Access flags: 0x9
+      = public static void main(java.lang.String[])
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 100, locals = 3, stack = 6):
+      [0] getstatic #8 = Fieldref(Main.fs LMain$FastScanner;)
+      [3] invokevirtual #11 = Methodref(Main$FastScanner.next()Ljava/lang/String;)
+      [6] astore_0 v0
+      [7] iconst_3
+      [8] newarray 10
+      [10] astore_1 v1
+      [11] iconst_0
+      [12] istore_2 v2
+      [13] iload_2 v2
+      [14] iconst_3
+      [15] if_icmpge +30 (target=45)
+      [18] aload_0 v0
+      [19] iload_2 v2
+      [20] invokevirtual #15 = Methodref(java/lang/String.charAt(I)C)
+      [23] bipush 82
+      [25] if_icmpne +10 (target=35)
+      [28] aload_1 v1
+      [29] iload_2 v2
+      [30] iconst_1
+      [31] iastore
+      [32] goto +7 (target=39)
+      [35] aload_1 v1
+      [36] iload_2 v2
+      [37] iconst_0
+      [38] iastore
+      [39] iinc v2, 1
+      [42] goto -29 (target=13)
+      [45] iconst_1
+      [46] istore_2 v2
+      [47] iload_2 v2
+      [48] iconst_3
+      [49] if_icmpge +27 (target=76)
+      [52] aload_1 v1
+      [53] iload_2 v2
+      [54] iaload
+      [55] iconst_1
+      [56] if_icmpne +14 (target=70)
+      [59] aload_1 v1
+      [60] iload_2 v2
+      [61] dup2
+      [62] iaload
+      [63] aload_1 v1
+      [64] iload_2 v2
+      [65] iconst_1
+      [66] isub
+      [67] iaload
+      [68] iadd
+      [69] iastore
+      [70] iinc v2, 1
+      [73] goto -26 (target=47)
+      [76] aload_1 v1
+      [77] iconst_0
+      [78] iaload
+      [79] aload_1 v1
+      [80] iconst_1
+      [81] iaload
+      [82] aload_1 v1
+      [83] iconst_2
+      [84] iaload
+      [85] invokestatic #13 = Methodref(java/lang/Math.max(II)I)
+      [88] invokestatic #13 = Methodref(java/lang/Math.max(II)I)
+      [91] istore_0 v0
+      [92] getstatic #9 = Fieldref(java/lang/System.out Ljava/io/PrintStream;)
+      [95] iload_0 v0
+      [96] invokevirtual #12 = Methodref(java/io/PrintStream.println(I)V)
+      [99] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 1):
+      + Line number table attribute (count = 12):
+        [0] -> line 16
+        [7] -> line 18
+        [11] -> line 19
+        [18] -> line 20
+        [35] -> line 21
+        [39] -> line 19
+        [45] -> line 23
+        [52] -> line 24
+        [70] -> line 23
+        [76] -> line 26
+        [92] -> line 27
+        [99] -> line 28
+  + Method:       <clinit>()V
+    Access flags: 0x8
+      = static void <clinit>()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 11, locals = 0, stack = 2):
+      [0] new #2 = Class(Main$FastScanner)
+      [3] dup
+      [4] invokespecial #10 = Methodref(Main$FastScanner.<init>()V)
+      [7] putstatic #8 = Fieldref(Main.fs LMain$FastScanner;)
+      [10] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 1):
+      + Line number table attribute (count = 1):
+        [0] -> line 12
+
+Class file attributes (count = 3):
+  + Source file attribute:
+    + Utf8 [Main.java]
+  + Nest members attribute:
+    + Class [Main$FastScanner]
+  + Inner classes attribute (count = 1):
+    + InnerClassesInfo:
+      Access flags:  0x8 = static 
+      + Class [Main$FastScanner]
+      + Class [Main]
+      + Utf8 [FastScanner]
+
+_____________________________________________________________________
++ Program class: Main$FastScanner
+  Superclass:    java/lang/Object
+  Major version: 0x45
+  Minor version: 0x0
+    = target 25
+  Access flags:  0x30
+    = final class Main$FastScanner extends java.lang.Object
+
+Interfaces (count = 0):
+
+Constant Pool (count = 63):
+  + String []
+  + Class [Main]
+  + Class [Main$FastScanner]
+  + Class [java/io/BufferedReader]
+  + Class [java/io/IOException]
+  + Class [java/io/InputStreamReader]
+  + Class [java/lang/Object]
+  + Class [java/lang/System]
+  + Class [java/util/StringTokenizer]
+  + Fieldref [Main$FastScanner.br Ljava/io/BufferedReader;]
+  + Fieldref [Main$FastScanner.st Ljava/util/StringTokenizer;]
+  + Fieldref [java/lang/System.in Ljava/io/InputStream;]
+  + Methodref [java/io/BufferedReader.<init> (Ljava/io/Reader;)V]
+  + Methodref [java/io/BufferedReader.readLine ()Ljava/lang/String;]
+  + Methodref [java/io/InputStreamReader.<init> (Ljava/io/InputStream;)V]
+  + Methodref [java/lang/Object.<init> ()V]
+  + Methodref [java/util/StringTokenizer.<init> (Ljava/lang/String;)V]
+  + Methodref [java/util/StringTokenizer.hasMoreTokens ()Z]
+  + Methodref [java/util/StringTokenizer.nextToken ()Ljava/lang/String;]
+  + NameAndType [<init> ()V]
+  + NameAndType [<init> (Ljava/io/InputStream;)V]
+  + NameAndType [<init> (Ljava/io/Reader;)V]
+  + NameAndType [<init> (Ljava/lang/String;)V]
+  + NameAndType [br Ljava/io/BufferedReader;]
+  + NameAndType [hasMoreTokens ()Z]
+  + NameAndType [in Ljava/io/InputStream;]
+  + NameAndType [nextToken ()Ljava/lang/String;]
+  + NameAndType [readLine ()Ljava/lang/String;]
+  + NameAndType [st Ljava/util/StringTokenizer;]
+  + Utf8 []
+  + Utf8 [()Ljava/lang/String;]
+  + Utf8 [()V]
+  + Utf8 [()Z]
+  + Utf8 [(Ljava/io/InputStream;)V]
+  + Utf8 [(Ljava/io/Reader;)V]
+  + Utf8 [(Ljava/lang/String;)V]
+  + Utf8 [<init>]
+  + Utf8 [Code]
+  + Utf8 [FastScanner]
+  + Utf8 [InnerClasses]
+  + Utf8 [LineNumberTable]
+  + Utf8 [Ljava/io/BufferedReader;]
+  + Utf8 [Ljava/io/InputStream;]
+  + Utf8 [Ljava/util/StringTokenizer;]
+  + Utf8 [Main]
+  + Utf8 [Main$FastScanner]
+  + Utf8 [Main.java]
+  + Utf8 [NestHost]
+  + Utf8 [SourceFile]
+  + Utf8 [br]
+  + Utf8 [hasMoreTokens]
+  + Utf8 [in]
+  + Utf8 [java/io/BufferedReader]
+  + Utf8 [java/io/IOException]
+  + Utf8 [java/io/InputStreamReader]
+  + Utf8 [java/lang/Object]
+  + Utf8 [java/lang/System]
+  + Utf8 [java/util/StringTokenizer]
+  + Utf8 [next]
+  + Utf8 [nextToken]
+  + Utf8 [readLine]
+  + Utf8 [st]
+
+Fields (count = 2):
+  + Field:        br Ljava/io/BufferedReader;
+    Access flags: 0x2
+      = private java.io.BufferedReader br
+  + Field:        st Ljava/util/StringTokenizer;
+    Access flags: 0x2
+      = private java.util.StringTokenizer st
+
+Methods (count = 2):
+  + Method:       <init>()V
+    Access flags: 0x0
+      = Main$FastScanner()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 39, locals = 1, stack = 6):
+      [0] aload_0 v0
+      [1] invokespecial #16 = Methodref(java/lang/Object.<init>()V)
+      [4] aload_0 v0
+      [5] new #4 = Class(java/io/BufferedReader)
+      [8] dup
+      [9] new #6 = Class(java/io/InputStreamReader)
+      [12] dup
+      [13] getstatic #12 = Fieldref(java/lang/System.in Ljava/io/InputStream;)
+      [16] invokespecial #15 = Methodref(java/io/InputStreamReader.<init>(Ljava/io/InputStream;)V)
+      [19] invokespecial #13 = Methodref(java/io/BufferedReader.<init>(Ljava/io/Reader;)V)
+      [22] putfield #10 = Fieldref(Main$FastScanner.br Ljava/io/BufferedReader;)
+      [25] aload_0 v0
+      [26] new #9 = Class(java/util/StringTokenizer)
+      [29] dup
+      [30] ldc #1 = String("")
+      [32] invokespecial #17 = Methodref(java/util/StringTokenizer.<init>(Ljava/lang/String;)V)
+      [35] putfield #11 = Fieldref(Main$FastScanner.st Ljava/util/StringTokenizer;)
+      [38] return
+      Code attribute exceptions (count = 0):
+      Code attribute attributes (attribute count = 1):
+      + Line number table attribute (count = 3):
+        [0] -> line 30
+        [4] -> line 31
+        [25] -> line 32
+  + Method:       next()Ljava/lang/String;
+    Access flags: 0x11
+      = public final java.lang.String next()
+    Class member attributes (count = 1):
+    + Code attribute instructions (code length = 43, locals = 1, stack = 4):
+      [0] aload_0 v0
+      [1] getfield #11 = Fieldref(Main$FastScanner.st Ljava/util/StringTokenizer;)
+      [4] invokevirtual #18 = Methodref(java/util/StringTokenizer.hasMoreTokens()Z)
+      [7] ifne +28 (target=35)
+      [10] aload_0 v0
+      [11] new #9 = Class(java/util/StringTokenizer)
+      [14] dup
+      [15] aload_0 v0
+      [16] getfield #10 = Fieldref(Main$FastScanner.br Ljava/io/BufferedReader;)
+      [19] invokevirtual #14 = Methodref(java/io/BufferedReader.readLine()Ljava/lang/String;)
+      [22] invokespecial #17 = Methodref(java/util/StringTokenizer.<init>(Ljava/lang/String;)V)
+      [25] putfield #11 = Fieldref(Main$FastScanner.st Ljava/util/StringTokenizer;)
+      [28] goto -28 (target=0)
+      [31] pop
+      [32] goto -32 (target=0)
+      [35] aload_0 v0
+      [36] getfield #11 = Fieldref(Main$FastScanner.st Ljava/util/StringTokenizer;)
+      [39] invokevirtual #19 = Methodref(java/util/StringTokenizer.nextToken()Ljava/lang/String;)
+      [42] areturn
+      Code attribute exceptions (count = 1):
+      + ExceptionInfo (10 -> 28: 31):
+      + Class [java/io/IOException]
+      Code attribute attributes (attribute count = 1):
+      + Line number table attribute (count = 6):
+        [0] -> line 35
+        [10] -> line 37
+        [28] -> line 40
+        [31] -> line 38
+        [32] -> line 40
+        [35] -> line 41
+
+Class file attributes (count = 3):
+  + Source file attribute:
+    + Utf8 [Main.java]
+  + Nest host attribute:
+    + Class [Main]
+  + Inner classes attribute (count = 1):
+    + InnerClassesInfo:
+      Access flags:  0x8 = static 
+      + Class [Main$FastScanner]
+      + Class [Main]
+      + Utf8 [FastScanner]
+

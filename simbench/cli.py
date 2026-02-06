@@ -28,14 +28,20 @@ def cli(ctx):
 @click.command()
 @click.argument("file")
 @click.option("-fl", "--filter", default=None, help="Filter on source")
-def show_file(file: str, filter) -> None:
+@click.option(
+    "--csv", "csv", default=None, help="Output the file as csv. Pairs well with xan"
+)
+def show_file(file: str, filter, csv) -> None:
     assert file.endswith(".parquet"), "Can only show parquet file"
     data = pl.scan_parquet(Path(file))
 
     if filter:
         data = data.filter(pl.col("src") == filter)
 
-    logger.info(data.collect())
+    if csv:
+        print(data.collect().write_csv(file=None))
+    else:
+        logger.info(data.collect())
 
 
 @click.command()
@@ -167,6 +173,25 @@ def diff_class(classification1, classification2):
     print(df)
 
 
+#
+# @click.command()
+# @click.argument("file1", type=click.Path(file_okay=True, path_type=Path))
+# @click.argument("file2", type=click.Path(file_okay=True, path_type=Path))
+# def codebert(file1, file2):
+#     from simbench.codeBERT import tokenize_java_code, embed_code
+#     import torch
+#
+#     with open(file1, "r") as f1:
+#         embedding1 = embed_code(f1.read())
+#
+#     with open(file2, "r") as f2:
+#         embedding2 = embed_code(f2.read())
+#
+#     print(torch.norm(embedding1 - embedding2))
+#     print(cosine_distance(embedding1, embedding2))
+#
+
+# cli.add_command(codebert)
 cli.add_command(diff_class)
 cli.add_command(show_file)
 cli.add_command(analyse)

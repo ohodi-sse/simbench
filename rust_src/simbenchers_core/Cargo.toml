@@ -1,0 +1,17 @@
+[package]
+name = "simbenchers_core"
+version = "0.1.0"
+edition = "2024"
+
+[dependencies]
+bytes = "1.11.0"
+camino = "1.2.2"
+color-eyre = "0.6.5"
+duct = "1.1.1"
+flate2 = "1.1.8"
+indicatif = { version = "0.18.3", features = ["rayon"] }
+itertools = "0.14.0"
+rayon = "1.11.0"
+polars = "0.52.0"
+zstd-safe = "7.2.4"
+tempfile = "3.24.0"
