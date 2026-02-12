@@ -1,6 +1,7 @@
 
 -libraryjars /usr/lib/jvm/java-25-openjdk-amd64/jmods/java.base.jmod
 
+-dontshrink
 -optimizationpasses 3
 -allowaccessmodification
 -dontobfuscate

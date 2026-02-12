@@ -3,7 +3,7 @@ use color_eyre::eyre::eyre;
 use color_eyre::{Result, eyre::OptionExt};
 
 use duct::cmd;
-use indicatif::{ParallelProgressIterator, ProgressIterator};
+use indicatif::ParallelProgressIterator;
 use rayon::iter::IntoParallelRefIterator;
 use rayon::prelude::*;
 use std::env;
@@ -51,11 +51,6 @@ fn compile_java(filepath: impl AsRef<Path>, compiled_path: impl AsRef<Path>) -> 
         compiled_path
     );
     assert!(filepath.exists(), "Failed to locate file {}", filepath);
-
-    if compiled_path.exists() {
-        println!("The compiled file {:?} already exists", compiled_path);
-        return Ok(());
-    };
 
     // Create temporary directory
     let tmp_dir = tempdir_in(get_parent_dir(filepath)?.as_std_path())?;
@@ -181,57 +176,44 @@ fn decompile_w_procyon(
     Ok(())
 }
 
-// fn google_format(
-//     filepath: impl AsRef<Path>,
-//     decompiled_path: impl AsRef<Path>,
-// ) -> Result<()> {
-//     let filepath = Utf8Path::from_path(filepath.as_ref())
-//         .ok_or_eyre("Failed to convert filepath to Utf8Path")?;
-//
-//     assert!(
-//         filepath
-//             .extension()
-//             .ok_or_eyre("Failed to extract extension")?
-//             == "jar"
-//     );
-//     assert!(filepath.exists(), "Failed to find file {}", filepath);
-//     assert!(
-//         decompiled_path
-//             .as_ref()
-//             .extension()
-//             .ok_or_eyre("Failed to extract extension")?
-//             == "java"
-//     );
-//     let full_compiled_path = env::current_dir()?.join(filepath);
-//     let full_decompiled_path = env::current_dir()?.join(&decompiled_path);
-//
-//         toolspath = TOOLSPATH / "google_java_formatter"
-//         formatter_path = toolspath / "google-java-format-1.33.0-all-deps.jar"
-//         processed_file = self.new_path(src)
-//         processed_file.parent.mkdir(parents=True, exist_ok=True)
-//         processed_file.touch()
-//
-//         logger.debug(f"Formatting {src.name} using the Google Java Formatter")
-//         with open(processed_file, "ab") as outfile:
-//             processed_bytes = subprocess.run(
-//                 ["java", "-jar", formatter_path, src.path],
-//                 capture_output=True,
-//             )
-//             assert processed_bytes.returncode == 0, f"{processed_bytes.stderr}"
-//             assert len(processed_bytes.stdout) > 0, (
-//                 f"No data was loaded from {src.path}"
-//             )
-//             outfile.write(processed_bytes.stdout)
-//
-//         return Source(processed_file)
-// }
+fn google_format(filepath: impl AsRef<Path>, formatted_path: impl AsRef<Path>) -> Result<()> {
+    let filepath = Utf8Path::from_path(filepath.as_ref()).ok_or(eyre!(
+        "Failed to create Utf8Path from {:?}",
+        filepath.as_ref()
+    ))?;
+    assert!(
+        get_file_extension(filepath)? == "java",
+        "Can only compile java file, found {}",
+        filepath
+    );
+    let formatted_path = Utf8Path::from_path(formatted_path.as_ref()).ok_or(eyre!(
+        "Failed to create Utf8Path from {:?}",
+        formatted_path.as_ref()
+    ))?;
+
+    let full_file_path = env::current_dir()?.join(filepath);
+    let full_formatted_path = env::current_dir()?.join(formatted_path);
+
+    let toolpath = env::current_dir()?
+        .join("processing_tools/google_java_formatter/google-java-format-1.33.0-all-deps.jar");
+
+    let output = cmd!("java", "-jar", toolpath, full_file_path)
+        .stdout_capture()
+        .run()?;
+    println!("{:?}", output.stdout);
+    let mut output_file = File::create(full_formatted_path)?;
+
+    output_file.write_all(output.stdout.as_slice())?;
+
+    Ok(())
+}
 
 pub fn batch_compile(source_files: Vec<String>, target_files: Vec<String>) -> Result<()> {
     assert_eq!(source_files.len(), target_files.len());
 
     source_files
-        .iter()
-        .zip(target_files.iter())
+        .par_iter()
+        .zip(target_files.par_iter())
         .progress()
         .try_for_each(|(src, tgt)| compile_java(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt)))
 }
@@ -250,18 +232,49 @@ pub fn batch_decompile(source_files: Vec<String>, target_files: Vec<String>) -> 
     assert_eq!(source_files.len(), target_files.len());
 
     source_files
-        .iter()
-        .zip(target_files.iter())
+        .par_iter()
+        .zip(target_files.par_iter())
         .progress()
         .try_for_each(|(src, tgt)| {
             decompile_w_procyon(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt))
         })
 }
 
+pub fn batch_format(source_files: Vec<String>, target_files: Vec<String>) -> Result<()> {
+    assert_eq!(source_files.len(), target_files.len());
+
+    source_files
+        .par_iter()
+        .zip(target_files.par_iter())
+        .progress()
+        .try_for_each(|(src, tgt)| google_format(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt)))
+}
+
 #[cfg(test)]
 mod tests {
     use super::*;
     use std::{fs::remove_file, io::Read};
+
+    #[test]
+    fn test_formatter() -> Result<()> {
+        let testfile = Utf8Path::new("../tests/s001421950.java");
+
+        let new_path = Path::new("s001421950_formatted.java");
+        google_format(testfile, new_path)?;
+        assert!(&new_path.exists());
+
+        let mut file = File::open(new_path)?;
+        let mut contents: Vec<u8> = vec![];
+        file.read_to_end(&mut contents)?;
+
+        assert!(!contents.is_empty());
+
+        remove_file(new_path)?;
+
+        assert!(!new_path.exists());
+
+        Ok(())
+    }
 
     #[test]
     fn test_compile_java() -> Result<()> {
@@ -327,7 +340,7 @@ mod tests {
 
         let decompiled_file = Path::new("s001421950_decompiled_test1.java");
 
-        decompile_w_procyon(compiled_file, &decompiled_file)?;
+        decompile_w_procyon(compiled_file, decompiled_file)?;
 
         let mut file = File::open(decompiled_file)?;
         let mut contents = String::new();

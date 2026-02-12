@@ -239,10 +239,19 @@ class Normalizer(Protocol):
     def name(self) -> str: ...
 
     @abstractmethod
-    def process(self, source_files: list[Path], target_files: list[Path]): ...
+    def dependencies(self, sources: list[Source]) -> list[Source]: ...
 
     @abstractmethod
-    def dependencies(self, source_files: list[Source]) -> list[Path]: ...
+    def __call__(self, sources: list[str], targets: list[str]): ...
+
+    def process(self, sources: list[Source], targets: list[Source]):
+        # This function acts as a bridge to rust, since pyo3 does not support objects
+        assert len(sources) == len(targets)
+
+        source_strings = [str(src.path) for src in sources]
+        target_strings = [str(tgt.path) for tgt in targets]
+
+        self(source_strings, target_strings)
 
     def matches(self, match):
         import re
@@ -253,7 +262,7 @@ class Normalizer(Protocol):
     @abstractmethod
     def required_output_file_extension(self) -> str: ...
 
-    def new_path(self, src: Source) -> Path:
+    def new_source(self, src: Source) -> Source:
         label_dir = src.path.parent
         problems_dir = label_dir.parent
         root_dir = problems_dir.parent
@@ -276,19 +285,30 @@ class Normalizer(Protocol):
 
         new_path = processed_labels_dir / new_name
 
-        return new_path
+        return Source(new_path)
 
     def get_normalized_sources(self, sources: list[Source]):
-        source_files = self.dependencies(sources)
-        target_files: list[Path] = [self.new_path(src) for src in sources]
+        sources: list[Source] = self.dependencies(sources)
+        targets: list[Source] = [self.new_source(src) for src in sources]
 
-        if all(src.exists() for src in target_files):
-            return SourceDict({target.name: Source(target) for target in target_files})
+        if all(tgt.path.exists() for tgt in targets):
+            return SourceDict({tgt.name: tgt for tgt in targets})
 
-        self.process(source_files, target_files)
-        assert all(src.exists() for src in target_files)
+        self.process(sources, targets)
+        assert all(tgt.path.exists() for tgt in targets)
 
-        return SourceDict({target.name: Source(target) for target in target_files})
+        return SourceDict({tgt.name: tgt for tgt in targets})
+
+
+class DependentNormalizer(Normalizer):
+    depends_on_normalizer: Normalizer
+
+    def dependencies(self, sources: list[Source]) -> list[Source]:
+        bld = Builder(logger)
+        source_dict = self.depends_on_normalizer.get_normalized_sources(sources).pull(
+            bld
+        )
+        return source_dict.values()
 
 
 class IDNormalizer(Normalizer):
@@ -300,11 +320,11 @@ class IDNormalizer(Normalizer):
     def required_output_file_extension(self) -> str | None:
         return None
 
-    def process(self, source_files, target_files):
-        return
+    def dependencies(self, sources: list[Source]) -> list[Source]:
+        return sources
 
-    def dependencies(self, source_files: list[Source]):
-        return [src.path for src in source_files]
+    def __call__(self, sources: list[str], targets: list[str]):
+        return
 
 
 @dataclass

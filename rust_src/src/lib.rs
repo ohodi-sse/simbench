@@ -6,7 +6,7 @@ mod rust_src {
     use pyo3::exceptions::{PyRuntimeError, PyTypeError};
     use pyo3::prelude::*;
     use pyo3_polars::PyDataFrame;
-    use simbenchers_core::normalizers::batch_optimize;
+    use simbenchers_core::normalizers::{batch_format, batch_optimize};
     use simbenchers_core::{
         normalizers::{batch_compile, batch_decompile},
         tables::{compressions, pairwise_compressions, strings_to_sources},
@@ -78,6 +78,13 @@ mod rust_src {
         target_strings: Vec<String>,
     ) -> PyResult<()> {
         batch_decompile(source_strings, target_strings)
+            .map_err(|e| PyRuntimeError::new_err(format!("{:?}", e)))
+    }
+
+    #[pyfunction]
+    #[pyo3(name = "rust_batch_format")]
+    fn rust_batch_format(source_strings: Vec<String>, target_strings: Vec<String>) -> PyResult<()> {
+        batch_format(source_strings, target_strings)
             .map_err(|e| PyRuntimeError::new_err(format!("{:?}", e)))
     }
 }
