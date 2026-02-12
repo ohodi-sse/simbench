@@ -24,4 +24,5 @@ polars = "0.52.0"
 pyo3 = "^0.26.0" 
 pyo3-polars = "0.25.0"
 rayon = "1.11.0"
+simbenchers_core = { version = "0.1.0", path = "simbenchers_core" }
 zstd-safe = "7.2.4"

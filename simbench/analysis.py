@@ -19,17 +19,16 @@ from loguru import logger
 from simbench.build import (
     IDNormalizer,
     Normalizer,
-    PullableSource,
     Suite,
     Constant,
-    source_node_builder,
 )
 from simbench.classification import Classifier
 from simbench.normalizers import (
-    CompileDecompileNormalizer,
     GoogleFormatter,
-    ImportCommentRemover,
     DecompileWOImports,
+    CompileNormalizer,
+    DecompileNormalizer,
+    OptimizedDecompiledNormalizer,
 )
 from simbench.tables import (
     compressions,
@@ -103,7 +102,7 @@ def get_all_tools():
     gzip = [Gzip(comp_lvl) for comp_lvl in comp_lvls]
     zstd = [Zstd(comp_lvl) for comp_lvl in comp_lvls]
 
-    compressors = zlib + gzip + zstd
+    compressors = gzip + zstd + zlib
     comp_metrics = [NCD()]
 
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
@@ -114,21 +113,16 @@ def get_all_tools():
         GenericTool(GenericMetric(), GraphCodeBERT()),
     ]
 
-    tools = ai_tools + comp_tools + diff_tools  # + other_tools
+    tools = comp_tools + ai_tools + diff_tools  # + other_tools
 
     return tools
 
 
-def get_all_classifiers(*max_files) -> Sequence[Classifier]:
+def get_all_classifiers(steps: int = 20) -> Sequence[Classifier]:
     from simbench.classification import KNN, Threshold
 
-    thrsh = [Threshold(round(t, 3)) for t in arange(0.05, 1.0, 0.05)]
-
-    if max_files:
-        step = max(1, int(max_files[0] / 10))
-        knn = [KNN(k) for k in range(1, max_files[0], step)]
-    else:
-        knn = [KNN(k) for k in range(1, 300, 20)]
+    thrsh = [Threshold(round(t, 3)) for t in arange(0.05, 1.0, 1.0 / steps)]
+    knn = [KNN(k) for k in range(1, 300, int(301 / steps))]
 
     classifiers = thrsh + knn
 
@@ -138,9 +132,11 @@ def get_all_classifiers(*max_files) -> Sequence[Classifier]:
 def get_all_normalizers():
     return [
         IDNormalizer(),
-        GoogleFormatter(),
-        CompileDecompileNormalizer(),
-        ImportCommentRemover(),
+        DecompileNormalizer(),
+        OptimizedDecompiledNormalizer(),
+        # GoogleFormatter(),
+        # CompileDecompileNormalizer(),
+        # ImportCommentRemover(),
         DecompileWOImports(),
     ]
 
@@ -216,12 +212,7 @@ class Analysis(ABC):
 
     @property
     def source_nodes(self):
-        return {
-            src.name: source_node_builder(
-                normalizer=self.normalizer, src=PullableSource(src)
-            )
-            for src in self.suite.sources()
-        }
+        return self.normalizer.get_normalized_sources(list(self.suite.sources()))
 
     @property
     @abstractmethod
@@ -279,7 +270,7 @@ class CompressionAnalysis(Analysis):
         return compressions(
             self.compression_file,
             compressor=Constant(self.tool.compressor),
-            **self.source_nodes,
+            sources=self.source_nodes,
         )
 
     @property
@@ -288,7 +279,7 @@ class CompressionAnalysis(Analysis):
         return pairwise_compressions(
             self.pairwise_compression_file,
             compressor=Constant(self.tool.compressor),
-            **self.source_nodes,
+            sources=self.source_nodes,
         )
 
     @property
@@ -315,7 +306,7 @@ class DiffAnalysis(Analysis):
         return pairwise_diff(
             self.diff_file,
             diff=Constant(self.tool.diff),
-            **self.source_nodes,
+            sources=self.source_nodes,
         )
 
     @property
@@ -339,7 +330,7 @@ class GenericAnalysis(Analysis):
         return generic_distances(
             self.distance_file,
             tool=Constant(self.tool.generic),
-            **self.source_nodes,
+            sources=self.source_nodes,
         )
 
 

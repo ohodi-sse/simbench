@@ -221,17 +221,3 @@ public class Main
         }
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class Node
-{
-    int h;
-    int w;
-    
-    Node(final int h, final int w) {
-        this.h = h;
-        this.w = w;
-    }
-}

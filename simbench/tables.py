@@ -7,7 +7,14 @@ from sklearn.metrics import (
 import numpy as np
 import itertools
 
-from simbench.build import TableBuilder, schema, tablenode, Builder, NamedCallable
+from simbench.build import (
+    TableBuilder,
+    schema,
+    tablenode,
+    Builder,
+    NamedCallable,
+    Source,
+)
 from simbench.compressors import Compressor, Diff
 from simbench.metrics import Metric
 from simbench.classification import Classifier
@@ -28,7 +35,7 @@ def compressions(
     schema: pl.Schema,
     bld: Builder,
     compressor: Compressor,
-    **sources,
+    sources: dict[str, Source],
 ):
     out = TableBuilder(schema)
 
@@ -54,7 +61,7 @@ def pairwise_compressions(
     schema: pl.Schema,
     bld: Builder,
     compressor: Compressor,
-    **sources,
+    sources: dict[str, Source],
 ):
     out = TableBuilder(schema)
 
@@ -83,7 +90,7 @@ def pairwise_diff(
     schema: pl.Schema,
     bld: Builder,
     diff: Diff,
-    **sources,
+    sources: dict[str, Source],
 ):
     out = TableBuilder(schema)
 
@@ -155,10 +162,7 @@ def comp_distances(
 
 @tablenode(schema(DistanceTable))
 def generic_distances(
-    schema: pl.Schema,
-    bld: Builder,
-    tool: NamedCallable,
-    **sources,
+    schema: pl.Schema, bld: Builder, tool: NamedCallable, sources: dict[str, Source]
 ) -> pl.LazyFrame:
     out = TableBuilder(schema)
 
@@ -232,14 +236,18 @@ def classifications(
             pb.inc(1)
             c = classifier.classify(distances, src)
 
-            if c is not None:
-                out.add(
-                    src=src,
-                    src_label=label,
-                    classifier=classifier.name,
-                    class_param=classifier.param,
-                    labelled_as=c.labelled_as,
-                )
+            if c is None:
+                labelled_as = "Not classificable"
+            else:
+                labelled_as = c.labelled_as
+
+            out.add(
+                src=src,
+                src_label=label,
+                classifier=classifier.name,
+                class_param=classifier.param,
+                labelled_as=labelled_as,
+            )
 
     return out.getvalue()
 
@@ -262,10 +270,15 @@ def performance(schema: pl.Schema, bld: Builder, **classifications) -> pl.LazyFr
     def get_performance_row(class_df: pl.LazyFrame):
         classif = pl.Series(class_df.select("classifier").unique().collect()).item()
         param = pl.Series(class_df.select("class_param").unique().collect()).item()
-
         src_labels = pl.Series(class_df.select("src_label").collect()).to_list()
         labelled_as = pl.Series(class_df.select("labelled_as").collect()).to_list()
-        cm = confusion_matrix(src_labels, labelled_as)
+
+        labels = list(set(src_labels))
+
+        assert len(labels) > 1, (
+            f"Not enough classes to meaningfully classify in {labels}. This probably happens because the classifier returned None for some classes."
+        )
+        cm = confusion_matrix(src_labels, labelled_as, labels=labels)
 
         FP = sum(cm.sum(axis=0) - np.diag(cm))
         FN = sum(cm.sum(axis=1) - np.diag(cm))
@@ -273,7 +286,7 @@ def performance(schema: pl.Schema, bld: Builder, **classifications) -> pl.LazyFr
 
         accuracy = accuracy_score(src_labels, labelled_as)
         precision, recall, f_score, _ = precision_recall_fscore_support(
-            src_labels, labelled_as, average=averaging, zero_division=0.0
+            src_labels, labelled_as, average=averaging, zero_division=0.0, labels=labels
         )
 
         return classif, param, FP, FN, accuracy, precision, recall, f_score

@@ -1,3 +1,86 @@
+import java.util.function.LongUnaryOperator;
+import java.util.function.IntUnaryOperator;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class In
+{
+    private BufferedReader reader;
+    private StringTokenizer tokenizer;
+    
+    In() {
+        this.reader = new BufferedReader(new InputStreamReader(System.in), 65536);
+    }
+    
+    String next() {
+        try {
+            while (this.tokenizer == null || !this.tokenizer.hasMoreTokens()) {
+                this.tokenizer = new StringTokenizer(this.reader.readLine());
+            }
+        }
+        catch (final IOException ex) {}
+        return this.tokenizer.nextToken();
+    }
+    
+    int nextInt() {
+        return Integer.parseInt(this.next());
+    }
+    
+    long nextLong() {
+        return Long.parseLong(this.next());
+    }
+    
+    char[] nextCharArray() {
+        return this.next().toCharArray();
+    }
+    
+    char[][] nextCharGrid(final int n, final int n2) {
+        final char[][] array = new char[n][n2];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.next().toCharArray();
+        }
+        return array;
+    }
+    
+    int[] nextIntArray(final int n) {
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.nextInt();
+        }
+        return array;
+    }
+    
+    int[] nextIntArray(final int n, final IntUnaryOperator intUnaryOperator) {
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = intUnaryOperator.applyAsInt(this.nextInt());
+        }
+        return array;
+    }
+    
+    long[] nextLongArray(final int n) {
+        final long[] array = new long[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.nextLong();
+        }
+        return array;
+    }
+    
+    long[] nextLongArray(final int n, final LongUnaryOperator longUnaryOperator) {
+        final long[] array = new long[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = longUnaryOperator.applyAsLong(this.nextLong());
+        }
+        return array;
+    }
+}
 import java.math.BigDecimal;
 
 // 
@@ -88,88 +171,5 @@ class Out
     
     void flush() {
         this.out.flush();
-    }
-}
-import java.util.function.LongUnaryOperator;
-import java.util.function.IntUnaryOperator;
-import java.io.IOException;
-import java.io.Reader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-import java.io.BufferedReader;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-class In
-{
-    private BufferedReader reader;
-    private StringTokenizer tokenizer;
-    
-    In() {
-        this.reader = new BufferedReader(new InputStreamReader(System.in), 65536);
-    }
-    
-    String next() {
-        try {
-            while (this.tokenizer == null || !this.tokenizer.hasMoreTokens()) {
-                this.tokenizer = new StringTokenizer(this.reader.readLine());
-            }
-        }
-        catch (final IOException ex) {}
-        return this.tokenizer.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    char[] nextCharArray() {
-        return this.next().toCharArray();
-    }
-    
-    char[][] nextCharGrid(final int n, final int n2) {
-        final char[][] array = new char[n][n2];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.next().toCharArray();
-        }
-        return array;
-    }
-    
-    int[] nextIntArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    int[] nextIntArray(final int n, final IntUnaryOperator intUnaryOperator) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = intUnaryOperator.applyAsInt(this.nextInt());
-        }
-        return array;
-    }
-    
-    long[] nextLongArray(final int n) {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    long[] nextLongArray(final int n, final LongUnaryOperator longUnaryOperator) {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = longUnaryOperator.applyAsLong(this.nextLong());
-        }
-        return array;
     }
 }

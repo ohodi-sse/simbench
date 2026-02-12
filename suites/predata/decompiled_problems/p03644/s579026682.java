@@ -1,45 +1,5 @@
 import java.io.Reader;
 import java.io.InputStreamReader;
-import java.io.InputStream;
-import java.io.IOException;
-import java.util.InputMismatchException;
-import java.util.StringTokenizer;
-import java.io.BufferedReader;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class InputReader
-{
-    BufferedReader in;
-    StringTokenizer tok;
-    
-    public String nextString() {
-        while (!this.tok.hasMoreTokens()) {
-            try {
-                this.tok = new StringTokenizer(this.in.readLine(), " ");
-                continue;
-            }
-            catch (final IOException ex) {
-                throw new InputMismatchException();
-            }
-            break;
-        }
-        return this.tok.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.nextString());
-    }
-    
-    public InputReader(final InputStream in) {
-        this.in = new BufferedReader(new InputStreamReader(in));
-        this.tok = new StringTokenizer("");
-    }
-}
-import java.io.Reader;
-import java.io.InputStreamReader;
 import java.io.IOException;
 import java.util.InputMismatchException;
 import java.util.StringTokenizer;
@@ -101,20 +61,5 @@ public class Main
             this.in = new BufferedReader(new InputStreamReader(in));
             this.tok = new StringTokenizer("");
         }
-    }
-}
-import java.io.PrintWriter;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class TaskB
-{
-    public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-        int nextInt;
-        int x;
-        for (nextInt = inputReader.nextInt(), x = 1; x * 2 <= nextInt; x *= 2) {}
-        printWriter.println(x);
     }
 }

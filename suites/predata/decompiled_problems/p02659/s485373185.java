@@ -1,17 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-class XY
-{
-    int h;
-    int c;
-    
-    XY(final int h, final int c) {
-        this.h = h;
-        this.c = c;
-    }
-}
 import java.math.BigDecimal;
 import java.util.Scanner;
 
@@ -142,5 +128,19 @@ public class Main
         Main.N = "No";
         Main.MOD = (long)(Math.pow(10.0, 9.0) + 7.0);
         Main.sc = new Scanner(System.in);
+    }
+}
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class XY
+{
+    int h;
+    int c;
+    
+    XY(final int h, final int c) {
+        this.h = h;
+        this.c = c;
     }
 }

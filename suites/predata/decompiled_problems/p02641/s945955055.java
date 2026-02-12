@@ -1,15 +1,4 @@
-import java.util.Comparator;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-class Main$1 implements Comparator<int[]> {
-    @Override
-    public int compare(final int[] array, final int[] array2) {
-        return array[0] - array2[0];
-    }
-}import java.io.IOException;
+import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;
 import java.util.StringTokenizer;
@@ -193,79 +182,5 @@ public class Main
             }
             return line;
         }
-    }
-}
-import java.io.IOException;
-import java.io.Reader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-import java.io.BufferedReader;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class FastScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int ni() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nl() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nd() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}
-import java.util.Comparator;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-class Main$2 implements Comparator<long[]> {
-    @Override
-    public int compare(final long[] array, final long[] array2) {
-        if (array[0] < array2[0]) {
-            return -1;
-        }
-        return 1;
     }
 }

@@ -1,61 +1,3 @@
-import java.util.List;
-import java.util.Collections;
-import java.util.ArrayList;
-import java.io.PrintWriter;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-class test
-{
-    public void solve(final FastReader fastReader, final PrintWriter printWriter) {
-        final int nextInt = fastReader.nextInt();
-        final int nextInt2 = fastReader.nextInt();
-        final ArrayList list = new ArrayList();
-        for (int i = 0; i < nextInt2; ++i) {
-            list.add(fastReader.nextInt());
-        }
-        Collections.sort((List<Comparable>)list);
-        if (nextInt2 == 0) {
-            printWriter.println(nextInt);
-        }
-        else {
-            if (list.contains(nextInt)) {
-                while (true) {
-                    int n;
-                    int n2;
-                    for (n = nextInt, n2 = 1; list.contains(n - n2); ++n2) {
-                        if (!list.contains(n + n2)) {
-                            final int x = n + n2;
-                            printWriter.println(x);
-                            return;
-                        }
-                    }
-                    final int x = n - n2;
-                    continue;
-                }
-            }
-            printWriter.println(nextInt);
-        }
-    }
-}
-import java.io.IOException;
-import java.io.OutputStream;
-import java.io.PrintWriter;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-public class Main
-{
-    public static void main(final String[] array) throws IOException {
-        final PrintWriter printWriter = new PrintWriter(System.out);
-        new test().solve(new FastReader(), printWriter);
-        printWriter.close();
-    }
-}
 import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;
@@ -113,5 +55,63 @@ class FastReader
             ex.printStackTrace();
         }
         return line;
+    }
+}
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final PrintWriter printWriter = new PrintWriter(System.out);
+        new test().solve(new FastReader(), printWriter);
+        printWriter.close();
+    }
+}
+import java.util.List;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.io.PrintWriter;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class test
+{
+    public void solve(final FastReader fastReader, final PrintWriter printWriter) {
+        final int nextInt = fastReader.nextInt();
+        final int nextInt2 = fastReader.nextInt();
+        final ArrayList list = new ArrayList();
+        for (int i = 0; i < nextInt2; ++i) {
+            list.add(fastReader.nextInt());
+        }
+        Collections.sort((List<Comparable>)list);
+        if (nextInt2 == 0) {
+            printWriter.println(nextInt);
+        }
+        else {
+            if (list.contains(nextInt)) {
+                while (true) {
+                    int n;
+                    int n2;
+                    for (n = nextInt, n2 = 1; list.contains(n - n2); ++n2) {
+                        if (!list.contains(n + n2)) {
+                            final int x = n + n2;
+                            printWriter.println(x);
+                            return;
+                        }
+                    }
+                    final int x = n - n2;
+                    continue;
+                }
+            }
+            printWriter.println(nextInt);
+        }
     }
 }

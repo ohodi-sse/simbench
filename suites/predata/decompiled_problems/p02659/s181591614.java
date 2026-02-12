@@ -1,24 +1,3 @@
-import java.util.Arrays;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-public class Main
-{
-    public static void main(final String[] array) {
-        new Main().run();
-    }
-    
-    void run() {
-        final FastScanner fastScanner = new FastScanner();
-        System.out.println(fastScanner.nextLong() * Math.round(fastScanner.nextDouble() * 100.0) / 100L);
-    }
-    
-    void tr(final Object... a) {
-        System.out.println(Arrays.deepToString(a));
-    }
-}
 import java.util.NoSuchElementException;
 import java.io.IOException;
 import java.io.InputStream;
@@ -118,5 +97,26 @@ class FastScanner
     
     public double nextDouble() {
         return Double.parseDouble(this.next());
+    }
+}
+import java.util.Arrays;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) {
+        new Main().run();
+    }
+    
+    void run() {
+        final FastScanner fastScanner = new FastScanner();
+        System.out.println(fastScanner.nextLong() * Math.round(fastScanner.nextDouble() * 100.0) / 100L);
+    }
+    
+    void tr(final Object... a) {
+        System.out.println(Arrays.deepToString(a));
     }
 }

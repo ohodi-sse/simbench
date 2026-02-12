@@ -1,3 +1,33 @@
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class ChenBitUtil
+{
+    static int popCount(final int i) {
+        return Integer.bitCount(i);
+    }
+    
+    static boolean isFlag(final int n, final int n2) {
+        return 0x0 != (n & 1 << n2);
+    }
+    
+    static int setTrue(int n, final int n2) {
+        return n |= 1 << n2;
+    }
+    
+    static int setFalse(int n, final int n2) {
+        return n &= ~(1 << n2);
+    }
+    
+    static int setReverse(final int n, final int n2) {
+        return isFlag(n, n2) ? setFalse(n, n2) : setTrue(n, n2);
+    }
+    
+    static int reverseAll(final int n) {
+        return ~n;
+    }
+}
 import java.util.List;
 import java.util.Collections;
 import java.util.ArrayList;
@@ -63,35 +93,5 @@ public class Main
             }
             return i;
         }
-    }
-}
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-class ChenBitUtil
-{
-    static int popCount(final int i) {
-        return Integer.bitCount(i);
-    }
-    
-    static boolean isFlag(final int n, final int n2) {
-        return 0x0 != (n & 1 << n2);
-    }
-    
-    static int setTrue(int n, final int n2) {
-        return n |= 1 << n2;
-    }
-    
-    static int setFalse(int n, final int n2) {
-        return n &= ~(1 << n2);
-    }
-    
-    static int setReverse(final int n, final int n2) {
-        return isFlag(n, n2) ? setFalse(n, n2) : setTrue(n, n2);
-    }
-    
-    static int reverseAll(final int n) {
-        return ~n;
     }
 }

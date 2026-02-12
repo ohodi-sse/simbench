@@ -1,57 +1,6 @@
 import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;
-import java.io.InputStream;
-import java.util.StringTokenizer;
-import java.io.BufferedReader;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class MyScanner
-{
-    private BufferedReader in;
-    private StringTokenizer st;
-    
-    public MyScanner(final InputStream in) {
-        this.in = new BufferedReader(new InputStreamReader(in));
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                final String line = this.in.readLine();
-                if (line == null) {
-                    return null;
-                }
-                this.st = new StringTokenizer(line);
-                continue;
-            }
-            catch (final IOException ex) {
-                return null;
-            }
-            break;
-        }
-        return this.st.nextToken();
-    }
-    
-    public long Long() {
-        return Long.parseLong(this.next());
-    }
-    
-    public double Double() {
-        return Double.parseDouble(this.next());
-    }
-}
-import java.io.IOException;
-import java.io.Reader;
-import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.math.BigInteger;
@@ -121,18 +70,5 @@ public class Main
         public double Double() {
             return Double.parseDouble(this.next());
         }
-    }
-}
-import java.math.BigInteger;
-import java.io.PrintWriter;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class C
-{
-    public void solve(final int n, final MyScanner myScanner, final PrintWriter printWriter) {
-        printWriter.println(BigInteger.valueOf(myScanner.Long()).multiply(BigInteger.valueOf(Math.round(myScanner.Double() * 100.0))).divide(BigInteger.valueOf(100L)).toString());
     }
 }

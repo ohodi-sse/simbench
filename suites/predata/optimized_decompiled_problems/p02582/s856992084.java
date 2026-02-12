@@ -1,0 +1,32 @@
+import java.io.IOException;
+import java.io.Reader;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+final class Main
+{
+    private static void main$3231c38a() throws IOException {
+        final String line = new BufferedReader(new InputStreamReader(System.in)).readLine();
+        int i = 0;
+        int x = 0;
+        int n = 0;
+        while (i < 3) {
+            if (line.charAt(i) == 'R') {
+                ++x;
+                ++n;
+            }
+            else if (x == 1) {
+                x = 0;
+            }
+            ++i;
+        }
+        if (x == 0 && n == 1) {
+            x = n;
+        }
+        System.out.println(x);
+    }
+}

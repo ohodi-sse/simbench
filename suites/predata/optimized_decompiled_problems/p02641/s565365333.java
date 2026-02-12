@@ -1,0 +1,286 @@
+import java.io.IOException;
+import java.io.InputStream;
+import java.io.FileInputStream;
+import java.io.DataInputStream;
+import java.util.Iterator;
+import java.util.TreeSet;
+import java.util.HashSet;
+import java.util.ArrayList;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public final class Main
+{
+    private static void main$3231c38a() throws Exception {
+        final Reader reader = new Reader();
+        int n = 1;
+        while (n-- > 0) {
+            final int nextInt = reader.nextInt();
+            final int nextInt2;
+            final int[] array = new int[nextInt2 = reader.nextInt()];
+            new ArrayList();
+            final HashSet<Integer> set = new HashSet<Integer>();
+            for (int i = 1; i <= 100; ++i) {
+                set.add(i);
+            }
+            for (int j = 0; j < nextInt2; ++j) {
+                array[j] = reader.nextInt();
+                set.remove(array[j]);
+            }
+            int min = Integer.MAX_VALUE;
+            final Iterator<Integer> iterator = set.iterator();
+            while (iterator.hasNext()) {
+                min = Math.min(min, Math.abs(iterator.next() - nextInt));
+            }
+            final TreeSet<Integer> set2 = new TreeSet<Integer>();
+            final Iterator<Integer> iterator2 = set.iterator();
+            while (iterator2.hasNext()) {
+                final int intValue;
+                if (Math.abs((intValue = iterator2.next()) - nextInt) == min) {
+                    set2.add(intValue);
+                }
+            }
+            final int abs = Math.abs(nextInt);
+            final int abs2 = Math.abs(nextInt - 101);
+            final int min2;
+            if ((min2 = Math.min(abs, abs2)) <= min && min2 == abs) {
+                if (min2 == abs) {
+                    System.out.println(0);
+                }
+                return;
+            }
+            if (min2 < min && min2 == abs2) {
+                System.out.println(101);
+                return;
+            }
+            if (set.size() == 0) {
+                System.out.println(Math.min(Math.abs(nextInt), Math.abs(nextInt - 101)));
+                return;
+            }
+            System.out.println(set2.first());
+        }
+    }
+    
+    private static int countInRange(final int[] array, final int n, final int n2, final int n3) {
+        int n4 = n;
+        int i = 0;
+        --n4;
+        while (i <= n4) {
+            final int n5 = (i + n4) / 2;
+            if (array[n5] <= n3) {
+                i = n5 + 1;
+            }
+            else {
+                n4 = n5 - 1;
+            }
+        }
+        final int n6 = n4;
+        int n7 = n;
+        int j = 0;
+        --n7;
+        while (j <= n7) {
+            final int n8 = (j + n7) / 2;
+            if (array[n8] >= n2) {
+                n7 = n8 - 1;
+            }
+            else {
+                j = n8 + 1;
+            }
+        }
+        return n6 - j + 1;
+    }
+    
+    private static int lowerIndex(final int[] array, int n, final int n2) {
+        int i = 0;
+        --n;
+        while (i <= n) {
+            final int n3 = (i + n) / 2;
+            if (array[n3] >= n2) {
+                n = n3 - 1;
+            }
+            else {
+                i = n3 + 1;
+            }
+        }
+        return i;
+    }
+    
+    private static int upperIndex(final int[] array, int n, final int n2) {
+        int i = 0;
+        --n;
+        while (i <= n) {
+            final int n3 = (i + n) / 2;
+            if (array[n3] <= n2) {
+                i = n3 + 1;
+            }
+            else {
+                n = n3 - 1;
+            }
+        }
+        return n;
+    }
+    
+    private static StringBuilder dec_to_bin(long n) {
+        if (n == 0L) {
+            final StringBuilder sb = new StringBuilder("");
+            for (int i = 0; i < 30; ++i) {
+                sb.append("0");
+            }
+            return sb;
+        }
+        final StringBuilder sb2 = new StringBuilder("");
+        while (n != 0L) {
+            sb2.append(n % 2L);
+            n /= 2L;
+        }
+        final StringBuilder reverse = sb2.reverse();
+        final StringBuilder sb3 = new StringBuilder("");
+        for (int j = reverse.length(); j != 30; ++j) {
+            sb3.append("0");
+        }
+        sb3.append((CharSequence)reverse);
+        return sb3;
+    }
+    
+    private static int binarySearchPM(final int[] array, final int n) {
+        final int length = array.length;
+        int i = 0;
+        int n2 = length;
+        while (i <= n2) {
+            final int n3;
+            if ((n3 = (i + n2) / 2) == length) {
+                return length;
+            }
+            if (n < array[n3]) {
+                n2 = n3 - 1;
+            }
+            else {
+                if (n <= array[n3]) {
+                    return n3;
+                }
+                i = n3 + 1;
+            }
+        }
+        return -i;
+    }
+    
+    static final class Reader
+    {
+        private final int BUFFER_SIZE = 65536;
+        private DataInputStream din;
+        private byte[] buffer;
+        private int bufferPointer;
+        private int bytesRead;
+        
+        public Reader() {
+            this.din = new DataInputStream(System.in);
+            this.buffer = new byte[65536];
+            final int n = 0;
+            this.bytesRead = n;
+            this.bufferPointer = n;
+        }
+        
+        private Reader(final String name) throws IOException {
+            this.din = new DataInputStream(new FileInputStream(name));
+            this.buffer = new byte[65536];
+            final int n = 0;
+            this.bytesRead = n;
+            this.bufferPointer = n;
+        }
+        
+        private String readLine() throws IOException {
+            final byte[] bytes = new byte[64];
+            int length = 0;
+            byte read;
+            while ((read = this.read()) != -1 && read != 10) {
+                bytes[length++] = read;
+            }
+            return new String(bytes, 0, length);
+        }
+        
+        public final int nextInt() throws IOException {
+            int n = 0;
+            byte b;
+            for (b = this.read(); b <= 32; b = this.read()) {}
+            final boolean b2;
+            if (b2 = (b == 45)) {
+                b = this.read();
+            }
+            do {
+                n = n * 10 + b - 48;
+            } while ((b = this.read()) >= 48 && b <= 57);
+            if (b2) {
+                return -n;
+            }
+            return n;
+        }
+        
+        private long nextLong() throws IOException {
+            long n = 0L;
+            byte b;
+            for (b = this.read(); b <= 32; b = this.read()) {}
+            final boolean b2;
+            if (b2 = (b == 45)) {
+                b = this.read();
+            }
+            do {
+                n = n * 10L + b - 48L;
+            } while ((b = this.read()) >= 48 && b <= 57);
+            if (b2) {
+                return -n;
+            }
+            return n;
+        }
+        
+        private double nextDouble() throws IOException {
+            double n = 0.0;
+            double n2 = 1.0;
+            byte b;
+            for (b = this.read(); b <= 32; b = this.read()) {}
+            final boolean b2;
+            if (b2 = (b == 45)) {
+                b = this.read();
+            }
+            do {
+                n = n * 10.0 + b - 48.0;
+            } while ((b = this.read()) >= 48 && b <= 57);
+            if (b == 46) {
+                byte read;
+                while ((read = this.read()) >= 48 && read <= 57) {
+                    n += (read - 48) / (n2 *= 10.0);
+                }
+            }
+            if (b2) {
+                return -n;
+            }
+            return n;
+        }
+        
+        private void fillBuffer() throws IOException {
+            final DataInputStream din = this.din;
+            final byte[] buffer = this.buffer;
+            final int n = 0;
+            this.bufferPointer = n;
+            this.bytesRead = din.read(buffer, n, 65536);
+            if (this.bytesRead == -1) {
+                this.buffer[0] = -1;
+            }
+        }
+        
+        private byte read() throws IOException {
+            if (this.bufferPointer == this.bytesRead) {
+                this.fillBuffer();
+            }
+            return this.buffer[this.bufferPointer++];
+        }
+        
+        private void close() throws IOException {
+            if (this.din == null) {
+                return;
+            }
+            this.din.close();
+        }
+    }
+}

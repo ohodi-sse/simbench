@@ -1,35 +1,11 @@
+import java.util.ArrayList;
+
 // 
 // Decompiled by Procyon v0.6.0
 // 
 
-class Pair implements Comparable
+class Edge extends ArrayList<P>
 {
-    int from;
-    int end;
-    
-    public Pair(final int from, final int end) {
-        this.from = from;
-        this.end = end;
-    }
-    
-    @Override
-    public int compareTo(final Object o) {
-        return ((Pair)o).from - this.from;
-    }
-}
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-class P
-{
-    int to;
-    long cost;
-    
-    P(final int to, final long cost) {
-        this.to = to;
-        this.cost = cost;
-    }
 }
 import java.util.ArrayList;
 import java.util.Scanner;
@@ -128,6 +104,39 @@ class Main
 // Decompiled by Procyon v0.6.0
 // 
 
+class P
+{
+    int to;
+    long cost;
+    
+    P(final int to, final long cost) {
+        this.to = to;
+        this.cost = cost;
+    }
+}
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class Pair implements Comparable
+{
+    int from;
+    int end;
+    
+    public Pair(final int from, final int end) {
+        this.from = from;
+        this.end = end;
+    }
+    
+    @Override
+    public int compareTo(final Object o) {
+        return ((Pair)o).from - this.from;
+    }
+}
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
 class Town
 {
     int index;
@@ -139,13 +148,4 @@ class Town
         this.x = x;
         this.y = y;
     }
-}
-import java.util.ArrayList;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-class Edge extends ArrayList<P>
-{
 }

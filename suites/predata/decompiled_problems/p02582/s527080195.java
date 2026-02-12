@@ -53,17 +53,3 @@ public class Main
         }
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class Pair<A, B>
-{
-    A first;
-    B second;
-    
-    public Pair(final A first, final B second) {
-        this.first = first;
-        this.second = second;
-    }
-}

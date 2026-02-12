@@ -118,21 +118,6 @@ class JsonStore[A](Store[A], Pullable[A]):
 
 
 @dataclass
-class ByteStore[bytes](Store[bytes], Pullable[bytes]):
-    file: Path
-
-    def load(self, bld) -> bytes | None:
-        if self.file.exists():
-            return self.pull(bld)
-
-    def store(self, item: bytes, bld):
-        self.file.write_bytes(item)
-
-    def pull(self, bld) -> bytes:
-        return self.file.read_bytes()
-
-
-@dataclass
 class SourceStore(Store[Source], Pullable[Source]):
     file: Path
     source: Source
@@ -241,6 +226,88 @@ class Suite:
 
 
 @dataclass
+class SourceDict(Pullable):
+    sources: dict[str, Source]
+
+    def pull(self, bld: Builder):
+        return self.sources
+
+
+class Normalizer(Protocol):
+    @property
+    @abstractmethod
+    def name(self) -> str: ...
+
+    @abstractmethod
+    def process(self, source_files: list[Path], target_files: list[Path]): ...
+
+    @abstractmethod
+    def dependencies(self, source_files: list[Source]) -> list[Path]: ...
+
+    def matches(self, match):
+        import re
+
+        return re.match(match, self.name) is not None
+
+    @property
+    @abstractmethod
+    def required_output_file_extension(self) -> str: ...
+
+    def new_path(self, src: Source) -> Path:
+        label_dir = src.path.parent
+        problems_dir = label_dir.parent
+        root_dir = problems_dir.parent
+
+        processed_problems_dir = (
+            root_dir
+            / f"{self.name + '_' if self.name != 'unprocessed' else ''}{problems_dir.name}"
+        )
+        processed_problems_dir.mkdir(parents=True, exist_ok=True)
+        assert processed_problems_dir.exists(), (
+            f"Failed to create directory {processed_problems_dir}"
+        )
+        processed_labels_dir = processed_problems_dir / label_dir.name
+        processed_labels_dir.mkdir(parents=True, exist_ok=True)
+
+        if self.required_output_file_extension is not None:
+            new_name = src.path.with_suffix(self.required_output_file_extension).name
+        else:
+            new_name = src.name
+
+        new_path = processed_labels_dir / new_name
+
+        return new_path
+
+    def get_normalized_sources(self, sources: list[Source]):
+        source_files = self.dependencies(sources)
+        target_files: list[Path] = [self.new_path(src) for src in sources]
+
+        if all(src.exists() for src in target_files):
+            return SourceDict({target.name: Source(target) for target in target_files})
+
+        self.process(source_files, target_files)
+        assert all(src.exists() for src in target_files)
+
+        return SourceDict({target.name: Source(target) for target in target_files})
+
+
+class IDNormalizer(Normalizer):
+    @property
+    def name(self) -> str:
+        return "unprocessed"
+
+    @property
+    def required_output_file_extension(self) -> str | None:
+        return None
+
+    def process(self, source_files, target_files):
+        return
+
+    def dependencies(self, source_files: list[Source]):
+        return [src.path for src in source_files]
+
+
+@dataclass
 class TableBuilder:
     schema: pl.Schema
     columns: dict[str, list[object]] = field(init=False)
@@ -286,61 +353,3 @@ def figurenode(fn):
         return Node(fn, FigureStore(path), dependencies)
 
     return wrapper
-
-
-class Normalizer(Protocol):
-    @property
-    @abstractmethod
-    def name(self) -> str: ...
-
-    @abstractmethod
-    def process(self, src: Source) -> Source: ...
-
-    def matches(self, match):
-        import re
-
-        return re.match(match, self.name) is not None
-
-    def new_path(self, src: Source) -> Path:
-        label_dir = src.path.parent
-        problems_dir = label_dir.parent
-        root_dir = problems_dir.parent
-
-        processed_problems_dir = (
-            root_dir
-            / f"{self.name + '_' if self.name != 'unprocessed' else ''}{problems_dir.name}"
-        )
-        processed_problems_dir.mkdir(parents=True, exist_ok=True)
-        new_path = processed_problems_dir / label_dir.name / src.name
-        return new_path
-
-
-class IDNormalizer(Normalizer):
-    @property
-    def name(self) -> str:
-        return "unprocessed"
-
-    def process(self, src: Source) -> Source:
-        return src
-
-
-@dataclass(frozen=True)
-class PullableSource(Pullable[Source]):
-    source: Source
-
-    def pull(self, bld) -> Source:
-        return self.source
-
-
-def source_node_builder(normalizer: Normalizer, src: PullableSource):
-    new_file = normalizer.new_path(src.source)
-
-    def normalization_action(bld, **src):
-        src = [s for n, s in src.items()][0]
-        return normalizer.process(src)
-
-    return Node(
-        normalization_action,
-        SourceStore(new_file),
-        dependencies={src.source.name: src},
-    )

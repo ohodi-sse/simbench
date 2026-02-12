@@ -1,17 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class trie
-{
-    trie[] a;
-    int cnt;
-    
-    trie() {
-        this.a = new trie[26];
-        this.cnt = 0;
-    }
-}
 import java.io.OutputStream;
 import java.io.Reader;
 import java.io.InputStreamReader;

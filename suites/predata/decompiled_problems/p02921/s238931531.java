@@ -1,22 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-public class Main
-{
-    public static void main(final String[] array) throws Exception {
-        final FastScanner fastScanner = new FastScanner(System.in);
-        final char[] charArray = fastScanner.next().toCharArray();
-        final char[] charArray2 = fastScanner.next().toCharArray();
-        int x = 0;
-        for (int i = 0; i < 3; ++i) {
-            if (charArray[i] == charArray2[i]) {
-                ++x;
-            }
-        }
-        System.out.println(x);
-    }
-}
 import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;
@@ -96,5 +77,24 @@ class FastScanner
             array[i] = this.nextLong();
         }
         return array;
+    }
+}
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) throws Exception {
+        final FastScanner fastScanner = new FastScanner(System.in);
+        final char[] charArray = fastScanner.next().toCharArray();
+        final char[] charArray2 = fastScanner.next().toCharArray();
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (charArray[i] == charArray2[i]) {
+                ++x;
+            }
+        }
+        System.out.println(x);
     }
 }

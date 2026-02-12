@@ -1,2 +1,2 @@
-mod normalizers;
-mod tables;
+pub mod normalizers;
+pub mod tables;

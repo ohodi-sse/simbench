@@ -1,58 +1,6 @@
 import java.io.IOException;
 import java.io.Reader;
 import java.io.InputStreamReader;
-import java.io.InputStream;
-import java.util.StringTokenizer;
-import java.io.BufferedReader;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-private static class InputReader
-{
-    private BufferedReader br;
-    private StringTokenizer st;
-    
-    public InputReader(final InputStream in) {
-        this.br = new BufferedReader(new InputStreamReader(in), 32768);
-        this.st = null;
-    }
-    
-    public String nextToken() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-                continue;
-            }
-            catch (final IOException cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.st.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.nextToken());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.nextToken());
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.nextToken());
-    }
-}
-import java.io.IOException;
-import java.io.Reader;
-import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.PrintStream;

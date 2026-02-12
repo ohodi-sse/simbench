@@ -26,16 +26,3 @@ public class Main
         }
     }
 }
-import java.io.PrintWriter;
-import java.util.Scanner;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class CMultiplication3
-{
-    public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
-        printWriter.println(scanner.nextLong() * Math.round(scanner.nextDouble() * 100.0) / 100L);
-    }
-}

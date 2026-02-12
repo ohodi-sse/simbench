@@ -91,7 +91,7 @@ macro_rules! dataframe_from_struct {
 
 pub fn compressions(compressor: Compressor, srcs: Vec<Source>) -> Result<DataFrame> {
     let result_rows: Result<Vec<CompressionTable>> = srcs
-        .iter()
+        .par_iter()
         .map(|s| -> Result<CompressionTable> { compute_comp_row(compressor, s) })
         .collect();
 

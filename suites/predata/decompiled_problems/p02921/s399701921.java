@@ -34,24 +34,3 @@ public class Main
         }
     }
 }
-import java.io.PrintWriter;
-import java.util.Scanner;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class abc139_a
-{
-    public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
-        final String[] split = scanner.next().split("");
-        final String[] split2 = scanner.next().split("");
-        int x = 0;
-        for (int i = 0; i < split.length; ++i) {
-            if (split[i].compareTo(split2[i]) == 0) {
-                ++x;
-            }
-        }
-        printWriter.println(x);
-    }
-}

@@ -1,3 +1,13 @@
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class Main
+{
+    public static void main(final String[] array) {
+        new Solver().run();
+    }
+}
 import java.util.Scanner;
 
 // 
@@ -17,15 +27,5 @@ class Solver
             }
         }
         System.out.println(x);
-    }
-}
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-class Main
-{
-    public static void main(final String[] array) {
-        new Solver().run();
     }
 }

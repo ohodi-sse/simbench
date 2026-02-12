@@ -1,0 +1,43 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public final class Main
+{
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
+        final int nextInt = scanner.nextInt();
+        final ArrayList list = new ArrayList();
+        for (int i = 0; i < nextInt; ++i) {
+            list.add(scanner.next());
+        }
+        if (list.size() == 0 || !list.contains(next)) {
+            System.out.println(next);
+            return;
+        }
+        int n = 1;
+        String value;
+        String value2;
+        while (true) {
+            value = String.valueOf(Integer.parseInt(next) - n);
+            value2 = String.valueOf(Integer.parseInt(next) + n);
+            if (!list.contains(value) || !list.contains(value2)) {
+                break;
+            }
+            ++n;
+        }
+        if (!list.contains(value) && !list.contains(value2)) {
+            System.out.println(value);
+            return;
+        }
+        if (!list.contains(value)) {
+            System.out.println(value);
+            return;
+        }
+        System.out.println(value2);
+    }
+}

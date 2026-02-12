@@ -3,76 +3,6 @@ import java.io.FileNotFoundException;
 import java.io.FileReader;
 import java.io.Reader;
 import java.io.InputStreamReader;
-import java.io.InputStream;
-import java.util.StringTokenizer;
-import java.io.BufferedReader;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class InputReader
-{
-    public BufferedReader reader;
-    public StringTokenizer tok;
-    
-    public InputReader(final InputStream in) {
-        this.reader = new BufferedReader(new InputStreamReader(in));
-        this.tok = null;
-    }
-    
-    public InputReader(final String fileName) throws FileNotFoundException {
-        this.reader = new BufferedReader(new FileReader(fileName));
-        this.tok = null;
-    }
-    
-    public String nextLine() {
-        String line;
-        try {
-            line = this.reader.readLine();
-        }
-        catch (final IOException cause) {
-            throw new RuntimeException(cause);
-        }
-        return line;
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.tok != null) {
-                if (this.tok.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.tok = new StringTokenizer(this.nextLine());
-                continue;
-            }
-            catch (final Exception cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.tok.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-}
-import java.io.IOException;
-import java.io.FileNotFoundException;
-import java.io.FileReader;
-import java.io.Reader;
-import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
 import java.io.PrintStream;
@@ -174,33 +104,5 @@ public class Main
             }
             printWriter.println(x);
         }
-    }
-}
-import java.io.PrintWriter;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class Task
-{
-    public void solve(final InputReader inputReader, final PrintWriter printWriter) {
-        final String next = inputReader.next();
-        int x = 0;
-        int n = 0;
-        final char[] charArray = next.toCharArray();
-        for (int length = charArray.length, i = 0; i < length; ++i) {
-            if (charArray[i] == 'S') {
-                x = Math.max(x, n);
-                n = 0;
-            }
-            else {
-                ++n;
-            }
-        }
-        if (n > 0) {
-            x = Math.max(n, x);
-        }
-        printWriter.println(x);
     }
 }

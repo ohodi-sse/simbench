@@ -1,55 +1,18 @@
 
 -libraryjars /usr/lib/jvm/java-25-openjdk-amd64/jmods/java.base.jmod
 
--optimizationpasses 2
+-optimizationpasses 3
 -allowaccessmodification
 -dontobfuscate
 -dontusemixedcaseclassnames
--dontpreverify
 -verbose
 
 
-
-# Keep - Applications. Keep all application classes, along with their 'main' methods.
--keepclasseswithmembers public class * {
-    public static void main(java.lang.String[]);
-}
 
 # Keep - Native method names. Keep all native class/method names.
 -keepclasseswithmembers,includedescriptorclasses,allowshrinking class * {
     native <methods>;
 }
-
-# Keep - _class method names. Keep all .class method names. This may be
-# useful for libraries that will be obfuscated again with different obfuscators.
--keepclassmembers,allowshrinking class * {
-    java.lang.Class class$(java.lang.String);
-    java.lang.Class class$(java.lang.String,boolean);
-}
-
--keepclassmembers,allowshrinking class * {
-    @proguard.annotation.KeepName
-    <fields>;
-    @proguard.annotation.KeepName
-    <methods>;
-}
-
--keepclassmembers,allowshrinking @proguard.annotation.KeepClassMemberNames class * {
-    <fields>;
-    <methods>;
-}
-
--keepclassmembers,allowshrinking @proguard.annotation.KeepPublicClassMemberNames class * {
-    public <fields>;
-    public <methods>;
-}
-
--keepclassmembers,allowshrinking @proguard.annotation.KeepPublicProtectedClassMemberNames class * {
-    public protected <fields>;
-    public protected <methods>;
-}
-
--keep,allowshrinking @proguard.annotation.KeepName class *
 
 # Remove - System method calls. Remove all invocations of System
 # methods without side effects whose return values are not used.
@@ -311,28 +274,4 @@
     public int length();
     public java.lang.String substring(int);
     public java.lang.String substring(int,int);
-}
-
-# Remove debugging - Throwable_printStackTrace calls. Remove all invocations of
-# Throwable.printStackTrace().
--assumenosideeffects public class java.lang.Throwable {
-    public void printStackTrace();
-}
-
-# Remove debugging - Thread_dumpStack calls. Remove all invocations of
-# Thread.dumpStack().
--assumenosideeffects public class java.lang.Thread {
-    public static void dumpStack();
-}
-
-# Remove debugging - All logging API calls. Remove all invocations of the
-# logging API whose return values are not used.
--assumenosideeffects public class java.util.logging.* {
-    <methods>;
-}
-
-# Remove debugging - All Log4j API calls. Remove all invocations of the
-# Log4j API whose return values are not used.
--assumenosideeffects public class org.apache.log4j.** {
-    <methods>;
 }

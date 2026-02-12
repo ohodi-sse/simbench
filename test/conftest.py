@@ -21,10 +21,12 @@ def test_bld():
 def test_suite():
     suite = Suite(Path("./test/testfiles/"))
     yield suite
-    shutil.rmtree(suite.root / "results")
-    shutil.rmtree(suite.root / "decompiled_problems")
-    shutil.rmtree(suite.root / "google_java_formatted_problems")
-    shutil.rmtree(suite.root / "imports_removed_problems")
+    shutil.rmtree(suite.root / "results", ignore_errors=True)
+    shutil.rmtree(suite.root / "compiled_problems", ignore_errors=True)
+    shutil.rmtree(suite.root / "optimized_problems", ignore_errors=True)
+    shutil.rmtree(suite.root / "decompiled_problems", ignore_errors=True)
+    shutil.rmtree(suite.root / "google_java_formatted_problems", ignore_errors=True)
+    shutil.rmtree(suite.root / "imports_removed_problems", ignore_errors=True)
 
 
 @pytest.fixture(params=[tool for tool in get_all_tools()])
@@ -34,8 +36,7 @@ def test_tool(request):
 
 @pytest.fixture(scope="session")
 def test_classifiers(test_suite):
-    max_files = test_suite.sources()
-    return get_all_classifiers(len(list(max_files)))
+    return get_all_classifiers(1)
 
 
 @pytest.fixture(params=[n for n in get_all_normalizers()])

@@ -1,17 +1,3 @@
-import java.io.PrintWriter;
-import java.util.Scanner;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class Multiplication3
-{
-    public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
-        final String[] split = scanner.nextLine().split(" ");
-        printWriter.append(String.valueOf(Long.parseLong(split[0]) * Long.parseLong(split[1].replaceAll("\\.", "")) / 100L));
-    }
-}
 import java.io.PrintStream;
 import java.io.InputStream;
 import java.io.OutputStream;

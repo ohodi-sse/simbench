@@ -1,0 +1,140 @@
+import java.io.IOException;
+import java.util.InputMismatchException;
+import java.io.PrintStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public final class Main
+{
+    private static void main$3231c38a() {
+        final InputStream in = System.in;
+        final PrintStream out = System.out;
+        final FastReader fastReader = new FastReader(in);
+        final PrintWriter printWriter = new PrintWriter(out);
+        new CMultiplication3();
+        CMultiplication3.solve$3c455bd4(fastReader, printWriter);
+        printWriter.close();
+    }
+    
+    static final class CMultiplication3
+    {
+        public static void solve$3c455bd4(final FastReader fastReader, final PrintWriter printWriter) {
+            int n;
+            for (n = fastReader.read(); fastReader.isSpaceChar(n); n = fastReader.read()) {}
+            int n2 = 1;
+            if (n == 45) {
+                n2 = -1;
+                n = fastReader.read();
+            }
+            long n3 = 0L;
+            while (n >= 48 && n <= 57) {
+                n3 = n3 * 10L + (n - 48);
+                n = fastReader.read();
+                if (fastReader.isSpaceChar(n)) {
+                    final long n4 = n3 * n2;
+                    int n5;
+                    for (n5 = fastReader.read(); fastReader.isSpaceChar(n5); n5 = fastReader.read()) {}
+                    final StringBuilder sb = new StringBuilder();
+                    do {
+                        if (Character.isValidCodePoint(n5)) {
+                            sb.appendCodePoint(n5);
+                        }
+                        n5 = fastReader.read();
+                    } while (!fastReader.isSpaceChar(n5));
+                    final String s;
+                    if ((s = "" + n4 * Long.parseLong(sb.toString().replace(".", ""))).length() <= 2) {
+                        printWriter.println(0);
+                        return;
+                    }
+                    printWriter.println(s.substring(0, s.length() - 2));
+                    return;
+                }
+            }
+            throw new InputMismatchException();
+        }
+    }
+    
+    static final class FastReader
+    {
+        private InputStream stream;
+        private byte[] buf;
+        private int curChar;
+        private int numChars;
+        private SpaceCharFilter filter;
+        
+        public FastReader(final InputStream stream) {
+            this.buf = new byte[1024];
+            this.stream = stream;
+        }
+        
+        public final int read() {
+            if (this.numChars == -1) {
+                throw new InputMismatchException();
+            }
+            if (this.curChar >= this.numChars) {
+                this.curChar = 0;
+                try {
+                    this.numChars = this.stream.read(this.buf);
+                }
+                catch (final IOException ex) {
+                    throw new InputMismatchException();
+                }
+                if (this.numChars <= 0) {
+                    return -1;
+                }
+            }
+            return this.buf[this.curChar++];
+        }
+        
+        private long nextLong() {
+            int n;
+            for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+            int n2 = 1;
+            if (n == 45) {
+                n2 = -1;
+                n = this.read();
+            }
+            long n3 = 0L;
+            while (n >= 48 && n <= 57) {
+                n3 = n3 * 10L + (n - 48);
+                n = this.read();
+                if (this.isSpaceChar(n)) {
+                    return n3 * n2;
+                }
+            }
+            throw new InputMismatchException();
+        }
+        
+        private String nextString() {
+            int n;
+            for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+            final StringBuilder sb = new StringBuilder();
+            do {
+                if (Character.isValidCodePoint(n)) {
+                    sb.appendCodePoint(n);
+                }
+                n = this.read();
+            } while (!this.isSpaceChar(n));
+            return sb.toString();
+        }
+        
+        public final boolean isSpaceChar(final int n) {
+            final SpaceCharFilter filter = this.filter;
+            return isWhitespace(n);
+        }
+        
+        private static boolean isWhitespace(final int n) {
+            return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
+        }
+        
+        public interface SpaceCharFilter
+        {
+            boolean isSpaceChar$134632();
+        }
+    }
+}

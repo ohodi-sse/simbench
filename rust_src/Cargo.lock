@@ -2454,6 +2454,7 @@ dependencies = [
  "pyo3",
  "pyo3-polars",
  "rayon",
+ "simbenchers_core",
  "zstd-safe",
 ]
 

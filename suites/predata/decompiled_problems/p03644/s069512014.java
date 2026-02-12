@@ -66,39 +66,3 @@ public class Main
         }
     }
 }
-import java.io.IOException;
-import java.io.Reader;
-import java.io.InputStreamReader;
-import java.util.StringTokenizer;
-import java.io.BufferedReader;
-
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-static class ConsoleScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    ConsoleScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-        this.st = new StringTokenizer("");
-    }
-    
-    String next() {
-        try {
-            while (!this.st.hasMoreElements()) {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            return this.st.nextToken();
-        }
-        catch (final IOException detailMessage) {
-            throw new AssertionError((Object)detailMessage);
-        }
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-}

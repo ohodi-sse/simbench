@@ -1,22 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
-class Status
-{
-    int row;
-    int col;
-    int candies;
-    
-    public Status(final int row, final int col, final int candies) {
-        this.row = 0;
-        this.col = 0;
-        this.candies = 0;
-        this.row = row;
-        this.col = col;
-        this.candies = candies;
-    }
-}
 import java.util.ArrayList;
 import java.util.List;
 import java.math.BigDecimal;
@@ -78,5 +59,24 @@ public class Main
             array[i] = Integer.parseInt(split[i]);
         }
         return array;
+    }
+}
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class Status
+{
+    int row;
+    int col;
+    int candies;
+    
+    public Status(final int row, final int col, final int candies) {
+        this.row = 0;
+        this.col = 0;
+        this.candies = 0;
+        this.row = row;
+        this.col = col;
+        this.candies = candies;
     }
 }
