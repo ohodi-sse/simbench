@@ -3,7 +3,7 @@ use color_eyre::eyre::eyre;
 use color_eyre::{Result, eyre::OptionExt};
 
 use duct::cmd;
-use indicatif::ParallelProgressIterator;
+use indicatif::{ParallelProgressIterator, ProgressIterator};
 use rayon::iter::IntoParallelRefIterator;
 use rayon::prelude::*;
 use std::env;
@@ -51,6 +51,11 @@ fn compile_java(filepath: impl AsRef<Path>, compiled_path: impl AsRef<Path>) -> 
         compiled_path
     );
     assert!(filepath.exists(), "Failed to locate file {}", filepath);
+
+    if compiled_path.exists() {
+        println!("The compiled file {:?} already exists", compiled_path);
+        return Ok(());
+    };
 
     // Create temporary directory
     let tmp_dir = tempdir_in(get_parent_dir(filepath)?.as_std_path())?;
@@ -225,8 +230,8 @@ pub fn batch_compile(source_files: Vec<String>, target_files: Vec<String>) -> Re
     assert_eq!(source_files.len(), target_files.len());
 
     source_files
-        .par_iter()
-        .zip(target_files.par_iter())
+        .iter()
+        .zip(target_files.iter())
         .progress()
         .try_for_each(|(src, tgt)| compile_java(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt)))
 }
@@ -245,8 +250,8 @@ pub fn batch_decompile(source_files: Vec<String>, target_files: Vec<String>) -> 
     assert_eq!(source_files.len(), target_files.len());
 
     source_files
-        .par_iter()
-        .zip(target_files.par_iter())
+        .iter()
+        .zip(target_files.iter())
         .progress()
         .try_for_each(|(src, tgt)| {
             decompile_w_procyon(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt))
