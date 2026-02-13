@@ -1,4 +1,5 @@
 from simbench.build import NamedCallable, Source
+from abc import ABC, abstractmethod
 import torch
 from transformers import (
     RobertaTokenizer,
@@ -9,12 +10,31 @@ from transformers import (
     PreTrainedModel,
 )
 
-from abc import ABC, abstractmethod
-
 
 class AITool(ABC, NamedCallable):
-    tokenizer: PreTrainedTokenizer
-    model: PreTrainedModel
+    def __init__(self):
+        self._tokenizer = None
+        self._model = None
+
+    @property
+    def model(self):
+        if self._model is None:
+            self._model = self._load_model()
+        return self._model
+
+    @property
+    def tokenizer(self):
+        if self._tokenizer is None:
+            self._tokenizer = self._load_tokenizer()
+        return self._tokenizer
+
+    @property
+    @abstractmethod
+    def _load_model(self) -> PreTrainedModel: ...
+
+    @property
+    @abstractmethod
+    def _load_tokenizer(self) -> PreTrainedTokenizer: ...
 
     def normalize(self, embedding):
         return embedding / embedding.norm(p=2)
@@ -26,7 +46,6 @@ class AITool(ABC, NamedCallable):
         with torch.no_grad():
             outputs = self.model(**inputs)
 
-        # embedding = outputs.last_hidden_state[:, 0, :]
         # Using mean as it should be better at finding semantic similarity
         embedding = outputs.last_hidden_state.mean(dim=1)
 
@@ -49,24 +68,28 @@ class AITool(ABC, NamedCallable):
 
 
 class CodeBERT(AITool):
-    def __init__(self):
-        torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.tokenizer = RobertaTokenizer.from_pretrained("microsoft/codebert-base")
-        self.model = RobertaModel.from_pretrained("microsoft/codebert-base")
-        self.model.eval()
-
     @property
     def name(self):
         return "CodeBERT"
 
+    def _load_model(self):
+        model = RobertaModel.from_pretrained("microsoft/codebert-base")
+        model.eval()
+        return model
+
+    def _load_tokenizer(self):
+        return RobertaTokenizer.from_pretrained("microsoft/codebert-base")
+
 
 class GraphCodeBERT(AITool):
-    def __init__(self):
-        torch.device("cuda" if torch.cuda.is_available() else "cpu")
-        self.tokenizer = AutoTokenizer.from_pretrained("microsoft/graphcodebert-base")
-        self.model = AutoModel.from_pretrained("microsoft/graphcodebert-base")
-        self.model.eval()
-
     @property
     def name(self):
         return "GraphCodeBERT"
+
+    def _load_model(self):
+        model = AutoModel.from_pretrained("microsoft/graphcodebert-base")
+        model.eval()
+        return model
+
+    def _load_tokenizer(self):
+        return AutoTokenizer.from_pretrained("microsoft/graphcodebert-base")

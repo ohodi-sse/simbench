@@ -7,7 +7,6 @@ import matplotlib.pyplot as plt
 
 from simbench.build import (
     Builder,
-    IDNormalizer,
     Suite,
 )
 
@@ -94,44 +93,6 @@ def analyse(cfg, suite, tool_pattern, normalizer_pattern, classifier_pattern):
     help="filter on which classifiers to run",
     default=".*",
 )
-@click.option("--show/--no-show", default=False)
-@click.pass_obj
-def plot(cfg, suite, tool_pattern, classifier_pattern, show) -> None:
-    bld = Builder(logger)
-
-    for tool in cfg.tools:
-        if not tool.matches(tool_pattern):
-            cfg.log.debug(f"Skipping {tool} with name: {tool.name}")
-            continue
-
-        filtered_classifiers = [
-            c for c in cfg.classifiers if c.matches(classifier_pattern)
-        ]
-        analysis = init_analysis(
-            tool,
-            Suite(suite),
-            filtered_classifiers,
-            IDNormalizer(),  # CompileDecompileNormalizer()
-        )
-
-        pdf = analysis.performance_pdf_node
-        pdf.pull(bld)
-
-        if show:
-            plt.show()
-
-    click.echo("Done")
-
-
-@click.command()
-@click.argument("suite", type=click.Path(file_okay=False, path_type=Path))
-@click.option("--tool", "tool_pattern", help="filter the tools to be run", default=".*")
-@click.option(
-    "--classifier",
-    "classifier_pattern",
-    help="filter on which classifiers to run",
-    default=".*",
-)
 @click.option(
     "--normalizer",
     "normalizer_pattern",
@@ -176,5 +137,4 @@ def diff_class(classification1, classification2):
 cli.add_command(diff_class)
 cli.add_command(show_file)
 cli.add_command(analyse)
-cli.add_command(plot)
 cli.add_command(plot_comparison)

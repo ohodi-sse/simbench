@@ -1,5 +1,5 @@
 from __future__ import annotations
-from simbench.codeBERT import CodeBERT, GraphCodeBERT
+from simbench.AI_tools import CodeBERT, GraphCodeBERT
 
 from typing import Sequence
 from contextlib import contextmanager
@@ -17,19 +17,19 @@ import loguru
 from loguru import logger
 
 from simbench.build import (
-    IDNormalizer,
     Normalizer,
     Suite,
     Constant,
 )
 from simbench.classification import Classifier
 from simbench.normalizers import (
+    IDNormalizer,
     GoogleFormatter,
     DecompileWOImports,
-    CompileNormalizer,
     DecompileNormalizer,
     OptimizedDecompiledNormalizer,
 )
+
 from simbench.tables import (
     compressions,
     pairwise_compressions,

@@ -4,7 +4,7 @@ from loguru import logger
 from pathlib import Path
 
 
-def test_analyse(test_suite):
+def test_analyse_simple(test_suite):
     runner = CliRunner()
     logger.debug(f"Running from {Path.cwd()}")
 
@@ -14,6 +14,10 @@ def test_analyse(test_suite):
         [
             "analyse",
             str(test_suite.root),
+            "--tool",
+            "zstd-1",
+            "--normalizer",
+            "unprocessed",
         ],
     )
 

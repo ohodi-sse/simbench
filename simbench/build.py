@@ -263,26 +263,23 @@ class Normalizer(Protocol):
     def required_output_file_extension(self) -> str: ...
 
     def new_source(self, src: Source) -> Source:
-        label_dir = src.path.parent
-        problems_dir = label_dir.parent
+        label = src.label
+        problems_dir = src.path.parent.parent
         root_dir = problems_dir.parent
 
+        # Create new directory for processed files using the name of the processing method
         processed_problems_dir = (
             root_dir
-            / f"{self.name + '_' if self.name != 'unprocessed' else ''}{problems_dir.name}"
+            / f"{self.name + '_' if self.name != 'unprocessed' else ''}problems"
         )
         processed_problems_dir.mkdir(parents=True, exist_ok=True)
         assert processed_problems_dir.exists(), (
             f"Failed to create directory {processed_problems_dir}"
         )
-        processed_labels_dir = processed_problems_dir / label_dir.name
+        processed_labels_dir = processed_problems_dir / label
         processed_labels_dir.mkdir(parents=True, exist_ok=True)
 
-        if self.required_output_file_extension is not None:
-            new_name = src.path.with_suffix(self.required_output_file_extension).name
-        else:
-            new_name = src.name
-
+        new_name = Path(src.name).with_suffix(self.required_output_file_extension).name
         new_path = processed_labels_dir / new_name
 
         return Source(new_path)
@@ -309,22 +306,6 @@ class DependentNormalizer(Normalizer):
             bld
         )
         return source_dict.values()
-
-
-class IDNormalizer(Normalizer):
-    @property
-    def name(self) -> str:
-        return "unprocessed"
-
-    @property
-    def required_output_file_extension(self) -> str | None:
-        return None
-
-    def dependencies(self, sources: list[Source]) -> list[Source]:
-        return sources
-
-    def __call__(self, sources: list[str], targets: list[str]):
-        return
 
 
 @dataclass

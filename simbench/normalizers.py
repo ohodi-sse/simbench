@@ -1,10 +1,8 @@
 import tree_sitter as ts
 import tree_sitter_java as tsjava
 
-from simbench.build import Normalizer, Source, DependentNormalizer, IDNormalizer
+from simbench.build import Normalizer, Source, DependentNormalizer
 from pathlib import Path
-import subprocess
-import shutil
 from loguru import logger
 from rust_src import (
     rust_batch_decompile,
@@ -12,6 +10,22 @@ from rust_src import (
     rust_batch_optimize,
     rust_batch_format,
 )
+
+
+class IDNormalizer(Normalizer):
+    @property
+    def name(self) -> str:
+        return "unprocessed"
+
+    @property
+    def required_output_file_extension(self) -> str | None:
+        return ".java"
+
+    def dependencies(self, sources: list[Source]) -> list[Source]:
+        return sources
+
+    def __call__(self, sources: list[str], targets: list[str]):
+        return
 
 
 class CompileNormalizer(DependentNormalizer):
