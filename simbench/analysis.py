@@ -106,16 +106,14 @@ def get_all_tools():
     comp_metrics = [NCD()]
 
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
-    diff_tools = []  # [DiffTool(DiffMetric(), BSDiff())] BSDiff is veeeery slooow
+    diff_tools = [DiffTool(DiffMetric(), BSDiff())]  # BSDiff is veeeery slooow
     other_tools = [GenericTool(GenericMetric(), Difflib())]
     ai_tools = [
         GenericTool(GenericMetric(), CodeBERT()),
         GenericTool(GenericMetric(), GraphCodeBERT()),
     ]
 
-    tools = comp_tools + ai_tools + diff_tools  # + other_tools
-
-    return tools
+    return comp_tools + ai_tools + diff_tools + other_tools
 
 
 def get_all_classifiers(steps: int = 20) -> Sequence[Classifier]:
@@ -123,10 +121,7 @@ def get_all_classifiers(steps: int = 20) -> Sequence[Classifier]:
 
     thrsh = [Threshold(round(t, 3)) for t in arange(0.05, 1.0, 1.0 / steps)]
     knn = [KNN(k) for k in range(1, 300, int(301 / steps))]
-
-    classifiers = thrsh + knn
-
-    return classifiers
+    return thrsh + knn
 
 
 def get_all_normalizers():
@@ -135,8 +130,6 @@ def get_all_normalizers():
         DecompileNormalizer(),
         OptimizedDecompiledNormalizer(),
         GoogleFormatter(),
-        # CompileDecompileNormalizer(),
-        # ImportCommentRemover(),
         DecompileWOImports(),
     ]
 

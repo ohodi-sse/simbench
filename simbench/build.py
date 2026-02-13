@@ -15,7 +15,7 @@ from loguru import logger
 
 from indicatif import ProgressBar, ProgressStyle
 
-Logger = type(logger)
+# Logger = type(logger)
 
 
 @dataclass(frozen=True)
@@ -30,17 +30,14 @@ class Source:
     def label(self):
         return self.path.parent.name
 
-    # def __post_init__(self):
-    #     if not self.path.is_file():
-    #         raise ValueError(f"Path {self.path} is not a file.")
-
     def get_bytes(self) -> bytes:
         return self.path.read_bytes()
 
 
 @dataclass
 class Builder:
-    log: logger
+    def __init__(self, logger):
+        self.log = logger
 
     @contextmanager
     def profile(self):
@@ -132,8 +129,6 @@ class SourceStore(Store[Source], Pullable[Source]):
 
     def store(self, item: Source, bld):
         assert isinstance(item, Source)
-        # self.file.touch(exist_ok=True)
-        # assert self.file.exists()
         self.source.path.write_bytes(item.get_bytes())
         assert self.source.path.exists()
 
@@ -172,8 +167,6 @@ class FigureStore(Store[Figure]):
         return None  # Returning None will always overwrite the plot
 
     def store(self, item: Figure, bld):
-        # page_width, page_height = 8.3, 11.7  # A4 size in inches
-        # item.set_size_inches(page_width, page_height)
         item.savefig(self.file, format="pdf", bbox_inches="tight", pad_inches=1.5)
         assert self.file.exists(), f"Failed to create file {self.file}"
 
