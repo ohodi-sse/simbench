@@ -60,9 +60,10 @@ def show_file(file: str, filter, csv) -> None:
 )
 @click.pass_obj
 def analyse(cfg, suite, tool_pattern, normalizer_pattern, classifier_pattern):
-    bld = Builder(logger)
+    bld = Builder(cfg.log)
 
     for normalizer in cfg.normalizers:
+        cfg.log.info(f"Using {normalizer.name} data for the following analyses!")
         for tool in cfg.tools:
             if not tool.matches(tool_pattern) or not normalizer.matches(
                 normalizer_pattern
@@ -127,11 +128,11 @@ def plot_comparison(
 @click.command()
 @click.argument("classification1", type=click.Path(file_okay=True, path_type=Path))
 @click.argument("classification2", type=click.Path(file_okay=True, path_type=Path))
-def diff_class(classification1, classification2):
+@click.option("--seed", default=None)
+def diff_class(classification1, classification2, seed):
     from simbench.comparing import find_classification_difference
 
-    df = find_classification_difference(classification1, classification2)
-    print(df)
+    find_classification_difference(classification1, classification2, seed)
 
 
 cli.add_command(diff_class)

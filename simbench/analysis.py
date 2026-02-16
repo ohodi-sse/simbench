@@ -4,6 +4,7 @@ from simbench.AI_tools import CodeBERT, GraphCodeBERT
 from typing import Sequence
 from contextlib import contextmanager
 from numpy import arange
+import sys
 
 from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
@@ -121,6 +122,9 @@ def get_all_classifiers(steps: int = 20) -> Sequence[Classifier]:
 
     thrsh = [Threshold(round(t, 3)) for t in arange(0.05, 1.0, 1.0 / steps)]
     knn = [KNN(k) for k in range(1, 300, int(301 / steps))]
+
+    thrsh = [Threshold(0.5)]
+    knn = [KNN(20)]
     return thrsh + knn
 
 
@@ -143,6 +147,9 @@ class Config:
 
     def __init__(self):
         self.log = logger
+        self.log.remove(0)
+        self.log.add(sys.stderr, level="INFO")
+
         self.tools = get_all_tools()
         self.classifiers = get_all_classifiers()
         self.normalizers = get_all_normalizers()

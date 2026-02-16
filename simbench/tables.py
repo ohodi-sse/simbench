@@ -3,6 +3,7 @@ from sklearn.metrics import (
     precision_recall_fscore_support,
     accuracy_score,
     confusion_matrix,
+    multilabel_confusion_matrix,
 )
 import numpy as np
 import itertools
@@ -237,7 +238,7 @@ def classifications(
             c = classifier.classify(distances, src)
 
             if c is None:
-                labelled_as = "Not classificable"
+                labelled_as = "Not classifiable"
             else:
                 labelled_as = c.labelled_as
 
@@ -278,10 +279,11 @@ def performance(schema: pl.Schema, bld: Builder, **classifications) -> pl.LazyFr
         assert len(labels) > 1, (
             f"Not enough classes to meaningfully classify in {labels}. This probably happens because the classifier returned None for some classes."
         )
-        cm = confusion_matrix(src_labels, labelled_as, labels=labels)
+        # cm = confusion_matrix(src_labels, labelled_as, labels=labels)
+        mcm = multilabel_confusion_matrix(src_labels, labelled_as, labels=labels)
+        FN = sum(mcm[:, 1, 0])
+        FP = sum(mcm[:, 0, 1])
 
-        FP = sum(cm.sum(axis=0) - np.diag(cm))
-        FN = sum(cm.sum(axis=1) - np.diag(cm))
         averaging = "macro"
 
         accuracy = accuracy_score(src_labels, labelled_as)
