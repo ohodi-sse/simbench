@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final long nextLong = scanner.nextLong();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final long nextLong = (scanner = new Scanner(System.in)).nextLong();
         final double nextDouble = scanner.nextDouble();
         if (nextLong == 0L || nextDouble == 0.0) {
             System.out.println("0");
@@ -18,8 +18,8 @@ public class Main
         if (s.length() >= 4) {
             n2 = Integer.parseInt(String.valueOf(s.charAt(3)));
         }
-        final String s2 = "" + (nextLong * n3 * 100L + nextLong * n * 10L + nextLong * n2);
-        if (s2.length() <= 2) {
+        final String s2;
+        if ((s2 = "" + (nextLong * n3 * 100L + nextLong * n * 10L + nextLong * n2)).length() <= 2) {
             System.out.println("0");
             return;
         }

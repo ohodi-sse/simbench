@@ -1,29 +1,36 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final FastScanner fastScanner = new FastScanner();
-        final int nextInt = fastScanner.nextInt();
-        final int nextInt2 = fastScanner.nextInt();
-        final int[] array2 = fastScanner.readArray(nextInt2);
-        for (int i = 0; i < 100; ++i) {
-            final boolean inArray = inArray(array2, nextInt - i, nextInt2);
-            final boolean inArray2 = inArray(array2, nextInt + i, nextInt2);
+    private static void main$3231c38a() {
+        final FastScanner fastScanner;
+        final int int1 = Integer.parseInt((fastScanner = new FastScanner()).next());
+        final int int2 = Integer.parseInt(fastScanner.next());
+        final FastScanner fastScanner2 = fastScanner;
+        final int n = int2;
+        final FastScanner fastScanner3 = fastScanner2;
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = Integer.parseInt(fastScanner3.next());
+        }
+        final int[] array2 = array;
+        for (int j = 0; j < 100; ++j) {
+            final boolean inArray = inArray(array2, int1 - j, int2);
+            final boolean inArray2 = inArray(array2, int1 + j, int2);
             if (inArray && inArray2) {
-                System.out.println(nextInt - i);
-                break;
+                System.out.println(int1 - j);
+                return;
             }
             if (inArray) {
-                System.out.println(nextInt - i);
-                break;
+                System.out.println(int1 - j);
+                return;
             }
             if (inArray2) {
-                System.out.println(nextInt + i);
-                break;
+                System.out.println(int1 + j);
+                return;
             }
         }
     }
     
-    public static boolean inArray(final int[] array, final int n, final int n2) {
+    private static boolean inArray(final int[] array, final int n, final int n2) {
         for (int i = 0; i < n2; ++i) {
             if (n == array[i]) {
                 return false;
@@ -32,17 +39,17 @@ public class Main
         return true;
     }
     
-    static class FastScanner
+    static final class FastScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         FastScanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
             this.st = new StringTokenizer("");
         }
         
-        public String next() {
+        public final String next() {
             while (!this.st.hasMoreElements()) {
                 try {
                     this.st = new StringTokenizer(this.br.readLine());
@@ -54,49 +61,16 @@ public class Main
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        int[] readArray(final int n) {
+        private int[] readArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
-    }
-}static class FastScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    FastScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-        this.st = new StringTokenizer("");
-    }
-    
-    public String next() {
-        while (!this.st.hasMoreElements()) {
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    int[] readArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
     }
 }

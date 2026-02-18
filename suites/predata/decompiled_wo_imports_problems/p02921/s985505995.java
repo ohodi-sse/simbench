@@ -1,9 +1,9 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         try {
-            final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-            final List<String> list = Arrays.asList(bufferedReader.readLine().split(""));
+            final BufferedReader bufferedReader;
+            final List<String> list = Arrays.asList((bufferedReader = new BufferedReader(new InputStreamReader(System.in))).readLine().split(""));
             final List<String> list2 = Arrays.asList(bufferedReader.readLine().split(""));
             int x = 0;
             for (int i = 0; i < 3; ++i) {

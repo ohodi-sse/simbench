@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         int n = 0;
         final ArrayList list = new ArrayList();
@@ -28,9 +28,8 @@ public class Main
         Collections.sort((List<Comparable>)list2);
         if (nextInt2 > 0) {
             System.out.println(list2.get(0));
+            return;
         }
-        else {
-            System.out.println(nextInt);
-        }
+        System.out.println(nextInt);
     }
 }

@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
-        final String next = new Scanner(System.in).next();
-        if (next.equals("SSS")) {
+    private static void main$3231c38a() throws Exception {
+        final String next;
+        if ((next = new Scanner(System.in).next()).equals("SSS")) {
             System.out.println(0);
         }
         if (next.equals("RRR")) {

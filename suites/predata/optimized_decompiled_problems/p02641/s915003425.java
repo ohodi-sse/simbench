@@ -139,7 +139,7 @@ public final class Main
             return Long.parseLong(this.next());
         }
         
-        public final int[] nextIntArr(final int n) throws NumberFormatException, IOException {
+        private int[] nextIntArr(final int n) throws NumberFormatException, IOException {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
                 array[i] = Integer.parseInt(this.next());

@@ -1,125 +1,107 @@
-static class InputReader
+public final class Main
 {
-    private InputStream stream;
-    private byte[] buf;
-    private int curChar;
-    private int numChars;
-    private SpaceCharFilter filter;
-    
-    public InputReader(final InputStream stream) {
-        this.buf = new byte[1024];
-        this.stream = stream;
-    }
-    
-    public int read() {
-        if (this.numChars == -1) {
-            throw new InputMismatchException();
-        }
-        if (this.curChar >= this.numChars) {
-            this.curChar = 0;
-            try {
-                this.numChars = this.stream.read(this.buf);
-            }
-            catch (final IOException ex) {
-                throw new InputMismatchException();
-            }
-            if (this.numChars <= 0) {
-                return -1;
-            }
-        }
-        return this.buf[this.curChar++];
-    }
-    
-    public int readInt() {
+    private static void main$3231c38a() {
+        final InputStream in = System.in;
+        final PrintStream out = System.out;
+        final InputReader inputReader = new InputReader(in);
+        final OutputWriter outputWriter = new OutputWriter(out);
+        new MBBreakNumber();
+        final InputReader inputReader2 = inputReader;
+        final OutputWriter outputWriter2 = outputWriter;
+        InputReader inputReader3;
         int n;
-        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+        for (inputReader3 = inputReader2, n = inputReader2.read(); inputReader3.isSpaceChar(n); n = inputReader3.read()) {}
         int n2 = 1;
         if (n == 45) {
             n2 = -1;
-            n = this.read();
+            n = inputReader3.read();
         }
         int n3 = 0;
         while (n >= 48 && n <= 57) {
             n3 = n3 * 10 + (n - 48);
-            n = this.read();
-            if (this.isSpaceChar(n)) {
-                return n3 * n2;
+            n = inputReader3.read();
+            if (inputReader3.isSpaceChar(n)) {
+                int i = n3 * n2;
+                int n4 = 0;
+                while (i >= 0) {
+                    for (int j = 0; j < 20; ++j) {
+                        if ((int)Math.pow(2.0, j) == i) {
+                            outputWriter2.writer.println(i);
+                            n4 = 1;
+                            break;
+                        }
+                    }
+                    if (n4 == 1) {
+                        break;
+                    }
+                    --i;
+                }
+                outputWriter.writer.close();
+                return;
             }
         }
         throw new InputMismatchException();
     }
     
-    public boolean isSpaceChar(final int n) {
-        if (this.filter != null) {
-            return this.filter.isSpaceChar(n);
-        }
-        return isWhitespace(n);
-    }
-    
-    public static boolean isWhitespace(final int n) {
-        return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
-    }
-    
-    public interface SpaceCharFilter
+    static final class MBBreakNumber
     {
-        boolean isSpaceChar(final int p0);
-    }
-}public interface SpaceCharFilter
-{
-    boolean isSpaceChar(final int p0);
-}public class Main
-{
-    public static void main(final String[] array) {
-        final InputStream in = System.in;
-        final PrintStream out = System.out;
-        final InputReader inputReader = new InputReader(in);
-        final OutputWriter outputWriter = new OutputWriter(out);
-        new MBBreakNumber().solve(1, inputReader, outputWriter);
-        outputWriter.close();
-    }
-    
-    static class MBBreakNumber
-    {
-        public void solve(final int n, final InputReader inputReader, final OutputWriter outputWriter) {
-            final int int1 = inputReader.readInt();
-            int n2 = 0;
-            for (int i = int1; i >= 0; --i) {
-                for (int j = 0; j < 20; ++j) {
-                    if ((int)Math.pow(2.0, j) == i) {
-                        outputWriter.printLine(i);
-                        n2 = 1;
-                        break;
+        private static void solve$6e5309c7(final InputReader inputReader, final OutputWriter outputWriter) {
+            int n;
+            for (n = inputReader.read(); inputReader.isSpaceChar(n); n = inputReader.read()) {}
+            int n2 = 1;
+            if (n == 45) {
+                n2 = -1;
+                n = inputReader.read();
+            }
+            int n3 = 0;
+            while (n >= 48 && n <= 57) {
+                n3 = n3 * 10 + (n - 48);
+                n = inputReader.read();
+                if (inputReader.isSpaceChar(n)) {
+                    int i = n3 * n2;
+                    int n4 = 0;
+                    while (i >= 0) {
+                        for (int j = 0; j < 20; ++j) {
+                            if ((int)Math.pow(2.0, j) == i) {
+                                outputWriter.writer.println(i);
+                                n4 = 1;
+                                break;
+                            }
+                        }
+                        if (n4 == 1) {
+                            break;
+                        }
+                        --i;
                     }
-                }
-                if (n2 == 1) {
-                    break;
+                    return;
                 }
             }
+            throw new InputMismatchException();
         }
     }
     
-    static class OutputWriter
+    static final class OutputWriter
     {
-        private final PrintWriter writer;
+        final PrintWriter writer;
         
         public OutputWriter(final OutputStream out) {
             this.writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(out)));
         }
         
-        public OutputWriter(final Writer out) {
+        private OutputWriter(final Writer out) {
             this.writer = new PrintWriter(out);
         }
         
-        public void close() {
+        private void close() {
             this.writer.close();
         }
         
-        public void printLine(final int x) {
+        private void printLine(final int x) {
             this.writer.println(x);
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
         private InputStream stream;
         private byte[] buf;
@@ -132,7 +114,7 @@ static class InputReader
             this.stream = stream;
         }
         
-        public int read() {
+        public final int read() {
             if (this.numChars == -1) {
                 throw new InputMismatchException();
             }
@@ -151,7 +133,7 @@ static class InputReader
             return this.buf[this.curChar++];
         }
         
-        public int readInt() {
+        private int readInt() {
             int n;
             for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
             int n2 = 1;
@@ -170,57 +152,18 @@ static class InputReader
             throw new InputMismatchException();
         }
         
-        public boolean isSpaceChar(final int n) {
-            if (this.filter != null) {
-                return this.filter.isSpaceChar(n);
-            }
+        public final boolean isSpaceChar(final int n) {
+            final SpaceCharFilter filter = this.filter;
             return isWhitespace(n);
         }
         
-        public static boolean isWhitespace(final int n) {
+        private static boolean isWhitespace(final int n) {
             return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
         }
         
         public interface SpaceCharFilter
         {
-            boolean isSpaceChar(final int p0);
+            boolean isSpaceChar$134632();
         }
-    }
-}static class MBBreakNumber
-{
-    public void solve(final int n, final InputReader inputReader, final OutputWriter outputWriter) {
-        final int int1 = inputReader.readInt();
-        int n2 = 0;
-        for (int i = int1; i >= 0; --i) {
-            for (int j = 0; j < 20; ++j) {
-                if ((int)Math.pow(2.0, j) == i) {
-                    outputWriter.printLine(i);
-                    n2 = 1;
-                    break;
-                }
-            }
-            if (n2 == 1) {
-                break;
-            }
-        }
-    }
-}static class OutputWriter
-{
-    private final PrintWriter writer;
-    
-    public OutputWriter(final OutputStream out) {
-        this.writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(out)));
-    }
-    
-    public OutputWriter(final Writer out) {
-        this.writer = new PrintWriter(out);
-    }
-    
-    public void close() {
-        this.writer.close();
-    }
-    
-    public void printLine(final int x) {
-        this.writer.println(x);
     }
 }

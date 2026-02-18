@@ -1,57 +1,36 @@
-static class InputReader
+public final class Main
 {
-    BufferedReader in;
-    StringTokenizer tok;
-    
-    public String nextString() {
-        while (!this.tok.hasMoreTokens()) {
-            try {
-                this.tok = new StringTokenizer(this.in.readLine(), " ");
-                continue;
-            }
-            catch (final IOException ex) {
-                throw new InputMismatchException();
-            }
-            break;
-        }
-        return this.tok.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.nextString());
-    }
-    
-    public InputReader(final InputStream in) {
-        this.in = new BufferedReader(new InputStreamReader(in));
-        this.tok = new StringTokenizer("");
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final InputReader inputReader = new InputReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new TaskB().solve(1, inputReader, printWriter);
+        new TaskB();
+        final InputReader inputReader2 = inputReader;
+        final PrintWriter printWriter2 = printWriter;
+        int int1;
+        int x;
+        for (int1 = Integer.parseInt(inputReader2.nextString()), x = 1; x << 1 <= int1; x <<= 1) {}
+        printWriter2.println(x);
         printWriter.close();
     }
     
-    static class TaskB
+    static final class TaskB
     {
-        public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-            int nextInt;
+        private static void solve$6080e082(final InputReader inputReader, final PrintWriter printWriter) {
+            int int1;
             int x;
-            for (nextInt = inputReader.nextInt(), x = 1; x * 2 <= nextInt; x *= 2) {}
+            for (int1 = Integer.parseInt(inputReader.nextString()), x = 1; x << 1 <= int1; x <<= 1) {}
             printWriter.println(x);
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
-        BufferedReader in;
-        StringTokenizer tok;
+        private BufferedReader in;
+        private StringTokenizer tok;
         
-        public String nextString() {
+        public final String nextString() {
             while (!this.tok.hasMoreTokens()) {
                 try {
                     this.tok = new StringTokenizer(this.in.readLine(), " ");
@@ -65,7 +44,7 @@ static class InputReader
             return this.tok.nextToken();
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.nextString());
         }
         
@@ -73,13 +52,5 @@ static class InputReader
             this.in = new BufferedReader(new InputStreamReader(in));
             this.tok = new StringTokenizer("");
         }
-    }
-}static class TaskB
-{
-    public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-        int nextInt;
-        int x;
-        for (nextInt = inputReader.nextInt(), x = 1; x * 2 <= nextInt; x *= 2) {}
-        printWriter.println(x);
     }
 }

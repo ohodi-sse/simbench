@@ -1,56 +1,8 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
+    private static int mod;
     
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    static int mod;
-    
-    static int binarySearch(final int[] array, final int n, int i, int n2) {
+    private static int binarySearch(final int[] array, final int n, int i, int n2) {
         while (i <= n2) {
             final int n3 = (i + n2) / 2;
             if (array[n3] == n) {
@@ -69,9 +21,9 @@ static class FastReader
         return -1;
     }
     
-    static String reverse(final String s) {
-        final char[] charArray = s.toCharArray();
-        for (int n = charArray.length - 1, i = 0; i < n; ++i, --n) {
+    private static String reverse(final String s) {
+        char[] charArray;
+        for (int n = (charArray = s.toCharArray()).length - 1, i = 0; i < n; ++i, --n) {
             final char c = charArray[i];
             charArray[i] = charArray[n];
             charArray[n] = c;
@@ -79,27 +31,54 @@ static class FastReader
         return String.valueOf(charArray);
     }
     
-    static int gcd(final int n, final int n2) {
-        if (n == 0) {
-            return n2;
+    private static int gcd(int i, int n) {
+        while (i != 0) {
+            if (n == 0) {
+                return i;
+            }
+            if (i == n) {
+                return i;
+            }
+            if (i > n) {
+                i -= n;
+            }
+            else {
+                final int n2 = i;
+                n -= i;
+                i = n2;
+            }
         }
-        if (n2 == 0) {
-            return n;
-        }
-        if (n == n2) {
-            return n;
-        }
-        if (n > n2) {
-            return gcd(n - n2, n2);
-        }
-        return gcd(n, n2 - n);
+        return n;
     }
     
-    static int lcm(final int n, final int n2) {
-        return n * n2 / gcd(n, n2);
+    private static int lcm(int i, int n) {
+        final int n2 = i * n;
+        i = i;
+        while (i != 0) {
+            int n3;
+            if (n == 0) {
+                n3 = i;
+            }
+            else if (i == n) {
+                n3 = i;
+            }
+            else {
+                if (i > n) {
+                    i -= n;
+                    continue;
+                }
+                final int n4 = i;
+                n -= i;
+                i = n4;
+                continue;
+            }
+            return n2 / n3;
+        }
+        int n3 = n;
+        return n2 / n3;
     }
     
-    static int solve(final int n, final int n2) {
+    private static int solve(final int n, final int n2) {
         int n3 = 0;
         for (int i = 0; i < 21; ++i) {
             if ((n >> i & 0x1) != (n2 >> i & 0x1)) {
@@ -109,11 +88,11 @@ static class FastReader
         return n3;
     }
     
-    static long nCr(final int n, final int n2) {
+    private static long nCr(final int n, final int n2) {
         return fact(n) / (fact(n2) * fact(n - n2));
     }
     
-    static long fact(final int n) {
+    private static long fact(final int n) {
         long n2 = 1L;
         for (int i = 2; i <= n; ++i) {
             n2 *= i;
@@ -121,11 +100,11 @@ static class FastReader
         return n2;
     }
     
-    public static long count(final long n) {
+    private static long count(final long n) {
         return n * (n - 1L) / 2L;
     }
     
-    static boolean isPrime(final int n) {
+    private static boolean isPrime(final int n) {
         if (n == 2) {
             return true;
         }
@@ -140,11 +119,11 @@ static class FastReader
         return true;
     }
     
-    static int negMod(final int n) {
+    private static int negMod(final int n) {
         return (n % 1000000007 + 1000000007) % 1000000007;
     }
     
-    static String value(int i) {
+    private static String value(int i) {
         String s = "";
         while (i > 0) {
             if (i % 2 == 1) {
@@ -155,10 +134,16 @@ static class FastReader
             }
             i /= 2;
         }
-        return reverse(s);
+        char[] charArray;
+        for (int n = (charArray = s.toCharArray()).length - 1, j = 0; j < n; ++j, --n) {
+            final char c = charArray[j];
+            charArray[j] = charArray[n];
+            charArray[n] = c;
+        }
+        return String.valueOf(charArray);
     }
     
-    public static int sum(long n) {
+    private static int sum(long n) {
         int n2 = 0;
         while (n > 0L) {
             n2 += (int)(n % 10L);
@@ -167,7 +152,7 @@ static class FastReader
         return n2;
     }
     
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final PrintWriter printWriter = new PrintWriter(System.out);
         final String next = new FastReader().next();
         int a = 0;
@@ -188,20 +173,16 @@ static class FastReader
         printWriter.close();
     }
     
-    static {
-        Main.mod = 1000003;
-    }
-    
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -218,19 +199,19 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

@@ -1,32 +1,31 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         int x = nextInt;
         int x2 = nextInt;
-        final Integer[] array2 = new Integer[nextInt2];
+        final Integer[] array = new Integer[nextInt2];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = scanner.nextInt();
+            array[i] = scanner.nextInt();
         }
-        Arrays.sort(array2);
-        for (final int intValue : array2) {
+        Arrays.sort(array);
+        for (final int intValue : array) {
             if (x == intValue) {
                 x = intValue + 1;
             }
         }
-        Arrays.sort(array2, Collections.reverseOrder());
-        for (final int intValue2 : array2) {
+        Arrays.sort(array, Collections.reverseOrder());
+        for (final int intValue2 : array) {
             if (x2 == intValue2) {
                 x2 = intValue2 - 1;
             }
         }
         if (Math.abs(x - nextInt) < Math.abs(x2 - nextInt)) {
             System.out.println(x);
+            return;
         }
-        else {
-            System.out.println(x2);
-        }
+        System.out.println(x2);
     }
 }

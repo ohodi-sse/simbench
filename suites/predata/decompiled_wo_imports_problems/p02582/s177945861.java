@@ -1,57 +1,57 @@
-public class Main
+public final class Main
 {
-    public static Scanner scan;
+    private static Scanner scan;
     
-    public static void main(final String[] array) {
-        final String next = next();
-        if (next.contains("RRR")) {
-            print(3);
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = Main.scan.next()).contains("RRR")) {
+            System.out.println((Object)3);
+            return;
         }
-        else if (next.contains("RR")) {
-            print(2);
+        if (next.contains("RR")) {
+            System.out.println((Object)2);
+            return;
         }
-        else if (next.contains("R")) {
-            print(1);
+        if (next.contains("R")) {
+            System.out.println((Object)1);
+            return;
         }
-        else {
-            print(0);
-        }
+        System.out.println((Object)0);
     }
     
-    public static int nextInt() {
+    private static int nextInt() {
         return Integer.parseInt(Main.scan.next());
     }
     
-    public static long nextLong() {
+    private static long nextLong() {
         return Long.parseLong(Main.scan.next());
     }
     
-    public static String next() {
+    private static String next() {
         return Main.scan.next();
     }
     
-    public static double nextDouble() {
+    private static double nextDouble() {
         return Double.parseDouble(Main.scan.next());
     }
     
-    public static float nextFloat() {
+    private static float nextFloat() {
         return Float.parseFloat(Main.scan.next());
     }
     
-    public static void yesNo(final boolean b) {
+    private static void yesNo(final boolean b) {
         if (b) {
             System.out.println("Yes");
+            return;
         }
-        else {
-            System.out.println("No");
-        }
+        System.out.println("No");
     }
     
-    public static void print(final Object x) {
+    private static void print(final Object x) {
         System.out.println(x);
     }
     
-    public static int gcd(int n, int n2) {
+    private static int gcd(int n, int n2) {
         int n3;
         while ((n3 = n % n2) != 0) {
             n = n2;
@@ -60,7 +60,7 @@ public class Main
         return n2;
     }
     
-    public static int lcm(int n, int n2) {
+    private static int lcm(int n, int n2) {
         final long n3 = n * (long)n2;
         int n4;
         while ((n4 = n % n2) != 0) {

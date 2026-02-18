@@ -98,7 +98,7 @@ final class FastScanner
         return (int)nextLong;
     }
     
-    public final double nextDouble() {
+    private double nextDouble() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
@@ -135,12 +135,11 @@ public final class Main
     private static void run() {
         final FastScanner fastScanner;
         final long nextLong = (fastScanner = new FastScanner()).nextLong();
-        final FastScanner fastScanner2;
-        if (!(fastScanner2 = fastScanner).hasNext()) {
+        if (!fastScanner.hasNext()) {
             throw new NoSuchElementException();
         }
         final StringBuilder sb = new StringBuilder();
-        for (int codePoint = fastScanner2.readByte(); FastScanner.isPrintableChar(codePoint); codePoint = fastScanner2.readByte()) {
+        for (int codePoint = fastScanner.readByte(); FastScanner.isPrintableChar(codePoint); codePoint = fastScanner.readByte()) {
             sb.appendCodePoint(codePoint);
         }
         System.out.println(nextLong * Math.round(Double.parseDouble(sb.toString()) * 100.0) / 100L);

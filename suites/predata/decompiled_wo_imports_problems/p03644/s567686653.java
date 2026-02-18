@@ -1,15 +1,15 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int int1 = Integer.parseInt(scanner.next());
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int int1 = Integer.parseInt((scanner = new Scanner(System.in)).next());
         scanner.close();
-        final Integer[] a = { 2, 4, 8, 16, 32, 64 };
-        Arrays.sort(a, Collections.reverseOrder());
+        final Integer[] array;
+        Arrays.sort(array = new Integer[] { 2, 4, 8, 16, 32, 64 }, Collections.reverseOrder());
         int intValue = 1;
-        for (int i = 0; i < a.length; ++i) {
-            if (a[i] <= int1) {
-                intValue = a[i];
+        for (int i = 0; i < array.length; ++i) {
+            if (array[i] <= int1) {
+                intValue = array[i];
                 break;
             }
         }

@@ -1,4 +1,4 @@
-public class Main
+public final class Main
 {
     private final PrintWriter out;
     private final InputStream in;
@@ -14,13 +14,54 @@ public class Main
         this.buflen = 0;
     }
     
-    public static void main(final String[] array) throws IOException {
-        new Main().solve();
+    private static void main$3231c38a() throws IOException {
+        final Main main = new Main();
+        try {
+            final Main main2;
+            int i = Integer.parseInt((main2 = main).next());
+            int n = 0;
+            int x = 0;
+            while (i > 0) {
+                int n2;
+                int n3;
+                for (n2 = i, n3 = 0; n2 > 0 && n2 % 2 == 0; n2 /= 2, ++n3) {}
+                final int n4 = n3;
+                if (n <= n4) {
+                    n = n4;
+                    x = i;
+                }
+                --i;
+            }
+            main2.out.println(x);
+        }
+        finally {
+            if (main.in != null) {
+                main.in.close();
+            }
+            if (main.out != null) {
+                main.out.flush();
+                main.out.close();
+            }
+        }
     }
     
     private void solve() throws IOException {
         try {
-            this.solveB();
+            int i = Integer.parseInt(this.next());
+            int n = 0;
+            int x = 0;
+            while (i > 0) {
+                int n2;
+                int n3;
+                for (n2 = i, n3 = 0; n2 > 0 && n2 % 2 == 0; n2 /= 2, ++n3) {}
+                final int n4 = n3;
+                if (n <= n4) {
+                    n = n4;
+                    x = i;
+                }
+                --i;
+            }
+            this.out.println(x);
         }
         finally {
             if (this.in != null) {
@@ -34,46 +75,50 @@ public class Main
     }
     
     private void solveA() {
-        this.out.println("ABC" + this.nextInt());
+        this.out.println("ABC" + Integer.parseInt(this.next()));
     }
     
     private void solveB() {
-        final int nextInt = this.nextInt();
+        int i = Integer.parseInt(this.next());
         int n = 0;
         int x = 0;
-        for (int i = nextInt; i > 0; --i) {
-            final int chkB = this.chkB(i);
-            if (n <= chkB) {
-                n = chkB;
+        while (i > 0) {
+            int n2;
+            int n3;
+            for (n2 = i, n3 = 0; n2 > 0 && n2 % 2 == 0; n2 /= 2, ++n3) {}
+            final int n4 = n3;
+            if (n <= n4) {
+                n = n4;
                 x = i;
             }
+            --i;
         }
         this.out.println(x);
     }
     
-    private int chkB(int n) {
+    private static int chkB(int n) {
         int n2;
         for (n2 = 0; n > 0 && n % 2 == 0; n /= 2, ++n2) {}
         return n2;
     }
     
     private void solveC() {
-        this.nextInt();
+        this.next();
         this.out.println("");
     }
     
     private void solveD() {
-        this.nextInt();
+        this.next();
         this.out.println("");
     }
     
     private void solveE() {
-        this.nextInt();
+        this.next();
         this.out.println("");
     }
     
     private void solveF() {
-        this.nextInt();
+        this.next();
         this.out.println("");
     }
     
@@ -108,16 +153,18 @@ public class Main
         }
     }
     
-    public boolean hasNext() {
-        this.skipUnprintable();
+    private boolean hasNext() {
+        while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
+            ++this.ptr;
+        }
         return this.hasNextByte();
     }
     
-    public int nextInt() {
+    private int nextInt() {
         return Integer.parseInt(this.next());
     }
     
-    public String next() {
+    private String next() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
@@ -128,14 +175,14 @@ public class Main
         return sb.toString();
     }
     
-    public long nextLong() {
+    private long nextLong() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
         long n = 0L;
         boolean b = false;
-        int n2 = this.readByte();
-        if (n2 == 45) {
+        int n2;
+        if ((n2 = this.readByte()) == 45) {
             b = true;
             n2 = this.readByte();
         }
@@ -146,9 +193,12 @@ public class Main
             n = n * 10L + (n2 - 48);
             n2 = this.readByte();
         }
-        if (n2 == -1 || !isPrintableChar(n2)) {
-            return b ? (-n) : n;
+        if (n2 != -1 && isPrintableChar(n2)) {
+            throw new NumberFormatException();
         }
-        throw new NumberFormatException();
+        if (b) {
+            return -n;
+        }
+        return n;
     }
 }

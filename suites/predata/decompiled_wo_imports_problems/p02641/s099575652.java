@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final HashSet set = new HashSet();
         for (int i = 0; i < nextInt2; ++i) {
@@ -11,14 +11,12 @@ public class Main
         int n = 0;
         int x;
         while (true) {
-            final int j = nextInt - n;
-            if (!set.contains(j)) {
-                x = j;
+            x = nextInt - n;
+            if (!set.contains(x)) {
                 break;
             }
-            final int k = nextInt + n;
-            if (!set.contains(k)) {
-                x = k;
+            x = nextInt + n;
+            if (!set.contains(x)) {
                 break;
             }
             ++n;

@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         final PrintWriter printWriter = new PrintWriter(new OutputStreamWriter(System.out));
         final String line = bufferedReader.readLine();

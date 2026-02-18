@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final char[] charArray = new Scanner(System.in).nextLine().toCharArray();
         int x = 0;
         int x2 = 0;
@@ -8,19 +8,17 @@ public class Main
             if (charArray[i] == 'R') {
                 ++x;
             }
-            else if (x2 < x) {
-                x2 = x;
-                x = 0;
-            }
             else {
+                if (x2 < x) {
+                    x2 = x;
+                }
                 x = 0;
             }
         }
         if (x2 < x) {
             System.out.println(x);
+            return;
         }
-        else {
-            System.out.println(x2);
-        }
+        System.out.println(x2);
     }
 }

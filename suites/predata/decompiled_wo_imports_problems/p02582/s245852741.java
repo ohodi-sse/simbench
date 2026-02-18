@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String[] split = new Scanner(System.in).next().split("");
         int max = 0;
         int b = 0;

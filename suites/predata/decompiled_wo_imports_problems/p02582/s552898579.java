@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         scanner.close();
         final char char1 = next.charAt(0);
         final char char2 = next.charAt(1);
@@ -18,26 +18,26 @@ public class Main
             ++n;
         }
         if (n == 3) {
-            print(3);
+            System.out.println((Object)3);
             return;
         }
         if (n == 2) {
             if (char1 == 'R' && char3 == 'R') {
-                print(1);
+                System.out.println((Object)1);
                 return;
             }
-            print(2);
+            System.out.println((Object)2);
         }
         else {
             if (n == 1) {
-                print(1);
+                System.out.println((Object)1);
                 return;
             }
-            print(0);
+            System.out.println((Object)0);
         }
     }
     
-    public static void print(final Object x) {
+    private static void print(final Object x) {
         System.out.println(x);
     }
 }

@@ -1,13 +1,15 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         int x = 0;
         final String next = scanner.next();
         int n = 1;
         for (int i = 0; i < 3; ++i) {
-            final String substring = next.substring(i, i + 1);
-            if (substring.equals("R") && n != 0) {
+            final String s = next;
+            final int beginIndex = i;
+            final String substring;
+            if ((substring = s.substring(beginIndex, beginIndex + 1)).equals("R") && n != 0) {
                 ++x;
             }
             else if (substring.equals("R") && n == 0) {

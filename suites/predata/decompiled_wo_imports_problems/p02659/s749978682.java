@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
-        final String[] split = new BufferedReader(new InputStreamReader(System.in)).readLine().split(" ");
-        final long long1 = Long.parseLong(split[0]);
+    private static void main$3231c38a() throws IOException {
+        final String[] split;
+        final long long1 = Long.parseLong((split = new BufferedReader(new InputStreamReader(System.in)).readLine().split(" "))[0]);
         final char[] charArray = split[1].toCharArray();
         String s = "";
         for (int i = 0; i < charArray.length; ++i) {

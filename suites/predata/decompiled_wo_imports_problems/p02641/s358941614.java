@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         final Integer n = new Integer(Integer.parseInt(scanner.next()));
-        final int int1 = Integer.parseInt(scanner.next());
-        if (int1 == 0) {
+        final int int1;
+        if ((int1 = Integer.parseInt(scanner.next())) == 0) {
             System.out.println(n);
             return;
         }
@@ -18,29 +18,30 @@ public class Main
         }
         Arrays.sort(a);
         Arrays.asList(a).indexOf(n);
-        int j = n;
-        int n2 = 0;
-        while (j <= a[a.length - 1]) {
-            ++n2;
-            j = n - n2;
-            if (!Arrays.asList(a).contains(new Integer(j))) {
-                break;
-            }
-        }
         int intValue = n;
-        int n3 = 0;
-        while (a[0] <= intValue) {
-            ++n3;
-            intValue = n + n3;
-            if (!Arrays.asList(a).contains(new Integer(intValue))) {
+        int n2 = 0;
+        do {
+            final int n3 = intValue;
+            final Integer[] array = a;
+            if (n3 > array[array.length - 1]) {
+                break;
+            }
+            ++n2;
+            intValue = n - n2;
+        } while (Arrays.asList(a).contains(intValue));
+        int intValue2 = n;
+        int n4 = 0;
+        while (a[0] <= intValue2) {
+            ++n4;
+            intValue2 = n + n4;
+            if (!Arrays.asList(a).contains(intValue2)) {
                 break;
             }
         }
-        if (n2 <= n3) {
+        if (n2 <= n4) {
             System.out.println(n - n2);
+            return;
         }
-        else {
-            System.out.println(n + n3);
-        }
+        System.out.println(n + n4);
     }
 }

@@ -1,9 +1,9 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
+    private static void main$3231c38a() {
+        final String next;
         int x;
-        if (next.charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'R') {
+        if ((next = new Scanner(System.in).next()).charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'R') {
             x = 3;
         }
         else if (next.charAt(0) == 'R' && next.charAt(1) == 'R') {

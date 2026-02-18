@@ -1,51 +1,55 @@
-public class Main
+public final class Main
 {
-    static HashMap<Integer, String> CONVSTR;
-    static InputIterator ii;
-    static PrintWriter out;
+    private static HashMap<Integer, String> CONVSTR;
+    private static InputIterator ii;
+    private static PrintWriter out;
     
-    static void flush() {
+    private static void flush() {
         Main.out.flush();
     }
     
-    static void myout(final Object x) {
+    private static void myout(final Object x) {
         Main.out.println(x);
     }
     
-    static void myerr(final Object x) {
+    private static void myerr(final Object x) {
         System.err.print("debug:");
         System.err.println(x);
     }
     
-    static String next() {
-        return Main.ii.next();
+    private static String next() {
+        final InputIterator ii;
+        if ((ii = Main.ii).hasNext()) {
+            return ii.inputLine.get(ii.index++);
+        }
+        throw new IndexOutOfBoundsException("There is no more input");
     }
     
-    static boolean hasNext() {
+    private static boolean hasNext() {
         return Main.ii.hasNext();
     }
     
-    static int nextInt() {
+    private static int nextInt() {
         return Integer.parseInt(next());
     }
     
-    static long nextLong() {
+    private static long nextLong() {
         return Long.parseLong(next());
     }
     
-    static double nextDouble() {
+    private static double nextDouble() {
         return Double.parseDouble(next());
     }
     
-    static ArrayList<String> nextStrArray() {
+    private static ArrayList<String> nextStrArray() {
         return myconv(next(), 8);
     }
     
-    static ArrayList<String> nextCharArray() {
+    private static ArrayList<String> nextCharArray() {
         return myconv(next(), 0);
     }
     
-    static ArrayList<Integer> nextIntArray() {
+    private static ArrayList<Integer> nextIntArray() {
         final ArrayList<String> nextStrArray = nextStrArray();
         final ArrayList list = new ArrayList<Integer>(nextStrArray.size());
         for (int i = 0; i < nextStrArray.size(); ++i) {
@@ -54,7 +58,7 @@ public class Main
         return (ArrayList<Integer>)list;
     }
     
-    static ArrayList<Long> nextLongArray() {
+    private static ArrayList<Long> nextLongArray() {
         final ArrayList<String> nextStrArray = nextStrArray();
         final ArrayList list = new ArrayList<Long>(nextStrArray.size());
         for (int i = 0; i < nextStrArray.size(); ++i) {
@@ -63,7 +67,7 @@ public class Main
         return (ArrayList<Long>)list;
     }
     
-    static String myconv(final Object o, final int i) {
+    private static String myconv(final Object o, final int i) {
         final String s = Main.CONVSTR.get(i);
         if (o instanceof final String[]array) {
             return String.join(s, array);
@@ -74,23 +78,26 @@ public class Main
         throw new ClassCastException("Don't join");
     }
     
-    static ArrayList<String> myconv(final String s, final int i) {
+    private static ArrayList<String> myconv(final String s, final int i) {
         return new ArrayList<String>(Arrays.asList(s.split(Main.CONVSTR.get(i))));
     }
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         Main.CONVSTR.put(8, " ");
         Main.CONVSTR.put(9, "\n");
         Main.CONVSTR.put(0, "");
-        solve();
-        flush();
+        int int1;
+        int i;
+        for (int1 = Integer.parseInt(next()), i = 1; i <= int1; i <<= 1) {}
+        Main.out.println((Object)(i / 2));
+        Main.out.flush();
     }
     
-    static void solve() {
-        int nextInt;
+    private static void solve() {
+        int int1;
         int i;
-        for (nextInt = nextInt(), i = 1; i <= nextInt; i *= 2) {}
-        myout(i / 2);
+        for (int1 = Integer.parseInt(next()), i = 1; i <= int1; i <<= 1) {}
+        Main.out.println((Object)(i / 2));
     }
     
     static {
@@ -99,12 +106,12 @@ public class Main
         Main.out = new PrintWriter(System.out);
     }
     
-    static class InputIterator
+    static final class InputIterator
     {
         ArrayList<String> inputLine;
         int index;
-        int max;
-        String read;
+        private int max;
+        private String read;
         
         InputIterator() {
             this.inputLine = new ArrayList<String>(1024);
@@ -124,50 +131,15 @@ public class Main
             this.max = this.inputLine.size();
         }
         
-        boolean hasNext() {
+        final boolean hasNext() {
             return this.index < this.max;
         }
         
-        String next() {
+        private String next() {
             if (this.hasNext()) {
                 return this.inputLine.get(this.index++);
             }
             throw new IndexOutOfBoundsException("There is no more input");
         }
-    }
-}static class InputIterator
-{
-    ArrayList<String> inputLine;
-    int index;
-    int max;
-    String read;
-    
-    InputIterator() {
-        this.inputLine = new ArrayList<String>(1024);
-        this.index = 0;
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        try {
-            while (true) {
-                final String line = bufferedReader.readLine();
-                this.read = line;
-                if (line == null) {
-                    break;
-                }
-                this.inputLine.add(this.read);
-            }
-        }
-        catch (final IOException ex) {}
-        this.max = this.inputLine.size();
-    }
-    
-    boolean hasNext() {
-        return this.index < this.max;
-    }
-    
-    String next() {
-        if (this.hasNext()) {
-            return this.inputLine.get(this.index++);
-        }
-        throw new IndexOutOfBoundsException("There is no more input");
     }
 }

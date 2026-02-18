@@ -1,25 +1,24 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final HashSet set = new HashSet();
         for (int i = 0; i < nextInt2; ++i) {
             set.add(scanner.nextInt());
         }
         int j = nextInt;
-        int n = nextInt;
         while (true) {
             while (set.contains(j)) {
                 int x;
-                if (!set.contains(n - 1)) {
-                    x = n - 1;
+                if (!set.contains(nextInt - 1)) {
+                    x = nextInt - 1;
                 }
                 else {
                     if (set.contains(j + 1)) {
                         ++j;
-                        --n;
+                        --nextInt;
                         continue;
                     }
                     x = j + 1;

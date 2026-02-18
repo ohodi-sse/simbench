@@ -1,68 +1,33 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader reader;
-    StringTokenizer st;
-    
-    public FastReader(final InputStream in) {
-        this.reader = new BufferedReader(new InputStreamReader(in));
-        this.st = null;
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                final String line = this.reader.readLine();
-                if (line == null) {
-                    return null;
-                }
-                this.st = new StringTokenizer(line);
-                continue;
-            }
-            catch (final Exception ex) {
-                throw new RuntimeException();
-            }
-            break;
-        }
-        return this.st.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final FastReader fastReader = new FastReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new TaskB().solve(1, fastReader, printWriter);
+        new TaskB();
+        printWriter.println(Integer.highestOneBit(Integer.parseInt(fastReader.next())));
         printWriter.close();
     }
     
-    static class TaskB
+    static final class TaskB
     {
-        public void solve(final int n, final FastReader fastReader, final PrintWriter printWriter) {
-            printWriter.println(Integer.highestOneBit(fastReader.nextInt()));
+        private static void solve$3c455bd4(final FastReader fastReader, final PrintWriter printWriter) {
+            printWriter.println(Integer.highestOneBit(Integer.parseInt(fastReader.next())));
         }
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader reader;
-        StringTokenizer st;
+        private BufferedReader reader;
+        private StringTokenizer st;
         
         public FastReader(final InputStream in) {
             this.reader = new BufferedReader(new InputStreamReader(in));
             this.st = null;
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreTokens()) {
@@ -70,8 +35,8 @@ static class FastReader
                     }
                 }
                 try {
-                    final String line = this.reader.readLine();
-                    if (line == null) {
+                    final String line;
+                    if ((line = this.reader.readLine()) == null) {
                         return null;
                     }
                     this.st = new StringTokenizer(line);
@@ -85,13 +50,8 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
-    }
-}static class TaskB
-{
-    public void solve(final int n, final FastReader fastReader, final PrintWriter printWriter) {
-        printWriter.println(Integer.highestOneBit(fastReader.nextInt()));
     }
 }

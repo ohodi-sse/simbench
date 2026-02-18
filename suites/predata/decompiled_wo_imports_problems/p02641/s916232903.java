@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         final int nextInt = scanner.nextInt();
         final ArrayList list = new ArrayList();
         for (int i = 0; i < nextInt; ++i) {
@@ -25,12 +25,12 @@ public class Main
         }
         if (!list.contains(value) && !list.contains(value2)) {
             System.out.println(value);
+            return;
         }
-        else if (!list.contains(value)) {
+        if (!list.contains(value)) {
             System.out.println(value);
+            return;
         }
-        else {
-            System.out.println(value2);
-        }
+        System.out.println(value2);
     }
 }

@@ -1,34 +1,34 @@
-public class Main
+public final class Main
 {
-    static FastIO io;
+    private static FastIO io;
     
-    public static void main(final String[] array) throws Exception {
-        final String next = Main.io.next();
-        if (next.indexOf(82) < 0) {
-            Main.io.println(0);
+    private static void main$3231c38a() throws Exception {
+        final String next;
+        if ((next = FastIO.next()).indexOf(82) < 0) {
+            FastIO.println(0);
         }
         else if (next.equals("RRR")) {
-            Main.io.println(3);
+            FastIO.println(3);
         }
         else if (next.equals("RRS") || next.equals("SRR")) {
-            Main.io.println(2);
+            FastIO.println(2);
         }
         else {
-            Main.io.println(1);
+            FastIO.println(1);
         }
-        Main.io.flush();
+        FastIO.flush();
     }
     
     static {
-        Main.io = new FastIO("in.txt");
+        new FastIO("in.txt");
     }
     
-    static class FastIO
+    static final class FastIO
     {
-        static StringBuilder sb;
-        static BufferedReader br;
-        static StringTokenizer st;
-        static PrintStream ps;
+        private static StringBuilder sb;
+        private static BufferedReader br;
+        private static StringTokenizer st;
+        private static PrintStream ps;
         
         public FastIO(final String s) {
             try {
@@ -42,7 +42,7 @@ public class Main
             FastIO.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        static String next() {
             while (true) {
                 if (FastIO.st != null) {
                     if (FastIO.st.hasMoreElements()) {
@@ -59,33 +59,33 @@ public class Main
             return FastIO.st.nextToken();
         }
         
-        int nextInt() {
-            return Integer.parseInt(this.next());
+        private static int nextInt() {
+            return Integer.parseInt(next());
         }
         
-        long nextLong() {
-            return Long.parseLong(this.next());
+        private static long nextLong() {
+            return Long.parseLong(next());
         }
         
-        double nextDouble() {
-            return Double.parseDouble(this.next());
+        private static double nextDouble() {
+            return Double.parseDouble(next());
         }
         
-        void flush() {
+        static void flush() {
             System.out.print(FastIO.sb.toString());
             FastIO.sb.setLength();
         }
         
-        void print(final Object obj) {
+        private static void print(final Object obj) {
             FastIO.sb.append(obj);
         }
         
-        void println(final Object obj) {
+        static void println(final Object obj) {
             FastIO.sb.append(obj);
             FastIO.sb.append('\n');
         }
         
-        String nextLine() {
+        private static String nextLine() {
             String line = "";
             try {
                 line = FastIO.br.readLine();
@@ -98,84 +98,7 @@ public class Main
         
         static {
             FastIO.sb = new StringBuilder();
-            FastIO.ps = new PrintStream(System.out);
+            new PrintStream(System.out);
         }
-    }
-}static class FastIO
-{
-    static StringBuilder sb;
-    static BufferedReader br;
-    static StringTokenizer st;
-    static PrintStream ps;
-    
-    public FastIO(final String s) {
-        try {
-            if (new File(s).exists()) {
-                System.setIn(new FileInputStream(s));
-            }
-        }
-        catch (final Exception ex) {
-            ex.printStackTrace();
-        }
-        FastIO.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (FastIO.st != null) {
-                if (FastIO.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                FastIO.st = new StringTokenizer(FastIO.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return FastIO.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    void flush() {
-        System.out.print(FastIO.sb.toString());
-        FastIO.sb.setLength();
-    }
-    
-    void print(final Object obj) {
-        FastIO.sb.append(obj);
-    }
-    
-    void println(final Object obj) {
-        FastIO.sb.append(obj);
-        FastIO.sb.append('\n');
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = FastIO.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-    
-    static {
-        FastIO.sb = new StringBuilder();
-        FastIO.ps = new PrintStream(System.out);
     }
 }

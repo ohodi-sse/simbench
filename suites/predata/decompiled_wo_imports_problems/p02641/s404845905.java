@@ -1,16 +1,16 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int int1 = Integer.parseInt(scanner.next());
-        final int int2 = Integer.parseInt(scanner.next());
-        final int[] a = new int[int2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int int1 = Integer.parseInt((scanner = new Scanner(System.in)).next());
+        final int int2;
+        final int[] a = new int[int2 = Integer.parseInt(scanner.next())];
         for (int i = 0; i < int2; ++i) {
             a[i] = Integer.parseInt(scanner.next());
         }
         Arrays.sort(a);
         int j = 0;
-    Label_0067:
+    Label_0064:
         while (j < Integer.MAX_VALUE) {
             boolean b = true;
             for (int k = 0; k < int2; ++k) {
@@ -21,16 +21,15 @@ public class Main
             }
             if (b) {
                 System.out.println(int1 - j);
-                break;
+                return;
             }
             for (int l = 0; l < int2; ++l) {
                 if (int1 + j == a[l]) {
                     ++j;
-                    continue Label_0067;
+                    continue Label_0064;
                 }
             }
             System.out.println(int1 + j);
-            break;
         }
     }
 }

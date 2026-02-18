@@ -1,18 +1,19 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        if (next.equalsIgnoreCase("SRS") || next.equalsIgnoreCase("SSR") || next.equalsIgnoreCase("RSS") || next.equalsIgnoreCase("RSR")) {
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = new Scanner(System.in).next()).equalsIgnoreCase("SRS") || next.equalsIgnoreCase("SSR") || next.equalsIgnoreCase("RSS") || next.equalsIgnoreCase("RSR")) {
             System.out.println(1);
+            return;
         }
-        else if (!next.contains("R")) {
+        if (!next.contains("R")) {
             System.out.println(0);
+            return;
         }
-        else if (next.equalsIgnoreCase("RRR")) {
+        if (next.equalsIgnoreCase("RRR")) {
             System.out.println(3);
+            return;
         }
-        else {
-            System.out.println(2);
-        }
+        System.out.println(2);
     }
 }

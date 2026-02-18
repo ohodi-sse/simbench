@@ -1,21 +1,22 @@
-class Main
+final class Main
 {
-    static Scanner sc;
+    private static Scanner sc;
     
-    public static void main(final String[] array) {
-        final String next = Main.sc.next();
-        if (next.equals("RRR")) {
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = Main.sc.next()).equals("RRR")) {
             System.out.println(3);
+            return;
         }
-        else if (next.equals("RSR") || next.equals("RSS") || next.equals("SSR") || next.equals("SRS")) {
+        if (next.equals("RSR") || next.equals("RSS") || next.equals("SSR") || next.equals("SRS")) {
             System.out.println(1);
+            return;
         }
-        else if (next.equals("SSS")) {
+        if (next.equals("SSS")) {
             System.out.println(0);
+            return;
         }
-        else {
-            System.out.println(2);
-        }
+        System.out.println(2);
     }
     
     static {

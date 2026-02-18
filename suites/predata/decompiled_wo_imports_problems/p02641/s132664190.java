@@ -1,18 +1,18 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] array2 = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] array = new int[nextInt2 = scanner.nextInt()];
         final ArrayList list = new ArrayList();
         if (nextInt2 == 0) {
             System.out.println(nextInt);
             return;
         }
         for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = scanner.nextInt();
-            list.add(array2[i]);
+            array[i] = scanner.nextInt();
+            list.add(array[i]);
         }
         if (!list.contains(nextInt)) {
             System.out.println(nextInt);
@@ -22,11 +22,11 @@ public class Main
             if (!list.contains(nextInt + j) || !list.contains(nextInt - j)) {
                 if (!list.contains(nextInt - j)) {
                     System.out.println(nextInt - j);
-                    break;
+                    return;
                 }
                 if (!list.contains(nextInt + j)) {
                     System.out.println(nextInt + j);
-                    break;
+                    return;
                 }
             }
         }

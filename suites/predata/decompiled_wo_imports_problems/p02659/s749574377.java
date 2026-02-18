@@ -1,12 +1,11 @@
-class Main
+final class Main
 {
-    static Scanner sc;
+    private static Scanner sc;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final long nextLong = Main.sc.nextLong();
-        final long n = 0L;
         final String next = Main.sc.next();
-        System.out.println((n + 100L * nextLong * Character.getNumericValue(next.charAt(0)) + 10L * nextLong * Character.getNumericValue(next.charAt(2)) + nextLong * Character.getNumericValue(next.charAt(3))) / 100L);
+        System.out.println((0L + 100L * nextLong * Character.getNumericValue(next.charAt(0)) + 10L * nextLong * Character.getNumericValue(next.charAt(2)) + nextLong * Character.getNumericValue(next.charAt(3))) / 100L);
     }
     
     static {

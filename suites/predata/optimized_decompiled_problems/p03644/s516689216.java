@@ -19,7 +19,7 @@ public final class Main
     private static BufferedReader _in;
     private static PrintWriter _out;
     
-    private void solve() {
+    private static void solve() {
         int int1;
         int i;
         for (int1 = Integer.parseInt(readLine()), i = 1; i <= int1; i <<= 1) {}
@@ -100,7 +100,7 @@ public final class Main
         return readLine().split(" ");
     }
     
-    private int[] readNums() {
+    private static int[] readNums() {
         final String[] flds;
         final int[] array = new int[(flds = readFlds()).length];
         for (int i = 0; i < flds.length; ++i) {
@@ -109,7 +109,7 @@ public final class Main
         return array;
     }
     
-    private long[] readLongs() {
+    private static long[] readLongs() {
         final String[] flds;
         final long[] array = new long[(flds = readFlds()).length];
         for (int i = 0; i < flds.length; ++i) {

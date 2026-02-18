@@ -1,11 +1,12 @@
-class Main
+final class Main
 {
-    static BufferedReader f;
-    static PrintWriter out;
-    static StringTokenizer st;
+    private static BufferedReader f;
+    private static PrintWriter out;
+    private static StringTokenizer st;
     
-    public static void main(final String[] array) throws IOException {
-        setIO();
+    private static void main$3231c38a() throws IOException {
+        Main.f = new BufferedReader(new InputStreamReader(System.in));
+        Main.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
         final char[] charArray = Main.f.readLine().toCharArray();
         int max = 0;
         for (int i = 0; i < 3; ++i) {
@@ -20,7 +21,7 @@ class Main
         Main.out.close();
     }
     
-    static boolean[] generate(final int n, final int n2) {
+    private static boolean[] generate(final int n, final int n2) {
         final boolean[] array = new boolean[n2];
         for (int i = 0; i < n2; ++i) {
             array[i] = ((n & 1 << i) >> i == 1);
@@ -28,7 +29,7 @@ class Main
         return array;
     }
     
-    static boolean valid(int n, final char[][] array, final boolean[] array2, final boolean[] array3) {
+    private static boolean valid(int n, final char[][] array, final boolean[] array2, final boolean[] array3) {
         for (int i = 0; i < array2.length; ++i) {
             for (int j = 0; j < array3.length; ++j) {
                 if (array2[i] && array3[i] && array[i][j] == '#') {
@@ -39,50 +40,50 @@ class Main
         return n == 0;
     }
     
-    static int ni(final StringTokenizer stringTokenizer) {
+    private static int ni(final StringTokenizer stringTokenizer) {
         return Integer.parseInt(stringTokenizer.nextToken());
     }
     
-    static int ni() throws IOException {
+    private static int ni() throws IOException {
         return Integer.parseInt(Main.f.readLine());
     }
     
-    static StringTokenizer nl() throws IOException {
+    private static StringTokenizer nl() throws IOException {
         return new StringTokenizer(Main.f.readLine());
     }
     
-    static int[] nia(final int n) throws IOException {
-        final StringTokenizer nl = nl();
+    private static int[] nia(final int n) throws IOException {
+        final StringTokenizer stringTokenizer = new StringTokenizer(Main.f.readLine());
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = ni(nl);
+            array[i] = Integer.parseInt(stringTokenizer.nextToken());
         }
         return array;
     }
     
-    static void setIn(final String fileName) throws IOException {
+    private static void setIn(final String fileName) throws IOException {
         Main.f = new BufferedReader(new FileReader(fileName));
     }
     
-    static void setOut(final String fileName) throws IOException {
+    private static void setOut(final String fileName) throws IOException {
         Main.out = new PrintWriter(new FileWriter(fileName));
     }
     
-    static void setIn() {
+    private static void setIn() {
         Main.f = new BufferedReader(new InputStreamReader(System.in));
     }
     
-    static void setOut() {
+    private static void setOut() {
         Main.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
     }
     
-    static void setIO(final String s) throws IOException {
-        setIn(s + ".in");
-        setOut(s + ".out");
+    private static void setIO(final String s) throws IOException {
+        Main.f = new BufferedReader(new FileReader(s + ".in"));
+        Main.out = new PrintWriter(new FileWriter(s + ".out"));
     }
     
-    static void setIO() {
-        setIn();
-        setOut();
+    private static void setIO() {
+        Main.f = new BufferedReader(new InputStreamReader(System.in));
+        Main.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
     }
 }

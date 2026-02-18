@@ -1,28 +1,47 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        System.out.println(getConcRainy(new Scanner(System.in).nextLine()));
-    }
-    
-    public static int getConcRainy(final String s) {
+    private static void main$3231c38a() {
+        final String nextLine = new Scanner(System.in).nextLine();
         int n = 0;
-        int b = 0;
-        if (s.charAt(0) == 'R') {
+        int x = 0;
+        if (nextLine.charAt(0) == 'R') {
             ++n;
-            b = Math.max(b, n);
+            x = Math.max(0, 1);
         }
-        for (int i = 1; i < s.length(); ++i) {
-            if (s.charAt(i - 1) == s.charAt(i) && s.charAt(i) == 'R') {
-                b = Math.max(++n, b);
+        for (int i = 1; i < nextLine.length(); ++i) {
+            if (nextLine.charAt(i - 1) == nextLine.charAt(i) && nextLine.charAt(i) == 'R') {
+                x = Math.max(++n, x);
             }
-            else if (s.charAt(i) == 'R') {
+            else if (nextLine.charAt(i) == 'R') {
                 n = 1;
-                b = Math.max(n, b);
+                x = Math.max(1, x);
             }
             else {
                 n = 0;
             }
         }
-        return b;
+        System.out.println(x);
+    }
+    
+    private static int getConcRainy(final String s) {
+        int n = 0;
+        int n2 = 0;
+        if (s.charAt(0) == 'R') {
+            ++n;
+            n2 = Math.max(0, 1);
+        }
+        for (int i = 1; i < s.length(); ++i) {
+            if (s.charAt(i - 1) == s.charAt(i) && s.charAt(i) == 'R') {
+                n2 = Math.max(++n, n2);
+            }
+            else if (s.charAt(i) == 'R') {
+                n = 1;
+                n2 = Math.max(1, n2);
+            }
+            else {
+                n = 0;
+            }
+        }
+        return n2;
     }
 }

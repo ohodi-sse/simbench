@@ -1,9 +1,9 @@
-class Main
+final class Main
 {
-    public static PrintWriter out;
-    public static Scanner in;
+    private static PrintWriter out;
+    private static Scanner in;
     
-    void solve() {
+    private static void solve() {
         final char[] charArray = Main.in.next().toCharArray();
         final char[] charArray2 = Main.in.next().toCharArray();
         int x = 0;
@@ -15,8 +15,17 @@ class Main
         System.out.println(x);
     }
     
-    public static void main(final String[] array) {
-        new Main().solve();
+    private static void main$3231c38a() {
+        new Main();
+        final char[] charArray = Main.in.next().toCharArray();
+        final char[] charArray2 = Main.in.next().toCharArray();
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (charArray[i] == charArray2[i]) {
+                ++x;
+            }
+        }
+        System.out.println(x);
         Main.out.flush();
     }
     

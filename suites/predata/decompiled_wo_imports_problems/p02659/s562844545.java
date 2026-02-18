@@ -1,19 +1,16 @@
-public class Main
+public final class Main
 {
     private static final StringBuilder builder;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         System.out.print(readBigDecimal().multiply(readBigDecimal()).toBigInteger());
     }
     
     private static void read() {
         Main.builder.setLength();
         try {
-            while (true) {
-                final int read = System.in.read();
-                if (read == 32 || read == 10 || read == -1) {
-                    break;
-                }
+            int read;
+            while ((read = System.in.read()) != 32 && read != 10 && read != -1) {
                 Main.builder.appendCodePoint(read);
             }
         }
@@ -63,9 +60,7 @@ public class Main
     private static void skipLine() {
         try {
             int read;
-            do {
-                read = System.in.read();
-            } while (read != 10 && read != -1);
+            while ((read = System.in.read()) != 10 && read != -1) {}
         }
         catch (final IOException ex) {}
     }
@@ -73,9 +68,7 @@ public class Main
     private static void skip() {
         try {
             int read;
-            do {
-                read = System.in.read();
-            } while (read != 32 && read != 10 && read != -1);
+            while ((read = System.in.read()) != 32 && read != 10 && read != -1) {}
         }
         catch (final IOException ex) {}
     }

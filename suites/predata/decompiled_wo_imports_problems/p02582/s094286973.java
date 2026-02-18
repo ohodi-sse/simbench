@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() throws Exception {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         scanner.close();
         int n = 0;
         int x = 0;

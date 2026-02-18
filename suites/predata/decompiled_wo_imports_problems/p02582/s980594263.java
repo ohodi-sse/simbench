@@ -1,8 +1,7 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String nextLine = new Scanner(System.in).nextLine();
-        int n = 0;
         int x = 0;
         for (int i = 0; i < nextLine.length(); ++i) {
             if (nextLine.charAt(i) == 'R') {
@@ -12,9 +11,6 @@ public class Main
                     if (++i == nextLine.length()) {
                         break;
                     }
-                }
-                if (n < x) {
-                    n = x;
                 }
             }
         }

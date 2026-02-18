@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final ArrayList list = new ArrayList();
         if (nextInt2 == 0) {
@@ -16,32 +16,28 @@ public class Main
             System.out.println(nextInt);
             return;
         }
-        int n = Math.abs(nextInt - 0);
-        int n2 = 0;
+        int n = Math.abs(nextInt);
+        int x = 0;
         for (int j = nextInt - 1; j >= 0; --j) {
             if (!list.contains(j)) {
-                n2 = j;
+                x = j;
                 n = Math.abs(nextInt - j);
                 break;
             }
         }
-        int n3 = Math.abs(101 - nextInt);
-        int x = 101;
+        int n2 = Math.abs(101 - nextInt);
+        int x2 = 101;
         for (int k = nextInt + 1; k <= 101; ++k) {
             if (!list.contains(k)) {
-                x = k;
-                n3 = Math.abs(nextInt - k);
+                x2 = k;
+                n2 = Math.abs(nextInt - k);
                 break;
             }
         }
-        if (n < n3) {
-            System.out.println(n2);
+        if (n >= n2 && n > n2) {
+            System.out.println(x2);
+            return;
         }
-        else if (n > n3) {
-            System.out.println(x);
-        }
-        else {
-            System.out.println(n2);
-        }
+        System.out.println(x);
     }
 }

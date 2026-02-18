@@ -1,18 +1,18 @@
-public class Main
+public final class Main
 {
     private static Scanner sc;
-    static long mod;
-    static long longINF;
-    static int INF;
+    private static long mod;
+    private static long longINF;
+    private static int INF;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final long nextLong = Main.sc.nextLong();
-        final StringBuffer sb = new StringBuffer(Main.sc.next());
-        sb.deleteCharAt(1);
-        p(nextLong * Integer.parseInt(sb.toString()) / 100L);
+        final StringBuffer sb;
+        (sb = new StringBuffer(Main.sc.next())).deleteCharAt(1);
+        System.out.println(nextLong * Integer.parseInt(sb.toString()) / 100L);
     }
     
-    static long bi(final int n) {
+    private static long bi(final int n) {
         long n2 = 1L;
         for (int i = 1; i <= n; ++i) {
             n2 = n2 * i % Main.mod;
@@ -20,7 +20,7 @@ public class Main
         return n2;
     }
     
-    public static long modPow(final long n, final long n2) {
+    private static long modPow(final long n, final long n2) {
         long n3 = 1L;
         for (int n4 = 0; n4 < n2; ++n4) {
             n3 = n3 * n % Main.mod;
@@ -28,29 +28,39 @@ public class Main
         return n3;
     }
     
-    static void bit() {
-        final int n = 3;
+    private static void bit() {
         final String[] array = { "a", "b", "c" };
-        for (int i = 0; i < 1 << n; ++i) {
+        for (int i = 0; i < 8; ++i) {
             String s = "";
-            for (int j = 0; j < n; ++j) {
+            for (int j = 0; j < 3; ++j) {
                 if ((0x1 & i >> j) == 0x1) {
                     s += array[j];
                 }
             }
-            p("S=" + s);
+            System.out.println("S=" + s);
         }
     }
     
-    public static long lcm(final long n, final long n2) {
-        return n / gcd(n, n2) * n2;
+    private static long lcm(final long n, final long n2) {
+        long n3;
+        long n4;
+        long n5;
+        for (n3 = n2, n4 = n; n3 != 0L; n3 = n4 % n3, n4 = n5) {
+            n5 = n3;
+        }
+        return n / n4 * n2;
     }
     
-    public static long gcd(final long n, final long n2) {
-        return (n2 == 0L) ? n : gcd(n2, n % n2);
+    private static long gcd(long n, long n2) {
+        while (n2 != 0L) {
+            final long n3 = n2;
+            n2 = n % n2;
+            n = n3;
+        }
+        return n;
     }
     
-    static String nextPermutation(final String s) {
+    private static String nextPermutation(final String s) {
         final ArrayList list = new ArrayList();
         for (int i = 0; i < s.length(); ++i) {
             list.add(s.charAt(i));
@@ -86,30 +96,28 @@ public class Main
         return sb.toString();
     }
     
-    static void p(final String x) {
+    private static void p(final String x) {
         System.out.println(x);
     }
     
-    static void p(final int x) {
+    private static void p(final int x) {
         System.out.println(x);
     }
     
-    static void p() {
+    private static void p() {
         System.out.println();
     }
     
-    static void p(final long x) {
+    private static void p(final long x) {
         System.out.println(x);
     }
     
-    static void p(final double x) {
+    private static void p(final double x) {
         System.out.println(x);
     }
     
     static {
         Main.sc = new Scanner(System.in);
         Main.mod = 1000000007L;
-        Main.longINF = 1000000000000000007L;
-        Main.INF = 1000000007;
     }
 }

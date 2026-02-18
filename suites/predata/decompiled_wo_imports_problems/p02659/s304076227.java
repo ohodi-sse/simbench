@@ -1,14 +1,25 @@
-class Solver
+final class Main
 {
-    public void run() {
-        final Scanner scanner = new Scanner(System.in);
-        final long nextLong = scanner.nextLong();
+    private static void main$3231c38a() {
+        new Solver();
+        final Scanner scanner;
+        final long nextLong = (scanner = new Scanner(System.in)).nextLong();
         final String[] split = scanner.next().split("\\.");
         System.out.println(nextLong * (Integer.parseInt(split[0]) * 100 + Integer.parseInt(split[1])) / 100L);
     }
-}class Main
+}
+
+
+
+
+
+
+final class Solver
 {
-    public static void main(final String[] array) {
-        new Solver().run();
+    private static void run() {
+        final Scanner scanner;
+        final long nextLong = (scanner = new Scanner(System.in)).nextLong();
+        final String[] split = scanner.next().split("\\.");
+        System.out.println(nextLong * (Integer.parseInt(split[0]) * 100 + Integer.parseInt(split[1])) / 100L);
     }
 }

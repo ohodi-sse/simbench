@@ -1,11 +1,11 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int nextInt = new Scanner(System.in).nextInt();
         for (int i = 6; i >= 0; --i) {
             if (Math.pow(2.0, i) <= nextInt) {
                 System.out.println((int)Math.pow(2.0, i));
-                break;
+                return;
             }
         }
     }

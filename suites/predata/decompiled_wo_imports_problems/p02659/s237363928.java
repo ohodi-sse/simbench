@@ -1,18 +1,24 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final long long1 = Long.parseLong(scanner.next());
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final long long1 = Long.parseLong((scanner = new Scanner(System.in)).next());
         final String next = scanner.next();
         long n = 0L;
         int n2 = 100;
         for (int i = 0; i < 4; ++i) {
-            if (!next.substring(i, i + 1).equals(".")) {
-                n += n2 * Integer.parseInt(next.substring(i, i + 1));
+            final String s = next;
+            final int beginIndex = i;
+            if (!s.substring(beginIndex, beginIndex + 1).equals(".")) {
+                final long n3 = n;
+                final int n4 = n2;
+                final String s2 = next;
+                final int beginIndex2 = i;
+                n = n3 + n4 * Integer.parseInt(s2.substring(beginIndex2, beginIndex2 + 1));
                 n2 /= 10;
             }
         }
-        final long n3 = long1 * n;
-        System.out.println((n3 - n3 % 100L) / 100L);
+        final long n5 = long1 * n;
+        System.out.println((n5 - n5 % 100L) / 100L);
     }
 }

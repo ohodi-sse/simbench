@@ -1,54 +1,6 @@
-public static class MyScanner
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public MyScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final MyScanner myScanner = new MyScanner();
         final PrintWriter printWriter = new PrintWriter(new BufferedOutputStream(System.out));
         final String next = myScanner.next();
@@ -67,16 +19,16 @@ public static class MyScanner
         printWriter.close();
     }
     
-    public static class MyScanner
+    public static final class MyScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public MyScanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -93,19 +45,19 @@ public static class MyScanner
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

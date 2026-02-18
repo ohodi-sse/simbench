@@ -1,49 +1,9 @@
-static class InputReader
+public final class Main
 {
-    BufferedReader reader;
-    StringTokenizer tokenizer;
+    private static InputReader r;
+    private static PrintWriter pw;
     
-    public InputReader(final InputStream in) {
-        this.reader = new BufferedReader(new InputStreamReader(in), 32768);
-        this.tokenizer = null;
-    }
-    
-    String next() {
-        while (true) {
-            if (this.tokenizer != null) {
-                if (this.tokenizer.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.tokenizer = new StringTokenizer(this.reader.readLine());
-                continue;
-            }
-            catch (final IOException cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.tokenizer.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-}public class Main
-{
-    static InputReader r;
-    static PrintWriter pw;
-    
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = Main.r.next();
         final String next2 = Main.r.next();
         int x = 0;
@@ -61,17 +21,17 @@ static class InputReader
         Main.pw = new PrintWriter(System.out);
     }
     
-    static class InputReader
+    static final class InputReader
     {
-        BufferedReader reader;
-        StringTokenizer tokenizer;
+        private BufferedReader reader;
+        private StringTokenizer tokenizer;
         
         public InputReader(final InputStream in) {
             this.reader = new BufferedReader(new InputStreamReader(in), 32768);
             this.tokenizer = null;
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.tokenizer != null) {
                     if (this.tokenizer.hasMoreTokens()) {
@@ -90,15 +50,15 @@ static class InputReader
             return this.tokenizer.nextToken();
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        public double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
     }

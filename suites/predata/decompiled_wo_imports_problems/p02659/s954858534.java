@@ -1,13 +1,9 @@
-public class Main
+public final class Main
 {
-    static long mod;
+    private static long mod;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String[] split = new Scanner(System.in).nextLine().split(" ");
         System.out.println(Long.parseLong(split[0]) * Long.parseLong(split[1].replaceAll("\\.", "")) / 100L);
-    }
-    
-    static {
-        Main.mod = 1000000007L;
     }
 }

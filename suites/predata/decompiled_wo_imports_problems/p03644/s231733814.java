@@ -1,4 +1,4 @@
-public class Main
+public final class Main
 {
     private static int countPower(int n) {
         int n2 = 0;
@@ -9,15 +9,21 @@ public class Main
         return n2;
     }
     
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         int x = 1;
         int n = 0;
         for (int i = 1; i <= nextInt; ++i) {
-            final int countPower = countPower(i);
-            if (n < countPower) {
-                n = countPower;
+            int n2 = i;
+            int n3 = 0;
+            while (n2 % 2 == 0) {
+                ++n3;
+                n2 /= 2;
+            }
+            final int n4 = n3;
+            if (n < n4) {
+                n = n4;
                 x = i;
             }
         }

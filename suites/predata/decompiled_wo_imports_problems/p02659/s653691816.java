@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         System.out.println(new BigDecimal(Long.toString(scanner.nextLong())).multiply(new BigDecimal(Double.toString(scanner.nextDouble()))).setScale(0, 1));
         scanner.close();

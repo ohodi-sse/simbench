@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         try {
             final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
             int x = 0;

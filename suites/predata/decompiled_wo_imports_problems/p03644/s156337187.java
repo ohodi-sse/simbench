@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    static Scanner scanner;
+    private static Scanner scanner;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         System.out.println(Integer.highestOneBit(Main.scanner.nextInt()));
     }
     

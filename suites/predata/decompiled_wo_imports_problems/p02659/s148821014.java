@@ -1,91 +1,42 @@
-static class FastReader
+public final class Main
 {
-    public BufferedReader br;
-    public StringTokenizer st;
-    String context;
-    
-    public FastReader(final InputStream in) {
-        this(new InputStreamReader(in));
-    }
-    
-    public FastReader(final InputStreamReader in) {
-        this.context = null;
-        this.br = new BufferedReader(in);
-    }
-    
-    public String next() {
-        if (this.context != null) {
-            System.err.print("[" + this.context + "] Wait for input ...");
-        }
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                final String line = this.br.readLine();
-                if (line == null) {
-                    return null;
-                }
-                this.st = new StringTokenizer(line);
-                continue;
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-                throw new RuntimeException("Could not read");
-            }
-            break;
-        }
-        final String nextToken = this.st.nextToken();
-        if (this.context != null) {
-            System.err.println("[" + this.context + "] ... received : " + nextToken);
-        }
-        return nextToken;
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final FastReader fastReader = new FastReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new CMultiplication3().solve(1, fastReader, printWriter);
+        new CMultiplication3();
+        final FastReader fastReader2 = fastReader;
+        final String[] split;
+        printWriter.println(Long.parseLong(fastReader2.next()) * (Integer.parseInt(split[0]) * 100 + (((split = fastReader2.next().split("\\.")).length == 1) ? 0L : Integer.parseInt(split[1]))) / 100L);
         printWriter.close();
     }
     
-    static class CMultiplication3
+    static final class CMultiplication3
     {
-        public void solve(final int n, final FastReader fastReader, final PrintWriter printWriter) {
-            final long nextLong = fastReader.nextLong();
-            final String[] split = fastReader.next().split("\\.");
-            printWriter.println(nextLong * (Integer.parseInt(split[0]) * 100 + ((split.length == 1) ? 0L : Integer.parseInt(split[1]))) / 100L);
+        private static void solve$3c455bd4(final FastReader fastReader, final PrintWriter printWriter) {
+            final String[] split;
+            printWriter.println(Long.parseLong(fastReader.next()) * (Integer.parseInt(split[0]) * 100 + (((split = fastReader.next().split("\\.")).length == 1) ? 0L : Integer.parseInt(split[1]))) / 100L);
         }
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        public BufferedReader br;
-        public StringTokenizer st;
-        String context;
+        private BufferedReader br;
+        private StringTokenizer st;
+        private String context;
         
         public FastReader(final InputStream in) {
             this(new InputStreamReader(in));
         }
         
-        public FastReader(final InputStreamReader in) {
+        private FastReader(final InputStreamReader in) {
             this.context = null;
             this.br = new BufferedReader(in);
         }
         
-        public String next() {
-            if (this.context != null) {
-                System.err.print("[" + this.context + "] Wait for input ...");
-            }
+        public final String next() {
+            final String context = this.context;
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -93,8 +44,8 @@ static class FastReader
                     }
                 }
                 try {
-                    final String line = this.br.readLine();
-                    if (line == null) {
+                    final String line;
+                    if ((line = this.br.readLine()) == null) {
                         return null;
                     }
                     this.st = new StringTokenizer(line);
@@ -107,21 +58,12 @@ static class FastReader
                 break;
             }
             final String nextToken = this.st.nextToken();
-            if (this.context != null) {
-                System.err.println("[" + this.context + "] ... received : " + nextToken);
-            }
+            final String context2 = this.context;
             return nextToken;
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
-    }
-}static class CMultiplication3
-{
-    public void solve(final int n, final FastReader fastReader, final PrintWriter printWriter) {
-        final long nextLong = fastReader.nextLong();
-        final String[] split = fastReader.next().split("\\.");
-        printWriter.println(nextLong * (Integer.parseInt(split[0]) * 100 + ((split.length == 1) ? 0L : Integer.parseInt(split[1]))) / 100L);
     }
 }

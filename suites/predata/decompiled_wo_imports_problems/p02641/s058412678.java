@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        if (nextInt2 == 0) {
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        if ((nextInt2 = scanner.nextInt()) == 0) {
             System.out.println(nextInt);
             return;
         }
@@ -16,16 +16,16 @@ public class Main
         int n = Integer.MAX_VALUE;
         int x = -1;
         final int n2 = (int)list.get(0) - 1;
-        final int n3 = (nextInt < n2) ? nextInt : n2;
-        final int n4 = (int)list.get(list.size() - 1) + 1;
-        for (int n5 = (n4 < nextInt) ? nextInt : n4, j = n3; j <= n5; ++j) {
-            if (!list.contains(j)) {
-                final int abs = Math.abs(nextInt - j);
-                if (abs < n) {
-                    n = abs;
-                    x = j;
-                }
+        int j = (nextInt < n2) ? nextInt : n2;
+        final ArrayList list2 = list;
+        int n3;
+        while (j <= (((n3 = (int)list2.get(list2.size() - 1) + 1) < nextInt) ? nextInt : n3)) {
+            final int abs;
+            if (!list.contains(j) && (abs = Math.abs(nextInt - j)) < n) {
+                n = abs;
+                x = j;
             }
+            ++j;
         }
         System.out.println(x);
     }

@@ -1,13 +1,12 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
-        final String value = String.valueOf(scanner.nextLong() * (long)(scanner.nextDouble() * 100.0 + 0.5));
-        if (value.length() <= 2) {
+        final String value;
+        if ((value = String.valueOf(scanner.nextLong() * (long)(scanner.nextDouble() * 100.0 + 0.5))).length() <= 2) {
             System.out.println("0");
+            return;
         }
-        else {
-            System.out.println(value.substring(0, value.length() - 2));
-        }
+        System.out.println(value.substring(0, value.length() - 2));
     }
 }

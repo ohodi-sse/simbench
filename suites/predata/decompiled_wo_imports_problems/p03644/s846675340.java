@@ -1,6 +1,6 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int int1 = Integer.parseInt(new Scanner(System.in).next());
         int x = 1;
         int n = 0;

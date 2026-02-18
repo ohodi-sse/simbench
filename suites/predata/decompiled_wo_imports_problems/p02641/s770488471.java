@@ -1,45 +1,44 @@
-public class Main
+public final class Main
 {
-    static Scanner scanner;
+    private static Scanner scanner;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         Main.scanner = new Scanner(System.in);
-        final int gi = gi();
-        final int gi2 = gi();
-        final int[] array2 = new int[gi2];
+        int gi = gi();
+        final int gi2;
+        final int[] array = new int[gi2 = gi()];
         for (int i = 0; i < gi2; ++i) {
-            array2[i] = gi();
+            array[i] = gi();
         }
         int n = 0;
-        int x = gi;
         boolean b;
         do {
-            x += (int)(Math.pow(-1.0, n) * n);
+            gi += (int)(Math.pow(-1.0, n) * n);
             b = false;
             for (int j = 0; j < gi2; ++j) {
-                if (array2[j] == x) {
+                if (array[j] == gi) {
                     ++n;
                     b = true;
                     break;
                 }
             }
         } while (b);
-        System.out.println(x);
+        System.out.println(gi);
     }
     
-    public static String gs() {
+    private static String gs() {
         return Main.scanner.next();
     }
     
-    public static int gi() {
+    private static int gi() {
         return Integer.parseInt(Main.scanner.next());
     }
     
-    public static long gl() {
+    private static long gl() {
         return Long.parseLong(Main.scanner.next());
     }
     
-    public static double gd() {
+    private static double gd() {
         return Double.parseDouble(Main.scanner.next());
     }
 }

@@ -1,11 +1,10 @@
-public class Main
+public final class Main
 {
-    static Scanner scanner;
+    private static Scanner scanner;
     
-    public static void main(final String[] array) {
-        Main.scanner = new Scanner(System.in);
-        final String value = String.valueOf(gl() * Math.round(gd() * 100.0));
-        if (value.length() <= 2) {
+    private static void main$3231c38a() {
+        final String value;
+        if ((value = String.valueOf(Long.parseLong((Main.scanner = new Scanner(System.in)).next()) * Math.round(Double.parseDouble(Main.scanner.next()) * 100.0))).length() <= 2) {
             System.out.print("0");
             return;
         }
@@ -14,19 +13,19 @@ public class Main
         }
     }
     
-    public static String gs() {
+    private static String gs() {
         return Main.scanner.next();
     }
     
-    public static int gi() {
+    private static int gi() {
         return Integer.parseInt(Main.scanner.next());
     }
     
-    public static long gl() {
+    private static long gl() {
         return Long.parseLong(Main.scanner.next());
     }
     
-    public static double gd() {
+    private static double gd() {
         return Double.parseDouble(Main.scanner.next());
     }
 }

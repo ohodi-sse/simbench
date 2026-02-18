@@ -1,30 +1,35 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        if (next.equals("RRR")) {
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = new Scanner(System.in).next()).equals("RRR")) {
             System.out.println(3);
+            return;
         }
-        else if (next.equals("RRS")) {
+        if (next.equals("RRS")) {
             System.out.println(2);
+            return;
         }
-        else if (next.equals("SRR")) {
+        if (next.equals("SRR")) {
             System.out.println(2);
+            return;
         }
-        else if (next.equals("RSR")) {
+        if (next.equals("RSR")) {
             System.out.println(1);
+            return;
         }
-        else if (next.equals("RSS")) {
+        if (next.equals("RSS")) {
             System.out.println(1);
+            return;
         }
-        else if (next.equals("SRS")) {
+        if (next.equals("SRS")) {
             System.out.println(1);
+            return;
         }
-        else if (next.equals("SSR")) {
+        if (next.equals("SSR")) {
             System.out.println(1);
+            return;
         }
-        else {
-            System.out.println(0);
-        }
+        System.out.println(0);
     }
 }

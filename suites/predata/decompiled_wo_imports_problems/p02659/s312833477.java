@@ -1,80 +1,4 @@
-public class Main
-{
-    static In in;
-    static Out out;
-    static final long mod = 1000000007L;
-    static final long inf = 2305843009213693951L;
-    static final int iinf = 1073741823;
-    static final int[] da;
-    
-    void solve() {
-        Main.out.println(BigDecimal.valueOf(Main.in.nextLong()).multiply(BigDecimal.valueOf(Double.parseDouble(Main.in.next()))).longValue());
-    }
-    
-    public static void main(final String[] array) {
-        new Main().solve();
-        Main.out.flush();
-    }
-    
-    static {
-        Main.in = new In();
-        Main.out = new Out();
-        da = new int[] { -1, 0, 1, 0, -1, 1, 1, -1, -1 };
-    }
-}class Out
-{
-    private PrintWriter out;
-    boolean autoFlush;
-    
-    Out() {
-        this.out = new PrintWriter(System.out);
-        this.autoFlush = false;
-    }
-    
-    void println(final Object... array) {
-        final StringJoiner x = new StringJoiner(" ");
-        for (int length = array.length, i = 0; i < length; ++i) {
-            x.add(String.valueOf(array[i]));
-        }
-        this.out.println(x);
-        if (this.autoFlush) {
-            this.out.flush();
-        }
-    }
-    
-    void println(final char[] data) {
-        this.out.println(String.valueOf(data));
-        if (this.autoFlush) {
-            this.out.flush();
-        }
-    }
-    
-    void println(final int[] array) {
-        final StringJoiner x = new StringJoiner(" ");
-        for (int length = array.length, i = 0; i < length; ++i) {
-            x.add(Integer.toString(array[i]));
-        }
-        this.out.println(x);
-        if (this.autoFlush) {
-            this.out.flush();
-        }
-    }
-    
-    void println(final long[] array) {
-        final StringJoiner x = new StringJoiner(" ");
-        for (int length = array.length, i = 0; i < length; ++i) {
-            x.add(Long.toString(array[i]));
-        }
-        this.out.println(x);
-        if (this.autoFlush) {
-            this.out.flush();
-        }
-    }
-    
-    void flush() {
-        this.out.flush();
-    }
-}class In
+final class In
 {
     private BufferedReader reader;
     private StringTokenizer tokenizer;
@@ -83,7 +7,7 @@ public class Main
         this.reader = new BufferedReader(new InputStreamReader(System.in), 65536);
     }
     
-    String next() {
+    final String next() {
         try {
             while (this.tokenizer == null || !this.tokenizer.hasMoreTokens()) {
                 this.tokenizer = new StringTokenizer(this.reader.readLine());
@@ -93,19 +17,19 @@ public class Main
         return this.tokenizer.nextToken();
     }
     
-    int nextInt() {
+    private int nextInt() {
         return Integer.parseInt(this.next());
     }
     
-    long nextLong() {
+    private long nextLong() {
         return Long.parseLong(this.next());
     }
     
-    char[] nextCharArray() {
+    private char[] nextCharArray() {
         return this.next().toCharArray();
     }
     
-    char[][] nextCharGrid(final int n, final int n2) {
+    private char[][] nextCharGrid(final int n, final int n2) {
         final char[][] array = new char[n][n2];
         for (int i = 0; i < n; ++i) {
             array[i] = this.next().toCharArray();
@@ -113,35 +37,143 @@ public class Main
         return array;
     }
     
-    int[] nextIntArray(final int n) {
+    private int[] nextIntArray(final int n) {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
+            array[i] = Integer.parseInt(this.next());
         }
         return array;
     }
     
-    int[] nextIntArray(final int n, final IntUnaryOperator intUnaryOperator) {
+    private int[] nextIntArray(final int n, final IntUnaryOperator intUnaryOperator) {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = intUnaryOperator.applyAsInt(this.nextInt());
+            array[i] = intUnaryOperator.applyAsInt(Integer.parseInt(this.next()));
         }
         return array;
     }
     
-    long[] nextLongArray(final int n) {
+    private long[] nextLongArray(final int n) {
         final long[] array = new long[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
+            array[i] = Long.parseLong(this.next());
         }
         return array;
     }
     
-    long[] nextLongArray(final int n, final LongUnaryOperator longUnaryOperator) {
+    private long[] nextLongArray(final int n, final LongUnaryOperator longUnaryOperator) {
         final long[] array = new long[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = longUnaryOperator.applyAsLong(this.nextLong());
+            array[i] = longUnaryOperator.applyAsLong(Long.parseLong(this.next()));
         }
         return array;
+    }
+}
+
+
+
+
+
+
+
+public final class Main
+{
+    private static In in;
+    private static Out out;
+    private static long mod = 1000000007L;
+    private static long inf = 2305843009213693951L;
+    private static int iinf = 1073741823;
+    private static int[] da;
+    
+    private static void solve() {
+        final BigDecimal value = BigDecimal.valueOf(Long.parseLong(Main.in.next()));
+        final BigDecimal value2 = BigDecimal.valueOf(Double.parseDouble(Main.in.next()));
+        final Out out = Main.out;
+        final Object[] array = { value.multiply(value2).longValue() };
+        final Out out2 = out;
+        final StringJoiner x = new StringJoiner(" ");
+        final int length = array.length;
+        for (int i = 0; i <= 0; ++i) {
+            x.add(String.valueOf(array[0]));
+        }
+        out2.out.println(x);
+        final boolean autoFlush = out2.autoFlush;
+    }
+    
+    private static void main$3231c38a() {
+        new Main();
+        final BigDecimal value = BigDecimal.valueOf(Long.parseLong(Main.in.next()));
+        final BigDecimal value2 = BigDecimal.valueOf(Double.parseDouble(Main.in.next()));
+        final Out out = Main.out;
+        final Object[] array = { value.multiply(value2).longValue() };
+        final Out out2 = out;
+        final StringJoiner x = new StringJoiner(" ");
+        final int length = array.length;
+        for (int i = 0; i <= 0; ++i) {
+            x.add(String.valueOf(array[0]));
+        }
+        out2.out.println(x);
+        final boolean autoFlush = out2.autoFlush;
+        Main.out.out.flush();
+    }
+    
+    static {
+        Main.in = new In();
+        Main.out = new Out();
+    }
+}
+
+
+
+
+
+
+
+
+final class Out
+{
+    PrintWriter out;
+    boolean autoFlush;
+    
+    Out() {
+        this.out = new PrintWriter(System.out);
+        this.autoFlush = false;
+    }
+    
+    private void println(final Object... array) {
+        final StringJoiner x = new StringJoiner(" ");
+        final int length = array.length;
+        for (int i = 0; i <= 0; ++i) {
+            x.add(String.valueOf(array[0]));
+        }
+        this.out.println(x);
+        final boolean autoFlush = this.autoFlush;
+    }
+    
+    private void println(final char[] data) {
+        this.out.println(String.valueOf(data));
+        final boolean autoFlush = this.autoFlush;
+    }
+    
+    private void println(final int[] array) {
+        final StringJoiner x = new StringJoiner(" ");
+        for (int length = array.length, i = 0; i < length; ++i) {
+            x.add(Integer.toString(array[i]));
+        }
+        this.out.println(x);
+        final boolean autoFlush = this.autoFlush;
+    }
+    
+    private void println(final long[] array) {
+        final StringJoiner x = new StringJoiner(" ");
+        for (int length = array.length, i = 0; i < length; ++i) {
+            x.add(Long.toString(array[i]));
+        }
+        this.out.println(x);
+        final boolean autoFlush = this.autoFlush;
+    }
+    
+    private void flush() {
+        this.out.flush();
     }
 }

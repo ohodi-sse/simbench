@@ -1,15 +1,15 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final int nextInt = new Scanner(System.in).nextInt();
-        if (nextInt == 1) {
+    private static void main$3231c38a() {
+        int i;
+        if ((i = new Scanner(System.in).nextInt()) == 1) {
             System.out.println(1);
             System.exit(0);
         }
         int n = 0;
         int n2 = 0;
         int x = 0;
-        for (int i = nextInt; i > 0; --i) {
+        while (i > 0) {
             if (i % 2 == 0) {
                 for (int n3 = i; n3 % 2 == 0; n3 /= 2, ++n2) {}
                 if (n < n2) {
@@ -18,6 +18,7 @@ public class Main
                 }
             }
             n2 = 0;
+            --i;
         }
         System.out.println(x);
     }

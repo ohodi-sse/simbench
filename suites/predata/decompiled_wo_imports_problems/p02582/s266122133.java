@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new FastScanner(System.in).next();
         int x = 0;
         int n = 0;
@@ -21,7 +21,7 @@ public class Main
         System.out.println(x);
     }
     
-    private static class FastScanner
+    private static final class FastScanner
     {
         private BufferedReader reader;
         private StringTokenizer tokenizer;
@@ -33,7 +33,7 @@ public class Main
             this.tokenizer = null;
         }
         
-        public String next() {
+        public final String next() {
             if (this.tokenizer != null) {
                 if (this.tokenizer.hasMoreTokens()) {
                     return this.tokenizer.nextToken();
@@ -47,31 +47,5 @@ public class Main
             }
             return this.tokenizer.nextToken();
         }
-    }
-}private static class FastScanner
-{
-    private BufferedReader reader;
-    private StringTokenizer tokenizer;
-    
-    public FastScanner(final InputStream in) {
-        this.reader = null;
-        this.tokenizer = null;
-        this.reader = new BufferedReader(new InputStreamReader(in));
-        this.tokenizer = null;
-    }
-    
-    public String next() {
-        if (this.tokenizer != null) {
-            if (this.tokenizer.hasMoreTokens()) {
-                return this.tokenizer.nextToken();
-            }
-        }
-        try {
-            this.tokenizer = new StringTokenizer(this.reader.readLine());
-        }
-        catch (final IOException cause) {
-            throw new RuntimeException(cause);
-        }
-        return this.tokenizer.nextToken();
     }
 }

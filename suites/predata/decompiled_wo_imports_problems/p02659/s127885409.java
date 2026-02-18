@@ -1,18 +1,19 @@
-public class Main
+public final class Main
 {
-    Scanner sc;
-    int MOD;
+    private Scanner sc;
+    private int MOD;
     
     public Main() {
         this.sc = new Scanner(System.in);
         this.MOD = 998244353;
     }
     
-    public static void main(final String[] array) {
-        new Main().run();
+    private static void main$3231c38a() {
+        final Main main = new Main();
+        System.out.println(main.sc.nextLong() * Math.round(main.sc.nextDouble() * 100.0) / 100L);
     }
     
-    void run() {
+    private void run() {
         System.out.println(this.sc.nextLong() * Math.round(this.sc.nextDouble() * 100.0) / 100L);
     }
 }

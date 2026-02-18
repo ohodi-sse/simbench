@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        if (next.length() != 3) {
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = new Scanner(System.in).next()).length() != 3) {
             System.exit(0);
         }
         if (next.equals("RRR")) {
@@ -16,9 +16,8 @@ public class Main
         if (next.equals("SSS")) {
             System.out.println("0");
             System.exit(0);
+            return;
         }
-        else {
-            System.out.println("1");
-        }
+        System.out.println("1");
     }
 }

@@ -1,34 +1,34 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        if (nextInt2 == 0) {
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        if ((nextInt2 = scanner.nextInt()) == 0) {
             System.out.println(nextInt);
             return;
         }
-        final int[] array2 = new int[100];
+        final int[] array = new int[100];
         for (int i = 0; i < 100; ++i) {
-            array2[i] = 0;
+            array[i] = 0;
         }
         for (int j = 0; j < nextInt2; ++j) {
-            array2[scanner.nextInt() - 1] = 1;
+            array[scanner.nextInt() - 1] = 1;
         }
         int x = 101;
         for (int k = nextInt - 1; k < 100; ++k) {
-            if (array2[k] == 0) {
+            if (array[k] == 0) {
                 x = k + 1;
                 break;
             }
         }
         int l = nextInt - 1;
         while (l >= 0) {
-            if (array2[l] == 0) {
-                if (Math.abs(nextInt - x) < Math.abs(nextInt - (l + 1))) {
+            if (array[l] == 0) {
+                if (Math.abs(nextInt - x) >= Math.abs(nextInt - (l + 1))) {
+                    x = l + 1;
                     break;
                 }
-                x = l + 1;
                 break;
             }
             else {

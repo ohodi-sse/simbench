@@ -1,18 +1,19 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int int1 = Integer.parseInt(new Scanner(System.in).next());
-        final int[] array2 = { 1, 2, 4, 8, 16, 32, 64 };
-        int length = array2.length;
-        int n = 0;
-        while (n + 1 != length) {
-            if (int1 >= array2[(length + n) / 2]) {
-                n = (length + n) / 2;
+        final int[] array;
+        final int length = (array = new int[] { 1, 2, 4, 8, 16, 32, 64 }).length;
+        int n = 7;
+        int n2 = 0;
+        while (n2 + 1 != n) {
+            if (int1 >= array[(n + n2) / 2]) {
+                n2 = (n + n2) / 2;
             }
             else {
-                length = (length + n) / 2;
+                n = (n + n2) / 2;
             }
         }
-        System.out.println(array2[n]);
+        System.out.println(array[n2]);
     }
 }

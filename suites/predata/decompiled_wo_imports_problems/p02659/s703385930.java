@@ -1,49 +1,57 @@
-public class Main
+public final class Main
 {
-    static InputIterator ii;
-    static PrintWriter out;
+    private static InputIterator ii;
+    private static PrintWriter out;
     
-    static void flush() {
+    private static void flush() {
         Main.out.flush();
     }
     
-    static void myout(final Object x) {
+    private static void myout(final Object x) {
         Main.out.println(x);
     }
     
-    static void myerr(final Object x) {
+    private static void myerr(final Object x) {
         System.err.println(x);
     }
     
-    static String next() {
-        return Main.ii.next();
+    private static String next() {
+        final InputIterator ii;
+        final InputIterator inputIterator = ii = Main.ii;
+        if (inputIterator.index < inputIterator.max) {
+            final String s = ii.inputLine.get(ii.index);
+            final InputIterator inputIterator2 = ii;
+            ++inputIterator2.index;
+            return s;
+        }
+        throw new IndexOutOfBoundsException("\u3053\u308c\u4ee5\u4e0a\u5165\u529b\u306f\u306a\u3044\u3088\u3002");
     }
     
-    static int nextInt() {
+    private static int nextInt() {
         return Integer.parseInt(next());
     }
     
-    static long nextLong() {
+    private static long nextLong() {
         return Long.parseLong(next());
     }
     
-    static ArrayList<String> nextStrArray() {
-        return myHanSpSplit(next());
+    private static ArrayList<String> nextStrArray() {
+        return new ArrayList<String>(Arrays.asList(next().split(" ")));
     }
     
-    static ArrayList<String> myHanSpSplit(final String s) {
+    private static ArrayList<String> myHanSpSplit(final String s) {
         return new ArrayList<String>(Arrays.asList(s.split(" ")));
     }
     
-    static ArrayList<String> nextCharArray() {
-        return mySingleSplit(next());
+    private static ArrayList<String> nextCharArray() {
+        return new ArrayList<String>(Arrays.asList(next().split("")));
     }
     
-    static ArrayList<String> mySingleSplit(final String s) {
+    private static ArrayList<String> mySingleSplit(final String s) {
         return new ArrayList<String>(Arrays.asList(s.split("")));
     }
     
-    static ArrayList<Integer> nextIntArray() {
+    private static ArrayList<Integer> nextIntArray() {
         final ArrayList list = new ArrayList();
         final ArrayList<String> nextStrArray = nextStrArray();
         for (int i = 0; i < nextStrArray.size(); ++i) {
@@ -52,7 +60,7 @@ public class Main
         return list;
     }
     
-    static ArrayList<Long> nextLongArray() {
+    private static ArrayList<Long> nextLongArray() {
         final ArrayList list = new ArrayList();
         final ArrayList<String> nextStrArray = nextStrArray();
         for (int i = 0; i < nextStrArray.size(); ++i) {
@@ -61,30 +69,31 @@ public class Main
         return list;
     }
     
-    static String kaigyoToStr(final String[] elements) {
+    private static String kaigyoToStr(final String[] elements) {
         return String.join("\n", (CharSequence[])elements);
     }
     
-    static String kaigyoToStr(final ArrayList<String> elements) {
+    private static String kaigyoToStr(final ArrayList<String> elements) {
         return String.join("\n", elements);
     }
     
-    static String hanSpToStr(final String[] elements) {
+    private static String hanSpToStr(final String[] elements) {
         return String.join(" ", (CharSequence[])elements);
     }
     
-    static String hanSpToStr(final ArrayList<String> elements) {
+    private static String hanSpToStr(final ArrayList<String> elements) {
         return String.join(" ", elements);
     }
     
-    public static void main(final String[] array) {
-        solve();
-        flush();
+    private static void main$3231c38a() {
+        final ArrayList<String> nextStrArray = nextStrArray();
+        Main.out.println((Object)new BigDecimal(nextStrArray.get(0)).multiply(new BigDecimal(nextStrArray.get(1))).longValue());
+        Main.out.flush();
     }
     
-    public static void solve() {
+    private static void solve() {
         final ArrayList<String> nextStrArray = nextStrArray();
-        myout(new BigDecimal(nextStrArray.get(0)).multiply(new BigDecimal(nextStrArray.get(1))).longValue());
+        Main.out.println((Object)new BigDecimal(nextStrArray.get(0)).multiply(new BigDecimal(nextStrArray.get(1))).longValue());
     }
     
     static {
@@ -92,7 +101,7 @@ public class Main
         Main.out = new PrintWriter(System.out);
     }
     
-    public static class InputIterator
+    public static final class InputIterator
     {
         ArrayList<String> inputLine;
         int index;
@@ -118,55 +127,17 @@ public class Main
             this.max = this.inputLine.size();
         }
         
-        public boolean hasNext() {
+        private boolean hasNext() {
             return this.index < this.max;
         }
         
-        public String next() {
-            if (this.hasNext()) {
+        private String next() {
+            if (this.index < this.max) {
                 final String s = this.inputLine.get(this.index);
                 ++this.index;
                 return s;
             }
             throw new IndexOutOfBoundsException("\u3053\u308c\u4ee5\u4e0a\u5165\u529b\u306f\u306a\u3044\u3088\u3002");
         }
-    }
-}public static class InputIterator
-{
-    ArrayList<String> inputLine;
-    int index;
-    int max;
-    
-    InputIterator() {
-        this.inputLine = new ArrayList<String>(1024);
-        this.index = 0;
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        while (true) {
-            String line;
-            try {
-                line = bufferedReader.readLine();
-            }
-            catch (final IOException ex) {
-                line = null;
-            }
-            if (line == null) {
-                break;
-            }
-            this.inputLine.add(line);
-        }
-        this.max = this.inputLine.size();
-    }
-    
-    public boolean hasNext() {
-        return this.index < this.max;
-    }
-    
-    public String next() {
-        if (this.hasNext()) {
-            final String s = this.inputLine.get(this.index);
-            ++this.index;
-            return s;
-        }
-        throw new IndexOutOfBoundsException("\u3053\u308c\u4ee5\u4e0a\u5165\u529b\u306f\u306a\u3044\u3088\u3002");
     }
 }

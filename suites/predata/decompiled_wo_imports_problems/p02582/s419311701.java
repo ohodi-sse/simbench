@@ -1,10 +1,22 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
-        new Main().solve();
+    private static void main$3231c38a() throws IOException {
+        final String next = new Main().new FastScanner().next();
+        int max = 0;
+        int b = 0;
+        for (int i = 0; i < next.length(); ++i) {
+            if (next.charAt(i) == 'R') {
+                ++b;
+                max = Math.max(max, b);
+            }
+            else {
+                b = 0;
+            }
+        }
+        System.out.println(max);
     }
     
-    public void solve() throws IOException {
+    private void solve() throws IOException {
         final String next = new FastScanner().next();
         int max = 0;
         int b = 0;
@@ -20,9 +32,9 @@ public class Main
         System.out.println(max);
     }
     
-    public class FastScanner
+    public final class FastScanner
     {
-        BufferedReader reader;
+        private BufferedReader reader;
         private StringTokenizer st;
         
         public FastScanner(final Main obj) {
@@ -31,94 +43,44 @@ public class Main
             this.reader = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        public String next() throws IOException {
+        public final String next() throws IOException {
             if (this.st == null || !this.st.hasMoreElements()) {
                 this.st = new StringTokenizer(this.reader.readLine());
             }
             return this.st.nextToken();
         }
         
-        public String nextLine() throws IOException {
+        private String nextLine() throws IOException {
             this.st = null;
             return this.reader.readLine();
         }
         
-        public int nextInt() throws NumberFormatException, IOException {
+        private int nextInt() throws NumberFormatException, IOException {
             return Integer.parseInt(this.next());
         }
         
-        public long nextLong() throws NumberFormatException, IOException {
+        private long nextLong() throws NumberFormatException, IOException {
             return Long.parseLong(this.next());
         }
         
-        public int[] nextIntArr(final int n) throws NumberFormatException, IOException {
+        private int[] nextIntArr(final int n) throws NumberFormatException, IOException {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        public long[] nextLongArr(final int n) throws NumberFormatException, IOException {
+        private long[] nextLongArr(final int n) throws NumberFormatException, IOException {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLong();
+                array[i] = Long.parseLong(this.next());
             }
             return array;
         }
         
-        public void close() throws IOException {
+        private void close() throws IOException {
             this.reader.close();
         }
-    }
-}public class FastScanner
-{
-    BufferedReader reader;
-    private StringTokenizer st;
-    
-    public FastScanner(final Main obj) {
-        Objects.requireNonNull(obj);
-        this.st = null;
-        this.reader = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    public String next() throws IOException {
-        if (this.st == null || !this.st.hasMoreElements()) {
-            this.st = new StringTokenizer(this.reader.readLine());
-        }
-        return this.st.nextToken();
-    }
-    
-    public String nextLine() throws IOException {
-        this.st = null;
-        return this.reader.readLine();
-    }
-    
-    public int nextInt() throws NumberFormatException, IOException {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() throws NumberFormatException, IOException {
-        return Long.parseLong(this.next());
-    }
-    
-    public int[] nextIntArr(final int n) throws NumberFormatException, IOException {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    public long[] nextLongArr(final int n) throws NumberFormatException, IOException {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    public void close() throws IOException {
-        this.reader.close();
     }
 }

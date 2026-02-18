@@ -1,18 +1,17 @@
-public class Main
+public final class Main
 {
-    static final Scanner sc;
+    private static Scanner sc;
     
-    public static void main(final String[] array) {
-        final Matcher matcher = Pattern.compile("R+").matcher(Main.sc.next());
-        if (matcher.find()) {
+    private static void main$3231c38a() {
+        final Matcher matcher;
+        if ((matcher = Pattern.compile("R+").matcher(Main.sc.next())).find()) {
             System.out.println(matcher.group().length());
+            return;
         }
-        else {
-            System.out.println(0);
-        }
+        System.out.println(0);
     }
     
     static {
-        sc = new Scanner(System.in);
+        Main.sc = new Scanner(System.in);
     }
 }

@@ -1,20 +1,53 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final Scanner scanner = new Scanner(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new C().solve(1, scanner, printWriter);
+        new C();
+        final Scanner scanner2 = scanner;
+        final PrintWriter printWriter2 = printWriter;
+        final Scanner scanner3 = scanner2;
+        final int int1 = Integer.parseInt(scanner2.next());
+        final int int2;
+        if ((int2 = Integer.parseInt(scanner3.next())) == 0) {
+            printWriter2.println(int1);
+        }
+        else {
+            final int[] a = new int[int2];
+            for (int i = 0; i < int2; ++i) {
+                a[i] = Integer.parseInt(scanner3.next());
+            }
+            Arrays.sort(a);
+            int n = 0;
+            final TreeMap treeMap = new TreeMap();
+            for (int j = 101; j >= 0; --j) {
+                for (int k = 0; k < int2; ++k) {
+                    if (j == a[k]) {
+                        n = 1;
+                        break;
+                    }
+                }
+                if (n == 0) {
+                    treeMap.put(Math.abs(int1 - j), j);
+                }
+                n = 0;
+            }
+            final Iterator iterator;
+            if ((iterator = treeMap.values().iterator()).hasNext()) {
+                printWriter2.println(((Integer)iterator.next()).toString());
+            }
+        }
         printWriter.close();
     }
     
-    static class C
+    static final class C
     {
-        public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
+        private static void solve$32964a28(final Scanner scanner, final PrintWriter printWriter) {
             final int int1 = Integer.parseInt(scanner.next());
-            final int int2 = Integer.parseInt(scanner.next());
-            if (int2 == 0) {
+            final int int2;
+            if ((int2 = Integer.parseInt(scanner.next())) == 0) {
                 printWriter.println(int1);
                 return;
             }
@@ -23,57 +56,24 @@ public class Main
                 a[i] = Integer.parseInt(scanner.next());
             }
             Arrays.sort(a);
-            int n2 = 0;
+            int n = 0;
             final TreeMap treeMap = new TreeMap();
             for (int j = 101; j >= 0; --j) {
                 for (int k = 0; k < int2; ++k) {
                     if (j == a[k]) {
-                        n2 = 1;
+                        n = 1;
                         break;
                     }
                 }
-                if (n2 == 0) {
+                if (n == 0) {
                     treeMap.put(Math.abs(int1 - j), j);
                 }
-                n2 = 0;
+                n = 0;
             }
-            final Iterator iterator = treeMap.values().iterator();
-            if (iterator.hasNext()) {
+            final Iterator iterator;
+            if ((iterator = treeMap.values().iterator()).hasNext()) {
                 printWriter.println(((Integer)iterator.next()).toString());
             }
-        }
-    }
-}static class C
-{
-    public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
-        final int int1 = Integer.parseInt(scanner.next());
-        final int int2 = Integer.parseInt(scanner.next());
-        if (int2 == 0) {
-            printWriter.println(int1);
-            return;
-        }
-        final int[] a = new int[int2];
-        for (int i = 0; i < int2; ++i) {
-            a[i] = Integer.parseInt(scanner.next());
-        }
-        Arrays.sort(a);
-        int n2 = 0;
-        final TreeMap treeMap = new TreeMap();
-        for (int j = 101; j >= 0; --j) {
-            for (int k = 0; k < int2; ++k) {
-                if (j == a[k]) {
-                    n2 = 1;
-                    break;
-                }
-            }
-            if (n2 == 0) {
-                treeMap.put(Math.abs(int1 - j), j);
-            }
-            n2 = 0;
-        }
-        final Iterator iterator = treeMap.values().iterator();
-        if (iterator.hasNext()) {
-            printWriter.println(((Integer)iterator.next()).toString());
         }
     }
 }

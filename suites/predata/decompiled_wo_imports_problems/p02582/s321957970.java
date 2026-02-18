@@ -1,10 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        System.out.println(weatherReport(new Scanner(System.in).next()));
+    private static void main$3231c38a() {
+        final String next;
+        System.out.println((next = new Scanner(System.in).next()).matches("R{3}") ? 3 : (next.matches(".*R{2}.*") ? 2 : next.matches(".*R.*")));
     }
     
-    public static int weatherReport(final String s) {
+    private static int weatherReport(final String s) {
         if (s.matches("R{3}")) {
             return 3;
         }

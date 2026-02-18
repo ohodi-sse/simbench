@@ -1,20 +1,4 @@
-public class Main
-{
-    public static void main(final String[] array) {
-        final FastScanner fastScanner = new FastScanner();
-        System.out.println(BigDecimal.valueOf(fastScanner.nextLong()).multiply(new BigDecimal(String.valueOf(fastScanner.nextDoutble()))).longValue());
-    }
-    
-    public static int calcMin(final int[] array) {
-        int n = array[0];
-        for (int i = 1; i < array.length; ++i) {
-            if (n > array[i]) {
-                n = array[i];
-            }
-        }
-        return n;
-    }
-}class FastScanner
+final class FastScanner
 {
     private final InputStream in;
     private final byte[] buffer;
@@ -42,25 +26,25 @@ public class Main
         return this.buflen > 0;
     }
     
-    private int readByte() {
+    final int readByte() {
         if (this.hasNextByte()) {
             return this.buffer[this.ptr++];
         }
         return -1;
     }
     
-    private static boolean isPrintableChar(final int n) {
+    static boolean isPrintableChar(final int n) {
         return 33 <= n && n <= 126;
     }
     
-    public boolean hasNext() {
+    public final boolean hasNext() {
         while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
             ++this.ptr;
         }
         return this.hasNextByte();
     }
     
-    public String next() {
+    private String next() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
@@ -71,14 +55,14 @@ public class Main
         return sb.toString();
     }
     
-    public long nextLong() {
+    public final long nextLong() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
         long n = 0L;
         boolean b = false;
-        int n2 = this.readByte();
-        if (n2 == 45) {
+        int n2;
+        if ((n2 = this.readByte()) == 45) {
             b = true;
             n2 = this.readByte();
         }
@@ -89,21 +73,63 @@ public class Main
             n = n * 10L + (n2 - 48);
             n2 = this.readByte();
         }
-        if (n2 == -1 || !isPrintableChar(n2)) {
-            return b ? (-n) : n;
+        if (n2 != -1 && isPrintableChar(n2)) {
+            throw new NumberFormatException();
         }
-        throw new NumberFormatException();
+        if (b) {
+            return -n;
+        }
+        return n;
     }
     
-    public int nextInt() {
-        final long nextLong = this.nextLong();
-        if (nextLong < -2147483648L || nextLong > 2147483647L) {
+    private int nextInt() {
+        final long nextLong;
+        if ((nextLong = this.nextLong()) < -2147483648L || nextLong > 2147483647L) {
             throw new NumberFormatException();
         }
         return (int)nextLong;
     }
     
-    public double nextDoutble() {
-        return Double.parseDouble(this.next());
+    private double nextDoutble() {
+        if (!this.hasNext()) {
+            throw new NoSuchElementException();
+        }
+        final StringBuilder sb = new StringBuilder();
+        for (int codePoint = this.readByte(); isPrintableChar(codePoint); codePoint = this.readByte()) {
+            sb.appendCodePoint(codePoint);
+        }
+        return Double.parseDouble(sb.toString());
+    }
+}
+
+
+
+
+
+
+
+public final class Main
+{
+    private static void main$3231c38a() {
+        final FastScanner fastScanner;
+        final long nextLong = (fastScanner = new FastScanner()).nextLong();
+        if (!fastScanner.hasNext()) {
+            throw new NoSuchElementException();
+        }
+        final StringBuilder sb = new StringBuilder();
+        for (int codePoint = fastScanner.readByte(); FastScanner.isPrintableChar(codePoint); codePoint = fastScanner.readByte()) {
+            sb.appendCodePoint(codePoint);
+        }
+        System.out.println(BigDecimal.valueOf(nextLong).multiply(new BigDecimal(String.valueOf(Double.parseDouble(sb.toString())))).longValue());
+    }
+    
+    private static int calcMin(final int[] array) {
+        int n = array[0];
+        for (int i = 1; i < array.length; ++i) {
+            if (n > array[i]) {
+                n = array[i];
+            }
+        }
+        return n;
     }
 }

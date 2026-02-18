@@ -1,28 +1,27 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final HashMap hashMap = new HashMap();
         for (int i = 0; i < nextInt2; ++i) {
             hashMap.put(scanner.nextInt(), 1);
         }
         int n = 0;
-        int x;
+        int n2;
         while (true) {
             final int j = nextInt - n;
-            final int k = nextInt + n;
+            n2 = nextInt + n;
             if (hashMap.get(j) == null) {
-                x = j;
+                n2 = j;
                 break;
             }
-            if (hashMap.get(k) == null) {
-                x = k;
+            if (hashMap.get(n2) == null) {
                 break;
             }
             ++n;
         }
-        System.out.println(x);
+        System.out.println(n2);
     }
 }

@@ -1,9 +1,9 @@
-public class Main
+public final class Main
 {
-    static BufferedReader br;
-    static StringTokenizer st;
+    private static BufferedReader br;
+    private static StringTokenizer st;
     
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         Main.br = new BufferedReader(new InputStreamReader(System.in));
         final PrintWriter printWriter = new PrintWriter(System.out);
         final String next = next();
@@ -18,18 +18,18 @@ public class Main
         printWriter.close();
     }
     
-    static String next() throws IOException {
+    private static String next() throws IOException {
         while (!Main.st.hasMoreTokens()) {
             Main.st = new StringTokenizer(Main.br.readLine());
         }
         return Main.st.nextToken();
     }
     
-    static int nextInt() throws IOException {
+    private static int nextInt() throws IOException {
         return Integer.parseInt(next());
     }
     
-    static long nextLong() throws IOException {
+    private static long nextLong() throws IOException {
         return Long.parseLong(next());
     }
     

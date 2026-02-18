@@ -1,125 +1,89 @@
-static class InputReader
+public final class Main
 {
-    private InputStream stream;
-    private byte[] buf;
-    private int curChar;
-    private int numChars;
-    private SpaceCharFilter filter;
-    
-    public InputReader(final InputStream stream) {
-        this.buf = new byte[1024];
-        this.stream = stream;
-    }
-    
-    public int read() {
-        if (this.numChars == -1) {
-            throw new InputMismatchException();
-        }
-        if (this.curChar >= this.numChars) {
-            this.curChar = 0;
-            try {
-                this.numChars = this.stream.read(this.buf);
-            }
-            catch (final IOException ex) {
-                throw new InputMismatchException();
-            }
-            if (this.numChars <= 0) {
-                return -1;
-            }
-        }
-        return this.buf[this.curChar++];
-    }
-    
-    public String nextString() {
+    private static void main$3231c38a() {
+        final InputStream in = System.in;
+        final PrintStream out = System.out;
+        final InputReader inputReader = new InputReader(in);
+        final OutputWriter outputWriter = new OutputWriter(out);
+        new ARainySeasonEditorial();
+        final InputReader inputReader2 = inputReader;
+        final OutputWriter outputWriter2 = outputWriter;
+        InputReader inputReader3;
         int n;
-        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+        for (inputReader3 = inputReader2, n = inputReader2.read(); inputReader3.isSpaceChar(n); n = inputReader3.read()) {}
         final StringBuilder sb = new StringBuilder();
         do {
             if (Character.isValidCodePoint(n)) {
                 sb.appendCodePoint(n);
             }
-            n = this.read();
-        } while (!this.isSpaceChar(n));
-        return sb.toString();
-    }
-    
-    public boolean isSpaceChar(final int n) {
-        if (this.filter != null) {
-            return this.filter.isSpaceChar(n);
+            n = inputReader3.read();
+        } while (!inputReader3.isSpaceChar(n));
+        final String string;
+        final Character value = (string = sb.toString()).charAt(0);
+        final Character value2 = string.charAt(1);
+        final Character value3 = string.charAt(2);
+        if (value == 'R' && value2 == 'R' && value3 == 'R') {
+            outputWriter2.println(3);
         }
-        return isWhitespace(n);
+        else if ((value == 'R' && value2 == 'R' && value3 == 'S') || (value2 == 'R' && value3 == 'R' && value == 'S')) {
+            outputWriter2.println(2);
+        }
+        else if ((value == 'R' && value2 == 'S' && value3 == 'S') || (value == 'S' && value2 == 'R' && value3 == 'S') || (value == 'S' && value2 == 'S' && value3 == 'R') || (value == 'R' && value3 == 'R' && value2 == 'S')) {
+            outputWriter2.println(1);
+        }
+        else if (value == 'S' && value2 == 'S' && value3 == 'S') {
+            outputWriter2.println(0);
+        }
+        outputWriter.writer.close();
     }
     
-    public static boolean isWhitespace(final int n) {
-        return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
-    }
-    
-    public String next() {
-        return this.nextString();
-    }
-    
-    public interface SpaceCharFilter
+    static final class ARainySeasonEditorial
     {
-        boolean isSpaceChar(final int p0);
-    }
-}public interface SpaceCharFilter
-{
-    boolean isSpaceChar(final int p0);
-}public class Main
-{
-    public static void main(final String[] array) {
-        final InputStream in = System.in;
-        final PrintStream out = System.out;
-        final InputReader inputReader = new InputReader(in);
-        final OutputWriter outputWriter = new OutputWriter(out);
-        new ARainySeasonEditorial().solve(1, inputReader, outputWriter);
-        outputWriter.close();
-    }
-    
-    static class ARainySeasonEditorial
-    {
-        public void solve(final int n, final InputReader inputReader, final OutputWriter outputWriter) {
-            final String next = inputReader.next();
-            final Character value = next.charAt(0);
-            final Character value2 = next.charAt(1);
-            final Character value3 = next.charAt(2);
+        private static void solve$6e5309c7(final InputReader inputReader, final OutputWriter outputWriter) {
+            final String nextString;
+            final Character value = (nextString = inputReader.nextString()).charAt(0);
+            final Character value2 = nextString.charAt(1);
+            final Character value3 = nextString.charAt(2);
             if (value == 'R' && value2 == 'R' && value3 == 'R') {
                 outputWriter.println(3);
+                return;
             }
-            else if ((value == 'R' && value2 == 'R' && value3 == 'S') || (value2 == 'R' && value3 == 'R' && value == 'S')) {
+            if ((value == 'R' && value2 == 'R' && value3 == 'S') || (value2 == 'R' && value3 == 'R' && value == 'S')) {
                 outputWriter.println(2);
+                return;
             }
-            else if ((value == 'R' && value2 == 'S' && value3 == 'S') || (value == 'S' && value2 == 'R' && value3 == 'S') || (value == 'S' && value2 == 'S' && value3 == 'R') || (value == 'R' && value3 == 'R' && value2 == 'S')) {
+            if ((value == 'R' && value2 == 'S' && value3 == 'S') || (value == 'S' && value2 == 'R' && value3 == 'S') || (value == 'S' && value2 == 'S' && value3 == 'R') || (value == 'R' && value3 == 'R' && value2 == 'S')) {
                 outputWriter.println(1);
+                return;
             }
-            else if (value == 'S' && value2 == 'S' && value3 == 'S') {
+            if (value == 'S' && value2 == 'S' && value3 == 'S') {
                 outputWriter.println(0);
             }
         }
     }
     
-    static class OutputWriter
+    static final class OutputWriter
     {
-        private final PrintWriter writer;
+        final PrintWriter writer;
         
         public OutputWriter(final OutputStream out) {
             this.writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(out)));
         }
         
-        public OutputWriter(final Writer out) {
+        private OutputWriter(final Writer out) {
             this.writer = new PrintWriter(out);
         }
         
-        public void close() {
+        private void close() {
             this.writer.close();
         }
         
-        public void println(final int x) {
+        public final void println(final int x) {
             this.writer.println(x);
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
         private InputStream stream;
         private byte[] buf;
@@ -132,7 +96,7 @@ static class InputReader
             this.stream = stream;
         }
         
-        public int read() {
+        public final int read() {
             if (this.numChars == -1) {
                 throw new InputMismatchException();
             }
@@ -151,7 +115,7 @@ static class InputReader
             return this.buf[this.curChar++];
         }
         
-        public String nextString() {
+        public final String nextString() {
             int n;
             for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
             final StringBuilder sb = new StringBuilder();
@@ -164,63 +128,22 @@ static class InputReader
             return sb.toString();
         }
         
-        public boolean isSpaceChar(final int n) {
-            if (this.filter != null) {
-                return this.filter.isSpaceChar(n);
-            }
+        public final boolean isSpaceChar(final int n) {
+            final SpaceCharFilter filter = this.filter;
             return isWhitespace(n);
         }
         
-        public static boolean isWhitespace(final int n) {
+        private static boolean isWhitespace(final int n) {
             return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
         }
         
-        public String next() {
+        private String next() {
             return this.nextString();
         }
         
         public interface SpaceCharFilter
         {
-            boolean isSpaceChar(final int p0);
+            boolean isSpaceChar$134632();
         }
-    }
-}static class ARainySeasonEditorial
-{
-    public void solve(final int n, final InputReader inputReader, final OutputWriter outputWriter) {
-        final String next = inputReader.next();
-        final Character value = next.charAt(0);
-        final Character value2 = next.charAt(1);
-        final Character value3 = next.charAt(2);
-        if (value == 'R' && value2 == 'R' && value3 == 'R') {
-            outputWriter.println(3);
-        }
-        else if ((value == 'R' && value2 == 'R' && value3 == 'S') || (value2 == 'R' && value3 == 'R' && value == 'S')) {
-            outputWriter.println(2);
-        }
-        else if ((value == 'R' && value2 == 'S' && value3 == 'S') || (value == 'S' && value2 == 'R' && value3 == 'S') || (value == 'S' && value2 == 'S' && value3 == 'R') || (value == 'R' && value3 == 'R' && value2 == 'S')) {
-            outputWriter.println(1);
-        }
-        else if (value == 'S' && value2 == 'S' && value3 == 'S') {
-            outputWriter.println(0);
-        }
-    }
-}static class OutputWriter
-{
-    private final PrintWriter writer;
-    
-    public OutputWriter(final OutputStream out) {
-        this.writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(out)));
-    }
-    
-    public OutputWriter(final Writer out) {
-        this.writer = new PrintWriter(out);
-    }
-    
-    public void close() {
-        this.writer.close();
-    }
-    
-    public void println(final int x) {
-        this.writer.println(x);
     }
 }

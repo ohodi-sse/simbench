@@ -1,100 +1,11 @@
-static class MyScanner
+public final class Main
 {
-    static Scanner sc;
+    private static int MOD = 1000000007;
     
-    String next() {
-        return MyScanner.sc.next();
-    }
-    
-    String nextLine() {
-        return MyScanner.sc.nextLine();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(MyScanner.sc.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    int[] nextIntArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    double[] nextDoubleArray(final int n) {
-        final double[] array = new double[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextDouble();
-        }
-        return array;
-    }
-    
-    long[] nextLongArray(final int n) {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    String[] nextLineArray(final int n) {
-        final String[] array = new String[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLine();
-        }
-        return array;
-    }
-    
-    int[][] nextIntMatrix(final int n, final int n2) {
-        final int[][] array = new int[n][n2];
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n2; ++j) {
-                array[i][j] = this.nextInt();
-            }
-        }
-        return array;
-    }
-    
-    double[][] nextDoubleMatrix(final int n, final int n2) {
-        final double[][] array = new double[n][n2];
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n2; ++j) {
-                array[i][j] = this.nextDouble();
-            }
-        }
-        return array;
-    }
-    
-    long[][] nextLongMatrix(final int n, final int n2) {
-        final long[][] array = new long[n][n2];
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n2; ++j) {
-                array[i][j] = this.nextLong();
-            }
-        }
-        return array;
-    }
-    
-    static {
-        MyScanner.sc = new Scanner(System.in);
-    }
-}public class Main
-{
-    static final int MOD = 1000000007;
-    
-    public static void main(final String[] array) {
-        final MyScanner myScanner = new MyScanner();
-        final String nextLine = myScanner.nextLine();
-        final String nextLine2 = myScanner.nextLine();
+    private static void main$3231c38a() {
+        new MyScanner();
+        final String nextLine = MyScanner.nextLine();
+        final String nextLine2 = MyScanner.nextLine();
         int x = 0;
         for (int i = 0; i < nextLine.length(); ++i) {
             if (nextLine.charAt(i) == nextLine2.charAt(i)) {
@@ -104,87 +15,87 @@ static class MyScanner
         System.out.println(x);
     }
     
-    static class MyScanner
+    static final class MyScanner
     {
-        static Scanner sc;
+        private static Scanner sc;
         
-        String next() {
+        private static String next() {
             return MyScanner.sc.next();
         }
         
-        String nextLine() {
+        static String nextLine() {
             return MyScanner.sc.nextLine();
         }
         
-        int nextInt() {
+        private static int nextInt() {
             return Integer.parseInt(MyScanner.sc.next());
         }
         
-        double nextDouble() {
-            return Double.parseDouble(this.next());
+        private static double nextDouble() {
+            return Double.parseDouble(MyScanner.sc.next());
         }
         
-        long nextLong() {
-            return Long.parseLong(this.next());
+        private static long nextLong() {
+            return Long.parseLong(MyScanner.sc.next());
         }
         
-        int[] nextIntArray(final int n) {
+        private static int[] nextIntArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = nextInt();
             }
             return array;
         }
         
-        double[] nextDoubleArray(final int n) {
+        private static double[] nextDoubleArray(final int n) {
             final double[] array = new double[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextDouble();
+                array[i] = nextDouble();
             }
             return array;
         }
         
-        long[] nextLongArray(final int n) {
+        private static long[] nextLongArray(final int n) {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLong();
+                array[i] = nextLong();
             }
             return array;
         }
         
-        String[] nextLineArray(final int n) {
+        private static String[] nextLineArray(final int n) {
             final String[] array = new String[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLine();
+                array[i] = MyScanner.sc.nextLine();
             }
             return array;
         }
         
-        int[][] nextIntMatrix(final int n, final int n2) {
+        private static int[][] nextIntMatrix(final int n, final int n2) {
             final int[][] array = new int[n][n2];
             for (int i = 0; i < n; ++i) {
                 for (int j = 0; j < n2; ++j) {
-                    array[i][j] = this.nextInt();
+                    array[i][j] = nextInt();
                 }
             }
             return array;
         }
         
-        double[][] nextDoubleMatrix(final int n, final int n2) {
+        private static double[][] nextDoubleMatrix(final int n, final int n2) {
             final double[][] array = new double[n][n2];
             for (int i = 0; i < n; ++i) {
                 for (int j = 0; j < n2; ++j) {
-                    array[i][j] = this.nextDouble();
+                    array[i][j] = nextDouble();
                 }
             }
             return array;
         }
         
-        long[][] nextLongMatrix(final int n, final int n2) {
+        private static long[][] nextLongMatrix(final int n, final int n2) {
             final long[][] array = new long[n][n2];
             for (int i = 0; i < n; ++i) {
                 for (int j = 0; j < n2; ++j) {
-                    array[i][j] = this.nextLong();
+                    array[i][j] = nextLong();
                 }
             }
             return array;

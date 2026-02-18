@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] a = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] a = new int[nextInt2 = scanner.nextInt()];
         for (int i = 0; i < nextInt2; ++i) {
             a[i] = scanner.nextInt();
         }
@@ -29,14 +29,13 @@ public class Main
         else {
             for (int j = 0; j < nextInt2 - 1; ++j) {
                 final int n2 = a[j];
-                final int n3 = a[j + 1];
-                if (n3 > nextInt && n2 < nextInt) {
+                final int n3;
+                if ((n3 = a[j + 1]) > nextInt && n2 < nextInt) {
                     x = nextInt;
                 }
                 else if (n2 >= nextInt && n > n2 + 1 - nextInt) {
                     if (n3 - n2 > 1) {
-                        x = n2 + 1;
-                        n = x - nextInt;
+                        n = (x = n2 + 1) - nextInt;
                     }
                 }
                 else {

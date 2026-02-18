@@ -53,7 +53,7 @@ public final class Main
             return array;
         }
         
-        private double[] nextDoubleArray(final int n) {
+        private static double[] nextDoubleArray(final int n) {
             final double[] array = new double[n];
             for (int i = 0; i < n; ++i) {
                 array[i] = nextDouble();
@@ -61,7 +61,7 @@ public final class Main
             return array;
         }
         
-        private long[] nextLongArray(final int n) {
+        private static long[] nextLongArray(final int n) {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
                 array[i] = nextLong();
@@ -87,7 +87,7 @@ public final class Main
             return array;
         }
         
-        private double[][] nextDoubleMatrix(final int n, final int n2) {
+        private static double[][] nextDoubleMatrix(final int n, final int n2) {
             final double[][] array = new double[n][n2];
             for (int i = 0; i < n; ++i) {
                 for (int j = 0; j < n2; ++j) {
@@ -97,7 +97,7 @@ public final class Main
             return array;
         }
         
-        private long[][] nextLongMatrix(final int n, final int n2) {
+        private static long[][] nextLongMatrix(final int n, final int n2) {
             final long[][] array = new long[n][n2];
             for (int i = 0; i < n; ++i) {
                 for (int j = 0; j < n2; ++j) {

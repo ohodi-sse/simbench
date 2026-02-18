@@ -1,9 +1,18 @@
 public class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final ConsoleScanner consoleScanner = new ConsoleScanner();
         final PrintWriter printWriter = new PrintWriter(System.out);
-        solve(consoleScanner, printWriter);
+        final ConsoleScanner consoleScanner2 = consoleScanner;
+        final PrintWriter printWriter2 = printWriter;
+        final ConsoleScanner consoleScanner3 = consoleScanner2;
+        for (int i = 1; i <= 100; ++i) {
+            assert null != System.out.format("%d %d\n", i, solve(i));
+        }
+        final int int1 = Integer.parseInt(consoleScanner3.next());
+        final long currentTimeMillis = System.currentTimeMillis();
+        printWriter2.println(solve(int1));
+        assert null != printWriter2.format("%d elapsed", System.currentTimeMillis() - currentTimeMillis);
         printWriter.flush();
     }
     
@@ -11,9 +20,9 @@ public class Main
         for (int i = 1; i <= 100; ++i) {
             assert null != System.out.format("%d %d\n", i, solve(i));
         }
-        final int nextInt = consoleScanner.nextInt();
+        final int int1 = Integer.parseInt(consoleScanner.next());
         final long currentTimeMillis = System.currentTimeMillis();
-        printWriter.println(solve(nextInt));
+        printWriter.println(solve(int1));
         assert null != printWriter.format("%d elapsed", System.currentTimeMillis() - currentTimeMillis);
     }
     
@@ -27,17 +36,17 @@ public class Main
         return min;
     }
     
-    static class ConsoleScanner
+    static final class ConsoleScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         ConsoleScanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
             this.st = new StringTokenizer("");
         }
         
-        String next() {
+        final String next() {
             try {
                 while (!this.st.hasMoreElements()) {
                     this.st = new StringTokenizer(this.br.readLine());
@@ -49,33 +58,8 @@ public class Main
             }
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
-    }
-}static class ConsoleScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    ConsoleScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-        this.st = new StringTokenizer("");
-    }
-    
-    String next() {
-        try {
-            while (!this.st.hasMoreElements()) {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            return this.st.nextToken();
-        }
-        catch (final IOException detailMessage) {
-            throw new AssertionError((Object)detailMessage);
-        }
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
     }
 }

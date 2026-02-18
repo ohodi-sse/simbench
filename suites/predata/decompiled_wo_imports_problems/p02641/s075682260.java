@@ -1,12 +1,12 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] array2 = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] array = new int[nextInt2 = scanner.nextInt()];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = scanner.nextInt();
+            array[i] = scanner.nextInt();
         }
         int j = 1;
         int x = 0;
@@ -17,7 +17,7 @@ class Main
             int n2 = 1;
             if (nextInt - n > 0) {
                 for (int k = 0; k < nextInt2; ++k) {
-                    if (nextInt - n == array2[k]) {
+                    if (nextInt - n == array[k]) {
                         n2 = 0;
                         b2 = false;
                     }
@@ -26,7 +26,7 @@ class Main
             if (n2 == 0) {
                 n2 = 1;
                 for (int l = 0; l < nextInt2; ++l) {
-                    if (nextInt + n == array2[l]) {
+                    if (nextInt + n == array[l]) {
                         n2 = 0;
                         b = false;
                     }

@@ -1,48 +1,4 @@
-public class Main
-{
-    InputStream is;
-    int __t__;
-    int __f__;
-    int __FILE_DEBUG_FLAG__;
-    String __DEBUG_FILE_NAME__;
-    FastScanner in;
-    PrintWriter out;
-    
-    public Main() {
-        this.__t__ = 1;
-        this.__f__ = 0;
-        this.__FILE_DEBUG_FLAG__ = this.__f__;
-        this.__DEBUG_FILE_NAME__ = "src/D3";
-    }
-    
-    public void solve() {
-        final long nextLong = this.in.nextLong();
-        final String[] split = this.in.next().split("[.]");
-        System.out.println(nextLong * (Integer.valueOf(split[0]) * 100 + Integer.valueOf(split[1])) / 100L);
-    }
-    
-    public void run() {
-        if (this.__FILE_DEBUG_FLAG__ == this.__t__) {
-            try {
-                this.is = new FileInputStream(this.__DEBUG_FILE_NAME__);
-            }
-            catch (final FileNotFoundException ex) {
-                ex.printStackTrace();
-            }
-            System.out.println("FILE_INPUT!");
-        }
-        else {
-            this.is = System.in;
-        }
-        this.in = new FastScanner(this.is);
-        this.out = new PrintWriter(System.out);
-        this.solve();
-    }
-    
-    public static void main(final String[] array) {
-        new Main().run();
-    }
-}class FastScanner
+final class FastScanner
 {
     private InputStream stream;
     private byte[] buf;
@@ -54,7 +10,7 @@ public class Main
         this.stream = stream;
     }
     
-    int read() {
+    private int read() {
         if (this.numChars == -1) {
             throw new InputMismatchException();
         }
@@ -73,86 +29,103 @@ public class Main
         return this.buf[this.curChar++];
     }
     
-    public boolean isSpaceChar(final int n) {
+    private static boolean isSpaceChar(final int n) {
         return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
     }
     
-    public boolean isEndline(final int n) {
+    private static boolean isEndline(final int n) {
         return n == 10 || n == 13 || n == -1;
     }
     
-    public int nextInt() {
+    private int nextInt() {
         return Integer.parseInt(this.next());
     }
     
-    public int[] nextIntArray(final int n) {
+    private int[] nextIntArray(final int n) {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
+            array[i] = Integer.parseInt(this.next());
         }
         return array;
     }
     
-    public int[][] nextIntMap(final int n, final int n2) {
+    private int[][] nextIntMap(final int n, final int n2) {
         final int[][] array = new int[n][n2];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextIntArray(n2);
+            final int[][] array2 = array;
+            final int n3 = i;
+            final int[] array3 = new int[n2];
+            for (int j = 0; j < n2; ++j) {
+                array3[j] = Integer.parseInt(this.next());
+            }
+            array2[n3] = array3;
         }
         return array;
     }
     
-    public long nextLong() {
+    private long nextLong() {
         return Long.parseLong(this.next());
     }
     
-    public long[] nextLongArray(final int n) {
+    private long[] nextLongArray(final int n) {
         final long[] array = new long[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
+            array[i] = Long.parseLong(this.next());
         }
         return array;
     }
     
-    public long[][] nextLongMap(final int n, final int n2) {
+    private long[][] nextLongMap(final int n, final int n2) {
         final long[][] array = new long[n][n2];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLongArray(n2);
+            final long[][] array2 = array;
+            final int n3 = i;
+            final long[] array3 = new long[n2];
+            for (int j = 0; j < n2; ++j) {
+                array3[j] = Long.parseLong(this.next());
+            }
+            array2[n3] = array3;
         }
         return array;
     }
     
-    public double nextDouble() {
+    private double nextDouble() {
         return Double.parseDouble(this.next());
     }
     
-    public double[] nextDoubleArray(final int n) {
+    private double[] nextDoubleArray(final int n) {
         final double[] array = new double[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextDouble();
+            array[i] = Double.parseDouble(this.next());
         }
         return array;
     }
     
-    public double[][] nextDoubleMap(final int n, final int n2) {
+    private double[][] nextDoubleMap(final int n, final int n2) {
         final double[][] array = new double[n][n2];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextDoubleArray(n2);
+            final double[][] array2 = array;
+            final int n3 = i;
+            final double[] array3 = new double[n2];
+            for (int j = 0; j < n2; ++j) {
+                array3[j] = Double.parseDouble(this.next());
+            }
+            array2[n3] = array3;
         }
         return array;
     }
     
-    public String next() {
+    public final String next() {
         int codePoint;
-        for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
+        for (codePoint = this.read(); isSpaceChar(codePoint); codePoint = this.read()) {}
         final StringBuilder sb = new StringBuilder();
         do {
             sb.appendCodePoint(codePoint);
-            codePoint = this.read();
-        } while (!this.isSpaceChar(codePoint));
+        } while (!isSpaceChar(codePoint = this.read()));
         return sb.toString();
     }
     
-    public String[] nextStringArray(final int n) {
+    private String[] nextStringArray(final int n) {
         final String[] array = new String[n];
         for (int i = 0; i < n; ++i) {
             array[i] = this.next();
@@ -160,24 +133,97 @@ public class Main
         return array;
     }
     
-    public String nextLine() {
+    private String nextLine() {
         int codePoint;
-        for (codePoint = this.read(); this.isEndline(codePoint); codePoint = this.read()) {}
+        for (codePoint = this.read(); isEndline(codePoint); codePoint = this.read()) {}
         final StringBuilder sb = new StringBuilder();
         do {
             sb.appendCodePoint(codePoint);
-            codePoint = this.read();
-        } while (!this.isEndline(codePoint));
+        } while (!isEndline(codePoint = this.read()));
         return sb.toString();
     }
     
-    public int[][] nextPackedIntArrays(final int n, final int n2) {
+    private int[][] nextPackedIntArrays(final int n, final int n2) {
         final int[][] array = new int[n][n2];
         for (int i = 0; i < n2; ++i) {
             for (int j = 0; j < n; ++j) {
-                array[j][i] = this.nextInt();
+                array[j][i] = Integer.parseInt(this.next());
             }
         }
         return array;
+    }
+}
+
+
+
+
+
+
+
+
+
+
+public final class Main
+{
+    private InputStream is;
+    private int __t__;
+    private int __f__;
+    private int __FILE_DEBUG_FLAG__;
+    private String __DEBUG_FILE_NAME__;
+    private FastScanner in;
+    private PrintWriter out;
+    
+    public Main() {
+        this.__t__ = 1;
+        this.__f__ = 0;
+        this.__FILE_DEBUG_FLAG__ = this.__f__;
+        this.__DEBUG_FILE_NAME__ = "src/D3";
+    }
+    
+    private void solve() {
+        final long long1 = Long.parseLong(this.in.next());
+        final String[] split = this.in.next().split("[.]");
+        System.out.println(long1 * (Integer.valueOf(split[0]) * 100 + Integer.valueOf(split[1])) / 100L);
+    }
+    
+    private void run() {
+        if (this.__FILE_DEBUG_FLAG__ == this.__t__) {
+            try {
+                this.is = new FileInputStream(this.__DEBUG_FILE_NAME__);
+            }
+            catch (final FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            System.out.println("FILE_INPUT!");
+        }
+        else {
+            this.is = System.in;
+        }
+        this.in = new FastScanner(this.is);
+        this.out = new PrintWriter(System.out);
+        final long long1 = Long.parseLong(this.in.next());
+        final String[] split = this.in.next().split("[.]");
+        System.out.println(long1 * (Integer.valueOf(split[0]) * 100 + Integer.valueOf(split[1])) / 100L);
+    }
+    
+    private static void main$3231c38a() {
+        final Main main;
+        if ((main = new Main()).__FILE_DEBUG_FLAG__ == main.__t__) {
+            try {
+                main.is = new FileInputStream(main.__DEBUG_FILE_NAME__);
+            }
+            catch (final FileNotFoundException ex) {
+                ex.printStackTrace();
+            }
+            System.out.println("FILE_INPUT!");
+        }
+        else {
+            main.is = System.in;
+        }
+        main.in = new FastScanner(main.is);
+        main.out = new PrintWriter(System.out);
+        final long long1 = Long.parseLong(main.in.next());
+        final String[] split = main.in.next().split("[.]");
+        System.out.println(long1 * (Integer.valueOf(split[0]) * 100 + Integer.valueOf(split[1])) / 100L);
     }
 }

@@ -1,10 +1,9 @@
-class Main
+final class Main
 {
     private static Scanner sc;
     
-    public static void main(final String[] array) {
-        Main.sc = new Scanner(System.in);
-        int nextInt = Main.sc.nextInt();
+    private static void main$3231c38a() {
+        int nextInt = (Main.sc = new Scanner(System.in)).nextInt();
         final int nextInt2 = Main.sc.nextInt();
         final ArrayList list = new ArrayList();
         for (int i = 0; i < nextInt2; ++i) {
@@ -17,7 +16,7 @@ class Main
         for (int j = 1; j <= 100; ++j) {
             nextInt -= j;
             if (list.contains(nextInt)) {
-                nextInt += j * 2;
+                nextInt += j << 1;
                 if (list.contains(nextInt)) {
                     nextInt -= j;
                 }

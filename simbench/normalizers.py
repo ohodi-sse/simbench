@@ -41,7 +41,7 @@ class CompileNormalizer(DependentNormalizer):
         return ".jar"
 
     def __call__(self, sources: list[str], targets: list[str]):
-        logger.debug("Compiling source files")
+        logger.info("Compiling source files")
         rust_batch_compile(sources, targets)
 
 
@@ -58,7 +58,7 @@ class GoogleFormatter(DependentNormalizer):
         return ".java"
 
     def __call__(self, sources: list[str], targets: list[str]):
-        logger.debug("Formatting unprocessed files")
+        logger.info("Formatting unprocessed files")
         rust_batch_format(sources, targets)
 
 
@@ -75,7 +75,7 @@ class DecompileNormalizer(DependentNormalizer):
         return ".java"
 
     def __call__(self, sources: list[str], targets: list[str]):
-        logger.debug("Decompiling compiled files")
+        logger.info("Decompiling compiled files")
         rust_batch_decompile(sources, targets)
 
 
@@ -92,7 +92,7 @@ class OptimizingNormalizer(DependentNormalizer):
         return ".jar"
 
     def __call__(self, sources: list[str], targets: list[str]):
-        logger.debug("Optimizing decompiled files")
+        logger.info("Optimizing decompiled files")
         rust_batch_optimize(sources, targets)
 
 
@@ -109,7 +109,7 @@ class OptimizedDecompiledNormalizer(DependentNormalizer):
         return ".java"
 
     def __call__(self, sources: list[str], targets: list[str]):
-        logger.debug("Decompiling optimized files")
+        logger.info("Decompiling optimized files")
         rust_batch_decompile(sources, targets)
 
 

@@ -1,27 +1,31 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
-        final int nextInt = new Scanner(System.in).nextInt();
-        if (nextInt == 1) {
+    private static void main$3231c38a() throws Exception {
+        final int nextInt;
+        if ((nextInt = new Scanner(System.in).nextInt()) == 1) {
             System.out.println(1);
+            return;
         }
-        else if (nextInt <= 3) {
+        if (nextInt <= 3) {
             System.out.println(2);
+            return;
         }
-        else if (nextInt > 3 && nextInt < 8) {
+        if (nextInt > 3 && nextInt < 8) {
             System.out.println(4);
+            return;
         }
-        else if (nextInt >= 8 && nextInt < 16) {
+        if (nextInt >= 8 && nextInt < 16) {
             System.out.println(8);
+            return;
         }
-        else if (nextInt >= 16 && nextInt < 31) {
+        if (nextInt >= 16 && nextInt < 31) {
             System.out.println(16);
+            return;
         }
-        else if (nextInt >= 32 && nextInt < 64) {
+        if (nextInt >= 32 && nextInt < 64) {
             System.out.println(32);
+            return;
         }
-        else {
-            System.out.println(64);
-        }
+        System.out.println(64);
     }
 }

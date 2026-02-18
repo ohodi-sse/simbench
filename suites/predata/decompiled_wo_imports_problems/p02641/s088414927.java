@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         int x = 0;
         if (nextInt2 == 0) {
@@ -19,8 +19,8 @@ public class Main
             }
             int n = Integer.MAX_VALUE;
             for (final int intValue : hashMap.keySet()) {
-                final int intValue2 = (int)hashMap.get(intValue);
-                if (intValue2 < n && !list.contains(intValue)) {
+                final int intValue2;
+                if ((intValue2 = (int)hashMap.get(intValue)) < n && !list.contains(intValue)) {
                     x = intValue;
                     n = intValue2;
                 }

@@ -1,17 +1,17 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] a = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] a = new int[nextInt2 = scanner.nextInt()];
         for (int i = 0; i < nextInt2; ++i) {
-            final int nextInt3 = scanner.nextInt();
-            if (nextInt3 < nextInt) {
-                a[i] = Math.abs(nextInt - nextInt3) * 2;
+            final int nextInt3;
+            if ((nextInt3 = scanner.nextInt()) < nextInt) {
+                a[i] = Math.abs(nextInt - nextInt3) << 1;
             }
             else {
-                a[i] = Math.abs(nextInt - nextInt3) * 2 + 1;
+                a[i] = (Math.abs(nextInt - nextInt3) << 1) + 1;
             }
         }
         Arrays.sort(a);

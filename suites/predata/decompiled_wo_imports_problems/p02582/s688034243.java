@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
         int x = 0;
         int x2 = 0;
@@ -15,9 +15,8 @@ public class Main
         }
         if (x < x2) {
             System.out.println(x2);
+            return;
         }
-        else {
-            System.out.println(x);
-        }
+        System.out.println(x);
     }
 }

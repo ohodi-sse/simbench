@@ -1,41 +1,41 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
-        final int[] array2 = new int[102];
+        final int[] array = new int[102];
         for (int i = 0; i < 102; ++i) {
-            array2[i] = 0;
+            array[i] = 0;
         }
         for (int j = 0; j < nextInt2; ++j) {
-            array2[scanner.nextInt()] = 1;
+            array[scanner.nextInt()] = 1;
         }
-        if (array2[nextInt] == 0) {
+        if (array[nextInt] == 0) {
             System.out.println(nextInt);
             return;
         }
         int k;
         int l;
         for (k = nextInt + 1, l = nextInt - 1; k <= 101 && l >= 0; ++k, --l) {
-            if (array2[l] == 0) {
+            if (array[l] == 0) {
                 System.out.println(l);
                 return;
             }
-            if (array2[k] == 0) {
+            if (array[k] == 0) {
                 System.out.println(k);
                 return;
             }
         }
         while (k == 102) {
-            if (array2[l] == 0) {
+            if (array[l] == 0) {
                 System.out.println(l);
                 return;
             }
             --l;
         }
         while (l == -1) {
-            if (array2[k] == 0) {
+            if (array[k] == 0) {
                 System.out.println(k);
                 return;
             }

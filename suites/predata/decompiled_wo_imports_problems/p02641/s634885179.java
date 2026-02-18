@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         final PrintWriter printWriter = new PrintWriter(System.out);
-        final String[] split = bufferedReader.readLine().split(" ");
-        final int int1 = Integer.parseInt(split[0]);
+        final String[] split;
+        final int int1 = Integer.parseInt((split = bufferedReader.readLine().split(" "))[0]);
         final int int2 = Integer.parseInt(split[1]);
         final TreeSet set = new TreeSet();
         for (int i = 0; i <= 101; ++i) {

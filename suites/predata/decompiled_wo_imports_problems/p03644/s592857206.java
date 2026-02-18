@@ -1,25 +1,27 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final int nextInt = new Scanner(System.in).nextInt();
-        final int[] array2 = new int[nextInt + 1];
+    private static void main$3231c38a() {
+        final int nextInt;
+        final int[] array = new int[(nextInt = new Scanner(System.in).nextInt()) + 1];
         for (int i = 1; i <= nextInt; ++i) {
-            array2[i] = i;
+            final int[] array2 = array;
+            final int n = i;
+            array2[n] = n;
         }
         int x = 1;
-        int n;
+        int j;
         do {
-            n = 0;
-            for (int j = 1; j <= nextInt; ++j) {
-                if (array2[j] % 2 == 0) {
-                    array2[j] /= 2;
-                    x = j;
+            j = 0;
+            for (int k = 1; k <= nextInt; ++k) {
+                if (array[k] % 2 == 0) {
+                    array[k] /= 2;
+                    x = k;
                 }
                 else {
-                    ++n;
+                    ++j;
                 }
             }
-        } while (n != nextInt);
+        } while (j != nextInt);
         System.out.println(x);
     }
 }

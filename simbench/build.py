@@ -1,6 +1,5 @@
 from dataclasses import dataclass, field
 import time
-import sys
 import functools
 from pathlib import Path
 import json
@@ -52,7 +51,6 @@ class Builder:
             n,
             style=ProgressStyle(
                 template="{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})",
-                progress_chars="#>-",
             ),
         )
         yield pb
@@ -192,13 +190,14 @@ class Node[A](Pullable[A]):
             bld.log.debug(f"Found updated dependencies: {self.updated_dependencies()}")
 
         if (a := self.store.load(bld)) is not None and not self.updated_dependencies():
+            bld.log.info(f"Loaded precomputed store: {self.store.file}")
             return a
 
         outputs = {k: dep.pull(bld) for k, dep in self.dependencies.items()}
 
         a = self.action(bld=bld, **outputs)
-        bld.log.debug(f"Storing result to {self.store.file}")
         self.store.store(a, bld=bld)
+        bld.log.success(f"Stored result to {self.store.file}")
 
         return a
 
@@ -250,7 +249,7 @@ class Normalizer(Protocol):
     def matches(self, match):
         import re
 
-        return re.match(match, self.name) is not None
+        return re.fullmatch(match, self.name) is not None
 
     @property
     @abstractmethod

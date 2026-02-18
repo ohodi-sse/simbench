@@ -1,12 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         try (final Scanner scanner = new Scanner(System.in)) {
             final String[] split = scanner.next().split("S");
             int max = 0;
-            final String[] array2 = split;
-            for (int length = array2.length, i = 0; i < length; ++i) {
-                max = Math.max(array2[i].length(), max);
+            for (int length = split.length, i = 0; i < length; ++i) {
+                max = Math.max(split[i].length(), max);
             }
             System.out.println(max);
         }

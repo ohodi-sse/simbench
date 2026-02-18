@@ -1,15 +1,15 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
-        final boolean[] array2 = new boolean[101];
+        final boolean[] array = new boolean[101];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[scanner.nextInt()] = true;
+            array[scanner.nextInt()] = true;
         }
         for (int j = 0; j < nextInt2 + 1; ++j) {
-            if (!array2[nextInt - j]) {
+            if (!array[nextInt - j]) {
                 System.out.println(nextInt - j);
                 return;
             }
@@ -17,7 +17,7 @@ public class Main
                 System.out.println(101);
                 return;
             }
-            if (!array2[nextInt + j]) {
+            if (!array[nextInt + j]) {
                 System.out.println(nextInt + j);
                 return;
             }

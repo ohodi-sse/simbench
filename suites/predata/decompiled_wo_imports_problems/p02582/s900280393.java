@@ -1,21 +1,21 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        for (int n = 1, i = 0; i < n; ++i) {
+        for (int i = 0; i <= 0; ++i) {
             final char[] charArray = bufferedReader.readLine().toCharArray();
             int max = 0;
-            int n2 = 0;
+            int n = 0;
             for (int j = 0; j < 3; ++j) {
                 if (charArray[j] == 'S') {
-                    max = Math.max(max, n2);
-                    n2 = 0;
+                    max = Math.max(max, n);
+                    n = 0;
                 }
                 else {
-                    ++n2;
+                    ++n;
                 }
             }
-            System.out.println(Math.max(n2, max));
+            System.out.println(Math.max(n, max));
         }
     }
 }

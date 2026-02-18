@@ -1,10 +1,12 @@
-public class Main
+public final class Main
 {
-    static void solve() {
+    private static void solve() {
         final Scanner scanner = new Scanner(System.in);
         int x = 0;
         int n = 46;
-        for (final char c : scanner.next().toCharArray()) {
+        char[] charArray;
+        for (int length = (charArray = scanner.next().toCharArray()).length, i = 0; i < length; ++i) {
+            final char c = charArray[i];
             x = (((n == 46 || n == 83) && c == 'R') ? 1 : x);
             if (c == 'R' && n == 82) {
                 ++x;
@@ -15,7 +17,20 @@ public class Main
         scanner.close();
     }
     
-    public static void main(final String[] array) {
-        solve();
+    private static void main$3231c38a() {
+        final Scanner scanner = new Scanner(System.in);
+        int x = 0;
+        int n = 46;
+        char[] charArray;
+        for (int length = (charArray = scanner.next().toCharArray()).length, i = 0; i < length; ++i) {
+            final char c = charArray[i];
+            x = (((n == 46 || n == 83) && c == 'R') ? 1 : x);
+            if (c == 'R' && n == 82) {
+                ++x;
+            }
+            n = c;
+        }
+        System.out.println(x);
+        scanner.close();
     }
 }

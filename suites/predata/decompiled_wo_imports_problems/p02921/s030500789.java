@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         final ArrayList list = new ArrayList();
         for (String s = bufferedReader.readLine(); s != null; s = bufferedReader.readLine()) {
@@ -10,7 +10,12 @@ public class Main
         final String s3 = (String)list.get(1);
         int x = 0;
         for (int i = 0; i < s2.length(); ++i) {
-            if (s2.substring(i, i + 1).equals(s3.substring(i, i + 1))) {
+            final String s4 = s2;
+            final int beginIndex = i;
+            final String substring = s4.substring(beginIndex, beginIndex + 1);
+            final String s5 = s3;
+            final int beginIndex2 = i;
+            if (substring.equals(s5.substring(beginIndex2, beginIndex2 + 1))) {
                 ++x;
             }
         }

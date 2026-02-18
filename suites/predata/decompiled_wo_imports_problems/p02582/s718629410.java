@@ -1,62 +1,14 @@
-public static class MyScanner
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
+    private static MyScanner in;
+    private static int mod;
+    private static PrintWriter out;
+    private static BufferedReader br;
+    private static StringTokenizer st;
+    private static int[] dr;
+    private static int[] dc;
     
-    public MyScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    static MyScanner in;
-    static int mod;
-    static PrintWriter out;
-    static BufferedReader br;
-    static StringTokenizer st;
-    static int[] dr;
-    static int[] dc;
-    
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = Main.in.next();
         int max = 0;
         final int length = next.length();
@@ -74,42 +26,39 @@ public static class MyScanner
         Main.out.flush();
     }
     
-    static int rcToxy(final int n, final int n2, final int n3) {
+    private static int rcToxy(final int n, final int n2, final int n3) {
         return n * n3 + n2;
     }
     
     static {
         Main.in = new MyScanner();
-        Main.mod = 1000000007;
         Main.out = new PrintWriter(new OutputStreamWriter(System.out));
-        Main.br = new BufferedReader(new InputStreamReader(System.in));
-        Main.dr = new int[] { 1, -1, 0, 0 };
-        Main.dc = new int[] { 0, 0, -1, 1 };
+        new BufferedReader(new InputStreamReader(System.in));
     }
     
-    static class Node
+    static final class Node
     {
-        int r;
-        int c;
-        int prev;
-        int change;
+        private int r;
+        private int c;
+        private int prev;
+        private int change;
         
-        Node(final int r, final int c) {
+        private Node(final int r, final int c) {
             this.r = r;
             this.c = c;
         }
     }
     
-    public static class MyScanner
+    public static final class MyScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public MyScanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -126,19 +75,19 @@ public static class MyScanner
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();
@@ -148,16 +97,5 @@ public static class MyScanner
             }
             return line;
         }
-    }
-}static class Node
-{
-    int r;
-    int c;
-    int prev;
-    int change;
-    
-    Node(final int r, final int c) {
-        this.r = r;
-        this.c = c;
     }
 }

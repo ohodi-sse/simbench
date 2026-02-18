@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] a = new int[nextInt2];
-        final int[] array2 = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] a = new int[nextInt2 = scanner.nextInt()];
+        final int[] array = new int[nextInt2];
         if (nextInt2 == 0) {
             System.out.println(nextInt);
             return;
@@ -48,9 +48,8 @@ public class Main
         }
         if (Math.abs(nextInt - x) < Math.abs(nextInt - x2)) {
             System.out.println(x);
+            return;
         }
-        else {
-            System.out.println(x2);
-        }
+        System.out.println(x2);
     }
 }

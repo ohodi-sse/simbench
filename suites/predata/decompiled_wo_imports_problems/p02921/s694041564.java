@@ -1,8 +1,8 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         final String next2 = scanner.next();
         final String substring = next.substring(0, 1);
         final String substring2 = next.substring(1, 2);
@@ -14,20 +14,11 @@ class Main
         if (substring.equals(substring4)) {
             ++x;
         }
-        else {
-            x += 0;
-        }
         if (substring2.equals(substring5)) {
             ++x;
         }
-        else {
-            x += 0;
-        }
         if (substring3.equals(substring6)) {
             ++x;
-        }
-        else {
-            x += 0;
         }
         System.out.println(x);
     }

@@ -1,13 +1,13 @@
-public class Main
+public final class Main
 {
-    static int[][] numbers;
+    private static int[][] numbers;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
         int max = 0;
         for (int i = 0; i < 3; ++i) {
-            final char char1 = next.charAt(i);
-            if (char1 == 'R') {
+            final char char1;
+            if ((char1 = next.charAt(i)) == 'R') {
                 int b = 1;
                 for (int index = i + 1; index < 3 && char1 == next.charAt(index); ++index) {
                     ++b;

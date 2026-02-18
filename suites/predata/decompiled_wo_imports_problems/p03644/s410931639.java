@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         int n = 0;
         int n2 = 0;
@@ -22,7 +22,7 @@ public class Main
             nextInt = --i;
         }
         while (j < n2) {
-            x *= 2;
+            x <<= 1;
             ++j;
         }
         System.out.println(x);

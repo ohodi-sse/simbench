@@ -1,109 +1,68 @@
-static class MyReader extends BufferedReader
+public final class Main
 {
-    MyReader() {
-        super(new InputStreamReader(System.in));
-    }
-    
-    String s() throws IOException {
-        return this.readLine();
-    }
-    
-    String[] ss() throws IOException {
-        return this.s().split(" ");
-    }
-    
-    int i() throws IOException {
-        return Main.Int(this.s());
-    }
-    
-    int[] ii() throws IOException {
-        final String[] ss = this.ss();
-        final int length = ss.length;
-        final int[] array = new int[length];
-        for (int i = 0; i < length; ++i) {
-            array[i] = Main.Int(ss[i]);
-        }
-        return array;
-    }
-    
-    long l() throws IOException {
-        return Main.Long(this.s());
-    }
-    
-    long[] ll() throws IOException {
-        final String[] ss = this.ss();
-        final int length = ss.length;
-        final long[] array = new long[length];
-        for (int i = 0; i < length; ++i) {
-            array[i] = Main.Long(ss[i]);
-        }
-        return array;
-    }
-}public class Main
-{
-    public static void main(final String[] array) throws IOException {
-        int i = new MyReader().i();
+    private static void main$3231c38a() throws IOException {
+        int int1 = Integer.parseInt(new MyReader().readLine());
         int n = 1;
-        while ((i >>= 1) > 0) {
+        while ((int1 >>= 1) > 0) {
             ++n;
         }
-        println(1 << n - 1);
+        System.out.println(Integer.valueOf(1 << n - 1).toString());
     }
     
-    static void print(final Object o) {
+    private static void print(final Object o) {
         System.out.print(o.toString());
     }
     
-    static void println(final Object o) {
+    private static void println(final Object o) {
         System.out.println(o.toString());
     }
     
-    static int Int(final String s) {
+    private static int Int(final String s) {
         return Integer.parseInt(s);
     }
     
-    static long Long(final String s) {
+    private static long Long(final String s) {
         return Long.parseLong(s);
     }
     
-    static class MyReader extends BufferedReader
+    static final class MyReader extends BufferedReader
     {
         MyReader() {
             super(new InputStreamReader(System.in));
         }
         
-        String s() throws IOException {
+        private String s() throws IOException {
             return this.readLine();
         }
         
-        String[] ss() throws IOException {
-            return this.s().split(" ");
+        private String[] ss() throws IOException {
+            return this.readLine().split(" ");
         }
         
-        int i() throws IOException {
-            return Main.Int(this.s());
+        private int i() throws IOException {
+            return Integer.parseInt(this.readLine());
         }
         
-        int[] ii() throws IOException {
-            final String[] ss = this.ss();
-            final int length = ss.length;
-            final int[] array = new int[length];
+        private int[] ii() throws IOException {
+            final String[] ss;
+            final int length;
+            final int[] array = new int[length = (ss = this.ss()).length];
             for (int i = 0; i < length; ++i) {
-                array[i] = Main.Int(ss[i]);
+                array[i] = Integer.parseInt(ss[i]);
             }
             return array;
         }
         
-        long l() throws IOException {
-            return Main.Long(this.s());
+        private long l() throws IOException {
+            return Long.parseLong(this.readLine());
         }
         
-        long[] ll() throws IOException {
-            final String[] ss = this.ss();
-            final int length = ss.length;
-            final long[] array = new long[length];
+        private long[] ll() throws IOException {
+            final String[] ss;
+            final int length;
+            final long[] array = new long[length = (ss = this.ss()).length];
             for (int i = 0; i < length; ++i) {
-                array[i] = Main.Long(ss[i]);
+                array[i] = Long.parseLong(ss[i]);
             }
             return array;
         }

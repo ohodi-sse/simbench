@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int nextInt = new Scanner(System.in).nextInt();
         int i = 2;
         int x = 2;
@@ -8,8 +8,7 @@ public class Main
             x = 1;
         }
         while (i < nextInt) {
-            i *= 2;
-            if (i <= nextInt) {
+            if ((i <<= 1) <= nextInt) {
                 x = i;
             }
         }

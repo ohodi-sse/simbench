@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         int n = 0;
         int x = 0;
         for (int i = 0; i < 3; ++i) {
-            final char c = (char)System.in.read();
-            if (c == 'R') {
+            final char c;
+            if ((c = (char)System.in.read()) == 'R') {
                 ++n;
             }
             if (c == 'S') {

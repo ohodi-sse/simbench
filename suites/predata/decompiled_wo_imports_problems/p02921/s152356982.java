@@ -1,12 +1,21 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        do_(scanner);
-        scanner.close();
+    private static void main$3231c38a() {
+        final Scanner scanner2;
+        final Scanner scanner;
+        final char[] charArray = (scanner = (scanner2 = new Scanner(System.in))).next().toCharArray();
+        final char[] charArray2 = scanner.next().toCharArray();
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (charArray[i] == charArray2[i]) {
+                ++x;
+            }
+        }
+        System.out.println(x);
+        scanner2.close();
     }
     
-    public static void do_(final Scanner scanner) {
+    private static void do_(final Scanner scanner) {
         final char[] charArray = scanner.next().toCharArray();
         final char[] charArray2 = scanner.next().toCharArray();
         int x = 0;

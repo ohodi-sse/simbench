@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String[] split = new Scanner(System.in).next().split("");
         int x = 0;
         for (int i = 0; i < 3; ++i) {
@@ -8,10 +8,7 @@ public class Main
                 ++x;
             }
             else if (split[i].equals("S")) {
-                if (x == 2) {
-                    break;
-                }
-                if (x == 1) {
+                if (x == 2 || x == 1) {
                     break;
                 }
                 x = 0;

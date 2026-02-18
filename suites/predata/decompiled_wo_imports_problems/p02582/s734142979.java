@@ -1,18 +1,18 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         int n = 0;
         int x = 0;
-        final String nextLine = new Scanner(System.in).nextLine();
-        final String[] array2 = new String[nextLine.length()];
+        final String nextLine;
+        final String[] array = new String[(nextLine = new Scanner(System.in).nextLine()).length()];
         for (int i = 0; i < nextLine.length(); ++i) {
-            array2[i] = String.valueOf(nextLine.charAt(i));
+            array[i] = String.valueOf(nextLine.charAt(i));
         }
         for (int j = 0; j < nextLine.length(); ++j) {
-            if (array2[j].equals("R")) {
+            if (array[j].equals("R")) {
                 x = ++n;
             }
-            else if (array2[j].equals("S")) {
+            else if (array[j].equals("S")) {
                 n = 0;
             }
         }

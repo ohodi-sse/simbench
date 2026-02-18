@@ -1,20 +1,21 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         scanner.close();
         if ("SSS".equals(next)) {
             System.out.println(0);
+            return;
         }
-        else if ("RRS".equals(next) || "SRR".equals(next)) {
+        if ("RRS".equals(next) || "SRR".equals(next)) {
             System.out.println(2);
+            return;
         }
-        else if ("RRR".equals(next)) {
+        if ("RRR".equals(next)) {
             System.out.println(3);
+            return;
         }
-        else {
-            System.out.println(1);
-        }
+        System.out.println(1);
     }
 }

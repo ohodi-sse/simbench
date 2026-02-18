@@ -1,9 +1,9 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int nextInt = new Scanner(System.in).nextInt();
         int x = 1;
-        for (int n = 0; n < 10 && 2 * x <= nextInt; x *= 2, ++n) {}
+        for (int n = 0; n < 10 && 2 * x <= nextInt; x <<= 1, ++n) {}
         System.out.println(x);
     }
 }

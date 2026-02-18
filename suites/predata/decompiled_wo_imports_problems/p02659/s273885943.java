@@ -1,16 +1,22 @@
-public class Main
+public final class Main
 {
-    static BigDecimal A;
-    static BigDecimal B;
+    private static BigDecimal A;
+    private static BigDecimal B;
     
-    public static void main(final String[] array) throws NumberFormatException, IOException {
-        read();
+    private static void main$3231c38a() throws NumberFormatException, IOException {
+        final BufferedReader bufferedReader;
+        final String[] split;
+        Main.A = BigDecimal.valueOf(Double.valueOf((split = (bufferedReader = new BufferedReader(new InputStreamReader(System.in))).readLine().split(" "))[0]));
+        Main.B = BigDecimal.valueOf(Double.valueOf(split[1]));
+        Main.A = Main.A.multiply(Main.B);
+        System.out.println(Main.A.longValue());
+        bufferedReader.close();
     }
     
     private static void read() throws IOException {
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        final String[] split = bufferedReader.readLine().split(" ");
-        Main.A = BigDecimal.valueOf(Double.valueOf(split[0]));
+        final BufferedReader bufferedReader;
+        final String[] split;
+        Main.A = BigDecimal.valueOf(Double.valueOf((split = (bufferedReader = new BufferedReader(new InputStreamReader(System.in))).readLine().split(" "))[0]));
         Main.B = BigDecimal.valueOf(Double.valueOf(split[1]));
         Main.A = Main.A.multiply(Main.B);
         System.out.println(Main.A.longValue());

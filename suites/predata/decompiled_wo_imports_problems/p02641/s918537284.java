@@ -1,30 +1,25 @@
-public class Main
+public final class Main
 {
     private static StringBuilder builder;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int int1 = readInt();
         final int int2 = readInt();
         final ArrayList list = new ArrayList<Integer>(int2);
         for (int i = 0; i < int2; ++i) {
             list.add(readInt());
         }
-        int n = 0;
-        while (list.contains(int1 - n)) {
+        int n;
+        for (n = 0; list.contains(int1 - n); ++n) {
             if (!list.contains(int1 + n)) {
                 System.out.print(int1 + n);
+                return;
             }
-            else {
-                list.remove((Object)(int1 - n));
-                list.remove((Object)(int1 + n));
-                if (int1 + n != Integer.MAX_VALUE) {
-                    if (int1 - n != Integer.MIN_VALUE) {
-                        ++n;
-                        continue;
-                    }
-                }
+            list.remove((Object)(int1 - n));
+            list.remove((Object)(int1 + n));
+            if (int1 + n == Integer.MAX_VALUE || int1 - n == Integer.MIN_VALUE) {
+                return;
             }
-            return;
         }
         System.out.print(int1 - n);
     }
@@ -32,11 +27,8 @@ public class Main
     private static void read() {
         Main.builder.setLength();
         try {
-            while (true) {
-                final int read = System.in.read();
-                if (read == 32 || read == 10 || read == -1) {
-                    break;
-                }
+            int read;
+            while ((read = System.in.read()) != 32 && read != 10 && read != -1) {
                 Main.builder.appendCodePoint(read);
             }
         }
@@ -76,9 +68,7 @@ public class Main
     private static void skipLine() {
         try {
             int read;
-            do {
-                read = System.in.read();
-            } while (read != 10 && read != -1);
+            while ((read = System.in.read()) != 10 && read != -1) {}
         }
         catch (final IOException ex) {}
     }
@@ -86,9 +76,7 @@ public class Main
     private static void skip() {
         try {
             int read;
-            do {
-                read = System.in.read();
-            } while (read != 32 && read != 10 && read != -1);
+            while ((read = System.in.read()) != 32 && read != 10 && read != -1) {}
         }
         catch (final IOException ex) {}
     }

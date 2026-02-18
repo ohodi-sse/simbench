@@ -1,22 +1,23 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         final String next2 = scanner.next();
         final char[] charArray = next.toCharArray();
         final char[] charArray2 = next2.toCharArray();
         if (charArray[0] == charArray2[0] && charArray[1] == charArray2[1] && charArray[2] == charArray2[2]) {
             System.out.println("3");
+            return;
         }
-        else if ((charArray[0] == charArray2[0] && charArray[1] == charArray2[1]) || (charArray[1] == charArray2[1] && charArray[2] == charArray2[2]) || (charArray[0] == charArray2[0] && charArray[2] == charArray2[2])) {
+        if ((charArray[0] == charArray2[0] && charArray[1] == charArray2[1]) || (charArray[1] == charArray2[1] && charArray[2] == charArray2[2]) || (charArray[0] == charArray2[0] && charArray[2] == charArray2[2])) {
             System.out.println("2");
+            return;
         }
-        else if (charArray[0] == charArray2[0] || charArray[1] == charArray2[1] || charArray[2] == charArray2[2]) {
+        if (charArray[0] == charArray2[0] || charArray[1] == charArray2[1] || charArray[2] == charArray2[2]) {
             System.out.println("1");
+            return;
         }
-        else {
-            System.out.println("0");
-        }
+        System.out.println("0");
     }
 }

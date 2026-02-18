@@ -1,18 +1,29 @@
-public class Main
+public final class Main
 {
-    Scanner sc;
-    int X;
-    int N;
-    List<Integer> p;
+    private Scanner sc;
+    private int X;
+    private int N;
+    private List<Integer> p;
     
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final Scanner scanner = new Scanner(System.in);
         final Main main = new Main(scanner);
-        main.show(main.solve());
+        int x = 0;
+        for (int i = 0; i <= 100; ++i) {
+            if (!main.p.contains(main.X - i)) {
+                x = main.X - i;
+                break;
+            }
+            if (!main.p.contains(main.X + i)) {
+                x = main.X + i;
+                break;
+            }
+        }
+        System.out.println(x);
         scanner.close();
     }
     
-    Main(final Scanner sc) {
+    private Main(final Scanner sc) {
         this.p = new ArrayList<Integer>();
         this.sc = sc;
         this.X = sc.nextInt();
@@ -37,7 +48,7 @@ public class Main
         return n;
     }
     
-    public void show(final int x) {
+    private static void show(final int x) {
         System.out.println(x);
     }
 }

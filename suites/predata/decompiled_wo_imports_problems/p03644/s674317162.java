@@ -1,25 +1,25 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final FastScanner fastScanner = new FastScanner();
-        final int[] array2 = { 1, 2, 4, 8, 16, 32, 64, 128 };
-        final int nextInt = fastScanner.nextInt();
+        final int[] array = { 1, 2, 4, 8, 16, 32, 64, 128 };
+        final int int1 = Integer.parseInt(fastScanner.nextToken());
         int n = 0;
-        for (int i = 0; i < array2.length; ++i) {
-            if (array2[i] > nextInt) {
+        for (int i = 0; i < array.length; ++i) {
+            if (array[i] > int1) {
                 n = i;
                 break;
             }
         }
-        System.out.println(array2[n - 1]);
+        System.out.println(array[n - 1]);
     }
     
-    public static class FastScanner
+    public static final class FastScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
-        public FastScanner(final String fileName) {
+        private FastScanner(final String fileName) {
             try {
                 this.br = new BufferedReader(new FileReader(fileName));
             }
@@ -32,7 +32,7 @@ public class Main
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String nextToken() {
+        final String nextToken() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -49,7 +49,7 @@ public class Main
             return this.st.nextToken();
         }
         
-        String nextLine() {
+        private String nextLine() {
             this.st = null;
             try {
                 return this.br.readLine();
@@ -60,73 +60,16 @@ public class Main
             }
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.nextToken());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.nextToken());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.nextToken());
         }
-    }
-}public static class FastScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastScanner(final String fileName) {
-        try {
-            this.br = new BufferedReader(new FileReader(fileName));
-        }
-        catch (final FileNotFoundException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
-    public FastScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String nextToken() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    String nextLine() {
-        this.st = null;
-        try {
-            return this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.nextToken());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.nextToken());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.nextToken());
     }
 }

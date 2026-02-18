@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final char[] charArray = new Scanner(System.in).next().toCharArray();
         int n = 0;
         boolean b = false;
@@ -16,9 +16,8 @@ public class Main
         }
         if (b) {
             System.out.println(n + 1);
+            return;
         }
-        else {
-            System.out.println(0);
-        }
+        System.out.println(0);
     }
 }

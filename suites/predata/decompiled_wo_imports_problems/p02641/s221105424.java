@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         int n = 0;
         int n2 = 0;
@@ -10,33 +10,33 @@ public class Main
         int n4 = 0;
         if (nextInt2 == 0) {
             System.out.println(nextInt);
+            return;
         }
-        else {
-            final int[] array2 = new int[nextInt2];
-            for (int i = 0; i < array2.length; ++i) {
-                array2[i] = scanner.nextInt();
-            }
-            do {
-                for (int j = 0; j < array2.length; ++j) {
-                    if (array2[j] == nextInt + n3) {
-                        ++n3;
-                    }
+        final int[] array = new int[nextInt2];
+        for (int i = 0; i < array.length; ++i) {
+            array[i] = scanner.nextInt();
+        }
+        do {
+            for (int j = 0; j < array.length; ++j) {
+                if (array[j] == nextInt + n3) {
+                    ++n3;
                 }
-            } while (++n <= n3);
-            do {
-                for (int k = 0; k < array2.length; ++k) {
-                    if (array2[k] == nextInt + n4) {
-                        --n4;
-                    }
+            }
+        } while (++n <= n3);
+        do {
+            for (int k = 0; k < array.length; ++k) {
+                if (array[k] == nextInt + n4) {
+                    --n4;
                 }
-            } while (--n2 >= n4);
-            final int n5 = n3 + n4;
-            if (n5 >= 0) {
-                System.out.println(nextInt + n4);
             }
-            else if (n5 < 0) {
-                System.out.println(nextInt + n3);
-            }
+        } while (--n2 >= n4);
+        final int n5;
+        if ((n5 = n3 + n4) >= 0) {
+            System.out.println(nextInt + n4);
+            return;
+        }
+        if (n5 < 0) {
+            System.out.println(nextInt + n3);
         }
     }
 }

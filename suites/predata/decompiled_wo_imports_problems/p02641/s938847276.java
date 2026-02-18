@@ -1,36 +1,38 @@
-public class Main
+public final class Main
 {
-    BufferedReader br;
-    PrintWriter out;
-    StringTokenizer st;
-    boolean eof;
-    final long MOD = 1000000007L;
+    private BufferedReader br;
+    private PrintWriter out;
+    private StringTokenizer st;
+    private boolean eof;
+    private long MOD = 1000000007L;
     private static final int[] dx;
     private static final int[] dy;
     
-    void solve() throws IOException {
-        final int nextInt = this.nextInt();
-        final int[] nextIntArr = this.nextIntArr(this.nextInt());
+    private void solve() throws IOException {
+        final int int1 = Integer.parseInt(this.nextToken());
+        final int int2 = Integer.parseInt(this.nextToken());
+        final int[] array = new int[int2];
+        for (int i = 0; i < int2; ++i) {
+            array[i] = Integer.parseInt(this.nextToken());
+        }
+        final int[] array2 = array;
         final HashSet set = new HashSet();
-        final int[] array = nextIntArr;
-        for (int length = array.length, i = 0; i < length; ++i) {
-            set.add(array[i]);
+        for (int length = array2.length, j = 0; j < length; ++j) {
+            set.add(array2[j]);
         }
         int n = Integer.MAX_VALUE;
-        int j = -1;
-        for (int k = -1; k < 1000; ++k) {
-            if (!set.contains(k)) {
-                final int abs = Math.abs(k - nextInt);
-                if (abs < n) {
-                    n = abs;
-                    j = k;
-                }
+        int k = -1;
+        for (int l = -1; l < 1000; ++l) {
+            final int abs;
+            if (!set.contains(l) && (abs = Math.abs(l - int1)) < n) {
+                n = abs;
+                k = l;
             }
         }
-        this.outln(j);
+        this.out.println((Object)k);
     }
     
-    void shuffle(final int[] array) {
+    private static void shuffle(final int[] array) {
         for (int length = array.length, i = 0; i < length; ++i) {
             final int n = i + (int)(Math.random() * (length - i));
             final int n2 = array[i];
@@ -50,31 +52,51 @@ public class Main
     public Main() throws IOException {
         this.br = new BufferedReader(new InputStreamReader(System.in));
         this.out = new PrintWriter(System.out);
-        this.solve();
+        final int int1 = Integer.parseInt(this.nextToken());
+        final int int2 = Integer.parseInt(this.nextToken());
+        final int[] array = new int[int2];
+        for (int i = 0; i < int2; ++i) {
+            array[i] = Integer.parseInt(this.nextToken());
+        }
+        final int[] array2 = array;
+        final HashSet set = new HashSet();
+        for (int length = array2.length, j = 0; j < length; ++j) {
+            set.add(array2[j]);
+        }
+        int n = Integer.MAX_VALUE;
+        int k = -1;
+        for (int l = -1; l < 1000; ++l) {
+            final int abs;
+            if (!set.contains(l) && (abs = Math.abs(l - int1)) < n) {
+                n = abs;
+                k = l;
+            }
+        }
+        this.out.println((Object)k);
         this.out.close();
     }
     
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         new Main();
     }
     
-    public long[] nextLongArr(final int n) throws IOException {
+    private long[] nextLongArr(final int n) throws IOException {
         final long[] array = new long[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
+            array[i] = Long.parseLong(this.nextToken());
         }
         return array;
     }
     
-    public int[] nextIntArr(final int n) throws IOException {
+    private int[] nextIntArr(final int n) throws IOException {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
+            array[i] = Integer.parseInt(this.nextToken());
         }
         return array;
     }
     
-    public String nextToken() {
+    private String nextToken() {
         while (true) {
             if (this.st != null) {
                 if (this.st.hasMoreTokens()) {
@@ -94,7 +116,7 @@ public class Main
         return this.st.nextToken();
     }
     
-    public String nextString() {
+    private String nextString() {
         try {
             return this.br.readLine();
         }
@@ -104,20 +126,15 @@ public class Main
         }
     }
     
-    public int nextInt() throws IOException {
+    private int nextInt() throws IOException {
         return Integer.parseInt(this.nextToken());
     }
     
-    public long nextLong() throws IOException {
+    private long nextLong() throws IOException {
         return Long.parseLong(this.nextToken());
     }
     
-    public double nextDouble() throws IOException {
+    private double nextDouble() throws IOException {
         return Double.parseDouble(this.nextToken());
-    }
-    
-    static {
-        dx = new int[] { 0, -1, 0, 1 };
-        dy = new int[] { 1, 0, -1, 0 };
     }
 }

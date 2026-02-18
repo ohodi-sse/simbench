@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final FS fs = new FS();
-        final String next = fs.next();
+    private static void main$3231c38a() {
+        final FS fs;
+        final String next = (fs = new FS()).next();
         final String next2 = fs.next();
         int x = 0;
         for (int i = 0; i < 3; ++i) {
@@ -13,10 +13,10 @@ public class Main
         System.out.println(x);
     }
     
-    public static void solver() {
+    private static void solver() {
     }
     
-    static class FS
+    static final class FS
     {
         private final InputStream in;
         private final byte[] buffer;
@@ -45,47 +45,48 @@ public class Main
         }
         
         private int readByte() {
-            return this.hasNextByte() ? this.buffer[this.ptr++] : -1;
+            if (this.hasNextByte()) {
+                return this.buffer[this.ptr++];
+            }
+            return -1;
         }
         
-        private boolean isPrintableChar(final int n) {
+        private static boolean isPrintableChar(final int n) {
             return 33 <= n && n <= 126;
         }
         
         private void skipUnprintable() {
-            while (this.hasNextByte() && !this.isPrintableChar(this.buffer[this.ptr])) {
+            while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
                 ++this.ptr;
             }
         }
         
-        public boolean hasNext() {
-            this.skipUnprintable();
+        private boolean hasNext() {
+            while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
+                ++this.ptr;
+            }
             return this.hasNextByte();
         }
         
-        public String next() {
+        public final String next() {
             if (!this.hasNext()) {
                 throw new NoSuchElementException();
             }
             final StringBuilder sb = new StringBuilder();
-            for (int codePoint = this.readByte(); this.isPrintableChar(codePoint); codePoint = this.readByte()) {
+            for (int codePoint = this.readByte(); isPrintableChar(codePoint); codePoint = this.readByte()) {
                 sb.appendCodePoint(codePoint);
             }
             return sb.toString();
         }
         
-        public int nextInt() {
-            return (int)this.nextLong();
-        }
-        
-        public long nextLong() {
+        private int nextInt() {
             if (!this.hasNext()) {
                 throw new NoSuchElementException();
             }
             long n = 0L;
             boolean b = false;
-            int n2 = this.readByte();
-            if (n2 == 45) {
+            int n2;
+            if ((n2 = this.readByte()) == 45) {
                 b = true;
                 n2 = this.readByte();
             }
@@ -96,95 +97,37 @@ public class Main
                 n = n * 10L + (n2 - 48);
                 n2 = this.readByte();
             }
-            if (n2 == -1 || !this.isPrintableChar(n2)) {
-                return b ? (-n) : n;
+            if (n2 == -1 || !isPrintableChar(n2)) {
+                return (int)(b ? (-n) : n);
             }
             throw new NumberFormatException();
         }
-    }
-}static class FS
-{
-    private final InputStream in;
-    private final byte[] buffer;
-    private int ptr;
-    private int buflen;
-    
-    FS() {
-        this.in = System.in;
-        this.buffer = new byte[1024];
-        this.ptr = 0;
-        this.buflen = 0;
-    }
-    
-    private boolean hasNextByte() {
-        if (this.ptr < this.buflen) {
-            return true;
+        
+        private long nextLong() {
+            if (!this.hasNext()) {
+                throw new NoSuchElementException();
+            }
+            long n = 0L;
+            boolean b = false;
+            int n2;
+            if ((n2 = this.readByte()) == 45) {
+                b = true;
+                n2 = this.readByte();
+            }
+            if (n2 < 48 || 57 < n2) {
+                throw new NumberFormatException();
+            }
+            while (48 <= n2 && n2 <= 57) {
+                n = n * 10L + (n2 - 48);
+                n2 = this.readByte();
+            }
+            if (n2 != -1 && isPrintableChar(n2)) {
+                throw new NumberFormatException();
+            }
+            if (b) {
+                return -n;
+            }
+            return n;
         }
-        this.ptr = 0;
-        try {
-            this.buflen = this.in.read(this.buffer);
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return this.buflen > 0;
-    }
-    
-    private int readByte() {
-        return this.hasNextByte() ? this.buffer[this.ptr++] : -1;
-    }
-    
-    private boolean isPrintableChar(final int n) {
-        return 33 <= n && n <= 126;
-    }
-    
-    private void skipUnprintable() {
-        while (this.hasNextByte() && !this.isPrintableChar(this.buffer[this.ptr])) {
-            ++this.ptr;
-        }
-    }
-    
-    public boolean hasNext() {
-        this.skipUnprintable();
-        return this.hasNextByte();
-    }
-    
-    public String next() {
-        if (!this.hasNext()) {
-            throw new NoSuchElementException();
-        }
-        final StringBuilder sb = new StringBuilder();
-        for (int codePoint = this.readByte(); this.isPrintableChar(codePoint); codePoint = this.readByte()) {
-            sb.appendCodePoint(codePoint);
-        }
-        return sb.toString();
-    }
-    
-    public int nextInt() {
-        return (int)this.nextLong();
-    }
-    
-    public long nextLong() {
-        if (!this.hasNext()) {
-            throw new NoSuchElementException();
-        }
-        long n = 0L;
-        boolean b = false;
-        int n2 = this.readByte();
-        if (n2 == 45) {
-            b = true;
-            n2 = this.readByte();
-        }
-        if (n2 < 48 || 57 < n2) {
-            throw new NumberFormatException();
-        }
-        while (48 <= n2 && n2 <= 57) {
-            n = n * 10L + (n2 - 48);
-            n2 = this.readByte();
-        }
-        if (n2 == -1 || !this.isPrintableChar(n2)) {
-            return b ? (-n) : n;
-        }
-        throw new NumberFormatException();
     }
 }

@@ -4,12 +4,16 @@ use flate2::Compression;
 use flate2::write::GzEncoder;
 use flate2::write::ZlibEncoder;
 use indicatif::ParallelProgressIterator as _;
+use indicatif::ProgressStyle;
 use polars::df;
 use polars::prelude::*;
 use rayon::prelude::*;
 use std::io::prelude::*;
 use std::path::PathBuf;
 use std::time::*;
+
+const BAR_TEMPLATE: &str =
+    "{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})";
 
 pub struct Source {
     name: String,
@@ -153,9 +157,10 @@ struct PairwiseCompressionTable {
 }
 
 pub fn pairwise_compressions(compressor: Compressor, srcs: Vec<Source>) -> Result<DataFrame> {
+    let style = ProgressStyle::with_template(BAR_TEMPLATE)?;
     let result_rows: Result<Vec<PairwiseCompressionTable>> = srcs
         .par_iter()
-        .progress()
+        .progress_with_style(style)
         .flat_map(|s1| {
             srcs.par_iter()
                 .map(|s2| compute_pair_row(compressor, s1, s2))

@@ -1,71 +1,57 @@
-static class InputReader
+public final class Main
 {
-    public final BufferedReader reader;
-    public StringTokenizer tokenizer;
-    
-    public InputReader(final InputStream in) {
-        this.reader = new BufferedReader(new InputStreamReader(in), 32768);
-        this.tokenizer = null;
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.tokenizer != null) {
-                if (this.tokenizer.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.tokenizer = new StringTokenizer(this.reader.readLine());
-                continue;
-            }
-            catch (final IOException cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.tokenizer.nextToken();
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final InputReader inputReader = new InputReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new ARainySeason().solve(1, inputReader, printWriter);
+        new ARainySeason();
+        final InputReader inputReader2 = inputReader;
+        final PrintWriter printWriter2 = printWriter;
+        final char[] charArray = inputReader2.next().toCharArray();
+        int n = -1;
+        int max = 0;
+        for (int i = 0; i < charArray.length; ++i) {
+            if (charArray[i] == 'R') {
+                max = Math.max(max, i - n);
+            }
+            else {
+                n = i;
+            }
+        }
+        printWriter2.println(max);
         printWriter.close();
     }
     
-    static class ARainySeason
+    static final class ARainySeason
     {
-        public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
+        private static void solve$6080e082(final InputReader inputReader, final PrintWriter printWriter) {
             final char[] charArray = inputReader.next().toCharArray();
-            int n2 = -1;
+            int n = -1;
             int max = 0;
             for (int i = 0; i < charArray.length; ++i) {
                 if (charArray[i] == 'R') {
-                    max = Math.max(max, i - n2);
+                    max = Math.max(max, i - n);
                 }
                 else {
-                    n2 = i;
+                    n = i;
                 }
             }
             printWriter.println(max);
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
-        public final BufferedReader reader;
-        public StringTokenizer tokenizer;
+        private BufferedReader reader;
+        private StringTokenizer tokenizer;
         
         public InputReader(final InputStream in) {
             this.reader = new BufferedReader(new InputStreamReader(in), 32768);
             this.tokenizer = null;
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.tokenizer != null) {
                     if (this.tokenizer.hasMoreTokens()) {
@@ -83,21 +69,5 @@ static class InputReader
             }
             return this.tokenizer.nextToken();
         }
-    }
-}static class ARainySeason
-{
-    public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-        final char[] charArray = inputReader.next().toCharArray();
-        int n2 = -1;
-        int max = 0;
-        for (int i = 0; i < charArray.length; ++i) {
-            if (charArray[i] == 'R') {
-                max = Math.max(max, i - n2);
-            }
-            else {
-                n2 = i;
-            }
-        }
-        printWriter.println(max);
     }
 }

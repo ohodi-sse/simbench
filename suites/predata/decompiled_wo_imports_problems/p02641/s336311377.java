@@ -1,14 +1,14 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final ArrayList list = new ArrayList();
         final ArrayList list2 = new ArrayList();
         for (int i = 0; i < nextInt2; ++i) {
-            final int nextInt3 = scanner.nextInt();
-            if (nextInt3 < nextInt) {
+            final int nextInt3;
+            if ((nextInt3 = scanner.nextInt()) < nextInt) {
                 list.add(nextInt3);
             }
             else {
@@ -33,33 +33,35 @@ public class Main
                 break;
             }
         }
-        if (list2.size() > 0 && list.size() > 0) {
-            if (n == -1) {
-                n = list.get(list.size() - 1) - 1;
+        if (list2.size() <= 0 || list.size() <= 0) {
+            if (list2.size() != 0) {
+                if (list.size() != 0) {
+                    return;
+                }
+                if (list2.contains(nextInt)) {
+                    System.out.println(nextInt - 1);
+                    return;
+                }
             }
-            if (x == -1) {
-                x = list2.get(list2.size() - 1) + 1;
-            }
-            if (nextInt - n < x - nextInt) {
-                System.out.println(n);
-            }
-            else if (nextInt - n > x - nextInt) {
-                System.out.println(x);
-            }
-            else {
-                System.out.println(n);
-            }
-        }
-        else if (list2.size() == 0) {
             System.out.println(nextInt);
+            return;
         }
-        else if (list.size() == 0) {
-            if (list2.contains(nextInt)) {
-                System.out.println(nextInt - 1);
-            }
-            else {
-                System.out.println(nextInt);
-            }
+        if (n == -1) {
+            final ArrayList list3 = list;
+            n = (int)list3.get(list3.size() - 1) - 1;
         }
+        if (x == -1) {
+            final ArrayList list4 = list2;
+            x = (int)list4.get(list4.size() - 1) + 1;
+        }
+        if (nextInt - n < x - nextInt) {
+            System.out.println(n);
+            return;
+        }
+        if (nextInt - n > x - nextInt) {
+            System.out.println(x);
+            return;
+        }
+        System.out.println(n);
     }
 }

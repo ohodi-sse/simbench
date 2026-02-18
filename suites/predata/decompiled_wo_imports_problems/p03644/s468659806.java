@@ -1,6 +1,6 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final double n = new Scanner(System.in).nextInt();
         double pow = 0.0;
         for (double n2 = 6.0; n2 > 0.0; --n2) {

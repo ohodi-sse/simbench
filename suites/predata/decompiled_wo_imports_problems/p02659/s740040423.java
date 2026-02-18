@@ -1,124 +1,27 @@
-static class MScanner
+public final class Main
 {
-    StringTokenizer st;
-    BufferedReader br;
+    private static PrintWriter pw;
+    private static MScanner sc;
     
-    public MScanner(final InputStream in) {
-        this.br = new BufferedReader(new InputStreamReader(in));
+    private static void main() throws Exception {
+        final long long1 = Long.parseLong(Main.sc.next());
+        final char[] charArray;
+        Main.pw.println(long1 * Integer.parseInt("" + (charArray = Main.sc.next().toCharArray())[0]) + long1 * Integer.parseInt("" + charArray[2] + charArray[3]) / 100L);
     }
     
-    public MScanner(final String fileName) throws Exception {
-        this.br = new BufferedReader(new FileReader(fileName));
-    }
-    
-    public String next() throws IOException {
-        while (this.st == null || !this.st.hasMoreTokens()) {
-            this.st = new StringTokenizer(this.br.readLine());
-        }
-        return this.st.nextToken();
-    }
-    
-    public int[] intArr(final int n) throws IOException {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    public long[] longArr(final int n) throws IOException {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    public int[] intSortedArr(final int n) throws IOException {
-        final int[] a = new int[n];
-        for (int i = 0; i < n; ++i) {
-            a[i] = this.nextInt();
-        }
-        Main.shuffle(a);
-        Arrays.sort(a);
-        return a;
-    }
-    
-    public long[] longSortedArr(final int n) throws IOException {
-        final long[] a = new long[n];
-        for (int i = 0; i < n; ++i) {
-            a[i] = this.nextLong();
-        }
-        Main.shuffle(a);
-        Arrays.sort(a);
-        return a;
-    }
-    
-    public Integer[] IntegerArr(final int n) throws IOException {
-        final Integer[] array = new Integer[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    public Long[] LongArr(final int n) throws IOException {
-        final Long[] array = new Long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    public String nextLine() throws IOException {
-        return this.br.readLine();
-    }
-    
-    public int nextInt() throws IOException {
-        return Integer.parseInt(this.next());
-    }
-    
-    public double nextDouble() throws IOException {
-        return Double.parseDouble(this.next());
-    }
-    
-    public char nextChar() throws IOException {
-        return this.next().charAt(0);
-    }
-    
-    public long nextLong() throws IOException {
-        return Long.parseLong(this.next());
-    }
-    
-    public boolean ready() throws IOException {
-        return this.br.ready();
-    }
-    
-    public void waitForInput() throws InterruptedException {
-        Thread.sleep(3000L);
-    }
-}public class Main
-{
-    static PrintWriter pw;
-    static MScanner sc;
-    
-    static void main() throws Exception {
-        final long nextLong = Main.sc.nextLong();
-        final char[] charArray = Main.sc.next().toCharArray();
-        Main.pw.println(nextLong * Integer.parseInt("" + charArray[0]) + nextLong * Integer.parseInt("" + charArray[2] + charArray[3]) / 100L);
-    }
-    
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         Main.pw = new PrintWriter(System.out);
         Main.sc = new MScanner(System.in);
         int n = 1;
         while (n-- > 0) {
-            main();
+            final long long1 = Long.parseLong(Main.sc.next());
+            final char[] charArray;
+            Main.pw.println(long1 * Integer.parseInt("" + (charArray = Main.sc.next().toCharArray())[0]) + long1 * Integer.parseInt("" + charArray[2] + charArray[3]) / 100L);
         }
         Main.pw.flush();
     }
     
-    static void shuffle(final int[] array) {
+    private static void shuffle(final int[] array) {
         for (int i = 0; i < array.length; ++i) {
             final int n = (int)(Math.random() * array.length);
             final int n2 = array[i];
@@ -127,7 +30,7 @@ static class MScanner
         }
     }
     
-    static void shuffle(final long[] array) {
+    private static void shuffle(final long[] array) {
         for (int i = 0; i < array.length; ++i) {
             final int n = (int)(Math.random() * array.length);
             final long n2 = array[i];
@@ -136,103 +39,115 @@ static class MScanner
         }
     }
     
-    static class MScanner
+    static final class MScanner
     {
-        StringTokenizer st;
-        BufferedReader br;
+        private StringTokenizer st;
+        private BufferedReader br;
         
         public MScanner(final InputStream in) {
             this.br = new BufferedReader(new InputStreamReader(in));
         }
         
-        public MScanner(final String fileName) throws Exception {
+        private MScanner(final String fileName) throws Exception {
             this.br = new BufferedReader(new FileReader(fileName));
         }
         
-        public String next() throws IOException {
+        public final String next() throws IOException {
             while (this.st == null || !this.st.hasMoreTokens()) {
                 this.st = new StringTokenizer(this.br.readLine());
             }
             return this.st.nextToken();
         }
         
-        public int[] intArr(final int n) throws IOException {
+        private int[] intArr(final int n) throws IOException {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        public long[] longArr(final int n) throws IOException {
+        private long[] longArr(final int n) throws IOException {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLong();
+                array[i] = Long.parseLong(this.next());
             }
             return array;
         }
         
-        public int[] intSortedArr(final int n) throws IOException {
+        private int[] intSortedArr(final int n) throws IOException {
             final int[] a = new int[n];
             for (int i = 0; i < n; ++i) {
-                a[i] = this.nextInt();
+                a[i] = Integer.parseInt(this.next());
             }
-            Main.shuffle(a);
+            final int[] array = a;
+            for (int j = 0; j < array.length; ++j) {
+                final int n2 = (int)(Math.random() * array.length);
+                final int n3 = array[j];
+                array[j] = array[n2];
+                array[n2] = n3;
+            }
             Arrays.sort(a);
             return a;
         }
         
-        public long[] longSortedArr(final int n) throws IOException {
+        private long[] longSortedArr(final int n) throws IOException {
             final long[] a = new long[n];
             for (int i = 0; i < n; ++i) {
-                a[i] = this.nextLong();
+                a[i] = Long.parseLong(this.next());
             }
-            Main.shuffle(a);
+            final long[] array = a;
+            for (int j = 0; j < array.length; ++j) {
+                final int n2 = (int)(Math.random() * array.length);
+                final long n3 = array[j];
+                array[j] = array[n2];
+                array[n2] = n3;
+            }
             Arrays.sort(a);
             return a;
         }
         
-        public Integer[] IntegerArr(final int n) throws IOException {
+        private Integer[] IntegerArr(final int n) throws IOException {
             final Integer[] array = new Integer[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        public Long[] LongArr(final int n) throws IOException {
+        private Long[] LongArr(final int n) throws IOException {
             final Long[] array = new Long[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLong();
+                array[i] = Long.parseLong(this.next());
             }
             return array;
         }
         
-        public String nextLine() throws IOException {
+        private String nextLine() throws IOException {
             return this.br.readLine();
         }
         
-        public int nextInt() throws IOException {
+        private int nextInt() throws IOException {
             return Integer.parseInt(this.next());
         }
         
-        public double nextDouble() throws IOException {
+        private double nextDouble() throws IOException {
             return Double.parseDouble(this.next());
         }
         
-        public char nextChar() throws IOException {
+        private char nextChar() throws IOException {
             return this.next().charAt(0);
         }
         
-        public long nextLong() throws IOException {
+        private long nextLong() throws IOException {
             return Long.parseLong(this.next());
         }
         
-        public boolean ready() throws IOException {
+        private boolean ready() throws IOException {
             return this.br.ready();
         }
         
-        public void waitForInput() throws InterruptedException {
+        private static void waitForInput() throws InterruptedException {
             Thread.sleep(3000L);
         }
     }

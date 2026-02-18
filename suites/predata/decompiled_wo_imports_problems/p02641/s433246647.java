@@ -1,74 +1,111 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] array2 = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] array = new int[nextInt2 = scanner.nextInt()];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = scanner.nextInt();
+            array[i] = scanner.nextInt();
         }
-        System.out.println(Val(nextInt2, nextInt, array2));
+        final int n = nextInt2;
+        final int n2 = nextInt;
+        final int[] array2 = array;
+        int n3 = n2;
+        final int n4;
+        int x;
+        if ((n4 = n) == 0) {
+            x = n3;
+        }
+        else {
+            quickSort(array2, 0, n4 - 1);
+            int n5 = n3 + 1;
+            int n6 = 0;
+            while (true) {
+                --n5;
+                if (binarySearch(array2, 0, n4 - 1, n5) == -1) {
+                    x = n5;
+                    break;
+                }
+                if (n6 != 0) {
+                    ++n3;
+                    if (binarySearch(array2, 0, n4 - 1, n3) == -1) {
+                        x = n3;
+                        break;
+                    }
+                }
+                n6 = 1;
+            }
+        }
+        System.out.println(x);
     }
     
-    public static int Val(final int n, final int n2, final int[] array) {
+    private static int Val(final int n, int n2, final int[] array) {
         if (n == 0) {
             return n2;
         }
         quickSort(array, 0, n - 1);
         int n3 = n2 + 1;
-        int n4 = n2;
-        int n5 = 0;
+        int n4 = 0;
         while (true) {
             --n3;
             if (binarySearch(array, 0, n - 1, n3) == -1) {
                 return n3;
             }
-            if (n5 != 0) {
-                ++n4;
-                if (binarySearch(array, 0, n - 1, n4) == -1) {
-                    return n4;
+            if (n4 != 0) {
+                ++n2;
+                if (binarySearch(array, 0, n - 1, n2) == -1) {
+                    return n2;
                 }
             }
-            n5 = 1;
+            n4 = 1;
         }
     }
     
-    public static int binarySearch(final int[] array, final int n, final int n2, final int n3) {
-        if (n2 < n) {
-            return -1;
+    private static int binarySearch(int[] array, int n, int i, final int n2) {
+        while (i >= n) {
+            final int n3 = n + (i - n) / 2;
+            if (array[n3] == n2) {
+                return n3;
+            }
+            if (array[n3] > n2) {
+                final int[] array2 = array;
+                final int n4 = n;
+                i = n3 - 1;
+                n = n4;
+                array = array2;
+            }
+            else {
+                final int[] array3 = array;
+                n = n3 + 1;
+                array = array3;
+            }
         }
-        final int n4 = n + (n2 - n) / 2;
-        if (array[n4] == n3) {
-            return n4;
-        }
-        if (array[n4] > n3) {
-            return binarySearch(array, n, n4 - 1, n3);
-        }
-        return binarySearch(array, n4 + 1, n2, n3);
+        return -1;
     }
     
-    public static void quickSort(final int[] array, final int n, final int n2) {
-        if (n >= n2) {
-            return;
+    private static void quickSort(int[] array, int i, final int n) {
+        while (i < n) {
+            final int n2 = array[(i + n) / 2];
+            int j;
+            int n3;
+            for (j = i, n3 = n; j <= n3; ++j, --n3) {
+                while (array[j] < n2) {
+                    ++j;
+                }
+                while (array[n3] > n2) {
+                    --n3;
+                }
+                if (j <= n3) {
+                    final int n4 = array[j];
+                    array[j] = array[n3];
+                    array[n3] = n4;
+                }
+            }
+            quickSort(array, i, n3);
+            final int[] array2 = array;
+            i = j;
+            array = array2;
         }
-        final int n3 = array[(n + n2) / 2];
-        int i;
-        int n4;
-        for (i = n, n4 = n2; i <= n4; ++i, --n4) {
-            while (array[i] < n3) {
-                ++i;
-            }
-            while (array[n4] > n3) {
-                --n4;
-            }
-            if (i <= n4) {
-                final int n5 = array[i];
-                array[i] = array[n4];
-                array[n4] = n5;
-            }
-        }
-        quickSort(array, n, n4);
-        quickSort(array, i, n2);
     }
 }

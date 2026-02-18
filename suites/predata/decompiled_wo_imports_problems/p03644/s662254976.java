@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         int i = new Scanner(System.in).nextInt();
-        for (int n = 2; i >= n; i = n, n *= 2) {}
+        for (int n = 2; i >= n; i = n, n <<= 1) {}
         System.out.println(i);
     }
 }

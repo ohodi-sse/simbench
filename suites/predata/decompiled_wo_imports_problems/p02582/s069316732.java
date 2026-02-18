@@ -1,73 +1,9 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-    
-    int[] readArray(final int n, final int n2) {
-        final int[] array = new int[n2];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    long[] readLongArray(final int n, final int n2) {
-        final long[] array = new long[n2];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new FastReader().next();
-        int max;
-        int b = max = 0;
+        int b = 0;
+        int max = 0;
         for (int i = 0; i < next.length(); ++i) {
             if (next.charAt(i) == 'R') {
                 ++b;
@@ -80,16 +16,16 @@ static class FastReader
         System.out.println(max);
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -106,19 +42,19 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();
@@ -129,18 +65,18 @@ static class FastReader
             return line;
         }
         
-        int[] readArray(final int n, final int n2) {
+        private int[] readArray(final int n, final int n2) {
             final int[] array = new int[n2];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        long[] readLongArray(final int n, final int n2) {
+        private long[] readLongArray(final int n, final int n2) {
             final long[] array = new long[n2];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLong();
+                array[i] = Long.parseLong(this.next());
             }
             return array;
         }

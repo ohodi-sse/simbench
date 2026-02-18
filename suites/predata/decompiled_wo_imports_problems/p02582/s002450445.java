@@ -1,12 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String[] split = new Scanner(System.in).nextLine().split("");
         int n = 0;
         int x = 0;
-        final String[] array2 = split;
-        for (int length = array2.length, i = 0; i < length; ++i) {
-            if (array2[i].equals("R")) {
+        for (int length = split.length, i = 0; i < length; ++i) {
+            if (split[i].equals("R")) {
                 ++n;
             }
             else {

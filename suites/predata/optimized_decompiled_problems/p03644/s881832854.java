@@ -93,9 +93,12 @@ public final class Main
         int n = 0;
         int x = 0;
         while (i > 0) {
-            final int chkB = chkB(i);
-            if (n <= chkB) {
-                n = chkB;
+            int n2;
+            int n3;
+            for (n2 = i, n3 = 0; n2 > 0 && n2 % 2 == 0; n2 /= 2, ++n3) {}
+            final int n4 = n3;
+            if (n <= n4) {
+                n = n4;
                 x = i;
             }
             --i;

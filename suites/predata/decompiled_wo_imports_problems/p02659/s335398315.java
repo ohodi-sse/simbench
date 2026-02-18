@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final long nextLong = scanner.nextLong();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final long nextLong = (scanner = new Scanner(System.in)).nextLong();
         final String next = scanner.next();
         System.out.println(nextLong * Integer.valueOf(next.substring(0, 1)) + nextLong * Integer.parseInt(next.substring(2)) / 100L);
     }

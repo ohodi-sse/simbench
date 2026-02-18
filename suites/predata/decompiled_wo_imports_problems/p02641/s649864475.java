@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] a = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] a = new int[nextInt2 = scanner.nextInt()];
         for (int i = 0; i < nextInt2; ++i) {
             a[i] = scanner.nextInt();
         }
@@ -49,12 +49,9 @@ public class Main
                 }
             }
             if (!b2) {
-                if (nextInt - a[0] <= a[nextInt2 - 1] - nextInt) {
-                    x = 9;
-                }
-                else {
-                    x = 9;
-                }
+                final int n4 = a[0];
+                final int n5 = a[nextInt2 - 1];
+                x = 9;
             }
         }
         System.out.println(x);

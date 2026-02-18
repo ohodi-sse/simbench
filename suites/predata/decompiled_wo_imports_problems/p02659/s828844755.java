@@ -1,100 +1,50 @@
-static class LightWriter implements AutoCloseable
+public final class Main
 {
-    private final Writer out;
-    private boolean autoflush;
-    private boolean breaked;
-    
-    public LightWriter(final Writer out) {
-        this.autoflush = false;
-        this.breaked = true;
-        this.out = out;
-    }
-    
-    public LightWriter(final OutputStream out) {
-        this(new OutputStreamWriter(new BufferedOutputStream(out), Charset.defaultCharset()));
-    }
-    
-    public LightWriter print(final char c) {
-        try {
-            this.out.write(c);
-            this.breaked = false;
-        }
-        catch (final IOException cause) {
-            throw new UncheckedIOException(cause);
-        }
-        return this;
-    }
-    
-    public LightWriter print(final String str) {
-        try {
-            this.out.write(str, 0, str.length());
-            this.breaked = false;
-        }
-        catch (final IOException cause) {
-            throw new UncheckedIOException(cause);
-        }
-        return this;
-    }
-    
-    public LightWriter ans(final String s) {
-        if (!this.breaked) {
-            this.print(' ');
-        }
-        return this.print(s);
-    }
-    
-    public LightWriter ans(final long i) {
-        return this.ans(Long.toString(i));
-    }
-    
-    public LightWriter ln() {
-        this.print(System.lineSeparator());
-        this.breaked = true;
-        if (this.autoflush) {
-            try {
-                this.out.flush();
-            }
-            catch (final IOException cause) {
-                throw new UncheckedIOException(cause);
-            }
-        }
-        return this;
-    }
-    
-    @Override
-    public void close() {
-        try {
-            this.out.close();
-        }
-        catch (final IOException cause) {
-            throw new UncheckedIOException(cause);
-        }
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final LightScanner lightScanner = new LightScanner(in);
         final LightWriter lightWriter = new LightWriter(out);
-        new CMultiplication3().solve(1, lightScanner, lightWriter);
+        new CMultiplication3();
+        final LightScanner lightScanner2 = lightScanner;
+        final LightWriter lightWriter2 = lightWriter;
+        final LightScanner lightScanner3 = lightScanner2;
+        final long long1 = Long.parseLong(lightScanner2.string());
+        final double double1 = Double.parseDouble(lightScanner3.string());
+        final LightWriter lightWriter3 = lightWriter2;
+        final String string = Long.toString(long1 * (int)Math.round(double1 * 100.0) / 100L);
+        final LightWriter lightWriter4 = lightWriter3;
+        if (!lightWriter3.breaked) {
+            lightWriter4.print$3a5feaa1();
+        }
+        final LightWriter print;
+        (print = lightWriter4.print(string)).print(System.lineSeparator());
+        print.breaked = true;
+        final boolean autoflush = print.autoflush;
         lightWriter.close();
     }
     
-    static class CMultiplication3
+    static final class CMultiplication3
     {
-        public void solve(final int n, final LightScanner lightScanner, final LightWriter lightWriter) {
-            lightWriter.ans(lightScanner.longs() * (int)Math.round(lightScanner.doubles() * 100.0) / 100L).ln();
+        private static void solve$749e2011(final LightScanner lightScanner, final LightWriter lightWriter) {
+            final String string = Long.toString(Long.parseLong(lightScanner.string()) * (int)Math.round(Double.parseDouble(lightScanner.string()) * 100.0) / 100L);
+            if (!lightWriter.breaked) {
+                lightWriter.print$3a5feaa1();
+            }
+            final LightWriter print;
+            (print = lightWriter.print(string)).print(System.lineSeparator());
+            print.breaked = true;
+            final boolean autoflush = print.autoflush;
         }
     }
     
-    static class LightWriter implements AutoCloseable
+    static final class LightWriter implements AutoCloseable
     {
         private final Writer out;
-        private boolean autoflush;
-        private boolean breaked;
+        boolean autoflush;
+        boolean breaked;
         
-        public LightWriter(final Writer out) {
+        private LightWriter(final Writer out) {
             this.autoflush = false;
             this.breaked = true;
             this.out = out;
@@ -104,9 +54,9 @@ static class LightWriter implements AutoCloseable
             this(new OutputStreamWriter(new BufferedOutputStream(out), Charset.defaultCharset()));
         }
         
-        public LightWriter print(final char c) {
+        public final LightWriter print$3a5feaa1() {
             try {
-                this.out.write(c);
+                this.out.write(32);
                 this.breaked = false;
             }
             catch (final IOException cause) {
@@ -115,7 +65,7 @@ static class LightWriter implements AutoCloseable
             return this;
         }
         
-        public LightWriter print(final String str) {
+        public final LightWriter print(final String str) {
             try {
                 this.out.write(str, 0, str.length());
                 this.breaked = false;
@@ -126,33 +76,30 @@ static class LightWriter implements AutoCloseable
             return this;
         }
         
-        public LightWriter ans(final String s) {
+        private LightWriter ans(final String s) {
             if (!this.breaked) {
-                this.print(' ');
+                this.print$3a5feaa1();
             }
             return this.print(s);
         }
         
-        public LightWriter ans(final long i) {
-            return this.ans(Long.toString(i));
+        private LightWriter ans(final long i) {
+            final String string = Long.toString(i);
+            if (!this.breaked) {
+                this.print$3a5feaa1();
+            }
+            return this.print(string);
         }
         
-        public LightWriter ln() {
+        private LightWriter ln() {
             this.print(System.lineSeparator());
             this.breaked = true;
-            if (this.autoflush) {
-                try {
-                    this.out.flush();
-                }
-                catch (final IOException cause) {
-                    throw new UncheckedIOException(cause);
-                }
-            }
+            final boolean autoflush = this.autoflush;
             return this;
         }
         
         @Override
-        public void close() {
+        public final void close() {
             try {
                 this.out.close();
             }
@@ -162,7 +109,7 @@ static class LightWriter implements AutoCloseable
         }
     }
     
-    static class LightScanner implements AutoCloseable
+    static final class LightScanner implements AutoCloseable
     {
         private BufferedReader reader;
         private StringTokenizer tokenizer;
@@ -173,7 +120,7 @@ static class LightWriter implements AutoCloseable
             this.reader = new BufferedReader(new InputStreamReader(in));
         }
         
-        public String string() {
+        public final String string() {
             if (this.tokenizer != null) {
                 if (this.tokenizer.hasMoreTokens()) {
                     return this.tokenizer.nextToken();
@@ -188,70 +135,22 @@ static class LightWriter implements AutoCloseable
             return this.tokenizer.nextToken();
         }
         
-        public long longs() {
+        private long longs() {
             return Long.parseLong(this.string());
         }
         
-        public double doubles() {
+        private double doubles() {
             return Double.parseDouble(this.string());
         }
         
         @Override
-        public void close() {
+        public final void close() {
             try {
                 this.reader.close();
             }
             catch (final IOException cause) {
                 throw new UncheckedIOException(cause);
             }
-        }
-    }
-}static class CMultiplication3
-{
-    public void solve(final int n, final LightScanner lightScanner, final LightWriter lightWriter) {
-        lightWriter.ans(lightScanner.longs() * (int)Math.round(lightScanner.doubles() * 100.0) / 100L).ln();
-    }
-}static class LightScanner implements AutoCloseable
-{
-    private BufferedReader reader;
-    private StringTokenizer tokenizer;
-    
-    public LightScanner(final InputStream in) {
-        this.reader = null;
-        this.tokenizer = null;
-        this.reader = new BufferedReader(new InputStreamReader(in));
-    }
-    
-    public String string() {
-        if (this.tokenizer != null) {
-            if (this.tokenizer.hasMoreTokens()) {
-                return this.tokenizer.nextToken();
-            }
-        }
-        try {
-            this.tokenizer = new StringTokenizer(this.reader.readLine());
-        }
-        catch (final IOException cause) {
-            throw new UncheckedIOException(cause);
-        }
-        return this.tokenizer.nextToken();
-    }
-    
-    public long longs() {
-        return Long.parseLong(this.string());
-    }
-    
-    public double doubles() {
-        return Double.parseDouble(this.string());
-    }
-    
-    @Override
-    public void close() {
-        try {
-            this.reader.close();
-        }
-        catch (final IOException cause) {
-            throw new UncheckedIOException(cause);
         }
     }
 }

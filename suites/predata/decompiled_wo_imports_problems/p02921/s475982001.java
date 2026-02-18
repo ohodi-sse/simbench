@@ -1,22 +1,22 @@
-public class Main
+public final class Main
 {
-    PrintWriter out;
-    BufferedReader in;
-    StringTokenizer tok;
+    private PrintWriter out;
+    private BufferedReader in;
+    private StringTokenizer tok;
     
     public Main() {
         this.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
         this.in = new BufferedReader(new InputStreamReader(System.in));
     }
     
-    public void go() throws IOException {
+    private void go() throws IOException {
         this.ntok();
-        final String spar = this.spar();
+        final String nextToken = this.tok.nextToken();
         this.ntok();
-        final String spar2 = this.spar();
+        final String nextToken2 = this.tok.nextToken();
         int x = 0;
-        for (int i = 0; i < spar.length(); ++i) {
-            if (spar.charAt(i) == spar2.charAt(i)) {
+        for (int i = 0; i < nextToken.length(); ++i) {
+            if (nextToken.charAt(i) == nextToken2.charAt(i)) {
                 ++x;
             }
         }
@@ -25,27 +25,40 @@ public class Main
         this.in.close();
     }
     
-    public void ntok() throws IOException {
+    private void ntok() throws IOException {
         this.tok = new StringTokenizer(this.in.readLine());
     }
     
-    public int ipar() {
+    private int ipar() {
         return Integer.parseInt(this.tok.nextToken());
     }
     
-    public long lpar() {
+    private long lpar() {
         return Long.parseLong(this.tok.nextToken());
     }
     
-    public double dpar() {
+    private double dpar() {
         return Double.parseDouble(this.tok.nextToken());
     }
     
-    public String spar() {
+    private String spar() {
         return this.tok.nextToken();
     }
     
-    public static void main(final String[] array) throws IOException {
-        new Main().go();
+    private static void main$3231c38a() throws IOException {
+        final Main main;
+        (main = new Main()).ntok();
+        final String nextToken = main.tok.nextToken();
+        main.ntok();
+        final String nextToken2 = main.tok.nextToken();
+        int x = 0;
+        for (int i = 0; i < nextToken.length(); ++i) {
+            if (nextToken.charAt(i) == nextToken2.charAt(i)) {
+                ++x;
+            }
+        }
+        main.out.println(x);
+        main.out.flush();
+        main.in.close();
     }
 }

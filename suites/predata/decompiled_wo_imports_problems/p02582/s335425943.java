@@ -1,25 +1,24 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String nextLine = new Scanner(System.in).nextLine();
         int i = 0;
-        final int index = 0;
-        if (nextLine.charAt(index) == 'R') {
+        if (nextLine.charAt(0) == 'R') {
             ++i;
-            if (nextLine.charAt(index + 1) == 'R') {
+            if (nextLine.charAt(1) == 'R') {
                 ++i;
-                if (nextLine.charAt(index + 2) == 'R') {
+                if (nextLine.charAt(2) == 'R') {
                     ++i;
                 }
             }
         }
-        else if (nextLine.charAt(index + 1) == 'R') {
+        else if (nextLine.charAt(1) == 'R') {
             ++i;
-            if (nextLine.charAt(index + 2) == 'R') {
+            if (nextLine.charAt(2) == 'R') {
                 ++i;
             }
         }
-        else if (nextLine.charAt(index + 2) == 'R') {
+        else if (nextLine.charAt(2) == 'R') {
             ++i;
         }
         System.out.print(i);

@@ -1,116 +1,16 @@
-static class InputReader
+final class Main
 {
-    private final InputStream stream;
-    private final byte[] buf;
-    private int curChar;
-    private int snumChars;
-    
-    public InputReader(final InputStream stream) {
-        this.buf = new byte[8192];
-        this.stream = stream;
-    }
-    
-    public int read() {
-        if (this.snumChars == -1) {
-            throw new InputMismatchException();
-        }
-        if (this.curChar >= this.snumChars) {
-            this.curChar = 0;
-            try {
-                this.snumChars = this.stream.read(this.buf);
-            }
-            catch (final IOException ex) {
-                throw new InputMismatchException();
-            }
-            if (this.snumChars <= 0) {
-                return -1;
-            }
-        }
-        return this.buf[this.curChar++];
-    }
-    
-    public int nextInt() {
-        int n;
-        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
-        int n2 = 1;
-        if (n == 45) {
-            n2 = -1;
-            n = this.read();
-        }
-        int n3 = 0;
-        do {
-            n3 = n3 * 10 + (n - 48);
-            n = this.read();
-        } while (!this.isSpaceChar(n));
-        return n3 * n2;
-    }
-    
-    public long nextLong() {
-        int n;
-        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
-        int n2 = 1;
-        if (n == 45) {
-            n2 = -1;
-            n = this.read();
-        }
-        long n3 = 0L;
-        do {
-            n3 = n3 * 10L + (n - 48);
-            n = this.read();
-        } while (!this.isSpaceChar(n));
-        return n3 * n2;
-    }
-    
-    public int[] nextIntArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    public String readString() {
-        int codePoint;
-        for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
-        final StringBuilder sb = new StringBuilder();
-        do {
-            sb.appendCodePoint(codePoint);
-            codePoint = this.read();
-        } while (!this.isSpaceChar(codePoint));
-        return sb.toString();
-    }
-    
-    public String nextLine() {
-        int codePoint;
-        for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
-        final StringBuilder sb = new StringBuilder();
-        do {
-            sb.appendCodePoint(codePoint);
-            codePoint = this.read();
-        } while (!this.isEndOfLine(codePoint));
-        return sb.toString();
-    }
-    
-    public boolean isSpaceChar(final int n) {
-        return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
-    }
-    
-    private boolean isEndOfLine(final int n) {
-        return n == 10 || n == 13 || n == -1;
-    }
-}class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputReader inputReader = new InputReader(System.in);
         final PrintWriter printWriter = new PrintWriter(System.out);
         final Scanner scanner = new Scanner(System.in);
-        final int nextInt = inputReader.nextInt();
-        if (nextInt == 1) {
+        final int nextInt;
+        if ((nextInt = inputReader.nextInt()) == 1) {
             System.out.println("1");
         }
         else {
             int i;
-            for (i = 1; i <= nextInt; i *= 2) {}
+            for (i = 1; i <= nextInt; i <<= 1) {}
             if (i / 2 == nextInt) {
                 System.out.println(nextInt);
             }
@@ -122,7 +22,7 @@ static class InputReader
         scanner.close();
     }
     
-    static class InputReader
+    static final class InputReader
     {
         private final InputStream stream;
         private final byte[] buf;
@@ -134,7 +34,7 @@ static class InputReader
             this.stream = stream;
         }
         
-        public int read() {
+        private int read() {
             if (this.snumChars == -1) {
                 throw new InputMismatchException();
             }
@@ -153,9 +53,9 @@ static class InputReader
             return this.buf[this.curChar++];
         }
         
-        public int nextInt() {
+        public final int nextInt() {
             int n;
-            for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+            for (n = this.read(); isSpaceChar(n); n = this.read()) {}
             int n2 = 1;
             if (n == 45) {
                 n2 = -1;
@@ -164,14 +64,13 @@ static class InputReader
             int n3 = 0;
             do {
                 n3 = n3 * 10 + (n - 48);
-                n = this.read();
-            } while (!this.isSpaceChar(n));
+            } while (!isSpaceChar(n = this.read()));
             return n3 * n2;
         }
         
-        public long nextLong() {
+        private long nextLong() {
             int n;
-            for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+            for (n = this.read(); isSpaceChar(n); n = this.read()) {}
             int n2 = 1;
             if (n == 45) {
                 n2 = -1;
@@ -180,12 +79,11 @@ static class InputReader
             long n3 = 0L;
             do {
                 n3 = n3 * 10L + (n - 48);
-                n = this.read();
-            } while (!this.isSpaceChar(n));
+            } while (!isSpaceChar(n = this.read()));
             return n3 * n2;
         }
         
-        public int[] nextIntArray(final int n) {
+        private int[] nextIntArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
                 array[i] = this.nextInt();
@@ -193,33 +91,32 @@ static class InputReader
             return array;
         }
         
-        public String readString() {
+        private String readString() {
             int codePoint;
-            for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
+            for (codePoint = this.read(); isSpaceChar(codePoint); codePoint = this.read()) {}
             final StringBuilder sb = new StringBuilder();
             do {
                 sb.appendCodePoint(codePoint);
-                codePoint = this.read();
-            } while (!this.isSpaceChar(codePoint));
+            } while (!isSpaceChar(codePoint = this.read()));
             return sb.toString();
         }
         
-        public String nextLine() {
+        private String nextLine() {
             int codePoint;
-            for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
+            for (codePoint = this.read(); isSpaceChar(codePoint); codePoint = this.read()) {}
             final StringBuilder sb = new StringBuilder();
+            int n;
             do {
                 sb.appendCodePoint(codePoint);
-                codePoint = this.read();
-            } while (!this.isEndOfLine(codePoint));
+            } while ((n = (codePoint = this.read())) != 10 && n != 13 && n != -1);
             return sb.toString();
         }
         
-        public boolean isSpaceChar(final int n) {
+        private static boolean isSpaceChar(final int n) {
             return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
         }
         
-        private boolean isEndOfLine(final int n) {
+        private static boolean isEndOfLine(final int n) {
             return n == 10 || n == 13 || n == -1;
         }
     }

@@ -1,14 +1,14 @@
-public class Main
+public final class Main
 {
-    static final long MOD = 1000000007L;
-    public static String[] Ws;
-    public static int wsIndx;
-    public static BufferedReader in;
-    public static long cnt;
-    public static PrintWriter pw;
+    private static long MOD = 1000000007L;
+    private static String[] Ws;
+    private static int wsIndx;
+    private static BufferedReader in;
+    private static long cnt;
+    private static PrintWriter pw;
     
-    public static void main(final String[] array) throws Exception {
-        solutionC(array);
+    private static void main$3231c38a() throws Exception {
+        Main.pw.println(new BigDecimal(nextString()).multiply(new BigDecimal(nextString())).longValue());
         if (Main.in != null) {
             Main.in.close();
         }
@@ -16,19 +16,24 @@ public class Main
         Main.pw.close();
     }
     
-    public static void solutionA(final String[] array) throws Exception {
+    private static void solutionA$3231c38a() throws Exception {
         Main.pw.println(nextInt() * nextInt());
     }
     
-    public static void solutionB(final String[] array) throws Exception {
+    private static void solutionB$3231c38a() throws Exception {
         final int nextInt = nextInt();
-        final long[] nextLongs = nextLongs();
-        Arrays.sort(nextLongs);
-        long n = nextLongs[0];
-        for (int i = 1; i < nextInt; ++i) {
+        check();
+        final long[] a = new long[Main.Ws.length];
+        for (int i = 0; i < a.length; ++i) {
+            a[i] = Long.parseLong(Main.Ws[i]);
+        }
+        Main.wsIndx = Main.Ws.length;
+        Arrays.sort(a);
+        long n = a[0];
+        for (int j = 1; j < nextInt; ++j) {
             long multiplyExact;
             try {
-                multiplyExact = Math.multiplyExact(n, nextLongs[i]);
+                multiplyExact = Math.multiplyExact(n, a[j]);
             }
             catch (final Exception ex) {
                 Main.pw.println(-1);
@@ -43,14 +48,14 @@ public class Main
         Main.pw.println(n);
     }
     
-    public static void solutionC(final String[] array) throws Exception {
+    private static void solutionC$3231c38a() throws Exception {
         Main.pw.println(new BigDecimal(nextString()).multiply(new BigDecimal(nextString())).longValue());
     }
     
-    public static void solutionD(final String[] array) throws Exception {
+    private static void solutionD$3231c38a() throws Exception {
     }
     
-    public static void check() throws Exception {
+    private static void check() throws Exception {
         if (Main.in == null) {
             Main.in = new BufferedReader(new InputStreamReader(System.in));
         }
@@ -60,22 +65,22 @@ public class Main
         }
     }
     
-    public static int nextInt() throws Exception {
+    private static int nextInt() throws Exception {
         check();
         return Integer.parseInt(Main.Ws[Main.wsIndx++]);
     }
     
-    public static long nextLong() throws Exception {
+    private static long nextLong() throws Exception {
         check();
         return Long.parseLong(Main.Ws[Main.wsIndx++]);
     }
     
-    public static String nextString() throws Exception {
+    private static String nextString() throws Exception {
         check();
         return Main.Ws[Main.wsIndx++];
     }
     
-    public static int[] nextInts() throws Exception {
+    private static int[] nextInts() throws Exception {
         check();
         final int[] array = new int[Main.Ws.length];
         for (int i = 0; i < array.length; ++i) {
@@ -85,7 +90,7 @@ public class Main
         return array;
     }
     
-    public static long[] nextLongs() throws Exception {
+    private static long[] nextLongs() throws Exception {
         check();
         final long[] array = new long[Main.Ws.length];
         for (int i = 0; i < array.length; ++i) {
@@ -95,7 +100,7 @@ public class Main
         return array;
     }
     
-    public static String[] nextStrings() throws Exception {
+    private static String[] nextStrings() throws Exception {
         check();
         Main.wsIndx = Main.Ws.length;
         return Main.Ws;
@@ -105,7 +110,6 @@ public class Main
         Main.Ws = null;
         Main.wsIndx = 0;
         Main.in = null;
-        Main.cnt = 0L;
         Main.pw = new PrintWriter(System.out);
     }
 }

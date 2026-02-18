@@ -1,13 +1,30 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        test_ans();
+    private static void main$3231c38a() {
+        final String next;
+        final boolean b = (next = new Scanner(System.in).next()).charAt(0) == 'R';
+        final boolean b2 = next.charAt(1) == 'R';
+        final boolean b3 = next.charAt(2) == 'R';
+        int x;
+        if (b && b2 && b3) {
+            x = 3;
+        }
+        else if ((b && b2) || (b2 && b3)) {
+            x = 2;
+        }
+        else if (b || b2 || b3) {
+            x = 1;
+        }
+        else {
+            x = 0;
+        }
+        System.out.println(x);
     }
     
     private static void test_mine() {
-        final String next = new Scanner(System.in).next();
+        final String next;
         int x;
-        if (next.charAt(1) == 'S') {
+        if ((next = new Scanner(System.in).next()).charAt(1) == 'S') {
             if (next.charAt(0) == 'R' || next.charAt(2) == 'R') {
                 x = 1;
             }
@@ -38,8 +55,8 @@ public class Main
     }
     
     private static void test_ans() {
-        final String next = new Scanner(System.in).next();
-        final boolean b = next.charAt(0) == 'R';
+        final String next;
+        final boolean b = (next = new Scanner(System.in).next()).charAt(0) == 'R';
         final boolean b2 = next.charAt(1) == 'R';
         final boolean b3 = next.charAt(2) == 'R';
         int x;

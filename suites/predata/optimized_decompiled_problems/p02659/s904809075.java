@@ -29,9 +29,9 @@ public final class Main
     
     static final class CMultiplication3
     {
-        private static void solve$6080e082(InputReader inputReader, final PrintWriter printWriter) {
+        private static void solve$6080e082(final InputReader inputReader, final PrintWriter printWriter) {
             String s;
-            for (s = (inputReader = inputReader).readLine0(); s.trim().length() == 0; s = inputReader.readLine0()) {}
+            for (s = inputReader.readLine0(); s.trim().length() == 0; s = inputReader.readLine0()) {}
             final String[] split = s.split(" ");
             printWriter.println(String.valueOf(Long.parseLong(split[0]) * Long.parseLong(split[1].replaceAll("\\.", "")) / 100L));
         }
@@ -78,7 +78,7 @@ public final class Main
             return sb.toString();
         }
         
-        public final String readLine() {
+        private String readLine() {
             String s;
             for (s = this.readLine0(); s.trim().length() == 0; s = this.readLine0()) {}
             return s;

@@ -1,16 +1,16 @@
-class Main
+final class Main
 {
-    static final int MOD = 1000000007;
-    static final int INF = 1073741824;
+    private static int MOD = 1000000007;
+    private static int INF = 1073741824;
     
     Main() {
         Scanner scanner;
         int x;
-        for (scanner = new Scanner(System.in), x = 1; x * 2 <= scanner.nextInt(); x *= 2) {}
+        for (scanner = new Scanner(System.in), x = 1; x << 1 <= scanner.nextInt(); x <<= 1) {}
         System.out.println(x);
     }
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         new Main();
     }
 }

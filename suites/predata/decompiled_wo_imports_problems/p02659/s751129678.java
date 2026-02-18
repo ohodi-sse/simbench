@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static final int MOD = 1000000007;
+    private static int MOD = 1000000007;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         System.out.println(new BigDecimal(Long.parseLong(scanner.next())).multiply(new BigDecimal(scanner.next())).setScale(0, RoundingMode.DOWN));
     }

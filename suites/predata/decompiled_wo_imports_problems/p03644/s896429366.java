@@ -1,10 +1,10 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         try (final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in))) {
             int int1;
             int i;
-            for (int1 = Integer.parseInt(bufferedReader.readLine()), i = 1; i < int1; i *= 2) {}
+            for (int1 = Integer.parseInt(bufferedReader.readLine()), i = 1; i < int1; i <<= 1) {}
             if (i > int1) {
                 i /= 2;
             }

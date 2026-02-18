@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final HashMap hashMap = new HashMap();
         for (int i = 1; i <= nextInt2; ++i) {
@@ -10,17 +10,15 @@ public class Main
         }
         if (nextInt2 == 0) {
             System.out.println(nextInt);
+            return;
         }
-        else {
-            int x;
-            int n;
-            for (x = nextInt, n = nextInt; hashMap.containsKey(x) && hashMap.containsKey(n); --x, ++n) {}
-            if (!hashMap.containsKey(x)) {
-                System.out.println(x);
-            }
-            else {
-                System.out.println(n);
-            }
+        int x;
+        int n;
+        for (x = nextInt, n = nextInt; hashMap.containsKey(x) && hashMap.containsKey(n); --x, ++n) {}
+        if (!hashMap.containsKey(x)) {
+            System.out.println(x);
+            return;
         }
+        System.out.println(n);
     }
 }

@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final int nextInt = new Scanner(System.in).nextInt();
-        if (nextInt == 1) {
+    private static void main$3231c38a() {
+        final int nextInt;
+        if ((nextInt = new Scanner(System.in).nextInt()) == 1) {
             System.out.println(1);
             System.exit(0);
         }
@@ -18,8 +18,10 @@ public class Main
         }
         int intValue = 0;
         int intValue2 = 0;
-        for (final Map.Entry entry : hashMap.entrySet()) {
-            if ((int)entry.getValue() > intValue2) {
+        final Iterator iterator = hashMap.entrySet().iterator();
+        while (iterator.hasNext()) {
+            final Map.Entry entry;
+            if ((int)(entry = (Map.Entry)iterator.next()).getValue() > intValue2) {
                 intValue2 = (int)entry.getValue();
                 intValue = (int)entry.getKey();
             }

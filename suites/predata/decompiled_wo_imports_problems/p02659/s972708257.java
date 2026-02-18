@@ -1,14 +1,14 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final Long value = scanner.nextLong();
-        if (value == 0L) {
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final Long value;
+        if ((value = (scanner = new Scanner(System.in)).nextLong()) == 0L) {
             System.out.println("0");
             return;
         }
-        final Long value2 = value * Long.valueOf(scanner.next().replace(".", ""));
-        if (value2 < 100L) {
+        final Long value2;
+        if ((value2 = value * Long.valueOf(scanner.next().replace(".", ""))) < 100L) {
             System.out.println("0");
             return;
         }

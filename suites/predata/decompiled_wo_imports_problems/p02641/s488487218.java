@@ -1,31 +1,31 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() throws Exception {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
-        final Boolean[] array2 = new Boolean[102];
+        final Boolean[] array = new Boolean[102];
         for (int i = 0; i < 102; ++i) {
-            array2[i] = true;
+            array[i] = Boolean.TRUE;
         }
         for (int j = 0; j < nextInt2; ++j) {
-            array2[scanner.nextInt()] = false;
+            array[scanner.nextInt()] = Boolean.FALSE;
         }
         int n = nextInt;
         int n2 = nextInt;
         int n3 = 0;
         int x = nextInt;
-        while (!array2[nextInt]) {
+        while (!array[nextInt]) {
             if (n3 % 2 == 0) {
                 --n2;
-                if (array2[n2]) {
+                if (array[n2]) {
                     x = n2;
                     break;
                 }
             }
             if (n3 % 2 != 0) {
                 ++n;
-                if (array2[n]) {
+                if (array[n]) {
                     x = n;
                     break;
                 }

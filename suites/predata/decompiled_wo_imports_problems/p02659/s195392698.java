@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        System.out.println(scanner.nextLong() * (int)(scanner.nextDouble() * 100.0 + 0.05) / 100L);
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        System.out.println((scanner = new Scanner(System.in)).nextLong() * (int)(scanner.nextDouble() * 100.0 + 0.05) / 100L);
         scanner.close();
     }
 }

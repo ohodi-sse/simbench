@@ -1,14 +1,13 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
-        final char c = 'R';
         int x = 0;
         for (int i = 0; i < next.length(); ++i) {
-            if (x == 0 && next.charAt(i) == c) {
+            if (x == 0 && next.charAt(i) == 'R') {
                 x = 1;
             }
-            if (next.charAt(i) == c && i > 0 && next.charAt(i - 1) == c) {
+            if (next.charAt(i) == 'R' && i > 0 && next.charAt(i - 1) == 'R') {
                 ++x;
             }
         }

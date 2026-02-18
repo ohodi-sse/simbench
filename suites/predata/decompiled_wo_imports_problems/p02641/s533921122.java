@@ -1,56 +1,53 @@
-static class ForbiddenList
+public final class Main
 {
-    public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        if (nextInt2 == 0) {
-            printWriter.append(String.valueOf(nextInt));
-            return;
-        }
-        final boolean[] array = new boolean[101];
-        for (int i = 0; i < nextInt2; ++i) {
-            array[scanner.nextInt()] = true;
-        }
-        int n2 = 0;
-        while (true) {
-            final int n3 = nextInt - n2;
-            if (0 <= n3 && n3 <= 100 && !array[n3]) {
-                printWriter.append(String.valueOf(n3));
-                return;
-            }
-            final int n4 = nextInt + n2;
-            if (0 <= n4 && n4 <= 100 && !array[n4]) {
-                printWriter.append(String.valueOf(n4));
-                return;
-            }
-            if (n3 <= 0) {
-                printWriter.append(String.valueOf(n3));
-                return;
-            }
-            if (100 < n4) {
-                printWriter.append(String.valueOf(n4));
-                return;
-            }
-            ++n2;
-        }
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final Scanner scanner = new Scanner(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new ForbiddenList().solve(1, scanner, printWriter);
+        new ForbiddenList();
+        final Scanner scanner2 = scanner;
+        final PrintWriter printWriter2 = printWriter;
+        final Scanner scanner3 = scanner2;
+        final int nextInt = scanner2.nextInt();
+        Label_0214: {
+            final int nextInt2;
+            if ((nextInt2 = scanner3.nextInt()) == 0) {
+                printWriter2.append(String.valueOf(nextInt));
+            }
+            else {
+                final boolean[] array = new boolean[101];
+                for (int i = 0; i < nextInt2; ++i) {
+                    array[scanner3.nextInt()] = true;
+                }
+                int n2;
+                for (int n = 0; (n2 = nextInt - n) < 0 || n2 > 100 || array[n2]; ++n) {
+                    final int n3;
+                    if ((n3 = nextInt + n) >= 0 && n3 <= 100 && !array[n3]) {
+                        printWriter2.append(String.valueOf(n3));
+                        break Label_0214;
+                    }
+                    if (n2 <= 0) {
+                        printWriter2.append(String.valueOf(n2));
+                        break Label_0214;
+                    }
+                    if (100 < n3) {
+                        printWriter2.append(String.valueOf(n3));
+                        break Label_0214;
+                    }
+                }
+                printWriter2.append(String.valueOf(n2));
+            }
+        }
         printWriter.close();
     }
     
-    static class ForbiddenList
+    static final class ForbiddenList
     {
-        public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
+        private static void solve$32964a28(final Scanner scanner, final PrintWriter printWriter) {
             final int nextInt = scanner.nextInt();
-            final int nextInt2 = scanner.nextInt();
-            if (nextInt2 == 0) {
+            final int nextInt2;
+            if ((nextInt2 = scanner.nextInt()) == 0) {
                 printWriter.append(String.valueOf(nextInt));
                 return;
             }
@@ -58,28 +55,23 @@ static class ForbiddenList
             for (int i = 0; i < nextInt2; ++i) {
                 array[scanner.nextInt()] = true;
             }
-            int n2 = 0;
-            while (true) {
-                final int n3 = nextInt - n2;
-                if (0 <= n3 && n3 <= 100 && !array[n3]) {
+            int n2;
+            for (int n = 0; (n2 = nextInt - n) < 0 || n2 > 100 || array[n2]; ++n) {
+                final int n3;
+                if ((n3 = nextInt + n) >= 0 && n3 <= 100 && !array[n3]) {
                     printWriter.append(String.valueOf(n3));
                     return;
                 }
-                final int n4 = nextInt + n2;
-                if (0 <= n4 && n4 <= 100 && !array[n4]) {
-                    printWriter.append(String.valueOf(n4));
+                if (n2 <= 0) {
+                    printWriter.append(String.valueOf(n2));
                     return;
                 }
-                if (n3 <= 0) {
+                if (100 < n3) {
                     printWriter.append(String.valueOf(n3));
                     return;
                 }
-                if (100 < n4) {
-                    printWriter.append(String.valueOf(n4));
-                    return;
-                }
-                ++n2;
             }
+            printWriter.append(String.valueOf(n2));
         }
     }
 }

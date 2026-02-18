@@ -96,7 +96,7 @@ public final class Main
             return this.buf[this.curChar++];
         }
         
-        public final String readString() {
+        private String readString() {
             final StringBuilder sb = new StringBuilder();
             int n;
             for (n = this.read(); isSpaceChar(n); n = this.read()) {}
@@ -106,7 +106,7 @@ public final class Main
             return sb.toString();
         }
         
-        public final long readLong() {
+        private long readLong() {
             int n;
             for (n = this.read(); isSpaceChar(n); n = this.read()) {}
             int n2 = 1;

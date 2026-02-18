@@ -1,50 +1,31 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastReader(final InputStream in) {
-        this.br = new BufferedReader(new InputStreamReader(in), 32768);
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final FastReader fastReader = new FastReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new Solution().solve(1, fastReader, printWriter);
+        new Solution();
+        final FastReader fastReader2 = fastReader;
+        final PrintWriter printWriter2 = printWriter;
+        final String next = fastReader2.next();
+        int i = 0;
+        if (next.contains("RRR")) {
+            i = 3;
+        }
+        else if (next.contains("RR")) {
+            i = 2;
+        }
+        else if (next.contains("R")) {
+            i = 1;
+        }
+        printWriter2.print(i);
         printWriter.close();
     }
     
-    static class Solution
+    static final class Solution
     {
-        public void solve(final int n, final FastReader fastReader, final PrintWriter printWriter) {
+        private static void solve$3c455bd4(final FastReader fastReader, final PrintWriter printWriter) {
             final String next = fastReader.next();
             int i = 0;
             if (next.contains("RRR")) {
@@ -60,16 +41,16 @@ static class FastReader
         }
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader(final InputStream in) {
             this.br = new BufferedReader(new InputStreamReader(in), 32768);
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -86,28 +67,12 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
-    }
-}static class Solution
-{
-    public void solve(final int n, final FastReader fastReader, final PrintWriter printWriter) {
-        final String next = fastReader.next();
-        int i = 0;
-        if (next.contains("RRR")) {
-            i = 3;
-        }
-        else if (next.contains("RR")) {
-            i = 2;
-        }
-        else if (next.contains("R")) {
-            i = 1;
-        }
-        printWriter.print(i);
     }
 }

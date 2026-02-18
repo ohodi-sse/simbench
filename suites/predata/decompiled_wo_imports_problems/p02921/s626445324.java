@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
-        final Scanner scanner = new Scanner(System.in);
-        final char[] charArray = scanner.nextLine().toCharArray();
+    private static void main$3231c38a() throws Exception {
+        final Scanner scanner;
+        final char[] charArray = (scanner = new Scanner(System.in)).nextLine().toCharArray();
         final char[] charArray2 = scanner.nextLine().toCharArray();
         int i = 0;
         for (int j = 0; j < 3; ++j) {

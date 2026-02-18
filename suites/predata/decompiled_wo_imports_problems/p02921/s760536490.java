@@ -1,15 +1,21 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         int x = 0;
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         final String next2 = scanner.next();
         final ArrayList list = new ArrayList();
         final ArrayList list2 = new ArrayList();
         for (int i = 0; i < 3; ++i) {
-            list.add(next.substring(i, i + 1));
-            list2.add(next2.substring(i, i + 1));
+            final ArrayList list3 = list;
+            final String s = next;
+            final int beginIndex = i;
+            list3.add(s.substring(beginIndex, beginIndex + 1));
+            final ArrayList list4 = list2;
+            final String s2 = next2;
+            final int beginIndex2 = i;
+            list4.add(s2.substring(beginIndex2, beginIndex2 + 1));
         }
         for (int j = 0; j < list.size(); ++j) {
             if (((String)list.get(j)).equals(list2.get(j))) {

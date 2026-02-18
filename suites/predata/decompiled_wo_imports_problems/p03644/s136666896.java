@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int int1 = Integer.parseInt(scanner.next());
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        int i = Integer.parseInt((scanner = new Scanner(System.in)).next());
         int n = 0;
         int x = 0;
-        for (int i = int1; i >= 1; --i) {
+        while (i > 0) {
             int n2 = i;
             int n3 = 0;
             while (n2 % 2 == 0) {
@@ -16,6 +16,7 @@ public class Main
                 x = i;
                 n = n3;
             }
+            --i;
         }
         System.out.println(x);
         scanner.close();

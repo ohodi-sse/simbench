@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         final PrintWriter printWriter = new PrintWriter(System.out);
-        final int int1 = Integer.parseInt(scanner.next());
+        final int int1;
         int x;
-        if (int1 == 1) {
+        if ((int1 = Integer.parseInt(scanner.next())) == 1) {
             x = 1;
         }
         else if (int1 < 4) {

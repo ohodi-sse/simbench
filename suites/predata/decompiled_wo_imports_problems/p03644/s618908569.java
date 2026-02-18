@@ -1,23 +1,22 @@
-public class Main
+public final class Main
 {
-    public static PrintWriter out;
+    private static PrintWriter out;
     
-    public static void main(final String[] array) {
-        run();
-    }
-    
-    private static void run() {
+    private static void main$3231c38a() {
         Main.out = new PrintWriter(new BufferedOutputStream(System.out));
-        final Scanner scanner = new Scanner(System.in);
-        final int int1 = Integer.parseInt(scanner.next());
+        final Scanner scanner;
+        final int int1 = Integer.parseInt((scanner = new Scanner(System.in)).next());
         int x = 1;
         int i = 1;
         int n = 0;
         while (i <= int1) {
-            final int countOfDividedByTwo = countOfDividedByTwo(i);
-            if (n < countOfDividedByTwo) {
+            int n2;
+            int n3;
+            for (n2 = i, n3 = 0; n2 % 2 == 0; n2 /= 2, ++n3) {}
+            final int n4 = n3;
+            if (n < n4) {
                 x = i;
-                n = countOfDividedByTwo;
+                n = n4;
             }
             ++i;
         }
@@ -26,9 +25,32 @@ public class Main
         scanner.close();
     }
     
-    private static int countOfDividedByTwo(final int n) {
-        int n2 = 0;
-        for (int n3 = n; n3 % 2 == 0; n3 /= 2, ++n2) {}
+    private static void run() {
+        Main.out = new PrintWriter(new BufferedOutputStream(System.out));
+        final Scanner scanner;
+        final int int1 = Integer.parseInt((scanner = new Scanner(System.in)).next());
+        int x = 1;
+        int i = 1;
+        int n = 0;
+        while (i <= int1) {
+            int n2;
+            int n3;
+            for (n2 = i, n3 = 0; n2 % 2 == 0; n2 /= 2, ++n3) {}
+            final int n4 = n3;
+            if (n < n4) {
+                x = i;
+                n = n4;
+            }
+            ++i;
+        }
+        Main.out.println(x);
+        Main.out.close();
+        scanner.close();
+    }
+    
+    private static int countOfDividedByTwo(int n) {
+        int n2;
+        for (n2 = 0; n % 2 == 0; n /= 2, ++n2) {}
         return n2;
     }
 }

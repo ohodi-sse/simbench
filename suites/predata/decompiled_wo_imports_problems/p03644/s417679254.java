@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final int nextInt = new Scanner(System.in).nextInt();
-        final int[] a = new int[nextInt];
+    private static void main$3231c38a() {
+        final int nextInt;
+        final int[] a = new int[nextInt = new Scanner(System.in).nextInt()];
         int x = 0;
         for (int i = 1; i < nextInt; ++i) {
             a[i - 1] = i;

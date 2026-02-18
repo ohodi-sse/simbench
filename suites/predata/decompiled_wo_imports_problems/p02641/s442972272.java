@@ -1,20 +1,20 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
-        final int[] array2 = new int[1000];
+        final int[] array = new int[1000];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[scanner.nextInt()] = 1;
+            array[scanner.nextInt()] = 1;
         }
         int x = 0;
         for (int j = 0; j < 101; ++j) {
-            if (array2[nextInt - j] != 1) {
+            if (array[nextInt - j] != 1) {
                 x = nextInt - j;
                 break;
             }
-            if (array2[nextInt + j] != 1) {
+            if (array[nextInt + j] != 1) {
                 x = nextInt + j;
                 break;
             }

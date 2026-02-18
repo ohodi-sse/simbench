@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        final int length = next.length();
+    private static void main$3231c38a() {
+        final String next;
+        final int length = (next = new Scanner(System.in).next()).length();
         int n = 0;
         int x = 0;
         final char[] charArray = next.toCharArray();

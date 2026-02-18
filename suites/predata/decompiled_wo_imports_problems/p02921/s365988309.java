@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final Scanner scanner = new Scanner();
         final PrintWriter printWriter = new PrintWriter(System.out);
         final char[] charArray = scanner.next().toCharArray();
@@ -16,91 +16,48 @@ public class Main
         printWriter.close();
     }
     
-    static class Scanner
+    static final class Scanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         Scanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() throws IOException {
+        final String next() throws IOException {
             while (this.st == null || !this.st.hasMoreTokens()) {
                 this.st = new StringTokenizer(this.br.readLine());
             }
             return this.st.nextToken();
         }
         
-        int nextInt() throws IOException {
+        private int nextInt() throws IOException {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() throws IOException {
+        private long nextLong() throws IOException {
             return Long.parseLong(this.next());
         }
         
-        Integer[] nextIntegerArray(final int n) throws IOException {
+        private Integer[] nextIntegerArray(final int n) throws IOException {
             final Integer[] array = new Integer[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        double nextDouble() throws IOException {
+        private double nextDouble() throws IOException {
             return Double.parseDouble(this.next());
         }
         
-        int[] nextIntArray(final int n) throws IOException {
+        private int[] nextIntArray(final int n) throws IOException {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt() - 1;
+                array[i] = Integer.parseInt(this.next()) - 1;
             }
             return array;
         }
-    }
-}static class Scanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    Scanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() throws IOException {
-        while (this.st == null || !this.st.hasMoreTokens()) {
-            this.st = new StringTokenizer(this.br.readLine());
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() throws IOException {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() throws IOException {
-        return Long.parseLong(this.next());
-    }
-    
-    Integer[] nextIntegerArray(final int n) throws IOException {
-        final Integer[] array = new Integer[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    double nextDouble() throws IOException {
-        return Double.parseDouble(this.next());
-    }
-    
-    int[] nextIntArray(final int n) throws IOException {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt() - 1;
-        }
-        return array;
     }
 }

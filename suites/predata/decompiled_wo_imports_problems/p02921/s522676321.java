@@ -1,13 +1,13 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) throws Exception {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() throws Exception {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         final String next2 = scanner.next();
         int i = 0;
         for (int j = 0; j < next.length(); ++j) {
-            final int index = j;
-            if (index < next2.length() && next.charAt(j) == next2.charAt(index)) {
+            final int index;
+            if ((index = j) < next2.length() && next.charAt(j) == next2.charAt(index)) {
                 ++i;
             }
         }

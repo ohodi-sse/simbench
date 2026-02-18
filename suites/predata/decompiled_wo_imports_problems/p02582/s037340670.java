@@ -1,9 +1,9 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
-        final char[] charArray = next.toCharArray();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next;
+        final char[] charArray = (next = (scanner = new Scanner(System.in)).next()).toCharArray();
         final int length = next.length();
         int x = 1;
         for (int i = 0; i < length - 1; ++i) {

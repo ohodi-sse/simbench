@@ -1,15 +1,15 @@
-class Main
+final class Main
 {
-    static final Scanner s;
+    private static Scanner s;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         int nextInt;
         int x;
-        for (nextInt = Main.s.nextInt(), x = 1; x * 2 <= nextInt; x *= 2) {}
+        for (nextInt = Main.s.nextInt(), x = 1; x << 1 <= nextInt; x <<= 1) {}
         System.out.println(x);
     }
     
     static {
-        s = new Scanner(System.in);
+        Main.s = new Scanner(System.in);
     }
 }

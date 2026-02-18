@@ -1,74 +1,25 @@
-static class FastReader
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-        Main.out = new PrintWriter(System.out, true);
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
+public final class Main
 {
     static PrintWriter out;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final FastReader fastReader = new FastReader();
         final StringBuilder x = new StringBuilder();
         int n = 1;
         while (n-- > 0) {
-            final int nextInt = fastReader.nextInt();
-            final int nextInt2 = fastReader.nextInt();
-            final int[] array2 = new int[nextInt2];
+            final int int1 = Integer.parseInt(fastReader.next());
+            final int int2;
+            final int[] array = new int[int2 = Integer.parseInt(fastReader.next())];
             final HashSet<Integer> set = new HashSet<Integer>();
-            for (int i = 0; i < nextInt2; ++i) {
-                array2[i] = fastReader.nextInt();
-                set.add(array2[i]);
+            for (int i = 0; i < int2; ++i) {
+                array[i] = Integer.parseInt(fastReader.next());
+                set.add(array[i]);
             }
-            int j = nextInt;
+            int j = int1;
             int n2 = Integer.MAX_VALUE;
-            int k = nextInt;
+            int k = int1;
             while (true) {
-                final int n3 = nextInt - j;
+                final int n3 = int1 - j;
                 if (!set.contains(j) && n3 < n2) {
                     n2 = n3;
                     k = j;
@@ -78,9 +29,9 @@ static class FastReader
                 }
                 --j;
             }
-            int l = nextInt;
+            int l = int1;
             while (true) {
-                final int n4 = l - nextInt;
+                final int n4 = l - int1;
                 if (!set.contains(l) && n4 < n2) {
                     n2 = n4;
                     k = l;
@@ -92,11 +43,12 @@ static class FastReader
             }
             x.append(k).append('\n');
         }
-        x.deleteCharAt(x.length() - 1);
+        final StringBuilder sb = x;
+        sb.deleteCharAt(sb.length() - 1);
         Main.out.println(x);
     }
     
-    public static boolean isPrime(final int n) {
+    private static boolean isPrime(final int n) {
         if (n < 2) {
             return false;
         }
@@ -108,14 +60,15 @@ static class FastReader
         return true;
     }
     
-    public static void print(final int[] array, final int n, final int n2) {
-        for (int i = n; i <= n2; ++i) {
+    private static void print(final int[] array, int i, final int n) {
+        while (i <= n) {
             Main.out.print("" + array[i]);
+            ++i;
         }
         Main.out.println();
     }
     
-    public static long fastexpo(long n, long n2, final long n3) {
+    private static long fastexpo(long n, long n2, final long n3) {
         long n4 = 1L;
         while (n2 > 0L) {
             if ((n2 & 0x1L) == 0x1L) {
@@ -127,81 +80,126 @@ static class FastReader
         return n4;
     }
     
-    public static boolean[] sieve(final int n) {
-        final boolean[] a = new boolean[n + 1];
-        Arrays.fill(a, true);
-        a[0] = (a[1] = false);
-        for (int n2 = 2; n2 * n2 <= n; ++n2) {
-            if (a[n2]) {
-                for (int i = n2 * n2; i <= n; i += n2) {
-                    a[i] = false;
+    private static boolean[] sieve(final int n) {
+        final boolean[] array;
+        Arrays.fill(array = new boolean[n + 1], true);
+        array[0] = (array[1] = false);
+        int n2 = 2;
+        while (true) {
+            final int n3 = n2;
+            if (n3 * n3 > n) {
+                break;
+            }
+            if (array[n2]) {
+                final int n4 = n2;
+                for (int i = n4 * n4; i <= n; i += n2) {
+                    array[i] = false;
                 }
             }
+            ++n2;
         }
-        return a;
+        return array;
     }
     
-    public static long gcd(final long val, final long val2) {
+    private static long gcd(final long val, final long val2) {
         return BigInteger.valueOf(val).gcd(BigInteger.valueOf(val2)).longValue();
     }
     
-    public static void merge(final long[] array, final int n, final int n2, final int n3) {
+    private static void merge(final long[] array, int n, final int n2, int n3) {
         final int n4 = n2 - n + 1;
-        final int n5 = n3 - n2;
+        n3 -= n2;
         final long[] array2 = new long[n4];
-        final long[] array3 = new long[n5];
+        final long[] array3 = new long[n3];
         for (int i = 0; i < n4; ++i) {
             array2[i] = array[n + i];
         }
-        for (int j = 0; j < n5; ++j) {
+        for (int j = 0; j < n3; ++j) {
             array3[j] = array[n2 + 1 + j];
         }
         int k = 0;
         int l = 0;
-        int n6 = n;
-        while (k < n4 && l < n5) {
+        while (k < n4 && l < n3) {
             if (array2[k] <= array3[l]) {
-                array[n6] = array2[k];
+                array[n] = array2[k];
                 ++k;
             }
             else {
-                array[n6] = array3[l];
+                array[n] = array3[l];
                 ++l;
             }
-            ++n6;
+            ++n;
         }
         while (k < n4) {
-            array[n6] = array2[k];
+            array[n] = array2[k];
             ++k;
-            ++n6;
+            ++n;
         }
-        while (l < n5) {
-            array[n6] = array3[l];
+        while (l < n3) {
+            array[n] = array3[l];
             ++l;
-            ++n6;
+            ++n;
         }
     }
     
-    public static void sort(final long[] array, final int n, final int n2) {
+    private static void sort(long[] array, int n, int n2) {
         if (n < n2) {
             final int n3 = (n + n2) / 2;
             sort(array, n, n3);
             sort(array, n3 + 1, n2);
-            merge(array, n, n3, n2);
+            final long[] array2 = array;
+            final int n4 = n;
+            final int n5 = n3;
+            final int n6 = n2;
+            n2 = n5;
+            n = n4;
+            array = array2;
+            final int n7 = n2 - n + 1;
+            final int n8 = n6 - n2;
+            final long[] array3 = new long[n7];
+            final long[] array4 = new long[n8];
+            for (int i = 0; i < n7; ++i) {
+                array3[i] = array[n + i];
+            }
+            for (int j = 0; j < n8; ++j) {
+                array4[j] = array[n2 + 1 + j];
+            }
+            int k = 0;
+            int l = 0;
+            while (k < n7 && l < n8) {
+                if (array3[k] <= array4[l]) {
+                    array[n] = array3[k];
+                    ++k;
+                }
+                else {
+                    array[n] = array4[l];
+                    ++l;
+                }
+                ++n;
+            }
+            while (k < n7) {
+                array[n] = array3[k];
+                ++k;
+                ++n;
+            }
+            while (l < n8) {
+                array[n] = array4[l];
+                ++l;
+                ++n;
+            }
         }
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
             Main.out = new PrintWriter(System.out, true);
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -218,19 +216,19 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

@@ -1,13 +1,27 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final FastScanner fastScanner = new FastScanner();
         final PrintWriter printWriter = new PrintWriter(System.out);
-        solve(fastScanner, printWriter);
+        final FastScanner fastScanner2 = fastScanner;
+        final PrintWriter printWriter2 = printWriter;
+        final String next = fastScanner2.next();
+        int n = 0;
+        int max = 0;
+        for (int i = 0; i < next.length(); ++i) {
+            if (next.charAt(i) == 'R') {
+                ++n;
+            }
+            else {
+                max = Math.max(n, max);
+                n = 0;
+            }
+        }
+        printWriter2.println(Math.max(n, max));
         printWriter.close();
     }
     
-    static void solve(final FastScanner fastScanner, final PrintWriter printWriter) {
+    private static void solve(final FastScanner fastScanner, final PrintWriter printWriter) {
         final String next = fastScanner.next();
         int n = 0;
         int max = 0;
@@ -23,7 +37,7 @@ public class Main
         printWriter.println(Math.max(n, max));
     }
     
-    static void sort(final int[] array) {
+    private static void sort(final int[] array) {
         final ArrayList list = new ArrayList();
         for (int length = array.length, i = 0; i < length; ++i) {
             list.add(array[i]);
@@ -34,17 +48,17 @@ public class Main
         }
     }
     
-    static class FastScanner
+    static final class FastScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         FastScanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
             this.st = new StringTokenizer("");
         }
         
-        String next() {
+        final String next() {
             while (!this.st.hasMoreTokens()) {
                 try {
                     this.st = new StringTokenizer(this.br.readLine());
@@ -56,57 +70,20 @@ public class Main
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        int[] readArray(final int n) {
+        private int[] readArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
-    }
-}static class FastScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    FastScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-        this.st = new StringTokenizer("");
-    }
-    
-    String next() {
-        while (!this.st.hasMoreTokens()) {
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    int[] readArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
     }
 }

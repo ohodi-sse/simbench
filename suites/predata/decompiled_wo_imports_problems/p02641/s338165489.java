@@ -1,22 +1,13 @@
-class Pair
+final class Main
 {
-    long a;
-    long b;
+    private static boolean[] visited;
+    private static long[][][] dp;
+    private static long MOD;
+    private static Hashtable<String, Long> hash;
     
-    Pair(final long a, final long b) {
-        this.a = a;
-        this.b = b;
-    }
-}class Main
-{
-    static boolean[] visited;
-    static long[][][] dp;
-    static long MOD;
-    static Hashtable<String, Long> hash;
-    
-    public static void main(final String[] array) throws Exception {
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        final String[] split = bufferedReader.readLine().split(" ");
+    private static void main$3231c38a() throws Exception {
+        final BufferedReader bufferedReader;
+        final String[] split = (bufferedReader = new BufferedReader(new InputStreamReader(System.in))).readLine().split(" ");
         String[] split2 = new String[0];
         if (Integer.parseInt(split[1]) != 0) {
             split2 = bufferedReader.readLine().split(" ");
@@ -37,24 +28,31 @@ class Pair
         System.out.println(x);
     }
     
-    static long get(final long n, final String s, final long[] array, final int index, final int n2, final int n3) {
-        if (index == s.length()) {
-            return (n == 0L) ? 1L : 2L;
+    private static long get$5622c30f(final long n, final String s, final int n2) {
+        if (n2 != s.length()) {
+            throw new NullPointerException();
         }
-        if (Main.dp[index][n2][n3] != 0L) {
-            return Main.dp[index][n2][n3];
+        if (n == 0L) {
+            return 1L;
         }
-        if (s.charAt(index) == '1') {
-            Main.dp[index][n2][n3] = Math.max(get(n ^ array[index], s, array, index + 1, n2, n3 + 1), get(n, s, array, index + 1, n2, n3));
-        }
-        else {
-            Main.dp[index][n2][n3] = Math.min(get(n ^ array[index], s, array, index + 1, n2 + 1, n3), get(n, s, array, index + 1, n2, n3));
-        }
-        return Main.dp[index][n2][n3];
+        return 2L;
     }
     
     static {
-        Main.MOD = 1000000007L;
-        Main.hash = new Hashtable<String, Long>();
+        new Hashtable();
+    }
+}
+
+
+
+
+final class Pair
+{
+    private long a;
+    private long b;
+    
+    private Pair(final long a, final long b) {
+        this.a = a;
+        this.b = b;
     }
 }

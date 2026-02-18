@@ -1,21 +1,34 @@
-public class Main extends Reader
+public final class Main extends Reader
 {
-    int x;
-    int n;
-    int[] a;
+    private int x;
+    private int n;
+    private int[] a;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Main main = new Main();
-        main.show(main.solve());
+        int x = 0;
+        int x2 = main.x;
+        final int[] array = new int[102];
+        for (int i = 0; i < main.n; ++i) {
+            array[main.a[i]] = 1;
+        }
+        for (int j = 0; j <= 101; ++j) {
+            final int abs;
+            if (array[j] == 0 && (abs = Math.abs(j - main.x)) < x2) {
+                x2 = abs;
+                x = j;
+            }
+        }
+        System.out.println(x);
     }
     
     public Main() {
-        this.x = this.ini();
-        this.n = this.ini();
-        this.a = this.vi();
+        this.x = super.ini();
+        this.n = super.ini();
+        this.a = super.vi(this.n);
     }
     
-    int solve() {
+    private int solve() {
         int n = 0;
         int x = this.x;
         final int[] array = new int[102];
@@ -23,31 +36,37 @@ public class Main extends Reader
             array[this.a[i]] = 1;
         }
         for (int j = 0; j <= 101; ++j) {
-            if (array[j] == 0) {
-                final int abs = Math.abs(j - this.x);
-                if (abs < x) {
-                    x = abs;
-                    n = j;
-                }
+            final int abs;
+            if (array[j] == 0 && (abs = Math.abs(j - this.x)) < x) {
+                x = abs;
+                n = j;
             }
         }
         return n;
     }
     
-    int calc(final int n, final int n2) {
-        int n3 = 0;
-        for (int i = n; i <= n2; ++i) {
-            n3 += i;
+    private static int calc(int i, final int n) {
+        int n2 = 0;
+        while (i <= n) {
+            n2 += i;
+            ++i;
         }
-        return n3;
+        return n2;
     }
     
-    void show(final int x) {
+    private static void show(final int x) {
         System.out.println(x);
     }
-}class Reader
+}
+
+
+
+
+
+
+class Reader
 {
-    Scanner sc;
+    private Scanner sc;
     
     Reader() {
         this.sc = new Scanner(System.in);

@@ -1,18 +1,19 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String nextLine = new Scanner(System.in).nextLine();
-        if (nextLine.charAt(0) == 'R' && nextLine.charAt(1) == 'R' && nextLine.charAt(2) == 'R') {
+    private static void main$3231c38a() {
+        final String nextLine;
+        if ((nextLine = new Scanner(System.in).nextLine()).charAt(0) == 'R' && nextLine.charAt(1) == 'R' && nextLine.charAt(2) == 'R') {
             System.out.println("3");
+            return;
         }
-        else if ((nextLine.charAt(0) == 'R' && nextLine.charAt(1) == 'R') || (nextLine.charAt(1) == 'R' && nextLine.charAt(2) == 'R')) {
+        if ((nextLine.charAt(0) == 'R' && nextLine.charAt(1) == 'R') || (nextLine.charAt(1) == 'R' && nextLine.charAt(2) == 'R')) {
             System.out.println("2");
+            return;
         }
-        else if (nextLine.charAt(0) == 'S' && nextLine.charAt(1) == 'S' && nextLine.charAt(2) == 'S') {
+        if (nextLine.charAt(0) == 'S' && nextLine.charAt(1) == 'S' && nextLine.charAt(2) == 'S') {
             System.out.println("0");
+            return;
         }
-        else {
-            System.out.println("1");
-        }
+        System.out.println("1");
     }
 }

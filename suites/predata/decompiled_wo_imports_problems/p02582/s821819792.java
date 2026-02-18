@@ -1,67 +1,15 @@
-static class AnotherReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
+    private static AnotherReader sc;
+    private static PrintWriter out;
+    private static boolean multipleTC;
     
-    AnotherReader() throws FileNotFoundException {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    AnotherReader(final int n) throws FileNotFoundException {
-        this.br = new BufferedReader(new FileReader("input.txt"));
-    }
-    
-    String next() throws IOException {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() throws IOException {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() throws IOException {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() throws IOException {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() throws IOException {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    static AnotherReader sc;
-    static PrintWriter out;
-    static boolean multipleTC;
-    
-    public static void process() throws IOException {
-        final String nn = nn();
+    private static void process() throws IOException {
+        final String next = Main.sc.next();
         long n = 0L;
         long max = 0L;
         for (int i = 0; i < 3; ++i) {
-            if (nn.charAt(i) == 'R') {
+            if (next.charAt(i) == 'R') {
                 ++n;
             }
             else {
@@ -69,28 +17,40 @@ static class AnotherReader
                 n = 0L;
             }
         }
-        pn(Math.max(n, max));
+        Main.out.println((Object)Math.max(n, max));
     }
     
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         Main.out = new PrintWriter(System.out);
-        Main.sc = new AnotherReader();
-        final boolean b = true;
-        process();
-        final long currentTimeMillis = System.currentTimeMillis();
-        Main.out.flush();
-        if (!b) {
-            System.out.println(System.currentTimeMillis() - currentTimeMillis + "ms");
+        final String next = (Main.sc = new AnotherReader()).next();
+        long n = 0L;
+        long max = 0L;
+        for (int i = 0; i < 3; ++i) {
+            if (next.charAt(i) == 'R') {
+                ++n;
+            }
+            else {
+                max = Math.max(n, max);
+                n = 0L;
+            }
         }
+        Main.out.println((Object)Math.max(n, max));
+        Main.out.flush();
         System.out.close();
     }
     
-    static void sort(final long[] a, final int n) {
-        shuffle(a, n);
+    private static void sort(final long[] a, final int n) {
+        final Random random = new Random();
+        for (int i = 0; i < n; ++i) {
+            final long n2 = a[i];
+            final int n3 = i + random.nextInt(n - i);
+            a[i] = a[n3];
+            a[n3] = n2;
+        }
         Arrays.sort(a);
     }
     
-    static void shuffle(final long[] array, final int n) {
+    private static void shuffle(final long[] array, final int n) {
         final Random random = new Random();
         for (int i = 0; i < n; ++i) {
             final long n2 = array[i];
@@ -100,85 +60,94 @@ static class AnotherReader
         }
     }
     
-    static void pn(final Object x) {
+    private static void pn(final Object x) {
         Main.out.println(x);
     }
     
-    static void p(final Object obj) {
+    private static void p(final Object obj) {
         Main.out.print(obj);
     }
     
-    static void pni(final Object x) {
+    private static void pni(final Object x) {
         Main.out.println(x);
         System.out.flush();
     }
     
-    static int ni() throws IOException {
-        return Main.sc.nextInt();
+    private static int ni() throws IOException {
+        return Integer.parseInt(Main.sc.next());
     }
     
-    static long nl() throws IOException {
-        return Main.sc.nextLong();
+    private static long nl() throws IOException {
+        return Long.parseLong(Main.sc.next());
     }
     
-    static double nd() throws IOException {
-        return Main.sc.nextDouble();
+    private static double nd() throws IOException {
+        return Double.parseDouble(Main.sc.next());
     }
     
-    static String nln() throws IOException {
+    private static String nln() throws IOException {
         return Main.sc.nextLine();
     }
     
-    static String nn() throws IOException {
+    private static String nn() throws IOException {
         return Main.sc.next();
     }
     
-    static long gcd(final long n, final long n2) throws IOException {
-        return (n2 == 0L) ? n : gcd(n2, n % n2);
+    private static long gcd(long n, long n2) throws IOException {
+        while (n2 != 0L) {
+            final long n3 = n2;
+            n2 = n % n2;
+            n = n3;
+        }
+        return n;
     }
     
-    static int gcd(final int n, final int n2) throws IOException {
-        return (n2 == 0) ? n : gcd(n2, n % n2);
+    private static int gcd(int n, int i) throws IOException {
+        while (i != 0) {
+            final int n2 = i;
+            i = n % i;
+            n = n2;
+        }
+        return n;
     }
     
-    static int bit(final long n) throws IOException {
-        return (n == 0L) ? 0 : (1 + bit(n & n - 1L));
+    private static int bit(final long n) throws IOException {
+        if (n == 0L) {
+            return 0;
+        }
+        return 1 + bit(n & n - 1L);
     }
     
-    static int[] iarr(final int n) throws IOException {
+    private static int[] iarr(final int n) throws IOException {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = ni();
+            array[i] = Integer.parseInt(Main.sc.next());
         }
         return array;
     }
     
-    static long[] larr(final int n) throws IOException {
+    private static long[] larr(final int n) throws IOException {
         final long[] array = new long[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = nl();
+            array[i] = Long.parseLong(Main.sc.next());
         }
         return array;
     }
     
-    static {
-        Main.multipleTC = false;
-    }
-    
-    static class AnotherReader
+    static final class AnotherReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         AnotherReader() throws FileNotFoundException {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        AnotherReader(final int n) throws FileNotFoundException {
+        private AnotherReader(final byte b) throws FileNotFoundException {
             this.br = new BufferedReader(new FileReader("input.txt"));
         }
         
-        String next() throws IOException {
+        final String next() throws IOException {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -195,19 +164,19 @@ static class AnotherReader
             return this.st.nextToken();
         }
         
-        int nextInt() throws IOException {
+        private int nextInt() throws IOException {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() throws IOException {
+        private long nextLong() throws IOException {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() throws IOException {
+        private double nextDouble() throws IOException {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() throws IOException {
+        final String nextLine() throws IOException {
             String line = "";
             try {
                 line = this.br.readLine();

@@ -1,30 +1,4 @@
-public class Main
-{
-    public static void main(final String[] array) {
-        final FastScanner fastScanner = new FastScanner();
-        final int nextInt = fastScanner.nextInt();
-        final int nextInt2 = fastScanner.nextInt();
-        final int[] array2 = new int[102];
-        for (int i = 0; i < nextInt2; ++i) {
-            array2[fastScanner.nextInt()] = 1;
-        }
-        int x = 0;
-        int abs = Integer.MAX_VALUE;
-        for (int j = 0; j <= 101; ++j) {
-            if (nextInt2 == 0) {
-                x = nextInt;
-                break;
-            }
-            if (array2[j] != 1) {
-                if (abs > Math.abs(nextInt - j)) {
-                    abs = Math.abs(nextInt - j);
-                    x = j;
-                }
-            }
-        }
-        System.out.println(x);
-    }
-}class FastScanner
+final class FastScanner
 {
     private final InputStream in;
     private final byte[] buffer;
@@ -63,14 +37,14 @@ public class Main
         return 33 <= n && n <= 126;
     }
     
-    public boolean hasNext() {
+    private boolean hasNext() {
         while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
             ++this.ptr;
         }
         return this.hasNextByte();
     }
     
-    public String next() {
+    private String next() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
@@ -81,14 +55,14 @@ public class Main
         return sb.toString();
     }
     
-    public long nextLong() {
+    private long nextLong() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
         long n = 0L;
         boolean b = false;
-        int n2 = this.readByte();
-        if (n2 == 45) {
+        int n2;
+        if ((n2 = this.readByte()) == 45) {
             b = true;
             n2 = this.readByte();
         }
@@ -99,21 +73,80 @@ public class Main
             n = n * 10L + (n2 - 48);
             n2 = this.readByte();
         }
-        if (n2 == -1 || !isPrintableChar(n2)) {
-            return b ? (-n) : n;
-        }
-        throw new NumberFormatException();
-    }
-    
-    public int nextInt() {
-        final long nextLong = this.nextLong();
-        if (nextLong < -2147483648L || nextLong > 2147483647L) {
+        if (n2 != -1 && isPrintableChar(n2)) {
             throw new NumberFormatException();
         }
-        return (int)nextLong;
+        if (b) {
+            return -n;
+        }
+        return n;
     }
     
-    public double nextDouble() {
-        return Double.parseDouble(this.next());
+    public final int nextInt() {
+        if (!this.hasNext()) {
+            throw new NoSuchElementException();
+        }
+        long n = 0L;
+        boolean b = false;
+        int n2;
+        if ((n2 = this.readByte()) == 45) {
+            b = true;
+            n2 = this.readByte();
+        }
+        if (n2 < 48 || 57 < n2) {
+            throw new NumberFormatException();
+        }
+        while (48 <= n2 && n2 <= 57) {
+            n = n * 10L + (n2 - 48);
+            n2 = this.readByte();
+        }
+        if (n2 != -1 && isPrintableChar(n2)) {
+            throw new NumberFormatException();
+        }
+        final long n3;
+        if ((n3 = (b ? (-n) : n)) < -2147483648L || n3 > 2147483647L) {
+            throw new NumberFormatException();
+        }
+        return (int)n3;
+    }
+    
+    private double nextDouble() {
+        if (!this.hasNext()) {
+            throw new NoSuchElementException();
+        }
+        final StringBuilder sb = new StringBuilder();
+        for (int codePoint = this.readByte(); isPrintableChar(codePoint); codePoint = this.readByte()) {
+            sb.appendCodePoint(codePoint);
+        }
+        return Double.parseDouble(sb.toString());
+    }
+}
+
+
+
+
+public final class Main
+{
+    private static void main$3231c38a() {
+        final FastScanner fastScanner;
+        final int nextInt = (fastScanner = new FastScanner()).nextInt();
+        final int nextInt2 = fastScanner.nextInt();
+        final int[] array = new int[102];
+        for (int i = 0; i < nextInt2; ++i) {
+            array[fastScanner.nextInt()] = 1;
+        }
+        int x = 0;
+        int abs = Integer.MAX_VALUE;
+        for (int j = 0; j <= 101; ++j) {
+            if (nextInt2 == 0) {
+                x = nextInt;
+                break;
+            }
+            if (array[j] != 1 && abs > Math.abs(nextInt - j)) {
+                abs = Math.abs(nextInt - j);
+                x = j;
+            }
+        }
+        System.out.println(x);
     }
 }

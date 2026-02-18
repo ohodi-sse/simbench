@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static int findMaxConsecutiveDays(final String s) {
+    private static int findMaxConsecutiveDays(final String s) {
         int n = 0;
         final char[] charArray = s.toCharArray();
         int n2 = 0;
@@ -21,9 +21,28 @@ public class Main
         return n;
     }
     
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        System.out.println(findMaxConsecutiveDays(scanner.next()));
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
+        final PrintStream out = System.out;
+        int x = 0;
+        final char[] charArray = next.toCharArray();
+        int n = 0;
+        for (int i = 0; i < charArray.length; ++i) {
+            if (charArray[i] == 'R') {
+                ++n;
+            }
+            else {
+                if (n > x) {
+                    x = n;
+                }
+                n = 0;
+            }
+        }
+        if (n > x) {
+            x = n;
+        }
+        out.println(x);
         scanner.close();
     }
 }

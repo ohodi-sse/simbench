@@ -1,16 +1,16 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
-        final boolean[] array2 = new boolean[105];
+        final boolean[] array = new boolean[105];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[scanner.nextInt()] = true;
+            array[scanner.nextInt()] = true;
         }
         int x = nextInt;
-        for (int x2 = nextInt; array2[x]; --x, ++x2) {
-            if (!array2[x2]) {
+        for (int x2 = nextInt; array[x]; --x, ++x2) {
+            if (!array[x2]) {
                 System.out.println(x2);
                 return;
             }

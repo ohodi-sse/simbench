@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int int1 = Integer.parseInt(scanner.next());
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int int1 = Integer.parseInt((scanner = new Scanner(System.in)).next());
         int n = 0;
         int n2 = 0;
         int x = 0;
@@ -14,8 +14,8 @@ public class Main
             }
             n = 0;
         }
-        final PrintWriter printWriter = new PrintWriter(System.out);
-        printWriter.println(x);
+        final PrintWriter printWriter;
+        (printWriter = new PrintWriter(System.out)).println(x);
         printWriter.flush();
         scanner.close();
     }

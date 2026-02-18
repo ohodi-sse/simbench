@@ -1,55 +1,22 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-}public class Main
-{
-    public static void main(final String[] array) throws IOException {
-        final FastReader fastReader = new FastReader();
-        final long nextLong = fastReader.nextLong();
+    private static void main$3231c38a() throws IOException {
+        final FastReader fastReader;
+        final long long1 = Long.parseLong((fastReader = new FastReader()).next());
         final String next = fastReader.next();
-        System.out.println(nextLong * ((next.charAt(0) - '0') * 100 + (next.charAt(2) - '0') * 10 + (next.charAt(3) - '0')) / 100L);
+        System.out.println(long1 * ((next.charAt(0) - '0') * 100 + (next.charAt(2) - '0') * 10 + (next.charAt(3) - '0')) / 100L);
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -66,11 +33,11 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
     }

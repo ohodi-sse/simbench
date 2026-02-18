@@ -1,18 +1,19 @@
-public class Main
+public final class Main
 {
-    static final long MOD = 1000000007L;
-    public static String[] Ws;
-    public static int wsIndx;
-    public static BufferedReader in;
+    private static long MOD = 1000000007L;
+    private static String[] Ws;
+    private static int wsIndx;
+    private static BufferedReader in;
     
-    public static void main(final String[] array) throws Exception {
-        int nextInt;
+    private static void main$3231c38a() throws Exception {
+        check();
+        int int1;
         int i;
-        for (nextInt = nextInt(), i = 1; i <= nextInt; i *= 2) {}
+        for (int1 = Integer.parseInt(Main.Ws[Main.wsIndx++]), i = 1; i <= int1; i <<= 1) {}
         System.out.println(i / 2);
     }
     
-    public static void check() throws Exception {
+    private static void check() throws Exception {
         if (Main.in == null) {
             Main.in = new BufferedReader(new InputStreamReader(System.in));
         }
@@ -22,22 +23,22 @@ public class Main
         }
     }
     
-    public static int nextInt() throws Exception {
+    private static int nextInt() throws Exception {
         check();
         return Integer.parseInt(Main.Ws[Main.wsIndx++]);
     }
     
-    public static long nextLong() throws Exception {
+    private static long nextLong() throws Exception {
         check();
         return Long.parseLong(Main.Ws[Main.wsIndx++]);
     }
     
-    public static String nextString() throws Exception {
+    private static String nextString() throws Exception {
         check();
         return Main.Ws[Main.wsIndx++];
     }
     
-    public static int[] nextInts() throws Exception {
+    private static int[] nextInts() throws Exception {
         check();
         final int[] array = new int[Main.Ws.length];
         for (int i = 0; i < array.length; ++i) {
@@ -47,7 +48,7 @@ public class Main
         return array;
     }
     
-    public static long[] nextLongs() throws Exception {
+    private static long[] nextLongs() throws Exception {
         check();
         final long[] array = new long[Main.Ws.length];
         for (int i = 0; i < array.length; ++i) {
@@ -57,7 +58,7 @@ public class Main
         return array;
     }
     
-    public static String[] nextStrings() throws Exception {
+    private static String[] nextStrings() throws Exception {
         check();
         Main.wsIndx = Main.Ws.length;
         return Main.Ws;

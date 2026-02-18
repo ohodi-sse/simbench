@@ -1,23 +1,20 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String nextLine = scanner.nextLine();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String nextLine = (scanner = new Scanner(System.in)).nextLine();
         final String nextLine2 = scanner.nextLine();
-        final char c = 'S';
-        final char c2 = 'C';
-        final char c3 = 'R';
         int n = 0;
         int n2 = 0;
         int n3 = 0;
         for (int i = 0; i < nextLine.length(); ++i) {
-            if (nextLine.charAt(i) == nextLine2.charAt(i) && nextLine.charAt(i) == c) {
+            if (nextLine.charAt(i) == nextLine2.charAt(i) && nextLine.charAt(i) == 'S') {
                 ++n;
             }
-            else if (nextLine.charAt(i) == nextLine2.charAt(i) && nextLine.charAt(i) == c2) {
+            else if (nextLine.charAt(i) == nextLine2.charAt(i) && nextLine.charAt(i) == 'C') {
                 ++n2;
             }
-            else if (nextLine.charAt(i) == nextLine2.charAt(i) && nextLine.charAt(i) == c3) {
+            else if (nextLine.charAt(i) == nextLine2.charAt(i) && nextLine.charAt(i) == 'R') {
                 ++n3;
             }
         }

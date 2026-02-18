@@ -1,14 +1,26 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         int x = 1;
         int n = 0;
         for (int nextInt = scanner.nextInt(), i = 1; i <= nextInt; ++i) {
             if (i % 2 == 0) {
-                final int countHalf = countHalf(i);
-                if (n < countHalf) {
-                    n = countHalf;
+                int n2 = i;
+                int n3 = 0;
+                int j = 1;
+                while (j != 0) {
+                    if (n2 % 2 == 0) {
+                        n2 /= 2;
+                        ++n3;
+                    }
+                    else {
+                        j = 0;
+                    }
+                }
+                final int n4 = n3;
+                if (n < n4) {
+                    n = n4;
                     x = i;
                 }
             }
@@ -17,7 +29,7 @@ class Main
         scanner.close();
     }
     
-    public static int countHalf(int n) {
+    private static int countHalf(int n) {
         int n2 = 0;
         int i = 1;
         while (i != 0) {

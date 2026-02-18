@@ -1,36 +1,36 @@
-public class Main
+public final class Main
 {
-    static long mod;
-    public static String alpha;
+    private static long mod;
+    private static String alpha;
     
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final Scanner scanner = new Scanner(System.in);
         long n = 1L;
         while (n-- > 0L) {
-            final int[] array2 = new int[1000];
+            final int[] array = new int[1000];
             final int nextInt = scanner.nextInt();
             final int nextInt2 = scanner.nextInt();
             final ArrayList<Integer> list = new ArrayList<Integer>();
             for (int i = 0; i < nextInt2; ++i) {
                 list.add(scanner.nextInt());
-                final int[] array3 = array2;
+                final int[] array2 = array;
                 final int abs = Math.abs(nextInt - list.get(i));
-                ++array3[abs];
+                ++array2[abs];
             }
             int n2 = 0;
             int x = 0;
-            if (array2[0] != 1) {
+            if (array[0] != 1) {
                 System.out.println(nextInt);
             }
             else {
-                for (int j = 1; j < array2.length; ++j) {
-                    if (array2[j] < 2) {
+                for (int j = 1; j < array.length; ++j) {
+                    if (array[j] < 2) {
                         n2 = nextInt - j;
                         x = nextInt + j;
                         break;
                     }
                 }
-                if (list.indexOf(n2) > -1) {
+                if (list.indexOf(n2) >= 0) {
                     System.out.println(x);
                 }
                 else {
@@ -41,7 +41,7 @@ public class Main
         scanner.close();
     }
     
-    static ArrayList factors(final int n) {
+    private static ArrayList factors(final int n) {
         final ArrayList list = new ArrayList();
         for (int i = 1; i <= (int)Math.sqrt(n); ++i) {
             if (n % i == 0) {
@@ -58,31 +58,72 @@ public class Main
         return list;
     }
     
-    static boolean isPrime(final int n) {
-        return factors(n).size() == 2;
+    private static boolean isPrime(final int n) {
+        final ArrayList list = new ArrayList();
+        for (int i = 1; i <= (int)Math.sqrt(n); ++i) {
+            if (n % i == 0) {
+                if (i == Math.sqrt(n)) {
+                    list.add(i);
+                }
+                else {
+                    list.add(i);
+                    list.add(n / i);
+                }
+            }
+        }
+        Collections.sort((List<Comparable>)list);
+        return list.size() == 2;
     }
     
-    static long GCD(final long n, final long n2) {
-        if (n == 0L) {
-            return n2;
+    private static long GCD(long n, long n2) {
+        while (n != 0L) {
+            if (n2 == 0L) {
+                return n;
+            }
+            if (n == n2) {
+                return n;
+            }
+            if (n > n2) {
+                n -= n2;
+            }
+            else {
+                final long n3 = n;
+                n2 -= n;
+                n = n3;
+            }
         }
-        if (n2 == 0L) {
-            return n;
-        }
-        if (n == n2) {
-            return n;
-        }
-        if (n > n2) {
-            return GCD(n - n2, n2);
-        }
-        return GCD(n, n2 - n);
+        return n2;
     }
     
-    static long LCM(final long n, final long n2) {
-        return n * n2 / GCD(n, n2);
+    private static long LCM(final long n, final long n2) {
+        final long n3 = n * n2;
+        long n4 = n2;
+        long n5 = n;
+        while (n5 != 0L) {
+            long n6;
+            if (n4 == 0L) {
+                n6 = n5;
+            }
+            else if (n5 == n4) {
+                n6 = n5;
+            }
+            else {
+                if (n5 > n4) {
+                    n5 -= n4;
+                    continue;
+                }
+                final long n7 = n5;
+                n4 -= n5;
+                n5 = n7;
+                continue;
+            }
+            return n3 / n6;
+        }
+        long n6 = n4;
+        return n3 / n6;
     }
     
-    static String rev(final String s) {
+    private static String rev(final String s) {
         final char[] charArray = s.toCharArray();
         for (int i = 0; i < (s.length() + 1) / 2; ++i) {
             final char c = charArray[i];
@@ -92,7 +133,7 @@ public class Main
         return new String(charArray);
     }
     
-    static long pow(final long n, final long n2) {
+    private static long pow(final long n, final long n2) {
         if (n2 == 0L) {
             return 1L;
         }
@@ -101,12 +142,14 @@ public class Main
         }
         final long pow = pow(n, n2 / 2L);
         if (n2 % 2L == 0L) {
-            return pow * pow;
+            final long n3 = pow;
+            return n3 * n3;
         }
-        return pow * pow * n;
+        final long n4 = pow;
+        return n4 * n4 * n;
     }
     
-    static long powMod(final long n, final long n2) {
+    private static long powMod(final long n, final long n2) {
         if (n2 == 0L) {
             return 1L;
         }
@@ -123,6 +166,5 @@ public class Main
     
     static {
         Main.mod = (long)(Math.pow(10.0, 9.0) + 7.0);
-        Main.alpha = "zabcdefghijklmnopqrstuvwxy";
     }
 }

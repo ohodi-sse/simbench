@@ -1,9 +1,9 @@
-public class Main
+public final class Main
 {
-    static final FS sc;
-    static final PrintWriter pw;
+    private static FS sc;
+    private static PrintWriter pw;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = Main.sc.next();
         int x = 0;
         for (int i = 0; i < next.length(); ++i) {
@@ -26,21 +26,21 @@ public class Main
     }
     
     static {
-        sc = new FS();
-        pw = new PrintWriter(System.out);
+        Main.sc = new FS();
+        Main.pw = new PrintWriter(System.out);
     }
     
-    static class FS
+    static final class FS
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         FS() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
             this.st = new StringTokenizer("");
         }
         
-        String next() {
+        final String next() {
             while (!this.st.hasMoreElements()) {
                 try {
                     this.st = new StringTokenizer(this.br.readLine());
@@ -50,55 +50,20 @@ public class Main
             return this.st.nextToken();
         }
         
-        int[] nextArray(final int n) {
+        private int[] nextArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
-    }
-}static class FS
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    FS() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-        this.st = new StringTokenizer("");
-    }
-    
-    String next() {
-        while (!this.st.hasMoreElements()) {
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final Exception ex) {}
-        }
-        return this.st.nextToken();
-    }
-    
-    int[] nextArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
     }
 }

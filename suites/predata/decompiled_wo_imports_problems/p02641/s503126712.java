@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer tokenizer;
-    int totalCases;
-    int testNum;
-    PrintWriter out;
+    private BufferedReader br;
+    private StringTokenizer tokenizer;
+    private int totalCases;
+    private int testNum;
+    private PrintWriter out;
     
     public Main() {
         this.br = new BufferedReader(new InputStreamReader(System.in));
@@ -12,28 +12,28 @@ public class Main
         this.out = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)));
     }
     
-    void solve() throws IOException {
+    private static void solve() throws IOException {
     }
     
-    void execute() throws IOException {
-        final int ni = this.ni();
-        final int ni2 = this.ni();
-        if (ni2 == 0) {
-            this.out.println(ni);
+    private void execute() throws IOException {
+        final int int1 = Integer.parseInt(this.ns());
+        final int int2;
+        if ((int2 = Integer.parseInt(this.ns())) == 0) {
+            this.out.println(int1);
             this.out.close();
             return;
         }
-        final int[] array = new int[ni2];
-        for (int i = 0; i < ni2; ++i) {
-            array[i] = this.ni();
+        final int[] array = new int[int2];
+        for (int i = 0; i < int2; ++i) {
+            array[i] = Integer.parseInt(this.ns());
         }
         int n = Integer.MAX_VALUE;
         int n2 = array[0];
         final HashSet set = new HashSet();
-        for (int j = 0; j < ni2; ++j) {
+        for (int j = 0; j < int2; ++j) {
             set.add(array[j]);
-            final int abs = Math.abs(ni - array[j]);
-            if (abs < n) {
+            final int abs;
+            if ((abs = Math.abs(int1 - array[j])) < n) {
                 n = abs;
                 n2 = array[j];
             }
@@ -55,39 +55,76 @@ public class Main
         this.out.close();
     }
     
-    public static void main(final String[] array) throws IOException {
-        new Main().execute();
+    private static void main$3231c38a() throws IOException {
+        final Main main;
+        final int int1 = Integer.parseInt((main = new Main()).ns());
+        final int int2;
+        if ((int2 = Integer.parseInt(main.ns())) == 0) {
+            main.out.println(int1);
+        }
+        else {
+            final int[] array = new int[int2];
+            for (int i = 0; i < int2; ++i) {
+                array[i] = Integer.parseInt(main.ns());
+            }
+            int n = Integer.MAX_VALUE;
+            int n2 = array[0];
+            final HashSet set = new HashSet();
+            for (int j = 0; j < int2; ++j) {
+                set.add(array[j]);
+                final int abs;
+                if ((abs = Math.abs(int1 - array[j])) < n) {
+                    n = abs;
+                    n2 = array[j];
+                }
+            }
+            int n3 = 1;
+            while (true) {
+                final int n4 = n2 - n3;
+                final int n5 = n2 + n3;
+                if (!set.contains(n4)) {
+                    main.out.println(n4);
+                    break;
+                }
+                if (!set.contains(n5)) {
+                    main.out.println(n5);
+                    break;
+                }
+                ++n3;
+            }
+        }
+        main.out.close();
     }
     
-    void debug(final Object... a) {
+    private static void debug(final Object... a) {
         System.out.println(Arrays.deepToString(a));
     }
     
-    int ni() throws IOException {
+    private int ni() throws IOException {
         return Integer.parseInt(this.ns());
     }
     
-    long nl() throws IOException {
+    private long nl() throws IOException {
         return Long.parseLong(this.ns());
     }
     
-    double nd() throws IOException {
+    private double nd() throws IOException {
         return Double.parseDouble(this.ns());
     }
     
-    String ns() throws IOException {
+    private String ns() throws IOException {
         while (this.tokenizer == null || !this.tokenizer.hasMoreTokens()) {
             this.tokenizer = new StringTokenizer(this.br.readLine());
         }
         return this.tokenizer.nextToken();
     }
     
-    String nline() throws IOException {
+    private String nline() throws IOException {
         this.tokenizer = null;
         return this.br.readLine();
     }
     
-    boolean input() throws IOException {
+    private static boolean input() throws IOException {
         return true;
     }
 }

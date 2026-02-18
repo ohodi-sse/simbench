@@ -1,22 +1,8 @@
-class Status
+public final class Main
 {
-    int row;
-    int col;
-    int candies;
-    
-    public Status(final int row, final int col, final int candies) {
-        this.row = 0;
-        this.col = 0;
-        this.candies = 0;
-        this.row = row;
-        this.col = col;
-        this.candies = candies;
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
-        System.out.println(BigDecimal.valueOf(getLong(scanner)).multiply(BigDecimal.valueOf(getDouble(scanner))).longValue());
+        System.out.println(BigDecimal.valueOf(Long.parseLong(scanner.next())).multiply(BigDecimal.valueOf(Double.parseDouble(scanner.next()))).longValue());
     }
     
     private static double getDouble(final Scanner scanner) {
@@ -43,26 +29,45 @@ class Status
         return buildPermutaion;
     }
     
-    public static long getLong(final Scanner scanner) {
+    private static long getLong(final Scanner scanner) {
         return Long.parseLong(scanner.next());
     }
     
-    public static int getInt(final Scanner scanner) {
+    private static int getInt(final Scanner scanner) {
         return Integer.parseInt(scanner.next());
     }
     
-    public static String getString(final Scanner scanner) {
+    private static String getString(final Scanner scanner) {
         return scanner.next();
     }
     
-    public static int[] getIntArray(final Scanner scanner) {
+    private static int[] getIntArray(final Scanner scanner) {
         String nextLine;
         for (nextLine = ""; nextLine.equals(""); nextLine = scanner.nextLine()) {}
-        final String[] split = nextLine.split(" ");
-        final int[] array = new int[split.length];
+        final String[] split;
+        final int[] array = new int[(split = nextLine.split(" ")).length];
         for (int i = 0; i < split.length; ++i) {
             array[i] = Integer.parseInt(split[i]);
         }
         return array;
+    }
+}
+
+
+
+
+final class Status
+{
+    private int row;
+    private int col;
+    private int candies;
+    
+    private Status(final int row, final int col, final int candies) {
+        this.row = 0;
+        this.col = 0;
+        this.candies = 0;
+        this.row = row;
+        this.col = col;
+        this.candies = candies;
     }
 }

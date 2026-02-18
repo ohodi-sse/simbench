@@ -98,7 +98,7 @@ def get_all_tools():
     from simbench.metrics import NCD
     from simbench.metrics import GenericMetric, DiffMetric
 
-    comp_lvls = [1, 2, 3, 5, 7, 9]
+    comp_lvls = [1, 9]
     zlib = [Zlib(comp_lvl) for comp_lvl in comp_lvls]
     gzip = [Gzip(comp_lvl) for comp_lvl in comp_lvls]
     zstd = [Zstd(comp_lvl) for comp_lvl in comp_lvls]
@@ -107,14 +107,14 @@ def get_all_tools():
     comp_metrics = [NCD()]
 
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
-    diff_tools = [DiffTool(DiffMetric(), BSDiff())]  # BSDiff is veeeery slooow
+    # diff_tools = [DiffTool(DiffMetric(), BSDiff())]  # BSDiff is veeeery slooow
     other_tools = [GenericTool(GenericMetric(), Difflib())]
     ai_tools = [
         GenericTool(GenericMetric(), CodeBERT()),
         GenericTool(GenericMetric(), GraphCodeBERT()),
     ]
 
-    return comp_tools + ai_tools + diff_tools + other_tools
+    return comp_tools + ai_tools  # + other_tools
 
 
 def get_all_classifiers(steps: int = 20) -> Sequence[Classifier]:
@@ -124,7 +124,7 @@ def get_all_classifiers(steps: int = 20) -> Sequence[Classifier]:
     knn = [KNN(k) for k in range(1, 300, int(301 / steps))]
 
     thrsh = [Threshold(0.5)]
-    knn = [KNN(20)]
+    knn = [KNN(1)]
     return thrsh + knn
 
 

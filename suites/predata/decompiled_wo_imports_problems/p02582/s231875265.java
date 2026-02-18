@@ -1,22 +1,22 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        final int[] array2 = new int[next.length()];
+    private static void main$3231c38a() {
+        final String next;
+        final int[] array = new int[(next = new Scanner(System.in).next()).length()];
         int n = 0;
         for (int i = 0; i < next.length(); ++i) {
             if (next.charAt(i) == 'R') {
-                final int[] array3 = array2;
+                final int[] array2 = array;
                 final int n2 = n;
-                ++array3[n2];
+                ++array2[n2];
             }
             else {
                 ++n;
             }
         }
         final Vector coll = new Vector();
-        for (int j = 0; j < array2.length; ++j) {
-            coll.add(array2[j]);
+        for (int j = 0; j < array.length; ++j) {
+            coll.add(array[j]);
         }
         System.out.println(Collections.max((Collection<?>)coll));
     }

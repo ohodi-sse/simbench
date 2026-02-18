@@ -1,10 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        System.out.println(solve(new Scanner(System.in).next()));
+    private static void main$3231c38a() {
+        final String next;
+        System.out.println((next = new Scanner(System.in).next()).contains("RRR") ? 3 : (next.contains("RR") ? 2 : next.contains("R")));
     }
     
-    static int solve(final String s) {
+    private static int solve(final String s) {
         if (s.contains("RRR")) {
             return 3;
         }

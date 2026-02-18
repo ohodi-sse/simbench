@@ -1,10 +1,9 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final long nextLong = scanner.nextLong();
-        final String next = scanner.next();
-        System.out.println(nextLong * (Integer.parseInt(Character.toString(next.charAt(0))) * 100 + Integer.parseInt(Character.toString(next.charAt(2))) * 10 + Integer.parseInt(Character.toString(next.charAt(3)))) / 100L);
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next;
+        System.out.println((scanner = new Scanner(System.in)).nextLong() * (Integer.parseInt(Character.toString((next = scanner.next()).charAt(0))) * 100 + Integer.parseInt(Character.toString(next.charAt(2))) * 10 + Integer.parseInt(Character.toString(next.charAt(3)))) / 100L);
         scanner.close();
     }
 }

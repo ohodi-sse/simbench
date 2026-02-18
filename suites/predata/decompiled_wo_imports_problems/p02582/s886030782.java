@@ -1,17 +1,17 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final String next = new Scanner(System.in).next();
         boolean b = false;
         int x = 0;
-        final char[] array2 = new char[next.length()];
+        final char[] array = new char[next.length()];
         for (int i = 0; i < next.length(); ++i) {
-            array2[i] = next.charAt(i);
-            if (array2[i] == 'R') {
+            array[i] = next.charAt(i);
+            if (array[i] == 'R') {
                 ++x;
                 b = true;
             }
-            if (array2[i] == 'S' && b) {
+            if (array[i] == 'S' && b) {
                 break;
             }
         }

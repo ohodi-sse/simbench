@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
+    private static void main$3231c38a() {
+        Scanner scanner;
         int i;
         int n;
-        for (i = scanner.nextInt(), n = 0; i != 1; i /= 2, ++n) {}
+        for (i = (scanner = new Scanner(System.in)).nextInt(), n = 0; i != 1; i /= 2, ++n) {}
         System.out.println((int)Math.pow(2.0, n));
         scanner.close();
     }

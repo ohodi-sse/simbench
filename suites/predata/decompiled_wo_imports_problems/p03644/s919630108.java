@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
+    private static void main$3231c38a() {
+        Scanner scanner;
         int i;
         int x;
-        for (i = scanner.nextInt(), x = 1; i >= x * 2; x *= 2) {}
+        for (i = (scanner = new Scanner(System.in)).nextInt(), x = 1; i >= x << 1; x <<= 1) {}
         System.out.println(x);
         scanner.close();
     }

@@ -1,8 +1,8 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        if (next.equals("SSS")) {
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = new Scanner(System.in).next()).equals("SSS")) {
             System.out.println(0);
         }
         if (next.equals("SSR")) {

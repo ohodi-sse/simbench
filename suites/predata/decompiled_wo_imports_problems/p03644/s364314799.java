@@ -1,12 +1,12 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int nextInt = new Scanner(System.in).nextInt();
-        final int[] array2 = { 1, 2, 4, 8, 16, 32, 64 };
+        final int[] array = { 1, 2, 4, 8, 16, 32, 64 };
         for (int i = 6; i >= 0; --i) {
-            if (nextInt >= array2[i]) {
-                System.out.println(array2[i]);
-                break;
+            if (nextInt >= array[i]) {
+                System.out.println(array[i]);
+                return;
             }
         }
     }

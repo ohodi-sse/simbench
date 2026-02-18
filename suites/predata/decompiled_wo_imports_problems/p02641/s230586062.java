@@ -1,19 +1,19 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
-        final boolean[] array2 = new boolean[201];
+        final boolean[] array = new boolean[201];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[scanner.nextInt()] = true;
+            array[scanner.nextInt()] = true;
         }
         int min = 500;
         int n = 500;
         for (int j = 0; j <= 200; ++j) {
-            if (!array2[j]) {
-                final int abs = Math.abs(nextInt - j);
-                if (abs < n) {
+            if (!array[j]) {
+                final int abs;
+                if ((abs = Math.abs(nextInt - j)) < n) {
                     min = j;
                     n = abs;
                 }

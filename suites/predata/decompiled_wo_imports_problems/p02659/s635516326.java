@@ -1,68 +1,75 @@
-public class Main
+public final class Main
 {
-    static Scanner sc;
-    static StringBuilder sb;
+    private static Scanner sc;
+    private static StringBuilder sb;
     
-    public static void main(final String[] array) {
-        final long nextLong = nextLong();
-        final String[] splitString = splitString(next());
+    private static void main$3231c38a() {
+        final long long1 = Long.parseLong(Main.sc.next());
+        final String[] split = Main.sc.next().split("");
         String s = "";
         for (int i = 0; i < 4; ++i) {
-            if (!splitString[i].equals(".")) {
-                s += splitString[i];
+            if (!split[i].equals(".")) {
+                s += split[i];
             }
         }
-        System.out.println(nextLong * Long.parseLong(s) / 100L);
+        System.out.println(long1 * Long.parseLong(s) / 100L);
     }
     
-    static int lcm(final int n, final int n2) {
-        return n * n2 * gcd(n, n2);
+    private static int lcm(int n, int n2) {
+        final int n3 = n * n2;
+        int n4;
+        for (n = n; n % n2 != 0; n2 = n % n2, n = n4) {
+            n4 = n2;
+        }
+        return n3 * n2;
     }
     
-    static int gcd(final int n, final int n2) {
-        if (n % n2 != 0) {
-            return gcd(n2, n % n2);
+    private static int gcd(int n, int n2) {
+        while (n % n2 != 0) {
+            final int n3 = n2;
+            n2 = n % n2;
+            n = n3;
         }
         return n2;
     }
     
-    static String toSmall(final String s) {
+    private static String toSmall(final String s) {
         return s.toLowerCase();
     }
     
-    static String toBig(final String s) {
+    private static String toBig(final String s) {
         return s.toUpperCase();
     }
     
-    static String next() {
+    private static String next() {
         return Main.sc.next();
     }
     
-    static int nextInt() {
+    private static int nextInt() {
         return Integer.parseInt(Main.sc.next());
     }
     
-    static long nextLong() {
+    private static long nextLong() {
         return Long.parseLong(Main.sc.next());
     }
     
-    static double nextDouble() {
+    private static double nextDouble() {
         return Double.parseDouble(Main.sc.next());
     }
     
-    static String[] splitString(final String s) {
+    private static String[] splitString(final String s) {
         return s.split("");
     }
     
-    static char[] splitChar(final String s) {
+    private static char[] splitChar(final String s) {
         return s.toCharArray();
     }
     
-    static int charToInt(final char c) {
+    private static int charToInt(final char c) {
         return c - '0';
     }
     
-    public static int max(final int[] array) {
+    private static int max(final int[] array) {
         final int length = array.length;
         int max = array[0];
         for (int i = 1; i < length; ++i) {
@@ -71,7 +78,7 @@ public class Main
         return max;
     }
     
-    public static long max(final long[] array) {
+    private static long max(final long[] array) {
         final int length = array.length;
         long max = array[0];
         for (int i = 1; i < length; ++i) {
@@ -80,7 +87,7 @@ public class Main
         return max;
     }
     
-    public static int min(final int[] array) {
+    private static int min(final int[] array) {
         final int length = array.length;
         int min = array[0];
         for (int i = 1; i < length; ++i) {
@@ -89,7 +96,7 @@ public class Main
         return min;
     }
     
-    public static long min(final long[] array) {
+    private static long min(final long[] array) {
         final int length = array.length;
         long min = array[0];
         for (int i = 1; i < length; ++i) {
@@ -100,6 +107,6 @@ public class Main
     
     static {
         Main.sc = new Scanner(System.in);
-        Main.sb = new StringBuilder();
+        new StringBuilder();
     }
 }

@@ -1,22 +1,22 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        final char char1 = next.charAt(0);
+    private static void main$3231c38a() {
+        final String next;
+        final char char1 = (next = new Scanner(System.in).next()).charAt(0);
         final char char2 = next.charAt(1);
         final char char3 = next.charAt(2);
-        final char c = 'R';
-        if (char1 == char2 && char2 == char3 && char3 == c) {
+        if (char1 == char2 && char2 == char3 && char3 == 'R') {
             System.out.println("3");
+            return;
         }
-        else if ((char1 == char2 && char2 == c) || (char2 == char3 && char3 == c)) {
+        if ((char1 == char2 && char2 == 'R') || (char2 == char3 && char3 == 'R')) {
             System.out.println("2");
+            return;
         }
-        else if (char1 != c && char2 != c && char3 != c) {
+        if (char1 != 'R' && char2 != 'R' && char3 != 'R') {
             System.out.println("0");
+            return;
         }
-        else {
-            System.out.println("1");
-        }
+        System.out.println("1");
     }
 }

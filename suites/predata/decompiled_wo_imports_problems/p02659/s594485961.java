@@ -1,83 +1,61 @@
-static class InputReader
+public final class Main
 {
-    private InputStream stream;
-    private byte[] buf;
-    private int curChar;
-    private int numChars;
-    
-    public InputReader(final InputStream stream) {
-        this.buf = new byte[1024];
-        this.stream = stream;
-    }
-    
-    public int read() {
-        if (this.numChars == -1) {
-            throw new RuntimeException();
-        }
-        if (this.curChar >= this.numChars) {
-            this.curChar = 0;
-            try {
-                this.numChars = this.stream.read(this.buf);
-            }
-            catch (final IOException ex) {
-                throw new RuntimeException();
-            }
-            if (this.numChars <= 0) {
-                return -1;
-            }
-        }
-        return this.buf[this.curChar++];
-    }
-    
-    public String readString() {
-        final StringBuilder sb = new StringBuilder();
-        int n;
-        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
-        do {
-            sb.append((char)n);
-            n = this.read();
-        } while (!this.isSpaceChar(n));
-        return sb.toString();
-    }
-    
-    public long readLong() {
-        int n;
-        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
-        int n2 = 1;
-        if (n == 45) {
-            n2 = -1;
-            n = this.read();
-        }
-        long n3 = 0L;
-        do {
-            n3 = n3 * 10L + (n - 48);
-            n = this.read();
-        } while (!this.isSpaceChar(n));
-        return n3 * n2;
-    }
-    
-    public boolean isSpaceChar(final int n) {
-        return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final InputReader inputReader = new InputReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new CMultiplication3().solve(1, inputReader, printWriter);
+        new CMultiplication3();
+        InputReader inputReader2;
+        int n;
+        for (n = (inputReader2 = inputReader).read(); InputReader.isSpaceChar(n); n = inputReader2.read()) {}
+        int n2 = 1;
+        if (n == 45) {
+            n2 = -1;
+            n = inputReader2.read();
+        }
+        long n3 = 0L;
+        do {
+            n3 = n3 * 10L + (n - 48);
+        } while (!InputReader.isSpaceChar(n = inputReader2.read()));
+        final long n4 = n3 * n2;
+        final InputReader inputReader3 = inputReader;
+        final StringBuilder sb = new StringBuilder();
+        int n5;
+        for (n5 = inputReader3.read(); InputReader.isSpaceChar(n5); n5 = inputReader3.read()) {}
+        do {
+            sb.append((char)n5);
+        } while (!InputReader.isSpaceChar(n5 = inputReader3.read()));
+        System.out.println(n4 * Math.round(Double.parseDouble(sb.toString()) * 100.0) / 100L);
         printWriter.close();
     }
     
-    static class CMultiplication3
+    static final class CMultiplication3
     {
-        public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-            System.out.println(inputReader.readLong() * Math.round(Double.parseDouble(inputReader.readString()) * 100.0) / 100L);
+        private static void solve$6080e082(final InputReader inputReader) {
+            int n;
+            for (n = inputReader.read(); InputReader.isSpaceChar(n); n = inputReader.read()) {}
+            int n2 = 1;
+            if (n == 45) {
+                n2 = -1;
+                n = inputReader.read();
+            }
+            long n3 = 0L;
+            do {
+                n3 = n3 * 10L + (n - 48);
+            } while (!InputReader.isSpaceChar(n = inputReader.read()));
+            final long n4 = n3 * n2;
+            final StringBuilder sb = new StringBuilder();
+            int n5;
+            for (n5 = inputReader.read(); InputReader.isSpaceChar(n5); n5 = inputReader.read()) {}
+            do {
+                sb.append((char)n5);
+            } while (!InputReader.isSpaceChar(n5 = inputReader.read()));
+            System.out.println(n4 * Math.round(Double.parseDouble(sb.toString()) * 100.0) / 100L);
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
         private InputStream stream;
         private byte[] buf;
@@ -89,7 +67,7 @@ static class InputReader
             this.stream = stream;
         }
         
-        public int read() {
+        public final int read() {
             if (this.numChars == -1) {
                 throw new RuntimeException();
             }
@@ -108,20 +86,19 @@ static class InputReader
             return this.buf[this.curChar++];
         }
         
-        public String readString() {
+        private String readString() {
             final StringBuilder sb = new StringBuilder();
             int n;
-            for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+            for (n = this.read(); isSpaceChar(n); n = this.read()) {}
             do {
                 sb.append((char)n);
-                n = this.read();
-            } while (!this.isSpaceChar(n));
+            } while (!isSpaceChar(n = this.read()));
             return sb.toString();
         }
         
-        public long readLong() {
+        private long readLong() {
             int n;
-            for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+            for (n = this.read(); isSpaceChar(n); n = this.read()) {}
             int n2 = 1;
             if (n == 45) {
                 n2 = -1;
@@ -130,18 +107,12 @@ static class InputReader
             long n3 = 0L;
             do {
                 n3 = n3 * 10L + (n - 48);
-                n = this.read();
-            } while (!this.isSpaceChar(n));
+            } while (!isSpaceChar(n = this.read()));
             return n3 * n2;
         }
         
-        public boolean isSpaceChar(final int n) {
+        public static boolean isSpaceChar(final int n) {
             return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
         }
-    }
-}static class CMultiplication3
-{
-    public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-        System.out.println(inputReader.readLong() * Math.round(Double.parseDouble(inputReader.readString()) * 100.0) / 100L);
     }
 }

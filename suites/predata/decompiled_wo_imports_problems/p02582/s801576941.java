@@ -1,33 +1,85 @@
-class ChenNumberUtil
+final class ChenBitUtil
 {
-    static Collection<Integer> getDivisors(final int n) {
+    private static int popCount(final int i) {
+        return Integer.bitCount(i);
+    }
+    
+    private static boolean isFlag(final int n, final int n2) {
+        return 0x0 != (n & 1 << n2);
+    }
+    
+    private static int setTrue(final int n, final int n2) {
+        return n | 1 << n2;
+    }
+    
+    private static int setFalse(final int n, final int n2) {
+        return n & ~(1 << n2);
+    }
+    
+    private static int setReverse(final int n, final int n2) {
+        if (0x0 != (n & 1 << n2)) {
+            return n & ~(1 << n2);
+        }
+        return n | 1 << n2;
+    }
+    
+    private static int reverseAll(final int n) {
+        return ~n;
+    }
+}
+
+
+
+
+
+
+
+
+
+final class ChenNumberUtil
+{
+    private static Collection<Integer> getDivisors(final int n) {
         final ArrayList list = new ArrayList();
-        for (int i = 1; i * i <= n; ++i) {
+        int i = 1;
+        while (true) {
+            final int n2 = i;
+            if (n2 * n2 > n) {
+                break;
+            }
             if (n % i == 0) {
                 list.add(i);
                 if (n / i != i) {
                     list.add(n / i);
                 }
             }
+            ++i;
         }
         Collections.sort((List<Comparable>)list);
         return list;
     }
-}public class Main
+}
+
+
+
+
+
+
+
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Object run = run();
-        if (run != null) {
+    private static void main$3231c38a() {
+        final Object run;
+        if ((run = run()) != null) {
             System.out.println(run);
         }
     }
     
-    static Object run() {
+    private static Object run() {
         try (final Scanner scanner = new Scanner(System.in)) {
             final ArrayList list = new ArrayList();
             int i = 0;
-            final char[] charArray = scanner.next().toCharArray();
-            for (int length = charArray.length, j = 0; j < length; ++j) {
+            char[] charArray;
+            for (int length = (charArray = scanner.next().toCharArray()).length, j = 0; j < length; ++j) {
                 list.add(charArray[j]);
             }
             if ((char)list.get(0) == 'R') {
@@ -46,30 +98,5 @@ class ChenNumberUtil
             }
             return i;
         }
-    }
-}class ChenBitUtil
-{
-    static int popCount(final int i) {
-        return Integer.bitCount(i);
-    }
-    
-    static boolean isFlag(final int n, final int n2) {
-        return 0x0 != (n & 1 << n2);
-    }
-    
-    static int setTrue(int n, final int n2) {
-        return n |= 1 << n2;
-    }
-    
-    static int setFalse(int n, final int n2) {
-        return n &= ~(1 << n2);
-    }
-    
-    static int setReverse(final int n, final int n2) {
-        return isFlag(n, n2) ? setFalse(n, n2) : setTrue(n, n2);
-    }
-    
-    static int reverseAll(final int n) {
-        return ~n;
     }
 }

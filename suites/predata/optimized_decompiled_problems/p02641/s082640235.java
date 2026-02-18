@@ -50,15 +50,12 @@ public final class Main
             this.IINF = 1000000331;
         }
         
-        private void solve$6e5309c7(InputReader inputReader, final OutputWriter outputWriter) {
+        private void solve$6e5309c7(final InputReader inputReader, final OutputWriter outputWriter) {
             final int nextInt = inputReader.nextInt();
             final int nextInt2 = inputReader.nextInt();
             int n = this.IINF;
             int n2 = 0;
-            final InputReader inputReader2 = inputReader;
-            final int n3 = nextInt2;
-            inputReader = inputReader2;
-            final HashSet set = new HashSet(inputReader2.nextIntArrayList$60dab9ef(n3));
+            final HashSet set = new HashSet(inputReader.nextIntArrayList$60dab9ef(nextInt2));
             for (int i = 0; i <= 101; ++i) {
                 if (!set.contains(i) && n > Math.abs(nextInt - i)) {
                     n2 = i;
@@ -85,7 +82,7 @@ public final class Main
             this.writer.close();
         }
         
-        public final void println(final long x) {
+        private void println(final long x) {
             this.writer.println(x);
         }
     }
@@ -150,7 +147,7 @@ public final class Main
             return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
         }
         
-        public final ArrayList<Integer> nextIntArrayList(final int n) {
+        private ArrayList<Integer> nextIntArrayList(final int n) {
             return this.nextIntArrayList$60dab9ef(n);
         }
         

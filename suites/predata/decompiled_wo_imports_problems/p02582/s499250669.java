@@ -1,12 +1,12 @@
-public class Main
+public final class Main
 {
     private static final BufferedReader br;
     private static final PrintWriter pw;
     
-    public static void main(final String[] array) throws IOException {
-        final String line = Main.br.readLine();
+    private static void main$3231c38a() throws IOException {
+        final String line;
         int x;
-        if (line.charAt(1) == 'R') {
+        if ((line = Main.br.readLine()).charAt(1) == 'R') {
             x = 1 + ((line.charAt(0) == 'R') ? 1 : 0) + ((line.charAt(2) == 'R') ? 1 : 0);
         }
         else {

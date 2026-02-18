@@ -1,13 +1,18 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         final PrintWriter printWriter = new PrintWriter(System.out);
         final String next = scanner.next();
         final String next2 = scanner.next();
         int x = 0;
         for (int i = 0; i < 3; ++i) {
-            if (next.substring(i, i + 1).equals(next2.substring(i, i + 1))) {
+            final String s = next;
+            final int beginIndex = i;
+            final String substring = s.substring(beginIndex, beginIndex + 1);
+            final String s2 = next2;
+            final int beginIndex2 = i;
+            if (substring.equals(s2.substring(beginIndex2, beginIndex2 + 1))) {
                 ++x;
             }
         }

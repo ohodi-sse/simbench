@@ -1,132 +1,87 @@
-public static class MyScanner
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
+    private static long MOD;
+    private static long[] fac;
+    private static int[][] dir;
+    private static long lMax;
+    private static int iMax;
+    private static HashMap<Long, Long> memo;
+    private static int n;
+    private static int m;
+    private static int[][] mat;
+    private static PrintWriter out;
     
-    public MyScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    static long MOD;
-    static long[] fac;
-    static int[][] dir;
-    static long lMax;
-    static int iMax;
-    static HashMap<Long, Long> memo;
-    static int n;
-    static int m;
-    static int[][] mat;
-    public static PrintWriter out;
-    
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final MyScanner myScanner = new MyScanner();
         Main.out = new PrintWriter(new BufferedOutputStream(System.out));
         int n = 1;
         while (n-- > 0) {
-            Main.out.println(myScanner.nextLong() * (long)(100.0 * myScanner.nextDouble() + 0.001) / 100L);
+            Main.out.println(Long.parseLong(myScanner.next()) * (long)(Double.parseDouble(myScanner.next()) * 100.0 + 0.001) / 100L);
         }
         Main.out.close();
     }
     
-    public static long C(final int n, final int n2) {
+    private static long C(final int n, final int n2) {
         if (n2 == 0 || n2 == n) {
             return 1L;
         }
         if (n2 > n || n2 < 0) {
             return 0L;
         }
-        return Main.fac[n] * quickPOW(Main.fac[n2] * Main.fac[n - n2] % Main.MOD, Main.MOD - 2L) % Main.MOD;
+        throw new NullPointerException();
     }
     
-    public static long quickPOW(long n, long n2) {
+    private static long quickPOW(long n, long n2) {
         long n3 = 1L;
         while (n2 > 0L) {
             if (n2 % 2L == 1L) {
                 n3 = n3 * n % Main.MOD;
             }
-            n = n * n % Main.MOD;
+            final long n4 = n;
+            n = n4 * n4 % Main.MOD;
             n2 >>= 1;
         }
         return n3;
     }
     
-    public static int gcd(final int n, final int n2) {
-        if (n % n2 == 0) {
-            return n2;
+    private static int gcd(int n, int n2) {
+        while (n % n2 != 0) {
+            final int n3 = n2;
+            n2 = n % n2;
+            n = n3;
         }
-        return gcd(n2, n % n2);
+        return n2;
     }
     
-    public static long gcd(final long n, final long n2) {
-        if (n % n2 == 0L) {
-            return n2;
+    private static long gcd(long n, long n2) {
+        while (n % n2 != 0L) {
+            final long n3 = n2;
+            n2 = n % n2;
+            n = n3;
         }
-        return gcd(n2, n % n2);
+        return n2;
     }
     
-    public static long solve(final long n) {
+    private static long solve$1349e3() {
         return 0L;
     }
     
     static {
         Main.MOD = 1000000007L;
-        Main.dir = new int[][] { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
-        Main.lMax = 4557430888798830399L;
-        Main.iMax = 1061109567;
-        Main.memo = new HashMap<Long, Long>();
+        final int[][] array = { { 1, 0 }, { 0, 1 }, { -1, 0 }, { 0, -1 } };
+        new HashMap();
     }
     
-    public static class MyScanner
+    public static final class MyScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public MyScanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -143,19 +98,19 @@ public static class MyScanner
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

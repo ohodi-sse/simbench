@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final char[] charArray = scanner.nextLine().toCharArray();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final char[] charArray = (scanner = new Scanner(System.in)).nextLine().toCharArray();
         scanner.close();
         final boolean b = charArray[0] == 'R';
         final boolean b2 = charArray[1] == 'R';

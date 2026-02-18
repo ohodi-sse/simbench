@@ -1,29 +1,29 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] array = new int[nextInt2 = scanner.nextInt()];
         final int[] array2 = new int[nextInt2];
-        final int[] array3 = new int[nextInt2];
-        final int[] array4 = new int[100];
+        final int[] array3 = new int[100];
         int n = 0;
-        array4[0] = 1;
+        array3[0] = 1;
         for (int i = 1; i < 100; ++i) {
-            array4[i] = 2;
+            array3[i] = 2;
         }
         for (int j = 0; j < nextInt2; ++j) {
-            array2[j] = scanner.nextInt();
-            array4[array3[j] = Math.abs(array2[j] - nextInt)] = array4[array3[j]] - 1;
+            array[j] = scanner.nextInt();
+            array3[array2[j] = Math.abs(array[j] - nextInt)] = array3[array2[j]] - 1;
         }
         for (int k = 0; k < 100; ++k) {
-            if (array4[k] == 2) {
+            if (array3[k] == 2) {
                 System.out.println(nextInt - k);
                 System.exit(0);
             }
-            if (array4[k] == 1) {
+            if (array3[k] == 1) {
                 for (int l = 0; l < nextInt2; ++l) {
-                    if (array2[l] == nextInt + k) {
+                    if (array[l] == nextInt + k) {
                         ++n;
                     }
                 }

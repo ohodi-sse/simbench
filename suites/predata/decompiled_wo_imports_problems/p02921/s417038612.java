@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         int x = 0;
-        final String s = new String();
-        final String s2 = new String();
+        new String();
+        new String();
         final String nextLine = scanner.nextLine();
         final String nextLine2 = scanner.nextLine();
         final char[] charArray = nextLine.toCharArray();

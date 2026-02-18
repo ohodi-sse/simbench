@@ -1,18 +1,18 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] array2 = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] array = new int[nextInt2 = scanner.nextInt()];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = scanner.nextInt();
+            array[i] = scanner.nextInt();
         }
         int x = -1;
         int abs = 1000;
         final HashSet set = new HashSet();
         for (int j = 0; j < nextInt2; ++j) {
-            set.add(array2[j]);
+            set.add(array[j]);
         }
         for (int k = -100; k <= 200; ++k) {
             if (!set.contains(k) && Math.abs(k - nextInt) < abs) {

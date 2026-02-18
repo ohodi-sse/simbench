@@ -1,8 +1,8 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final ArrayList list = new ArrayList();
         for (int i = 0; i < nextInt2; ++i) {
@@ -13,26 +13,25 @@ class Main
         Collections.sort((List<Comparable>)list);
         if (!list.contains(nextInt)) {
             System.out.print(nextInt);
+            return;
         }
-        else {
-            int l = 0;
-            while (l < nextInt2) {
-                if (list.contains(j)) {
-                    --j;
+        int l = 0;
+        while (l < nextInt2) {
+            if (list.contains(j)) {
+                --j;
+            }
+            if (list.contains(k)) {
+                ++k;
+            }
+            if (!list.contains(j) && !list.contains(k)) {
+                if (Math.abs(nextInt - j) > Math.abs(nextInt - k)) {
+                    System.out.print(k);
+                    return;
                 }
-                if (list.contains(k)) {
-                    ++k;
-                }
-                if (!list.contains(j) && !list.contains(k)) {
-                    if (Math.abs(nextInt - j) > Math.abs(nextInt - k)) {
-                        System.out.print(k);
-                        return;
-                    }
-                    System.out.print(j);
-                }
-                else {
-                    ++l;
-                }
+                System.out.print(j);
+            }
+            else {
+                ++l;
             }
         }
     }

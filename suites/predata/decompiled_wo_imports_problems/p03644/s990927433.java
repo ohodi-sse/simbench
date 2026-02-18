@@ -1,14 +1,13 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int nextInt = new Scanner(System.in).nextInt();
         int max = 0;
         int x = 0;
         for (int i = nextInt; i > 0; --i) {
             int b = 0;
             for (int n = i; n % 2 == 0; n /= 2, ++b) {}
-            max = Math.max(max, b);
-            if (max == b) {
+            if ((max = Math.max(max, b)) == b) {
                 x = i;
             }
         }

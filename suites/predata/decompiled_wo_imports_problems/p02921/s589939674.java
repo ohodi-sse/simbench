@@ -1,28 +1,4 @@
-class Main
-{
-    public static void main(final String[] array) {
-        new Main().run();
-    }
-    
-    void run() {
-        final FastScanner fastScanner = new FastScanner();
-        final PrintWriter printWriter = new PrintWriter(System.out);
-        final char[] charArray = fastScanner.next().toCharArray();
-        final char[] charArray2 = fastScanner.next().toCharArray();
-        int x = 0;
-        for (int i = 0; i < charArray.length; ++i) {
-            if (charArray[i] == charArray2[i]) {
-                ++x;
-            }
-        }
-        printWriter.println(x);
-        printWriter.close();
-    }
-    
-    static void tr(final Object... a) {
-        System.out.println(Arrays.deepToString(a));
-    }
-}class FastScanner
+final class FastScanner
 {
     private final InputStream in;
     private final byte[] buffer;
@@ -61,15 +37,18 @@ class Main
         return 33 <= n && n <= 126;
     }
     
-    public boolean hasNext() {
+    private boolean hasNext() {
         while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
             ++this.ptr;
         }
         return this.hasNextByte();
     }
     
-    public String next() {
-        if (!this.hasNext()) {
+    public final String next() {
+        while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
+            ++this.ptr;
+        }
+        if (!this.hasNextByte()) {
             throw new NoSuchElementException();
         }
         final StringBuilder sb = new StringBuilder();
@@ -79,11 +58,56 @@ class Main
         return sb.toString();
     }
     
-    public int nextInt() {
+    private int nextInt() {
         return Integer.parseInt(this.next());
     }
     
-    public long nextLong() {
+    private long nextLong() {
         return Long.parseLong(this.next());
+    }
+}
+
+
+
+
+
+
+
+
+final class Main
+{
+    private static void main$3231c38a() {
+        new Main();
+        final FastScanner fastScanner = new FastScanner();
+        final PrintWriter printWriter = new PrintWriter(System.out);
+        final char[] charArray = fastScanner.next().toCharArray();
+        final char[] charArray2 = fastScanner.next().toCharArray();
+        int x = 0;
+        for (int i = 0; i < charArray.length; ++i) {
+            if (charArray[i] == charArray2[i]) {
+                ++x;
+            }
+        }
+        printWriter.println(x);
+        printWriter.close();
+    }
+    
+    private static void run() {
+        final FastScanner fastScanner = new FastScanner();
+        final PrintWriter printWriter = new PrintWriter(System.out);
+        final char[] charArray = fastScanner.next().toCharArray();
+        final char[] charArray2 = fastScanner.next().toCharArray();
+        int x = 0;
+        for (int i = 0; i < charArray.length; ++i) {
+            if (charArray[i] == charArray2[i]) {
+                ++x;
+            }
+        }
+        printWriter.println(x);
+        printWriter.close();
+    }
+    
+    private static void tr(final Object... a) {
+        System.out.println(Arrays.deepToString(a));
     }
 }

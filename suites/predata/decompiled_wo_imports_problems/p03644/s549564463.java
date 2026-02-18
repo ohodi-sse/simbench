@@ -1,97 +1,43 @@
-static class InputReader
+public final class Main
 {
-    BufferedReader in;
-    StringTokenizer tok;
+    private static int INF;
+    private static int MOD;
+    private static int[] mh4;
+    private static int[] mw4;
+    private static int[] mh8;
+    private static int[] mw8;
     
-    public String nextString() {
-        while (!this.tok.hasMoreTokens()) {
-            try {
-                this.tok = new StringTokenizer(this.in.readLine(), " ");
-                continue;
-            }
-            catch (final IOException ex) {
-                throw new InputMismatchException();
-            }
-            break;
-        }
-        return this.tok.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.nextString());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.nextString());
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.nextString());
-    }
-    
-    public int[] nextIntArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    public long[] nextLongArray(final int n) {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    public InputReader(final InputStream in) {
-        this.in = new BufferedReader(new InputStreamReader(in));
-        this.tok = new StringTokenizer("");
-    }
-}public class Main
-{
-    static int INF;
-    static int MOD;
-    static int[] mh4;
-    static int[] mw4;
-    static int[] mh8;
-    static int[] mw8;
-    
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final InputReader inputReader = new InputReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new TaskX().solve(1, inputReader, printWriter);
+        new TaskX();
+        final InputReader inputReader2 = inputReader;
+        final PrintWriter printWriter2 = printWriter;
+        int i;
+        int n;
+        for (i = Integer.parseInt(inputReader2.nextString()), n = 0; i > 0; i /= 2, ++n) {}
+        printWriter2.println((int)Math.pow(2.0, n - 1));
         printWriter.close();
     }
     
-    static {
-        Main.INF = 1073741824;
-        Main.MOD = 1000000007;
-        Main.mh4 = new int[] { 0, -1, 1, 0 };
-        Main.mw4 = new int[] { -1, 0, 0, 1 };
-        Main.mh8 = new int[] { -1, -1, -1, 0, 0, 1, 1, 1 };
-        Main.mw8 = new int[] { -1, 0, 1, -1, 1, -1, 0, 1 };
-    }
-    
-    static class TaskX
+    static final class TaskX
     {
-        public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
+        private static void solve$6080e082(final InputReader inputReader, final PrintWriter printWriter) {
             int i;
-            int n2;
-            for (i = inputReader.nextInt(), n2 = 0; i > 0; i /= 2, ++n2) {}
-            printWriter.println((int)Math.pow(2.0, n2 - 1));
+            int n;
+            for (i = Integer.parseInt(inputReader.nextString()), n = 0; i > 0; i /= 2, ++n) {}
+            printWriter.println((int)Math.pow(2.0, n - 1));
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
-        BufferedReader in;
-        StringTokenizer tok;
+        private BufferedReader in;
+        private StringTokenizer tok;
         
-        public String nextString() {
+        public final String nextString() {
             while (!this.tok.hasMoreTokens()) {
                 try {
                     this.tok = new StringTokenizer(this.in.readLine(), " ");
@@ -105,30 +51,30 @@ static class InputReader
             return this.tok.nextToken();
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.nextString());
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.nextString());
         }
         
-        public double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.nextString());
         }
         
-        public int[] nextIntArray(final int n) {
+        private int[] nextIntArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.nextString());
             }
             return array;
         }
         
-        public long[] nextLongArray(final int n) {
+        private long[] nextLongArray(final int n) {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLong();
+                array[i] = Long.parseLong(this.nextString());
             }
             return array;
         }
@@ -137,13 +83,5 @@ static class InputReader
             this.in = new BufferedReader(new InputStreamReader(in));
             this.tok = new StringTokenizer("");
         }
-    }
-}static class TaskX
-{
-    public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-        int i;
-        int n2;
-        for (i = inputReader.nextInt(), n2 = 0; i > 0; i /= 2, ++n2) {}
-        printWriter.println((int)Math.pow(2.0, n2 - 1));
     }
 }

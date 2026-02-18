@@ -1,17 +1,15 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) throws IOException {
-        final String next = new Scanner(System.in).next();
-        final char c = 'R';
-        final char[] charArray = next.toCharArray();
+    private static void main$3231c38a() throws IOException {
+        final char[] charArray;
         int x;
-        if (charArray[0] == c && charArray[1] == c && charArray[2] == c) {
+        if ((charArray = new Scanner(System.in).next().toCharArray())[0] == 'R' && charArray[1] == 'R' && charArray[2] == 'R') {
             x = 3;
         }
-        else if ((charArray[0] == c && charArray[1] == c) || (charArray[1] == c && charArray[2] == c)) {
+        else if ((charArray[0] == 'R' && charArray[1] == 'R') || (charArray[1] == 'R' && charArray[2] == 'R')) {
             x = 2;
         }
-        else if (charArray[0] == c || charArray[1] == c || charArray[2] == c) {
+        else if (charArray[0] == 'R' || charArray[1] == 'R' || charArray[2] == 'R') {
             x = 1;
         }
         else {
@@ -20,83 +18,44 @@ class Main
         System.out.println(x);
     }
     
-    static class Scanner
+    static final class Scanner
     {
-        StringTokenizer st;
-        BufferedReader br;
+        private StringTokenizer st;
+        private BufferedReader br;
         
         public Scanner(final InputStream in) {
             this.br = new BufferedReader(new InputStreamReader(in));
         }
         
-        public Scanner(final FileReader in) throws FileNotFoundException {
+        private Scanner(final FileReader in) throws FileNotFoundException {
             this.br = new BufferedReader(in);
         }
         
-        public String next() throws IOException {
+        public final String next() throws IOException {
             while (this.st == null || !this.st.hasMoreTokens()) {
                 this.st = new StringTokenizer(this.br.readLine());
             }
             return this.st.nextToken();
         }
         
-        public int nextInt() throws IOException {
+        private int nextInt() throws IOException {
             return Integer.parseInt(this.next());
         }
         
-        public long nextLong() throws IOException {
+        private long nextLong() throws IOException {
             return Long.parseLong(this.next());
         }
         
-        public String nextLine() throws IOException {
+        private String nextLine() throws IOException {
             return this.br.readLine();
         }
         
-        public double nextDouble() throws IOException {
+        private double nextDouble() throws IOException {
             return Double.parseDouble(this.next());
         }
         
-        public boolean ready() throws IOException {
+        private boolean ready() throws IOException {
             return this.br.ready();
         }
-    }
-}static class Scanner
-{
-    StringTokenizer st;
-    BufferedReader br;
-    
-    public Scanner(final InputStream in) {
-        this.br = new BufferedReader(new InputStreamReader(in));
-    }
-    
-    public Scanner(final FileReader in) throws FileNotFoundException {
-        this.br = new BufferedReader(in);
-    }
-    
-    public String next() throws IOException {
-        while (this.st == null || !this.st.hasMoreTokens()) {
-            this.st = new StringTokenizer(this.br.readLine());
-        }
-        return this.st.nextToken();
-    }
-    
-    public int nextInt() throws IOException {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() throws IOException {
-        return Long.parseLong(this.next());
-    }
-    
-    public String nextLine() throws IOException {
-        return this.br.readLine();
-    }
-    
-    public double nextDouble() throws IOException {
-        return Double.parseDouble(this.next());
-    }
-    
-    public boolean ready() throws IOException {
-        return this.br.ready();
     }
 }

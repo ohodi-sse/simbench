@@ -1,34 +1,8 @@
-static class MyScanner
+final class Main
 {
-    BufferedReader reader;
-    StringTokenizer tokenizer;
-    
-    MyScanner() {
-        this.reader = new BufferedReader(new InputStreamReader(System.in), 32768);
-    }
-    
-    String next() {
-        try {
-            while (this.tokenizer == null || !this.tokenizer.hasMoreTokens()) {
-                this.tokenizer = new StringTokenizer(this.reader.readLine());
-            }
-        }
-        catch (final IOException ex) {}
-        return this.tokenizer.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-}class Main
-{
-    public static void main(final String[] array) {
-        final MyScanner myScanner = new MyScanner();
-        final String next = myScanner.next();
+    private static void main$3231c38a() {
+        final MyScanner myScanner;
+        final String next = (myScanner = new MyScanner()).next();
         final String next2 = myScanner.next();
         int x = 0;
         for (int i = 0; i < 3; ++i) {
@@ -39,16 +13,16 @@ static class MyScanner
         System.out.println(x);
     }
     
-    static class MyScanner
+    static final class MyScanner
     {
-        BufferedReader reader;
-        StringTokenizer tokenizer;
+        private BufferedReader reader;
+        private StringTokenizer tokenizer;
         
         MyScanner() {
             this.reader = new BufferedReader(new InputStreamReader(System.in), 32768);
         }
         
-        String next() {
+        final String next() {
             try {
                 while (this.tokenizer == null || !this.tokenizer.hasMoreTokens()) {
                     this.tokenizer = new StringTokenizer(this.reader.readLine());
@@ -58,11 +32,11 @@ static class MyScanner
             return this.tokenizer.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
     }

@@ -120,7 +120,7 @@ public final class Main
             return this.buf[this.curChar++];
         }
         
-        public final long readLong() {
+        private long readLong() {
             int n;
             for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
             int n2 = 1;
@@ -139,7 +139,7 @@ public final class Main
             throw new InputMismatchException();
         }
         
-        public final String readString() {
+        private String readString() {
             int n;
             for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
             final StringBuilder sb = new StringBuilder();
@@ -183,7 +183,7 @@ public final class Main
             this.writer.close();
         }
         
-        public final void printLine(final long x) {
+        private void printLine(final long x) {
             this.writer.println(x);
         }
     }

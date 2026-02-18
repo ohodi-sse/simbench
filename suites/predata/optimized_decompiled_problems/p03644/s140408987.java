@@ -48,9 +48,9 @@ public final class Main
     
     static final class TaskB
     {
-        private static void solve$6e5309c7(InputReader inputReader, final OutputWriter outputWriter) {
+        private static void solve$6e5309c7(final InputReader inputReader, final OutputWriter outputWriter) {
             int n;
-            for (n = (inputReader = inputReader).read(); inputReader.isSpaceChar(n); n = inputReader.read()) {}
+            for (n = inputReader.read(); inputReader.isSpaceChar(n); n = inputReader.read()) {}
             int n2 = 1;
             if (n == 45) {
                 n2 = -1;
@@ -104,7 +104,7 @@ public final class Main
             return this.buf[this.curChar++];
         }
         
-        public final int readInt() {
+        private int readInt() {
             int n;
             for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
             int n2 = 1;
@@ -154,7 +154,7 @@ public final class Main
             this.writer.close();
         }
         
-        public final void printLine(final int x) {
+        private void printLine(final int x) {
             this.writer.println(x);
         }
     }

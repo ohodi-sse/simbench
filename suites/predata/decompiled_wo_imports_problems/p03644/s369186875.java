@@ -1,23 +1,19 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final Scanner scanner = new Scanner(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new BBreakNumber().solve(1, scanner, printWriter);
+        new BBreakNumber();
+        printWriter.println((int)Math.pow(2.0, Math.floor(Math.log(scanner.nextInt()) / Math.log(2.0))));
         printWriter.close();
     }
     
-    static class BBreakNumber
+    static final class BBreakNumber
     {
-        public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
+        private static void solve$32964a28(final Scanner scanner, final PrintWriter printWriter) {
             printWriter.println((int)Math.pow(2.0, Math.floor(Math.log(scanner.nextInt()) / Math.log(2.0))));
         }
-    }
-}static class BBreakNumber
-{
-    public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
-        printWriter.println((int)Math.pow(2.0, Math.floor(Math.log(scanner.nextInt()) / Math.log(2.0))));
     }
 }

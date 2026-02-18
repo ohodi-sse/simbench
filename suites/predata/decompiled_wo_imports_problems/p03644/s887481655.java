@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    static Scanner sc;
+    private static Scanner sc;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         int i;
         int n;
-        for (i = Main.sc.nextInt(), n = 1; i >= n; n *= 2) {}
+        for (i = Main.sc.nextInt(), n = 1; i >= n; n <<= 1) {}
         System.out.print(n / 2);
     }
     

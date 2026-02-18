@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() throws Exception {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final HashSet set = new HashSet();
         final HashSet set2 = new HashSet();
@@ -16,8 +16,10 @@ public class Main
                 set2.add(j + 1);
             }
         }
-        for (final int intValue : set2) {
-            if (Math.abs(intValue - nextInt) < abs) {
+        final Iterator iterator = set2.iterator();
+        while (iterator.hasNext()) {
+            final int intValue;
+            if (Math.abs((intValue = (int)iterator.next()) - nextInt) < abs) {
                 abs = Math.abs(intValue - nextInt);
                 n = intValue;
             }
@@ -25,15 +27,15 @@ public class Main
         if (nextInt <= 50) {
             if (nextInt <= Math.abs(n - nextInt)) {
                 System.out.println(0);
+                return;
             }
-            else {
-                System.out.println(n);
-            }
-        }
-        else if (101 - nextInt < Math.abs(n - nextInt)) {
-            System.out.println(101);
+            System.out.println(n);
         }
         else {
+            if (101 - nextInt < Math.abs(n - nextInt)) {
+                System.out.println(101);
+                return;
+            }
             System.out.println(n);
         }
     }

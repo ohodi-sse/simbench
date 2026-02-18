@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        if (nextInt2 == 0) {
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        if ((nextInt2 = scanner.nextInt()) == 0) {
             System.out.println(nextInt);
             System.exit(0);
         }
@@ -12,18 +12,13 @@ public class Main
         for (int i = 0; i < nextInt2; ++i) {
             list.add(scanner.nextInt());
         }
-        final boolean b = true;
-        int n = 0;
-        while (b) {
-            if (!list.contains(nextInt - n)) {
-                System.out.println(nextInt - n);
-                break;
-            }
+        int n;
+        for (n = 0; list.contains(nextInt - n); ++n) {
             if (!list.contains(nextInt + n)) {
                 System.out.println(nextInt + n);
-                break;
+                return;
             }
-            ++n;
         }
+        System.out.println(nextInt - n);
     }
 }

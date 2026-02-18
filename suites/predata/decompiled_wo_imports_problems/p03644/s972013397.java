@@ -1,76 +1,19 @@
-private class MyScanner
+public final class Main
 {
-    String[] s;
-    int i;
-    BufferedReader br;
-    String reg;
-    
-    MyScanner(final Main obj) {
-        Objects.requireNonNull(obj);
-        this.reg = " ";
-        this.s = new String[0];
-        this.i = 0;
-        this.br = new BufferedReader(new InputStreamReader(System.in));
+    private static void main$3231c38a() {
+        final int nextInt = new MyScanner().nextInt();
+        int x = 1;
+        int n2;
+        for (int n = 0; n < 10 && (n2 = x << 1) <= nextInt; x = n2, ++n) {}
+        System.out.println(x);
     }
     
-    public String next() {
-        try {
-            if (this.i < this.s.length) {
-                return this.s[this.i++];
-            }
-            String s;
-            for (s = this.br.readLine(); s.equals(""); s = this.br.readLine()) {}
-            this.s = s.split(this.reg, 0);
-            this.i = 0;
-            return this.s[this.i++];
-        }
-        catch (final Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-    
-    public int nextInt() {
-        try {
-            return Integer.parseInt(this.next());
-        }
-        catch (final Exception ex) {
-            ex.printStackTrace();
-            return -1;
-        }
-    }
-    
-    public double nextDouble() {
-        try {
-            return Double.parseDouble(this.next());
-        }
-        catch (final Exception ex) {
-            ex.printStackTrace();
-            return -1.0;
-        }
-    }
-    
-    public long nextLong() {
-        try {
-            return Long.parseLong(this.next());
-        }
-        catch (final Exception ex) {
-            ex.printStackTrace();
-            return -1L;
-        }
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
-        new Main().solve(array);
-    }
-    
-    public void solve(final String[] array) {
+    private void solve$3231c38a() {
         final int nextInt = new MyScanner().nextInt();
         int n = 1;
         for (int i = 0; i < 10; ++i) {
-            final int n2 = n * 2;
-            if (n2 > nextInt) {
+            final int n2;
+            if ((n2 = n << 1) > nextInt) {
                 System.out.println(n);
                 return;
             }
@@ -79,12 +22,12 @@ private class MyScanner
         System.out.println(n);
     }
     
-    private class MyScanner
+    private final class MyScanner
     {
-        String[] s;
-        int i;
-        BufferedReader br;
-        String reg;
+        private String[] s;
+        private int i;
+        private BufferedReader br;
+        private String reg;
         
         MyScanner(final Main obj) {
             Objects.requireNonNull(obj);
@@ -94,7 +37,7 @@ private class MyScanner
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        public String next() {
+        private String next() {
             try {
                 if (this.i < this.s.length) {
                     return this.s[this.i++];
@@ -111,7 +54,7 @@ private class MyScanner
             }
         }
         
-        public int nextInt() {
+        public final int nextInt() {
             try {
                 return Integer.parseInt(this.next());
             }
@@ -121,7 +64,7 @@ private class MyScanner
             }
         }
         
-        public double nextDouble() {
+        private double nextDouble() {
             try {
                 return Double.parseDouble(this.next());
             }
@@ -131,7 +74,7 @@ private class MyScanner
             }
         }
         
-        public long nextLong() {
+        private long nextLong() {
             try {
                 return Long.parseLong(this.next());
             }

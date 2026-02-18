@@ -1,46 +1,57 @@
-public class Main
+public final class Main
 {
     private static Scanner sc;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = Main.sc.next();
         final String next2 = Main.sc.next();
         final char[] charArray = next.toCharArray();
         final char[] charArray2 = next2.toCharArray();
-        int n = 0;
+        int x = 0;
         for (int i = 0; i < 3; ++i) {
             if (charArray[i] == charArray2[i]) {
-                ++n;
+                ++x;
             }
         }
-        p(n);
-    }
-    
-    public static long lcm(final long n, final long n2) {
-        return n / gcd(n, n2) * n2;
-    }
-    
-    public static long gcd(final long n, final long n2) {
-        return (n2 == 0L) ? n : gcd(n2, n % n2);
-    }
-    
-    static void p(final String x) {
         System.out.println(x);
     }
     
-    static void p(final int x) {
+    private static long lcm(final long n, final long n2) {
+        long n3;
+        long n4;
+        long n5;
+        for (n3 = n2, n4 = n; n3 != 0L; n3 = n4 % n3, n4 = n5) {
+            n5 = n3;
+        }
+        return n / n4 * n2;
+    }
+    
+    private static long gcd(long n, long n2) {
+        while (n2 != 0L) {
+            final long n3 = n2;
+            n2 = n % n2;
+            n = n3;
+        }
+        return n;
+    }
+    
+    private static void p(final String x) {
         System.out.println(x);
     }
     
-    static void p() {
+    private static void p(final int x) {
+        System.out.println(x);
+    }
+    
+    private static void p() {
         System.out.println();
     }
     
-    static void p(final long x) {
+    private static void p(final long x) {
         System.out.println(x);
     }
     
-    static void p(final double x) {
+    private static void p(final double x) {
         System.out.println(x);
     }
     

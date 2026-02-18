@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
         final String regex = "RRR";
         final String regex2 = "RR";
@@ -13,15 +13,16 @@ public class Main
         final Matcher matcher3 = compile3.matcher(next);
         if (matcher.find()) {
             System.out.println("3");
+            return;
         }
-        else if (matcher2.find()) {
+        if (matcher2.find()) {
             System.out.println("2");
+            return;
         }
-        else if (matcher3.find()) {
+        if (matcher3.find()) {
             System.out.println("1");
+            return;
         }
-        else {
-            System.out.println("0");
-        }
+        System.out.println("0");
     }
 }

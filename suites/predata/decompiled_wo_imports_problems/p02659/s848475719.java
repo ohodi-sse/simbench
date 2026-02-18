@@ -1,9 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final long nextLong = scanner.nextLong();
-        final char[] charArray = scanner.next().toCharArray();
-        System.out.println(nextLong * ((charArray[0] - '0') * 100 + (charArray[2] - '0') * 10 + (charArray[3] - '0')) / 100L);
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final char[] charArray;
+        System.out.println((scanner = new Scanner(System.in)).nextLong() * (((charArray = scanner.next().toCharArray())[0] - '0') * 100 + (charArray[2] - '0') * 10 + (charArray[3] - '0')) / 100L);
     }
 }

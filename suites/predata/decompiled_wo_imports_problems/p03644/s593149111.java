@@ -1,12 +1,12 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final int nextInt = new Scanner(System.in).nextInt();
-        final int[] array2 = { 1, 2, 4, 8, 16, 32, 64, 101 };
-        for (int i = 0; i < array2.length; ++i) {
-            if (array2[i] > nextInt) {
-                System.out.println(array2[i - 1]);
-                break;
+        final int[] array = { 1, 2, 4, 8, 16, 32, 64, 101 };
+        for (int i = 0; i < array.length; ++i) {
+            if (array[i] > nextInt) {
+                System.out.println(array[i - 1]);
+                return;
             }
         }
     }

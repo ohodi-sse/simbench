@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static Scanner Scan;
+    private static Scanner Scan;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = Main.Scan.next();
         int b = 0;
         int max = 0;

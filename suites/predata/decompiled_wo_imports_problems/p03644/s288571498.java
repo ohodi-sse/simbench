@@ -1,12 +1,12 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        System.out.println(solve(scanner.nextInt()));
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        System.out.println(Integer.highestOneBit((scanner = new Scanner(System.in)).nextInt()));
         scanner.close();
     }
     
-    static int solve(final int i) {
+    private static int solve(final int i) {
         return Integer.highestOneBit(i);
     }
 }

@@ -1,44 +1,4 @@
-static class InputReader
-{
-    public BufferedReader reader;
-    public StringTokenizer tokenizer;
-    
-    public InputReader(final InputStream in) {
-        this.reader = new BufferedReader(new InputStreamReader(in), 32768);
-        this.tokenizer = null;
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.tokenizer != null) {
-                if (this.tokenizer.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.tokenizer = new StringTokenizer(this.reader.readLine());
-                continue;
-            }
-            catch (final IOException cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.tokenizer.nextToken();
-    }
-    
-    public int ni() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nl() {
-        return Long.parseLong(this.next());
-    }
-    
-    public void close() throws IOException {
-        this.reader.close();
-    }
-}public class Main implements Closeable
+public final class Main implements Closeable
 {
     private InputReader in;
     private PrintWriter out;
@@ -48,19 +8,19 @@ static class InputReader
         this.out = new PrintWriter(System.out);
     }
     
-    public void solve() {
-        final int ni = this.in.ni();
-        final int ni2 = this.in.ni();
+    private void solve() {
+        final int int1 = Integer.parseInt(this.in.next());
+        final int int2 = Integer.parseInt(this.in.next());
         final boolean[] array = new boolean[201];
-        for (int i = 0; i < ni2; ++i) {
-            array[this.in.ni()] = true;
+        for (int i = 0; i < int2; ++i) {
+            array[Integer.parseInt(this.in.next())] = true;
         }
         int min = 500;
         int n = 500;
         for (int j = 0; j <= 200; ++j) {
             if (!array[j]) {
-                final int abs = Math.abs(ni - j);
-                if (abs < n) {
+                final int abs;
+                if ((abs = Math.abs(int1 - j)) < n) {
                     min = j;
                     n = abs;
                 }
@@ -73,28 +33,49 @@ static class InputReader
     }
     
     @Override
-    public void close() throws IOException {
-        this.in.close();
+    public final void close() throws IOException {
+        this.in.reader.close();
         this.out.close();
     }
     
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         try (final Main main = new Main()) {
-            main.solve();
+            final Main main2;
+            final int int1 = Integer.parseInt((main2 = main).in.next());
+            final int int2 = Integer.parseInt(main2.in.next());
+            final boolean[] array = new boolean[201];
+            for (int i = 0; i < int2; ++i) {
+                array[Integer.parseInt(main2.in.next())] = true;
+            }
+            int min = 500;
+            int n = 500;
+            for (int j = 0; j <= 200; ++j) {
+                if (!array[j]) {
+                    final int abs;
+                    if ((abs = Math.abs(int1 - j)) < n) {
+                        min = j;
+                        n = abs;
+                    }
+                    else if (abs == n) {
+                        min = Math.min(min, j);
+                    }
+                }
+            }
+            main2.out.println(min);
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
         public BufferedReader reader;
-        public StringTokenizer tokenizer;
+        private StringTokenizer tokenizer;
         
         public InputReader(final InputStream in) {
             this.reader = new BufferedReader(new InputStreamReader(in), 32768);
             this.tokenizer = null;
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.tokenizer != null) {
                     if (this.tokenizer.hasMoreTokens()) {
@@ -113,15 +94,15 @@ static class InputReader
             return this.tokenizer.nextToken();
         }
         
-        public int ni() {
+        private int ni() {
             return Integer.parseInt(this.next());
         }
         
-        public long nl() {
+        private long nl() {
             return Long.parseLong(this.next());
         }
         
-        public void close() throws IOException {
+        private void close() throws IOException {
             this.reader.close();
         }
     }

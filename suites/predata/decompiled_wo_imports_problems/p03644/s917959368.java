@@ -1,19 +1,22 @@
-public class Main
+public final class Main
 {
-    static int IleRazy(int n) {
+    private static int IleRazy(int n) {
         int n2;
         for (n2 = 0; n % 2 == 0; n /= 2, ++n2) {}
         return n2;
     }
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int nextInt = new Scanner(System.in).nextInt();
         int n = 0;
         int x = 0;
         for (int i = 1; i <= nextInt; ++i) {
-            final int ileRazy = IleRazy(i);
-            if (ileRazy >= n) {
-                n = ileRazy;
+            int n2;
+            int n3;
+            for (n2 = i, n3 = 0; n2 % 2 == 0; n2 /= 2, ++n3) {}
+            final int n4;
+            if ((n4 = n3) >= n) {
+                n = n4;
                 x = i;
             }
         }

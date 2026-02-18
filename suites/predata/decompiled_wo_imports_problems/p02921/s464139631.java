@@ -1,8 +1,16 @@
-static class A
+public final class Main
 {
-    public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
-        final String next = scanner.next();
-        final String next2 = scanner.next();
+    private static void main$3231c38a() {
+        final InputStream in = System.in;
+        final PrintStream out = System.out;
+        final Scanner scanner = new Scanner(in);
+        final PrintWriter printWriter = new PrintWriter(out);
+        new A();
+        final Scanner scanner2 = scanner;
+        final PrintWriter printWriter2 = printWriter;
+        final Scanner scanner3 = scanner2;
+        final String next = scanner2.next();
+        final String next2 = scanner3.next();
         int x = 0;
         if (next.charAt(0) == next2.charAt(0)) {
             ++x;
@@ -13,22 +21,13 @@ static class A
         if (next.charAt(2) == next2.charAt(2)) {
             ++x;
         }
-        printWriter.println(x);
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
-        final InputStream in = System.in;
-        final PrintStream out = System.out;
-        final Scanner scanner = new Scanner(in);
-        final PrintWriter printWriter = new PrintWriter(out);
-        new A().solve(1, scanner, printWriter);
+        printWriter2.println(x);
         printWriter.close();
     }
     
-    static class A
+    static final class A
     {
-        public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
+        private static void solve$32964a28(final Scanner scanner, final PrintWriter printWriter) {
             final String next = scanner.next();
             final String next2 = scanner.next();
             int x = 0;

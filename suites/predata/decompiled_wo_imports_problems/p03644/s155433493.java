@@ -1,9 +1,9 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         Integer value;
         int x;
-        for (value = new Scanner(System.in).nextInt(), x = 1; x * 2 <= value; x *= 2) {}
+        for (value = new Scanner(System.in).nextInt(), x = 1; x << 1 <= value; x <<= 1) {}
         System.out.println(x);
     }
 }

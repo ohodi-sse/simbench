@@ -1,8 +1,10 @@
-public class Main
+public final class Main
 {
-    public static <T> List<List<T>> zip(final List<T>... array) {
+    private static <T> List<List<T>> zip(final List<T>... array) {
         final ArrayList list = new ArrayList();
-        for (final List<T> list2 : array) {
+        final int length = array.length;
+        for (int i = 0; i < 2; ++i) {
+            final List<T> list2 = array[i];
             for (int j = 0; j < list2.size(); ++j) {
                 Object o;
                 if (j >= list.size()) {
@@ -17,7 +19,7 @@ public class Main
         return list;
     }
     
-    static List<Character> toCharacterList(final String s) {
+    private static List<Character> toCharacterList(final String s) {
         if (s == null) {
             return null;
         }
@@ -29,12 +31,28 @@ public class Main
         return list;
     }
     
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        final List<List<Object>> zip = zip(toCharacterList(bufferedReader.readLine()), toCharacterList(bufferedReader.readLine()));
+        final List[] array = { toCharacterList(bufferedReader.readLine()), toCharacterList(bufferedReader.readLine()) };
+        final ArrayList list = new ArrayList();
+        final int length = array.length;
+        for (int i = 0; i < 2; ++i) {
+            final List list2 = array[i];
+            for (int j = 0; j < list2.size(); ++j) {
+                Object o;
+                if (j >= list.size()) {
+                    list.add(o = new ArrayList<Object>());
+                }
+                else {
+                    o = list.get(j);
+                }
+                ((List<Object>)o).add(list2.get(j));
+            }
+        }
+        final ArrayList list3 = list;
         int x = 0;
-        for (final List list : zip) {
-            if (((Character)list.get(0)).equals(list.get(1))) {
+        for (final List list4 : list3) {
+            if (((Character)list4.get(0)).equals(list4.get(1))) {
                 ++x;
             }
         }

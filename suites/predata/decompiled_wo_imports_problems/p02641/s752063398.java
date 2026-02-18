@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         final ArrayList list = new ArrayList();
         final int nextInt = scanner.nextInt();
@@ -18,7 +18,7 @@ public class Main
             }
             if (n2 == 1) {
                 System.out.println(nextInt - n);
-                break;
+                return;
             }
             int n3 = 1;
             for (int l = 0; l < nextInt2; ++l) {
@@ -28,7 +28,7 @@ public class Main
             }
             if (n3 == 1) {
                 System.out.println(nextInt + n);
-                break;
+                return;
             }
             ++n;
             n2 = 1;

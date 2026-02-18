@@ -1,81 +1,80 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastReader(final InputStream in) {
-        this.br = new BufferedReader(new InputStreamReader(in));
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final FastReader fastReader = new FastReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new TaskB().solve(1, fastReader, printWriter);
+        new TaskB();
+        final FastReader fastReader2 = fastReader;
+        final PrintWriter printWriter2 = printWriter;
+        final int int1;
+        if ((int1 = Integer.parseInt(fastReader2.next())) < 2) {
+            printWriter2.println(1);
+        }
+        else if (int1 < 4) {
+            printWriter2.println(2);
+        }
+        else if (int1 < 8) {
+            printWriter2.println(4);
+        }
+        else if (int1 < 16) {
+            printWriter2.println(8);
+        }
+        else if (int1 < 32) {
+            printWriter2.println(16);
+        }
+        else if (int1 < 64) {
+            printWriter2.println(32);
+        }
+        else {
+            printWriter2.println(64);
+        }
         printWriter.close();
     }
     
-    static class TaskB
+    static final class TaskB
     {
-        public void solve(final int n, final FastReader fastReader, final PrintWriter printWriter) {
-            final int nextInt = fastReader.nextInt();
-            if (nextInt < 2) {
+        private static void solve$3c455bd4(final FastReader fastReader, final PrintWriter printWriter) {
+            final int int1;
+            if ((int1 = Integer.parseInt(fastReader.next())) < 2) {
                 printWriter.println(1);
+                return;
             }
-            else if (nextInt < 4) {
+            if (int1 < 4) {
                 printWriter.println(2);
+                return;
             }
-            else if (nextInt < 8) {
+            if (int1 < 8) {
                 printWriter.println(4);
+                return;
             }
-            else if (nextInt < 16) {
+            if (int1 < 16) {
                 printWriter.println(8);
+                return;
             }
-            else if (nextInt < 32) {
+            if (int1 < 32) {
                 printWriter.println(16);
+                return;
             }
-            else if (nextInt < 64) {
+            if (int1 < 64) {
                 printWriter.println(32);
+                return;
             }
-            else {
-                printWriter.println(64);
-            }
+            printWriter.println(64);
         }
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader(final InputStream in) {
             this.br = new BufferedReader(new InputStreamReader(in));
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -92,34 +91,8 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
-        }
-    }
-}static class TaskB
-{
-    public void solve(final int n, final FastReader fastReader, final PrintWriter printWriter) {
-        final int nextInt = fastReader.nextInt();
-        if (nextInt < 2) {
-            printWriter.println(1);
-        }
-        else if (nextInt < 4) {
-            printWriter.println(2);
-        }
-        else if (nextInt < 8) {
-            printWriter.println(4);
-        }
-        else if (nextInt < 16) {
-            printWriter.println(8);
-        }
-        else if (nextInt < 32) {
-            printWriter.println(16);
-        }
-        else if (nextInt < 64) {
-            printWriter.println(32);
-        }
-        else {
-            printWriter.println(64);
         }
     }
 }

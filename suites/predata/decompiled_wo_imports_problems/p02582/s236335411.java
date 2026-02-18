@@ -1,52 +1,30 @@
-static class InputReader
+public final class Main
 {
-    private BufferedReader reader;
-    private StringTokenizer tokenizer;
-    
-    public InputReader(final InputStream in) {
-        this.tokenizer = new StringTokenizer("");
-        this.reader = new BufferedReader(new InputStreamReader(in));
-    }
-    
-    public String next() {
-        while (!this.tokenizer.hasMoreTokens()) {
-            try {
-                this.tokenizer = new StringTokenizer(this.reader.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.tokenizer.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    public int[] nextIntArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final InputReader inputReader = new InputReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new TaskB().solve(inputReader, printWriter);
+        new TaskB();
+        final InputReader inputReader2 = inputReader;
+        final PrintWriter printWriter2 = printWriter;
+        final String next = inputReader2.next();
+        int b = 0;
+        int max = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (next.charAt(i) == 'R') {
+                ++b;
+            }
+            else {
+                b = 0;
+            }
+            max = Math.max(max, b);
+        }
+        printWriter2.print(max);
         printWriter.close();
     }
     
-    static void sort(final int[] array) {
+    private static void sort(final int[] array) {
         final ArrayList list = new ArrayList();
         for (int length = array.length, i = 0; i < length; ++i) {
             list.add(array[i]);
@@ -57,9 +35,9 @@ static class InputReader
         }
     }
     
-    static class TaskB
+    static final class TaskB
     {
-        public void solve(final InputReader inputReader, final PrintWriter printWriter) {
+        private static void solve(final InputReader inputReader, final PrintWriter printWriter) {
             final String next = inputReader.next();
             int b = 0;
             int max = 0;
@@ -76,7 +54,7 @@ static class InputReader
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
         private BufferedReader reader;
         private StringTokenizer tokenizer;
@@ -86,7 +64,7 @@ static class InputReader
             this.reader = new BufferedReader(new InputStreamReader(in));
         }
         
-        public String next() {
+        public final String next() {
             while (!this.tokenizer.hasMoreTokens()) {
                 try {
                     this.tokenizer = new StringTokenizer(this.reader.readLine());
@@ -98,37 +76,20 @@ static class InputReader
             return this.tokenizer.nextToken();
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        public int[] nextIntArray(final int n) {
+        private int[] nextIntArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
-    }
-}static class TaskB
-{
-    public void solve(final InputReader inputReader, final PrintWriter printWriter) {
-        final String next = inputReader.next();
-        int b = 0;
-        int max = 0;
-        for (int i = 0; i < 3; ++i) {
-            if (next.charAt(i) == 'R') {
-                ++b;
-            }
-            else {
-                b = 0;
-            }
-            max = Math.max(max, b);
-        }
-        printWriter.print(max);
     }
 }

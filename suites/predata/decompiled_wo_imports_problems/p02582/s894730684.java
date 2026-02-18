@@ -1,6 +1,6 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         final PrintWriter printWriter = new PrintWriter(System.out, true);
         final String nextLine = scanner.nextLine();

@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static int indexOf(final int[] array, final int n) {
+    private static int indexOf(final int[] array, final int n) {
         int n2 = -1;
         int i = 0;
         int n3 = array.length - 1;
@@ -20,11 +20,11 @@ public class Main
         return n2;
     }
     
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        if (nextInt2 == 0) {
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        if ((nextInt2 = scanner.nextInt()) == 0) {
             System.out.println(nextInt);
             scanner.close();
             return;
@@ -34,34 +34,42 @@ public class Main
             a[i] = scanner.nextInt();
         }
         Arrays.sort(a);
-        final int index = indexOf(a, nextInt);
-        if (index != -1) {
-            int n = 0;
+        final int[] array = a;
+        final int n = nextInt;
+        final int[] array2 = array;
+        int n2 = -1;
+        int j = 0;
+        int n3 = array2.length - 1;
+        while (j <= n3) {
+            final int n4 = (j + n3) / 2;
+            if (array2[n4] == n) {
+                n2 = n4;
+                break;
+            }
+            if (array2[n4] < n) {
+                j = n4 + 1;
+            }
+            else {
+                n3 = n4 - 1;
+            }
+        }
+        final int n5;
+        if ((n5 = n2) != -1) {
+            int n6 = 0;
             boolean b;
             int x;
             int x2;
             do {
-                ++n;
+                ++n6;
                 b = false;
                 x = Integer.MIN_VALUE;
                 x2 = Integer.MAX_VALUE;
-                if (index - n < 0) {
-                    x = nextInt - n;
+                if (n5 - n6 < 0 || a[n5 - n6] != nextInt - n6) {
+                    x = nextInt - n6;
                     b = true;
                 }
-                else if (a[index - n] != nextInt - n) {
-                    x = nextInt - n;
-                    b = true;
-                }
-                if (index + n >= nextInt2) {
-                    x2 = nextInt + n;
-                    b = true;
-                }
-                else {
-                    if (a[index + n] == nextInt + n) {
-                        continue;
-                    }
-                    x2 = nextInt + n;
+                if (n5 + n6 >= nextInt2 || a[n5 + n6] != nextInt + n6) {
+                    x2 = nextInt + n6;
                     b = true;
                 }
             } while (!b);

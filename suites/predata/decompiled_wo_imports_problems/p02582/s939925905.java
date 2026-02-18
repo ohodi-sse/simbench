@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final FastScanner fastScanner = new FastScanner(System.in);
         final PrintWriter printWriter = new PrintWriter(System.out);
-        final String next = fastScanner.next();
-        if (next.contains("RRR")) {
+        final String next;
+        if ((next = fastScanner.next()).contains("RRR")) {
             printWriter.println(3);
         }
         else if (next.contains("RR")) {
@@ -19,40 +19,38 @@ public class Main
         printWriter.close();
     }
     
-    static class FastScanner
+    static final class FastScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastScanner(final InputStream in) {
             this.br = new BufferedReader(new InputStreamReader(in));
             this.st = new StringTokenizer("");
         }
         
-        public String next() throws IOException {
-            if (this.st.hasMoreTokens()) {
-                return this.st.nextToken();
+        public final String next() throws IOException {
+            while (!this.st.hasMoreTokens()) {
+                this.st = new StringTokenizer(this.br.readLine());
             }
-            this.st = new StringTokenizer(this.br.readLine());
-            return this.next();
+            return this.st.nextToken();
         }
         
-        public int nextInt() throws IOException {
+        private int nextInt() throws IOException {
             return Integer.parseInt(this.next());
         }
         
-        public double nextDouble() throws IOException {
+        private double nextDouble() throws IOException {
             return Double.parseDouble(this.next());
         }
         
-        public long nextLong() throws IOException {
+        private long nextLong() throws IOException {
             return Long.parseLong(this.next());
         }
         
-        public String nextLine() throws IOException {
-            if (!this.st.hasMoreTokens()) {
+        private String nextLine() throws IOException {
+            while (!this.st.hasMoreTokens()) {
                 this.st = new StringTokenizer(this.br.readLine());
-                return this.nextLine();
             }
             String s = "";
             while (this.st.hasMoreTokens()) {
@@ -61,93 +59,28 @@ public class Main
             return s;
         }
         
-        public int[] nextIntArr(final int n) throws IOException {
+        private int[] nextIntArr(final int n) throws IOException {
             final int[] array = new int[n];
             for (int i = 0; i < array.length; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        public long[] nextLongArr(final int n) throws IOException {
+        private long[] nextLongArr(final int n) throws IOException {
             final long[] array = new long[n];
             for (int i = 0; i < array.length; ++i) {
-                array[i] = this.nextLong();
+                array[i] = Long.parseLong(this.next());
             }
             return array;
         }
         
-        public double[] nextDoubleArr(final int n) throws IOException {
+        private double[] nextDoubleArr(final int n) throws IOException {
             final double[] array = new double[n];
             for (int i = 0; i < array.length; ++i) {
-                array[i] = this.nextDouble();
+                array[i] = Double.parseDouble(this.next());
             }
             return array;
         }
-    }
-}static class FastScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastScanner(final InputStream in) {
-        this.br = new BufferedReader(new InputStreamReader(in));
-        this.st = new StringTokenizer("");
-    }
-    
-    public String next() throws IOException {
-        if (this.st.hasMoreTokens()) {
-            return this.st.nextToken();
-        }
-        this.st = new StringTokenizer(this.br.readLine());
-        return this.next();
-    }
-    
-    public int nextInt() throws IOException {
-        return Integer.parseInt(this.next());
-    }
-    
-    public double nextDouble() throws IOException {
-        return Double.parseDouble(this.next());
-    }
-    
-    public long nextLong() throws IOException {
-        return Long.parseLong(this.next());
-    }
-    
-    public String nextLine() throws IOException {
-        if (!this.st.hasMoreTokens()) {
-            this.st = new StringTokenizer(this.br.readLine());
-            return this.nextLine();
-        }
-        String s = "";
-        while (this.st.hasMoreTokens()) {
-            s += this.st.nextToken();
-        }
-        return s;
-    }
-    
-    public int[] nextIntArr(final int n) throws IOException {
-        final int[] array = new int[n];
-        for (int i = 0; i < array.length; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    public long[] nextLongArr(final int n) throws IOException {
-        final long[] array = new long[n];
-        for (int i = 0; i < array.length; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    public double[] nextDoubleArr(final int n) throws IOException {
-        final double[] array = new double[n];
-        for (int i = 0; i < array.length; ++i) {
-            array[i] = this.nextDouble();
-        }
-        return array;
     }
 }

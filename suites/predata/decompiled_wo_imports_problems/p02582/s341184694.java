@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final char[] charArray = scanner.next().toCharArray();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final char[] charArray = (scanner = new Scanner(System.in)).next().toCharArray();
         scanner.close();
         int n = 0;
         for (int i = 0; i < 3; ++i) {
@@ -12,20 +12,20 @@ public class Main
         }
         if (n == 3) {
             System.out.println("3");
+            return;
         }
-        else if (n == 1) {
+        if (n == 1) {
             System.out.println("1");
+            return;
         }
-        else if (n == 2) {
-            if (charArray[1] == 'S') {
-                System.out.println("1");
-            }
-            else {
-                System.out.println("2");
-            }
-        }
-        else {
+        if (n != 2) {
             System.out.println("0");
+            return;
         }
+        if (charArray[1] == 'S') {
+            System.out.println("1");
+            return;
+        }
+        System.out.println("2");
     }
 }

@@ -93,10 +93,9 @@ public final class Main
     
     private static int lcm(int n, int i) {
         final int n2 = n * i;
-        final int n3 = n;
-        int n4;
-        for (i = i, n = n3; i != 0; i = n % i, n = n4) {
-            n4 = i;
+        int n3;
+        for (n = n; i != 0; i = n % i, n = n3) {
+            n3 = i;
         }
         return n2 / n;
     }

@@ -1,74 +1,26 @@
-static class FastReader
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
+public final class Main
 {
     private static final int MOD;
     
-    public static void main(final String[] array) {
-        final int nextInt = new FastReader().nextInt();
+    private static void main$3231c38a() {
+        final int int1;
         int x;
-        if (nextInt >= 64 && nextInt <= 100) {
+        if ((int1 = Integer.parseInt(new FastReader().next())) >= 64 && int1 <= 100) {
             x = 64;
         }
-        else if (nextInt >= 32 && nextInt <= 63) {
+        else if (int1 >= 32 && int1 <= 63) {
             x = 32;
         }
-        else if (nextInt >= 16 && nextInt <= 31) {
+        else if (int1 >= 16 && int1 <= 31) {
             x = 16;
         }
-        else if (nextInt >= 8 && nextInt <= 15) {
+        else if (int1 >= 8 && int1 <= 15) {
             x = 8;
         }
-        else if (nextInt >= 4 && nextInt <= 7) {
+        else if (int1 >= 4 && int1 <= 7) {
             x = 4;
         }
-        else if (nextInt >= 2 && nextInt <= 3) {
+        else if (int1 >= 2 && int1 <= 3) {
             x = 2;
         }
         else {
@@ -77,20 +29,16 @@ static class FastReader
         System.out.println(x);
     }
     
-    static {
-        MOD = (int)Math.pow(10.0, 9.0) + 7;
-    }
-    
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -107,19 +55,19 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

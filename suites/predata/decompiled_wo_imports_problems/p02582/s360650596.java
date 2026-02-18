@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    static StringTokenizer st;
-    static BufferedReader br;
-    static PrintWriter out;
+    private static StringTokenizer st;
+    private static BufferedReader br;
+    private static PrintWriter out;
     
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         Main.br = new BufferedReader(new InputStreamReader(System.in));
         final char[] charArray = next().toCharArray();
         int b = 0;
@@ -21,19 +21,19 @@ public class Main
         System.out.println(max);
     }
     
-    public static int nextInt() throws IOException {
+    private static int nextInt() throws IOException {
         return Integer.parseInt(next());
     }
     
-    public static long nextLong() throws IOException {
+    private static long nextLong() throws IOException {
         return Long.parseLong(next());
     }
     
-    public static double nextDouble() throws IOException {
+    private static double nextDouble() throws IOException {
         return Double.parseDouble(next());
     }
     
-    static String next() throws IOException {
+    private static String next() throws IOException {
         while (Main.st == null || !Main.st.hasMoreTokens()) {
             Main.st = new StringTokenizer(Main.br.readLine().trim());
         }

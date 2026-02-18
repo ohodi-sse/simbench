@@ -1,10 +1,14 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        new Main().solve();
+    private static void main$3231c38a() {
+        new Main();
+        int nextInt;
+        int n;
+        for (nextInt = new Scanner(System.in).nextInt(), n = 0; 1 << n + 1 <= nextInt; ++n) {}
+        System.out.println(1 << n);
     }
     
-    void solve() {
+    private static void solve() {
         int nextInt;
         int n;
         for (nextInt = new Scanner(System.in).nextInt(), n = 0; 1 << n + 1 <= nextInt; ++n) {}

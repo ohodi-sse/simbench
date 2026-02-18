@@ -150,7 +150,7 @@ final class TaskB
         printWriter.println(x);
     }
     
-    private long __gcd(long n, long n2) {
+    private static long __gcd(long n, long n2) {
         while (n2 != 0L) {
             final long n3 = n2;
             n2 = n % n2;

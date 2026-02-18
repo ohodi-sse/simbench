@@ -1,65 +1,36 @@
-static class InputReader
+public final class Main
 {
-    public BufferedReader reader;
-    public StringTokenizer tokenizer;
-    
-    public InputReader(final InputStream in) {
-        this.reader = new BufferedReader(new InputStreamReader(in), 32768);
-        this.tokenizer = null;
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.tokenizer != null) {
-                if (this.tokenizer.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.tokenizer = new StringTokenizer(this.reader.readLine());
-                continue;
-            }
-            catch (final IOException cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.tokenizer.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final InputReader inputReader = new InputReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        printWriter.println(TaskA.solve(0, inputReader));
+        int x = 0;
+        final String next;
+        if ((next = inputReader.next()).contains("RRR")) {
+            x = 3;
+        }
+        else if (next.contains("RR")) {
+            x = 2;
+        }
+        else if (next.contains("R")) {
+            x = 1;
+        }
+        printWriter.println(x);
         printWriter.close();
     }
     
-    static class InputReader
+    static final class InputReader
     {
-        public BufferedReader reader;
-        public StringTokenizer tokenizer;
+        private BufferedReader reader;
+        private StringTokenizer tokenizer;
         
         public InputReader(final InputStream in) {
             this.reader = new BufferedReader(new InputStreamReader(in), 32768);
             this.tokenizer = null;
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.tokenizer != null) {
                     if (this.tokenizer.hasMoreTokens()) {
@@ -78,32 +49,37 @@ static class InputReader
             return this.tokenizer.nextToken();
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        public double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
     }
-}class TaskA
+}
+
+
+
+
+final class TaskA
 {
-    public static int solve(final int n, final Main.InputReader inputReader) {
-        int n2 = 0;
-        final String next = inputReader.next();
-        if (next.contains("RRR")) {
-            n2 = 3;
+    private static int solve$6d3ee072(final Main.InputReader inputReader) {
+        int n = 0;
+        final String next;
+        if ((next = inputReader.next()).contains("RRR")) {
+            n = 3;
         }
         else if (next.contains("RR")) {
-            n2 = 2;
+            n = 2;
         }
         else if (next.contains("R")) {
-            n2 = 1;
+            n = 1;
         }
-        return n2;
+        return n;
     }
 }

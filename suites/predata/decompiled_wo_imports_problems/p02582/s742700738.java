@@ -1,13 +1,13 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        String s = scanner.nextLine();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        String str = (scanner = new Scanner(System.in)).nextLine();
         scanner.close();
         int n = 0;
         int x = 0;
-        while (s.length() > 0) {
-            if (s.startsWith("R")) {
+        while (str.length() > 0) {
+            if (str.startsWith("R")) {
                 ++n;
             }
             else {
@@ -16,14 +16,18 @@ public class Main
             if (n > x) {
                 x = n;
             }
-            s = removeLeadingZeroes(s);
+            final StringBuilder sb;
+            if ((sb = new StringBuilder(str)).length() > 0) {
+                sb.deleteCharAt(0);
+            }
+            str = sb.toString();
         }
         System.out.println(x);
     }
     
-    static String removeLeadingZeroes(final String str) {
-        final StringBuilder sb = new StringBuilder(str);
-        if (sb.length() > 0) {
+    private static String removeLeadingZeroes(final String str) {
+        final StringBuilder sb;
+        if ((sb = new StringBuilder(str)).length() > 0) {
             sb.deleteCharAt(0);
         }
         return sb.toString();

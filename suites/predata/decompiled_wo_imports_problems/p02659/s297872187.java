@@ -1,12 +1,15 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        new Main().run();
+    private static void main$3231c38a() {
+        new Main();
+        final Scanner scanner;
+        System.out.println((scanner = new Scanner(System.in)).nextLong() * Math.round(scanner.nextDouble() * 100.0) / 100L);
+        scanner.close();
     }
     
-    public void run() {
-        final Scanner scanner = new Scanner(System.in);
-        System.out.println(scanner.nextLong() * Math.round(scanner.nextDouble() * 100.0) / 100L);
+    private static void run() {
+        final Scanner scanner;
+        System.out.println((scanner = new Scanner(System.in)).nextLong() * Math.round(scanner.nextDouble() * 100.0) / 100L);
         scanner.close();
     }
 }

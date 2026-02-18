@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    static Scanner sc;
+    private static Scanner sc;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         System.out.println(Main.sc.nextLong() * Math.round(Main.sc.nextDouble() * 100.0) / 100L);
     }
     

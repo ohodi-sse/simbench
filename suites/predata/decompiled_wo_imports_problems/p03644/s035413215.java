@@ -1,16 +1,15 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final int nextInt = new Scanner(System.in).nextInt();
-        if (nextInt == 1) {
+    private static void main$3231c38a() {
+        final int nextInt;
+        if ((nextInt = new Scanner(System.in).nextInt()) == 1) {
             System.out.println(1);
+            return;
         }
-        else {
-            int x = 0;
-            for (int i = 2; i <= nextInt; i *= 2) {
-                x = i;
-            }
-            System.out.println(x);
+        int x = 0;
+        for (int i = 2; i <= nextInt; i <<= 1) {
+            x = i;
         }
+        System.out.println(x);
     }
 }

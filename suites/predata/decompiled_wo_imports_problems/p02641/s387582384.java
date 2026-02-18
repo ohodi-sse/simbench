@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final ArrayList list = new ArrayList();
         for (int i = 0; i < nextInt2; ++i) {
@@ -21,8 +21,8 @@ public class Main
         int n = 51;
         int intValue2 = 0;
         for (int k = 0; k < list3.size(); ++k) {
-            final int abs = Math.abs((int)list3.get(k) - nextInt);
-            if (abs < n) {
+            final int abs;
+            if ((abs = Math.abs((int)list3.get(k) - nextInt)) < n) {
                 n = abs;
                 intValue2 = (int)list3.get(k);
             }

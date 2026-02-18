@@ -1,35 +1,4 @@
-public class Main
-{
-    private static final int M = 1000000007;
-    
-    public Main(final FastScanner fastScanner, final PrintWriter printWriter, final int n) {
-        final long nextLong = fastScanner.nextLong();
-        final String[] split = fastScanner.next().split("\\.");
-        printWriter.println(nextLong * (Integer.parseInt(split[0]) * 100 + Integer.parseInt(split[1])) / 100L);
-    }
-    
-    private long pow(final int n, int i) {
-        long n2 = 1L;
-        long n3 = n;
-        while (i > 1) {
-            if (i % 2 == 1) {
-                n2 = n2 * n3 % 1000000007L;
-            }
-            n3 = n3 * n3 % 1000000007L;
-            i /= 2;
-        }
-        return n2 * n3 % 1000000007L;
-    }
-    
-    public static void main(final String[] array) {
-        final PrintWriter printWriter = new PrintWriter(System.out);
-        final FastScanner fastScanner = new FastScanner(System.in);
-        for (int i = 1; i <= 1; ++i) {
-            final Main main = new Main(fastScanner, printWriter, i);
-        }
-        printWriter.close();
-    }
-}class FastScanner
+final class FastScanner
 {
     private InputStream stream;
     private byte[] buf;
@@ -41,7 +10,7 @@ public class Main
         this.stream = stream;
     }
     
-    int read() {
+    private int read() {
         if (this.numChars == -1) {
             throw new InputMismatchException();
         }
@@ -60,45 +29,83 @@ public class Main
         return this.buf[this.curChar++];
     }
     
-    boolean isSpaceChar(final int n) {
+    private static boolean isSpaceChar(final int n) {
         return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
     }
     
-    boolean isEndline(final int n) {
+    private static boolean isEndline(final int n) {
         return n == 10 || n == 13 || n == -1;
     }
     
-    int nextInt() {
+    private int nextInt() {
         return Integer.parseInt(this.next());
     }
     
-    long nextLong() {
+    private long nextLong() {
         return Long.parseLong(this.next());
     }
     
-    double nextDouble() {
+    private double nextDouble() {
         return Double.parseDouble(this.next());
     }
     
-    String next() {
+    final String next() {
         int codePoint;
-        for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
+        for (codePoint = this.read(); isSpaceChar(codePoint); codePoint = this.read()) {}
         final StringBuilder sb = new StringBuilder();
         do {
             sb.appendCodePoint(codePoint);
-            codePoint = this.read();
-        } while (!this.isSpaceChar(codePoint));
+        } while (!isSpaceChar(codePoint = this.read()));
         return sb.toString();
     }
     
-    String nextLine() {
+    private String nextLine() {
         int codePoint;
-        for (codePoint = this.read(); this.isEndline(codePoint); codePoint = this.read()) {}
+        for (codePoint = this.read(); isEndline(codePoint); codePoint = this.read()) {}
         final StringBuilder sb = new StringBuilder();
         do {
             sb.appendCodePoint(codePoint);
-            codePoint = this.read();
-        } while (!this.isEndline(codePoint));
+        } while (!isEndline(codePoint = this.read()));
         return sb.toString();
+    }
+}
+
+
+
+
+
+
+
+public final class Main
+{
+    private static final int M = 1000000007;
+    
+    private Main(final FastScanner fastScanner, final PrintWriter printWriter) {
+        final long long1 = Long.parseLong(fastScanner.next());
+        final String[] split = fastScanner.next().split("\\.");
+        printWriter.println(long1 * (Integer.parseInt(split[0]) * 100 + Integer.parseInt(split[1])) / 100L);
+    }
+    
+    private static long pow(final int n, int i) {
+        long n2 = 1L;
+        long n3 = n;
+        while (i > 1) {
+            if (i % 2 == 1) {
+                n2 = n2 * n3 % 1000000007L;
+            }
+            final long n4 = n3;
+            n3 = n4 * n4 % 1000000007L;
+            i /= 2;
+        }
+        return n2 * n3 % 1000000007L;
+    }
+    
+    private static void main$3231c38a() {
+        final PrintWriter printWriter = new PrintWriter(System.out);
+        final FastScanner fastScanner = new FastScanner(System.in);
+        for (int i = 1; i <= 1; ++i) {
+            new Main(fastScanner, printWriter);
+        }
+        printWriter.close();
     }
 }

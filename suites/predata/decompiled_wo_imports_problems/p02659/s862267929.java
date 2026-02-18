@@ -1,13 +1,13 @@
-public class Main
+public final class Main
 {
     private static final int MOD = 1000000007;
     private static final String YES = "Yes";
     private static final String NO = "No";
     private static final double eps = 1.0E-4;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
-        System.out.println(solve2(scanner.nextLong(), scanner.nextDouble()));
+        System.out.println(scanner.nextLong() * (int)(scanner.nextDouble() * 100.0 + 1.0E-4) / 100L);
     }
     
     private static String solve(final long val, final double val2) {

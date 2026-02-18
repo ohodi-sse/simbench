@@ -1,18 +1,31 @@
-public class Main
+public final class Main
 {
-    int n;
-    int ans;
+    private int n;
+    private int ans;
     
     public Main() {
         this.ans = 1;
     }
     
-    public static void main(final String[] array) {
-        new Main().run();
+    private static void main$3231c38a() {
+        final Main main;
+        (main = new Main()).n = new Scanner(System.in).nextInt();
+        int n = 0;
+        for (int i = 1; i <= main.n; ++i) {
+            int n2 = 0;
+            for (int n3 = i; n3 % 2 == 0; n3 /= 2) {
+                ++n2;
+            }
+            if (n < n2) {
+                n = n2;
+                main.ans = i;
+            }
+        }
+        System.out.println(main.ans);
     }
     
-    void run() {
-        this.in();
+    private void run() {
+        this.n = new Scanner(System.in).nextInt();
         int n = 0;
         for (int i = 1; i <= this.n; ++i) {
             int n2 = 0;
@@ -24,14 +37,14 @@ public class Main
                 this.ans = i;
             }
         }
-        this.out();
+        System.out.println(this.ans);
     }
     
-    void in() {
+    private void in() {
         this.n = new Scanner(System.in).nextInt();
     }
     
-    void out() {
+    private void out() {
         System.out.println(this.ans);
     }
 }

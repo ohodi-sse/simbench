@@ -1,21 +1,47 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        switch (true) {
-            case 1: {
-                P1.p1();
-                break;
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String nextLine = (scanner = new Scanner(System.in)).nextLine();
+        final String nextLine2 = scanner.nextLine();
+        final String s = nextLine;
+        final String s2 = nextLine2;
+        final String s3 = s;
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (Objects.equals(s3.charAt(i), s2.charAt(i))) {
+                ++x;
             }
         }
+        System.out.println(x);
     }
-}class P1
+}
+
+
+
+
+
+
+
+final class P1
 {
-    static void p1() {
-        final Scanner scanner = new Scanner(System.in);
-        System.out.println(calc(scanner.nextLine(), scanner.nextLine()));
+    private static void p1() {
+        final Scanner scanner;
+        final String nextLine = (scanner = new Scanner(System.in)).nextLine();
+        final String nextLine2 = scanner.nextLine();
+        final String s = nextLine;
+        final String s2 = nextLine2;
+        final String s3 = s;
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (Objects.equals(s3.charAt(i), s2.charAt(i))) {
+                ++x;
+            }
+        }
+        System.out.println(x);
     }
     
-    static int calc(final String s, final String s2) {
+    private static int calc(final String s, final String s2) {
         int n = 0;
         for (int i = 0; i < 3; ++i) {
             if (Objects.equals(s.charAt(i), s2.charAt(i))) {

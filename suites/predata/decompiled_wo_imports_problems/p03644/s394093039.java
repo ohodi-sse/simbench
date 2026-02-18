@@ -1,12 +1,4 @@
-public class Main
-{
-    public static void main(final String[] array) throws IOException {
-        final int int1 = new InputReader(System.in).readInt();
-        int x = 0;
-        for (int i = 0, n = 0; i <= int1; i = (int)Math.pow(2.0, n), x = (int)Math.pow(2.0, n - 1), ++n) {}
-        System.out.println(x);
-    }
-}class InputReader
+final class InputReader
 {
     private InputStream stream;
     private byte[] buf;
@@ -19,7 +11,7 @@ public class Main
         this.stream = stream;
     }
     
-    public int read() {
+    public final int read() {
         if (this.numChars == -1) {
             throw new InputMismatchException();
         }
@@ -38,7 +30,7 @@ public class Main
         return this.buf[this.curChar++];
     }
     
-    public int readInt() {
+    private int readInt() {
         int n;
         for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
         int n2 = 1;
@@ -57,7 +49,7 @@ public class Main
         throw new InputMismatchException();
     }
     
-    public String readString() {
+    private String readString() {
         int codePoint;
         for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
         final StringBuilder sb = new StringBuilder();
@@ -68,7 +60,7 @@ public class Main
         return sb.toString();
     }
     
-    public long readLong() {
+    private long readLong() {
         int n;
         for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
         int n2 = 1;
@@ -87,22 +79,57 @@ public class Main
         throw new InputMismatchException();
     }
     
-    public boolean isSpaceChar(final int n) {
-        if (this.filter != null) {
-            return this.filter.isSpaceChar(n);
-        }
+    public final boolean isSpaceChar(final int n) {
+        final SpaceCharFilter filter = this.filter;
         return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
     }
     
-    public String next() {
-        return this.readString();
+    private String next() {
+        int codePoint;
+        for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
+        final StringBuilder sb = new StringBuilder();
+        do {
+            sb.appendCodePoint(codePoint);
+            codePoint = this.read();
+        } while (!this.isSpaceChar(codePoint));
+        return sb.toString();
     }
     
     public interface SpaceCharFilter
     {
-        boolean isSpaceChar(final int p0);
+        boolean isSpaceChar$134632();
     }
-}public interface SpaceCharFilter
+}
+
+
+
+
+
+
+
+public final class Main
 {
-    boolean isSpaceChar(final int p0);
+    private static void main$3231c38a() throws IOException {
+        InputReader inputReader;
+        int n;
+        for (n = (inputReader = new InputReader(System.in)).read(); inputReader.isSpaceChar(n); n = inputReader.read()) {}
+        int n2 = 1;
+        if (n == 45) {
+            n2 = -1;
+            n = inputReader.read();
+        }
+        int n3 = 0;
+        while (n >= 48 && n <= 57) {
+            n3 = n3 * 10 + (n - 48);
+            n = inputReader.read();
+            if (inputReader.isSpaceChar(n)) {
+                final int n4 = n3 * n2;
+                int x = 0;
+                for (int i = 0, n5 = 0; i <= n4; i = (int)Math.pow(2.0, n5), x = (int)Math.pow(2.0, n5 - 1), ++n5) {}
+                System.out.println(x);
+                return;
+            }
+        }
+        throw new InputMismatchException();
+    }
 }

@@ -1,9 +1,9 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        final String[] split = bufferedReader.readLine().split(" ");
-        final int int1 = Integer.parseInt(split[0]);
+    private static void main$3231c38a() throws IOException {
+        final BufferedReader bufferedReader;
+        final String[] split;
+        final int int1 = Integer.parseInt((split = (bufferedReader = new BufferedReader(new InputStreamReader(System.in))).readLine().split(" "))[0]);
         final int int2 = Integer.parseInt(split[1]);
         int x = 0;
         int n = Integer.MAX_VALUE;
@@ -13,12 +13,10 @@ public class Main
             set.add(Integer.parseInt(split2[i]));
         }
         for (int j = 0; j <= 101; ++j) {
-            if (!set.contains(j)) {
-                final int abs = Math.abs(int1 - j);
-                if (abs < n) {
-                    n = abs;
-                    x = j;
-                }
+            final int abs;
+            if (!set.contains(j) && (abs = Math.abs(int1 - j)) < n) {
+                n = abs;
+                x = j;
             }
         }
         System.out.println(x);

@@ -1,58 +1,10 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
+    private static List<Integer> al;
+    private static int[] a;
+    private static Set<Integer> s;
     
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    static List<Integer> al;
-    static int[] a;
-    static Set<Integer> s;
-    
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String nextLine = new FastReader().nextLine();
         int x = 0;
         for (int i = 0; i < nextLine.length(); ++i) {
@@ -69,18 +21,21 @@ static class FastReader
         System.out.println(x);
     }
     
-    static void chess(final int n, final int n2, final int n3, final int n4) {
-        if (n3 < 0 || n4 < 0 || n3 >= n || n4 >= n2) {
-            return;
+    private static void chess(int n, int n2, int n3, final int n4) {
+        while (n3 >= 0 && n4 >= 0 && n3 < n && n4 < n2) {
+            System.out.print(n3 + " " + n4);
+            chess(n, n2, n3, n4 - 1);
+            chess(n, n2, n3 - 1, n4);
+            chess(n, n2, n3, n4 + 1);
+            final int n5 = n;
+            final int n6 = n2;
+            ++n3;
+            n2 = n6;
+            n = n5;
         }
-        System.out.print(n3 + " " + n4);
-        chess(n, n2, n3, n4 - 1);
-        chess(n, n2, n3 - 1, n4);
-        chess(n, n2, n3, n4 + 1);
-        chess(n, n2, n3 + 1, n4);
     }
     
-    static int findCounts(final int[] array, final int n) {
+    private static int findCounts(final int[] array, final int n) {
         int i = 0;
         while (i < n) {
             if (array[i] <= 0) {
@@ -110,20 +65,20 @@ static class FastReader
     }
     
     static {
-        Main.al = new ArrayList<Integer>();
-        Main.s = new HashSet<Integer>();
+        new ArrayList();
+        new HashSet();
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        private String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -140,19 +95,19 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        final String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

@@ -1,10 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        exec();
+    private static void main$3231c38a() {
+        final Scanner scanner = new Scanner(System.in);
+        System.out.println(BigDecimal.valueOf(scanner.nextLong()).multiply(BigDecimal.valueOf(scanner.nextDouble())).setScale(0, 1));
     }
     
-    static void exec() {
+    private static void exec() {
         final Scanner scanner = new Scanner(System.in);
         System.out.println(BigDecimal.valueOf(scanner.nextLong()).multiply(BigDecimal.valueOf(scanner.nextDouble())).setScale(0, 1));
     }

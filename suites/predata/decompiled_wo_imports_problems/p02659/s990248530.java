@@ -1,12 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final long nextLong = scanner.nextLong();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final long nextLong = (scanner = new Scanner(System.in)).nextLong();
         final BigDecimal nextBigDecimal = scanner.nextBigDecimal();
-        final int val = 100;
         final BigDecimal bigDecimal = new BigDecimal(nextLong);
-        final BigDecimal bigDecimal2 = new BigDecimal(val);
+        final BigDecimal bigDecimal2 = new BigDecimal(100);
         System.out.println(bigDecimal.multiply(nextBigDecimal.multiply(bigDecimal2)).divide(bigDecimal2).setScale(0, 1));
     }
 }

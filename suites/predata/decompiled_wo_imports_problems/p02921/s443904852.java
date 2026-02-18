@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        final String line = bufferedReader.readLine();
+    private static void main$3231c38a() throws Exception {
+        final BufferedReader bufferedReader;
+        final String line = (bufferedReader = new BufferedReader(new InputStreamReader(System.in))).readLine();
         final String line2 = bufferedReader.readLine();
         int i = 0;
         for (int j = 0; j < 3; ++j) {

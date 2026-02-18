@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         final PrintWriter printWriter = new PrintWriter(System.out);
-        final StringTokenizer stringTokenizer = new StringTokenizer(bufferedReader.readLine());
-        final int int1 = Integer.parseInt(stringTokenizer.nextToken());
+        final StringTokenizer stringTokenizer;
+        final int int1 = Integer.parseInt((stringTokenizer = new StringTokenizer(bufferedReader.readLine())).nextToken());
         if (Integer.parseInt(stringTokenizer.nextToken()) == 0) {
             printWriter.println(int1);
             bufferedReader.close();
@@ -13,13 +13,11 @@ public class Main
         }
         final String[] split = bufferedReader.readLine().split(" ");
         final HashSet set = new HashSet();
-        final String[] array2 = split;
-        for (int length = array2.length, i = 0; i < length; ++i) {
-            set.add(Integer.parseInt(array2[i]));
+        for (int length = split.length, i = 0; i < length; ++i) {
+            set.add(Integer.parseInt(split[i]));
         }
         int n = int1;
         int n2 = int1;
-        final int n3 = 1;
         if (!set.contains(int1)) {
             printWriter.println(int1);
             bufferedReader.close();
@@ -27,8 +25,8 @@ public class Main
             return;
         }
         while (n != 100 || n2 != 0) {
-            n += n3;
-            n2 -= n3;
+            ++n;
+            --n2;
             if (!set.contains(n2)) {
                 printWriter.println(n2);
                 break;

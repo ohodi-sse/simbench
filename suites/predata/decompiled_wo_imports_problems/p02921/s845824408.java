@@ -1,13 +1,13 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String nextLine = scanner.nextLine();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String nextLine = (scanner = new Scanner(System.in)).nextLine();
         final String nextLine2 = scanner.nextLine();
         int n = 0;
         int x = 0;
-        final String[] split = nextLine.split("");
-        for (int length = split.length, i = 0; i < length; ++i) {
+        String[] split;
+        for (int length = (split = nextLine.split("")).length, i = 0; i < length; ++i) {
             if (split[i].equals(nextLine2.split("")[n])) {
                 ++x;
             }

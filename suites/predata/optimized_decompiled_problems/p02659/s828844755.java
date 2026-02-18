@@ -101,11 +101,15 @@ public final class Main
             return this.print(s);
         }
         
-        public final LightWriter ans(final long i) {
-            return this.ans(Long.toString(i));
+        private LightWriter ans(final long i) {
+            final String string = Long.toString(i);
+            if (!this.breaked) {
+                this.print$3a5feaa1();
+            }
+            return this.print(string);
         }
         
-        public final LightWriter ln() {
+        private LightWriter ln() {
             this.print(System.lineSeparator());
             this.breaked = true;
             final boolean autoflush = this.autoflush;

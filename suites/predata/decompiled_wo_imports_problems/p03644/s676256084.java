@@ -1,96 +1,12 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    BufferedReader br1;
-    StringTokenizer st;
-    
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    public FastReader(final String fileName) throws FileNotFoundException {
-        this.br = new BufferedReader(new FileReader(fileName));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    char[][] readCharArray(final int n, final int n2) {
-        final char[][] array = new char[n][n2];
-        for (int i = 0; i < n; ++i) {
-            final String nextLine = this.nextLine();
-            for (int j = 0; j < n; ++j) {
-                array[i][j] = nextLine.charAt(j);
-            }
-        }
-        return array;
-    }
-    
-    char[][] readCharArray(final int n) {
-        return this.readCharArray(n, n);
-    }
-    
-    int[] readArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    long[] readLongArray(final int n) {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    public static void main(final String[] array) throws NumberFormatException, IOException {
+    private static void main$3231c38a() throws NumberFormatException, IOException {
         final FastReader fastReader = new FastReader();
         final PrintWriter printWriter = new PrintWriter(System.out);
-        final int nextInt = fastReader.nextInt();
+        final int int1 = Integer.parseInt(fastReader.next());
         int x = 0;
         int n = -1;
-        for (int i = 1; i <= nextInt; ++i) {
+        for (int i = 1; i <= int1; ++i) {
             int n2;
             int n3;
             for (n2 = i, n3 = 0; n2 % 2 == 0; n2 /= 2, ++n3) {}
@@ -103,21 +19,21 @@ static class FastReader
         printWriter.close();
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        BufferedReader br1;
-        StringTokenizer st;
+        private BufferedReader br;
+        private BufferedReader br1;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        public FastReader(final String fileName) throws FileNotFoundException {
+        private FastReader(final String fileName) throws FileNotFoundException {
             this.br = new BufferedReader(new FileReader(fileName));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -134,19 +50,19 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        char[][] readCharArray(final int n, final int n2) {
+        private char[][] readCharArray(final int n, final int n2) {
             final char[][] array = new char[n][n2];
             for (int i = 0; i < n; ++i) {
                 final String nextLine = this.nextLine();
@@ -157,27 +73,34 @@ static class FastReader
             return array;
         }
         
-        char[][] readCharArray(final int n) {
-            return this.readCharArray(n, n);
+        private char[][] readCharArray(final int n) {
+            final char[][] array = new char[n][n];
+            for (int i = 0; i < n; ++i) {
+                final String nextLine = this.nextLine();
+                for (int j = 0; j < n; ++j) {
+                    array[i][j] = nextLine.charAt(j);
+                }
+            }
+            return array;
         }
         
-        int[] readArray(final int n) {
+        private int[] readArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        long[] readLongArray(final int n) {
+        private long[] readLongArray(final int n) {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLong();
+                array[i] = Long.parseLong(this.next());
             }
             return array;
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

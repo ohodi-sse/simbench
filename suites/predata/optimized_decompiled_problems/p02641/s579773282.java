@@ -55,8 +55,7 @@ public final class Main
         for (int i = 0; i < 4; ++i) {
             final int n3 = Main.bishopr[i] + n;
             final int n4 = Main.bishopc[i] + n2;
-            final int n5;
-            if ((n5 = n3) >= 0 && n5 < 0L && n4 >= 0 && n4 < 0L) {
+            if (n3 >= 0 && n3 < 0L && n4 >= 0 && n4 < 0L) {
                 throw new NullPointerException();
             }
         }

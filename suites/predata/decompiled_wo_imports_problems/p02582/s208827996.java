@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    static final long MOD = 1000000007L;
+    private static long MOD = 1000000007L;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final FastScanner fastScanner = new FastScanner();
         final PrintWriter printWriter = new PrintWriter(System.out);
         final String next = fastScanner.next();
@@ -21,16 +21,16 @@ public class Main
         printWriter.close();
     }
     
-    static class FastScanner
+    static final class FastScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastScanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -47,19 +47,19 @@ public class Main
             return this.st.nextToken();
         }
         
-        int ni() {
+        private int ni() {
             return Integer.parseInt(this.next());
         }
         
-        long nl() {
+        private long nl() {
             return Long.parseLong(this.next());
         }
         
-        double nd() {
+        private double nd() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();
@@ -69,53 +69,5 @@ public class Main
             }
             return line;
         }
-    }
-}static class FastScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int ni() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nl() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nd() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
     }
 }

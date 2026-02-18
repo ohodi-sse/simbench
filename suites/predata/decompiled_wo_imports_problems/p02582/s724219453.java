@@ -1,18 +1,19 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        if (next.equals("RSS") || next.equals("SRS") || next.equals("SSR") || next.equals("RSR")) {
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = new Scanner(System.in).next()).equals("RSS") || next.equals("SRS") || next.equals("SSR") || next.equals("RSR")) {
             System.out.println(1);
+            return;
         }
-        else if (next.equals("RRS") || next.equals("SRR")) {
+        if (next.equals("RRS") || next.equals("SRR")) {
             System.out.println(2);
+            return;
         }
-        else if (next.equals("RRR")) {
+        if (next.equals("RRR")) {
             System.out.println(3);
+            return;
         }
-        else {
-            System.out.println(0);
-        }
+        System.out.println(0);
     }
 }

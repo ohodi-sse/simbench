@@ -1,15 +1,31 @@
-public class Main
+public final class Main
 {
-    public static PrintWriter out;
+    private static PrintWriter out;
     
-    public static void main(final String[] array) {
-        run();
+    private static void main$3231c38a() {
+        Main.out = new PrintWriter(new BufferedOutputStream(System.out));
+        final Scanner scanner = new Scanner(System.in);
+        final PrintWriter out = Main.out;
+        final int int1 = Integer.parseInt(scanner.next());
+        int x = 0;
+        for (int n = 0; (int)Math.pow(2.0, n) <= int1; ++n) {
+            x = (int)Math.pow(2.0, n);
+        }
+        out.println(x);
+        Main.out.close();
+        scanner.close();
     }
     
     private static void run() {
         Main.out = new PrintWriter(new BufferedOutputStream(System.out));
         final Scanner scanner = new Scanner(System.in);
-        Main.out.println(count(Integer.parseInt(scanner.next())));
+        final PrintWriter out = Main.out;
+        final int int1 = Integer.parseInt(scanner.next());
+        int x = 0;
+        for (int n = 0; (int)Math.pow(2.0, n) <= int1; ++n) {
+            x = (int)Math.pow(2.0, n);
+        }
+        out.println(x);
         Main.out.close();
         scanner.close();
     }

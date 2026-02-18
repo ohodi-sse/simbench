@@ -1,12 +1,20 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         try (final Scanner scanner = new Scanner(System.in)) {
-            solve(scanner);
+            final int nextInt = scanner.nextInt();
+            int n = 1;
+            for (int i = 0; i <= 100; ++i) {
+                if (n > nextInt) {
+                    System.out.println(n / 2);
+                    break;
+                }
+                n <<= 1;
+            }
         }
     }
     
-    public static void solve(final Scanner scanner) {
+    private static void solve(final Scanner scanner) {
         final int nextInt = scanner.nextInt();
         int n = 1;
         for (int i = 0; i <= 100; ++i) {
@@ -14,7 +22,7 @@ public class Main
                 System.out.println(n / 2);
                 return;
             }
-            n *= 2;
+            n <<= 1;
         }
     }
 }

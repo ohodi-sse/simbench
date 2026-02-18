@@ -1,12 +1,12 @@
-public class Main
+public final class Main
 {
     private static final int MOD = 1000000007;
     private static final String YES = "Yes";
     private static final String NO = "No";
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
-        System.out.println(solve(scanner.nextLong(), scanner.nextDouble()));
+        System.out.println(BigDecimal.valueOf(scanner.nextLong()).multiply(BigDecimal.valueOf(scanner.nextDouble())).setScale(0, RoundingMode.DOWN).toString());
     }
     
     private static String solve(final long val, final double val2) {

@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    static double eps;
+    private static double eps;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         System.out.println(scanner.nextLong() * (long)((Main.eps + scanner.nextDouble()) * 100.0) / 100L);
     }

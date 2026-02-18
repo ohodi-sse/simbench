@@ -1,19 +1,24 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        int nextInt = new Scanner(System.in).nextInt();
+    private static void main$3231c38a() {
+        int nextInt;
+        int i = nextInt = new Scanner(System.in).nextInt();
         int n = 0;
-        for (int i = nextInt; i > 0; --i) {
-            final int cnt = cnt(i);
-            if (cnt > n) {
-                n = cnt;
+        while (i > 0) {
+            int n2;
+            int n3;
+            for (n2 = i, n3 = 0; n2 > 0 && n2 % 2 == 0; n2 /= 2, ++n3) {}
+            final int n4;
+            if ((n4 = n3) > n) {
+                n = n4;
                 nextInt = i;
             }
+            --i;
         }
         System.out.println(nextInt);
     }
     
-    static int cnt(int n) {
+    private static int cnt(int n) {
         int n2;
         for (n2 = 0; n > 0 && n % 2 == 0; n /= 2, ++n2) {}
         return n2;

@@ -1,12 +1,12 @@
-class Main
+final class Main
 {
-    FileInputStream fs;
-    InputStream is;
-    PrintWriter out;
-    String INPUT;
+    private FileInputStream fs;
+    private InputStream is;
+    private PrintWriter out;
+    private String INPUT;
     private byte[] inbuf;
-    public int lenbuf;
-    public int ptrbuf;
+    private int lenbuf;
+    private int ptrbuf;
     
     Main() {
         this.INPUT = "";
@@ -15,7 +15,7 @@ class Main
         this.ptrbuf = 0;
     }
     
-    void solve() {
+    private void solve() {
         final String ns = this.ns();
         final String ns2 = this.ns();
         int x = 0;
@@ -27,19 +27,52 @@ class Main
         this.out.println(x);
     }
     
-    void run() throws Exception {
+    private void run() throws Exception {
         this.is = (this.INPUT.isEmpty() ? System.in : new ByteArrayInputStream(this.INPUT.getBytes()));
         this.out = new PrintWriter(System.out);
         final long currentTimeMillis = System.currentTimeMillis();
-        this.solve();
+        final String ns = this.ns();
+        final String ns2 = this.ns();
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (ns.charAt(i) == ns2.charAt(i)) {
+                ++x;
+            }
+        }
+        this.out.println(x);
         this.out.flush();
         if (!this.INPUT.isEmpty()) {
-            this.tr(System.currentTimeMillis() - currentTimeMillis + "ms");
+            final Object[] a = { System.currentTimeMillis() - currentTimeMillis + "ms" };
+            if (this.INPUT.length() > 0) {
+                System.out.println(Arrays.deepToString(a));
+            }
         }
     }
     
-    public static void main(final String[] array) throws Exception {
-        new Main().run();
+    private static void main$3231c38a() throws Exception {
+        final Main main2;
+        final Main main = main2 = new Main();
+        main.is = (main.INPUT.isEmpty() ? System.in : new ByteArrayInputStream(main2.INPUT.getBytes()));
+        main2.out = new PrintWriter(System.out);
+        final long currentTimeMillis = System.currentTimeMillis();
+        final Main main3;
+        final String ns = (main3 = main2).ns();
+        final String ns2 = main3.ns();
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (ns.charAt(i) == ns2.charAt(i)) {
+                ++x;
+            }
+        }
+        main3.out.println(x);
+        main2.out.flush();
+        if (!main2.INPUT.isEmpty()) {
+            final Main main4 = main2;
+            final Object[] a = { System.currentTimeMillis() - currentTimeMillis + "ms" };
+            if (main4.INPUT.length() > 0) {
+                System.out.println(Arrays.deepToString(a));
+            }
+        }
     }
     
     private int readByte() {
@@ -61,13 +94,13 @@ class Main
         return this.inbuf[this.ptrbuf++];
     }
     
-    private boolean isSpaceChar(final int n) {
+    private static boolean isSpaceChar(final int n) {
         return n < 33 || n > 126;
     }
     
     private int skip() {
         int byte1;
-        while ((byte1 = this.readByte()) != -1 && this.isSpaceChar(byte1)) {}
+        while ((byte1 = this.readByte()) != -1 && isSpaceChar(byte1)) {}
         return byte1;
     }
     
@@ -82,7 +115,7 @@ class Main
     private String ns() {
         int codePoint = this.skip();
         final StringBuilder sb = new StringBuilder();
-        while (!this.isSpaceChar(codePoint)) {
+        while (!isSpaceChar(codePoint)) {
             sb.appendCodePoint(codePoint);
             codePoint = this.readByte();
         }
@@ -93,14 +126,23 @@ class Main
         char[] original;
         int n2;
         int newLength;
-        for (original = new char[n], n2 = this.skip(), newLength = 0; newLength < n && !this.isSpaceChar(n2); original[newLength++] = (char)n2, n2 = this.readByte()) {}
-        return (n == newLength) ? original : Arrays.copyOf(original, newLength);
+        for (original = new char[n], n2 = this.skip(), newLength = 0; newLength < n && !isSpaceChar(n2); original[newLength++] = (char)n2, n2 = this.readByte()) {}
+        if (n == newLength) {
+            return original;
+        }
+        return Arrays.copyOf(original, newLength);
     }
     
     private char[][] nm(final int n, final int n2) {
         final char[][] array = new char[n][];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.ns(n2);
+            final char[][] array2 = array;
+            final int n3 = i;
+            char[] original;
+            int n4;
+            int newLength;
+            for (original = new char[n2], n4 = this.skip(), newLength = 0; newLength < n2 && !isSpaceChar(n4); original[newLength++] = (char)n4, n4 = this.readByte()) {}
+            array2[n3] = ((n2 == newLength) ? original : Arrays.copyOf(original, newLength));
         }
         return array;
     }
@@ -108,7 +150,21 @@ class Main
     private int[] na(final int n) {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.ni();
+            final int[] array2 = array;
+            final int n2 = i;
+            int n3 = 0;
+            boolean b = false;
+            int n4;
+            while ((n4 = this.readByte()) != -1 && (n4 < 48 || n4 > 57) && n4 != 45) {}
+            if (n4 == 45) {
+                b = true;
+                n4 = this.readByte();
+            }
+            while (n4 >= 48 && n4 <= 57) {
+                n3 = n3 * 10 + (n4 - 48);
+                n4 = this.readByte();
+            }
+            array2[n2] = (b ? (-n3) : n3);
         }
         return array;
     }
@@ -126,7 +182,10 @@ class Main
             n = n * 10 + (n2 - 48);
             n2 = this.readByte();
         }
-        return b ? (-n) : n;
+        if (b) {
+            return -n;
+        }
+        return n;
     }
     
     private long nl() {
@@ -142,7 +201,10 @@ class Main
             n = n * 10L + (n2 - 48);
             n2 = this.readByte();
         }
-        return b ? (-n) : n;
+        if (b) {
+            return -n;
+        }
+        return n;
     }
     
     private void tr(final Object... a) {

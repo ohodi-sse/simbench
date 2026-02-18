@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final long nextLong = scanner.nextLong();
-        final String[] split = scanner.next().replace(".", "A").split("A", 0);
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final long nextLong = (scanner = new Scanner(System.in)).nextLong();
+        final String[] split;
         long n;
-        if (split.length == 1) {
+        if ((split = scanner.next().replace(".", "A").split("A", 0)).length == 1) {
             n = 100L * Long.parseLong(split[0]);
         }
         else {

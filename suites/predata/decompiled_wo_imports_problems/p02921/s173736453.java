@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final FastIO fastIO = new FastIO();
         int x = 0;
         final String read = fastIO.read();
@@ -13,7 +13,7 @@ public class Main
         System.out.println(x);
     }
     
-    private static class FastIO
+    private static final class FastIO
     {
         private StringTokenizer stringTokenizer;
         private BufferedReader bufferedReader;
@@ -23,7 +23,7 @@ public class Main
             this.stringTokenizer = null;
         }
         
-        public String read() {
+        public final String read() {
             if (this.stringTokenizer != null) {
                 if (this.stringTokenizer.hasMoreTokens()) {
                     return this.stringTokenizer.nextToken();
@@ -38,44 +38,12 @@ public class Main
             return this.stringTokenizer.nextToken();
         }
         
-        public int readInt() {
+        private int readInt() {
             return Integer.parseInt(this.read());
         }
         
-        public long readLong() {
+        private long readLong() {
             return Long.parseLong(this.read());
         }
-    }
-}private static class FastIO
-{
-    private StringTokenizer stringTokenizer;
-    private BufferedReader bufferedReader;
-    
-    public FastIO() {
-        this.bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        this.stringTokenizer = null;
-    }
-    
-    public String read() {
-        if (this.stringTokenizer != null) {
-            if (this.stringTokenizer.hasMoreTokens()) {
-                return this.stringTokenizer.nextToken();
-            }
-        }
-        try {
-            this.stringTokenizer = new StringTokenizer(this.bufferedReader.readLine());
-        }
-        catch (final IOException cause) {
-            throw new RuntimeException(cause);
-        }
-        return this.stringTokenizer.nextToken();
-    }
-    
-    public int readInt() {
-        return Integer.parseInt(this.read());
-    }
-    
-    public long readLong() {
-        return Long.parseLong(this.read());
     }
 }

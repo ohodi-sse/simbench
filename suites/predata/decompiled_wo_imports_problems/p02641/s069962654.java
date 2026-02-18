@@ -1,14 +1,14 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] a = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] a = new int[nextInt2 = scanner.nextInt()];
         for (int i = 0; i < nextInt2; ++i) {
             a[i] = scanner.nextInt();
         }
-        final int[] array2 = new int[102];
+        final int[] array = new int[102];
         Arrays.sort(a);
         int n = 0;
         for (int j = 0; j <= 101; ++j) {
@@ -17,23 +17,27 @@ public class Main
                     ++n;
                 }
                 else {
-                    array2[j] = j;
+                    final int[] array2 = array;
+                    final int n2 = j;
+                    array2[n2] = n2;
                 }
             }
             else {
-                array2[j] = j;
+                final int[] array3 = array;
+                final int n3 = j;
+                array3[n3] = n3;
             }
         }
         int x = 0;
-        int n2 = 200;
+        int n4 = 200;
         for (int k = 0; k <= 101; ++k) {
-            int n3 = nextInt - array2[k];
-            if (n3 < 0) {
-                n3 *= -1;
+            int n5;
+            if ((n5 = nextInt - array[k]) < 0) {
+                n5 = -n5;
             }
-            if (n2 > n3) {
-                n2 = n3;
-                x = array2[k];
+            if (n4 > n5) {
+                n4 = n5;
+                x = array[k];
             }
         }
         System.out.println(x);

@@ -1,13 +1,17 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        new Main().compute();
-    }
-    
-    void compute() {
+    private static void main$3231c38a() {
+        new Main();
         int nextInt;
         int i;
-        for (nextInt = new Scanner(System.in).nextInt(), i = 1; i <= nextInt; i *= 2) {}
+        for (nextInt = new Scanner(System.in).nextInt(), i = 1; i <= nextInt; i <<= 1) {}
+        System.out.println(i / 2);
+    }
+    
+    private static void compute() {
+        int nextInt;
+        int i;
+        for (nextInt = new Scanner(System.in).nextInt(), i = 1; i <= nextInt; i <<= 1) {}
         System.out.println(i / 2);
     }
 }

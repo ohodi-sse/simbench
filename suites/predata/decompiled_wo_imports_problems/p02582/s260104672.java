@@ -1,11 +1,11 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         while (scanner.hasNext()) {
-            final String nextLine = scanner.nextLine();
+            final String nextLine;
             int x;
-            if (nextLine.equalsIgnoreCase("ssr") || nextLine.equalsIgnoreCase("srs") || nextLine.equalsIgnoreCase("rss") || nextLine.equalsIgnoreCase("rsr")) {
+            if ((nextLine = scanner.nextLine()).equalsIgnoreCase("ssr") || nextLine.equalsIgnoreCase("srs") || nextLine.equalsIgnoreCase("rss") || nextLine.equalsIgnoreCase("rsr")) {
                 x = 1;
             }
             else if (nextLine.equalsIgnoreCase("rrs") || nextLine.equalsIgnoreCase("srr")) {

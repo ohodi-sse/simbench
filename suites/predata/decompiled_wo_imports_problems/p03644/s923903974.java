@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int nextInt = new Scanner(System.in).nextInt();
         int n = 0;
         int x = 1;
         for (int i = 1; i <= nextInt; ++i) {
-            final int divCnt = divCnt(i);
+            final int divCnt = divCnt(i, 0);
             if (n < divCnt) {
                 n = divCnt;
                 x = i;
@@ -18,10 +18,9 @@ public class Main
         return divCnt(n, 0);
     }
     
-    private static int divCnt(int n, int divCnt) {
-        if (n / 2 >= 1 && n % 2 == 0) {
-            n /= 2;
-            divCnt = divCnt(n, divCnt);
+    private static int divCnt(final int n, int divCnt) {
+        if (n / 2 > 0 && n % 2 == 0) {
+            divCnt = divCnt(n / 2, divCnt);
             ++divCnt;
         }
         return divCnt;

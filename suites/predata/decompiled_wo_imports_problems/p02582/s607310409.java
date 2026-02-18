@@ -1,22 +1,23 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new FastScanner(System.in).next();
-        if (next.equals("RRR")) {
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = new FastScanner(System.in).next()).equals("RRR")) {
             System.out.println(3);
+            return;
         }
-        else if (next.startsWith("RR") || next.endsWith("RR")) {
+        if (next.startsWith("RR") || next.endsWith("RR")) {
             System.out.println(2);
+            return;
         }
-        else if (next.contains("R")) {
+        if (next.contains("R")) {
             System.out.println(1);
+            return;
         }
-        else {
-            System.out.println(0);
-        }
+        System.out.println(0);
     }
     
-    private static class FastScanner
+    private static final class FastScanner
     {
         private final BufferedReader reader;
         private StringTokenizer tokenizer;
@@ -25,7 +26,7 @@ public class Main
             this.reader = new BufferedReader(new InputStreamReader(in));
         }
         
-        String next() {
+        final String next() {
             if (this.tokenizer != null) {
                 if (this.tokenizer.hasMoreTokens()) {
                     return this.tokenizer.nextToken();
@@ -40,15 +41,15 @@ public class Main
             return this.tokenizer.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             if (this.tokenizer != null) {
                 if (this.tokenizer.hasMoreTokens()) {
                     return this.tokenizer.nextToken("\n");
@@ -63,58 +64,8 @@ public class Main
             return this.tokenizer.nextToken("\n");
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
-    }
-}private static class FastScanner
-{
-    private final BufferedReader reader;
-    private StringTokenizer tokenizer;
-    
-    FastScanner(final InputStream in) {
-        this.reader = new BufferedReader(new InputStreamReader(in));
-    }
-    
-    String next() {
-        if (this.tokenizer != null) {
-            if (this.tokenizer.hasMoreTokens()) {
-                return this.tokenizer.nextToken();
-            }
-        }
-        try {
-            this.tokenizer = new StringTokenizer(this.reader.readLine());
-        }
-        catch (final IOException cause) {
-            throw new RuntimeException(cause);
-        }
-        return this.tokenizer.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    String nextLine() {
-        if (this.tokenizer != null) {
-            if (this.tokenizer.hasMoreTokens()) {
-                return this.tokenizer.nextToken("\n");
-            }
-        }
-        try {
-            return this.reader.readLine();
-        }
-        catch (final IOException cause) {
-            throw new RuntimeException(cause);
-        }
-        return this.tokenizer.nextToken("\n");
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
     }
 }

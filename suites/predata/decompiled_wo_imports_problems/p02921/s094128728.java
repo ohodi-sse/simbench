@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
     private static final Scanner sc;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = Main.sc.next();
         final String next2 = Main.sc.next();
         int x = 0;

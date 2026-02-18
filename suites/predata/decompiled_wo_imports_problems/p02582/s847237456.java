@@ -1,68 +1,19 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    public FastReader(final String pathname) throws FileNotFoundException {
-        this.br = new BufferedReader(new FileReader(new File(pathname)));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final FastReader fastReader = new FastReader();
         final PrintWriter printWriter = new PrintWriter(System.out);
-        final Task task = new Task();
-        for (int n = 1, i = 1; i <= n; ++i) {
-            task.solve(i, fastReader, printWriter);
+        new Task();
+        for (int i = 1; i <= 1; ++i) {
+            final FastReader fastReader2 = fastReader;
+            final PrintWriter printWriter2 = printWriter;
+            final String next = fastReader2.next();
+            printWriter2.println(next.contains("RRR") ? 3 : (next.contains("RR") ? 2 : next.contains("R")));
         }
         printWriter.close();
     }
     
-    static void shuffle(final int[] array) {
+    private static void shuffle(final int[] array) {
         final Random random = new Random();
         for (int i = 0; i < array.length; ++i) {
             final int nextInt = random.nextInt(array.length);
@@ -72,7 +23,7 @@ static class FastReader
         }
     }
     
-    static void shuffle(final long[] array) {
+    private static void shuffle(final long[] array) {
         final Random random = new Random();
         for (int i = 0; i < array.length; ++i) {
             final int nextInt = random.nextInt(array.length);
@@ -82,28 +33,28 @@ static class FastReader
         }
     }
     
-    static class Task
+    static final class Task
     {
-        public void solve(final int n, final FastReader fastReader, final PrintWriter printWriter) {
+        private static void solve$3c455bd4(final FastReader fastReader, final PrintWriter printWriter) {
             final String next = fastReader.next();
             printWriter.println(next.contains("RRR") ? 3 : (next.contains("RR") ? 2 : next.contains("R")));
         }
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        public FastReader(final String pathname) throws FileNotFoundException {
+        private FastReader(final String pathname) throws FileNotFoundException {
             this.br = new BufferedReader(new FileReader(new File(pathname)));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -120,19 +71,19 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();
@@ -142,11 +93,5 @@ static class FastReader
             }
             return line;
         }
-    }
-}static class Task
-{
-    public void solve(final int n, final FastReader fastReader, final PrintWriter printWriter) {
-        final String next = fastReader.next();
-        printWriter.println(next.contains("RRR") ? 3 : (next.contains("RR") ? 2 : next.contains("R")));
     }
 }

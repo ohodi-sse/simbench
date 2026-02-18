@@ -1,9 +1,9 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
+    private static void main$3231c38a() {
+        final Scanner scanner;
         int nextInt;
-        final int n = nextInt = scanner.nextInt();
+        final int n = nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final ArrayList list = new ArrayList();
         for (int i = 0; i < nextInt2; ++i) {
@@ -12,7 +12,7 @@ class Main
         Collections.sort((List<Comparable>)list);
         int abs = 0;
         int x = n;
-    Label_0284:
+    Label_0261:
         for (int j = 0; j < list.size(); ++j) {
             if (n <= (int)list.get(j) || j >= list.size()) {
                 for (int k = j; k >= 0; --k) {
@@ -30,16 +30,11 @@ class Main
                     if (nextInt - (int)list.get(l) == 0) {
                         ++nextInt;
                     }
-                    else {
-                        if (nextInt < (int)list.get(l)) {
-                            break Label_0284;
-                        }
-                        if (nextInt > n + abs - 1) {
-                            break Label_0284;
-                        }
+                    else if (nextInt < (int)list.get(l) || nextInt > n + abs - 1) {
+                        break Label_0261;
                     }
                     if (l >= list.size() - 1) {
-                        break Label_0284;
+                        break Label_0261;
                     }
                 }
             }

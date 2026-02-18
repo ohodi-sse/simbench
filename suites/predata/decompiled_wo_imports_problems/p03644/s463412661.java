@@ -1,14 +1,13 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) throws IOException {
-        final int nextInt = new Scanner(System.in).nextInt();
-        if (nextInt == 1) {
+    private static void main$3231c38a() throws IOException {
+        final int nextInt;
+        if ((nextInt = new Scanner(System.in).nextInt()) == 1) {
             System.out.println("1");
+            return;
         }
-        else {
-            int i;
-            for (i = 1; i <= nextInt; i *= 2) {}
-            System.out.println(i / 2);
-        }
+        int i;
+        for (i = 1; i <= nextInt; i <<= 1) {}
+        System.out.println(i / 2);
     }
 }

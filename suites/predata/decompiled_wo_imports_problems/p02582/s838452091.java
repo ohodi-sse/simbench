@@ -1,6 +1,6 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
         final ArrayList list = new ArrayList();
         for (int i = 0; i < next.length(); ++i) {
@@ -18,9 +18,8 @@ class Main
         }
         if (max < 0) {
             System.out.println("0");
+            return;
         }
-        else {
-            System.out.println(max);
-        }
+        System.out.println(max);
     }
 }

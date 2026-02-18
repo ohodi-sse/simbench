@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        int nextInt = (scanner = new Scanner(System.in)).nextInt();
         int x = 1;
         while (nextInt / 2 > 0) {
-            x *= 2;
+            x <<= 1;
             nextInt /= 2;
         }
         System.out.println(x);

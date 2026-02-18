@@ -1,68 +1,34 @@
-static class InputReader
+public final class Main
 {
-    public BufferedReader reader;
-    public StringTokenizer tokenizer;
-    
-    public InputReader(final InputStream in) {
-        this.reader = new BufferedReader(new InputStreamReader(in), 32768);
-        this.tokenizer = null;
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.tokenizer != null) {
-                if (this.tokenizer.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.tokenizer = new StringTokenizer(this.reader.readLine());
-                continue;
-            }
-            catch (final IOException cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.tokenizer.nextToken();
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final InputReader inputReader = new InputReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new CMultiplication3().solve(1, inputReader, printWriter);
+        new CMultiplication3();
+        final InputReader inputReader2 = inputReader;
+        printWriter.println(Long.parseLong(inputReader2.next()) * Math.round(Double.parseDouble(inputReader2.next()) * 100.0) / 100L);
         printWriter.close();
     }
     
-    static class CMultiplication3
+    static final class CMultiplication3
     {
-        public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-            printWriter.println(inputReader.nextLong() * Math.round(inputReader.nextDouble() * 100.0) / 100L);
+        private static void solve$6080e082(final InputReader inputReader, final PrintWriter printWriter) {
+            printWriter.println(Long.parseLong(inputReader.next()) * Math.round(Double.parseDouble(inputReader.next()) * 100.0) / 100L);
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
-        public BufferedReader reader;
-        public StringTokenizer tokenizer;
+        private BufferedReader reader;
+        private StringTokenizer tokenizer;
         
         public InputReader(final InputStream in) {
             this.reader = new BufferedReader(new InputStreamReader(in), 32768);
             this.tokenizer = null;
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.tokenizer != null) {
                     if (this.tokenizer.hasMoreTokens()) {
@@ -81,17 +47,12 @@ static class InputReader
             return this.tokenizer.nextToken();
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        public double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
-    }
-}static class CMultiplication3
-{
-    public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-        printWriter.println(inputReader.nextLong() * Math.round(inputReader.nextDouble() * 100.0) / 100L);
     }
 }

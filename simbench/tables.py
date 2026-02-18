@@ -40,7 +40,9 @@ def compressions(
 ):
     out = TableBuilder(schema)
 
-    bld.log.info(f"Computing compression table for {compressor.name}")
+    bld.log.info(
+        f"Computing compression table for {compressor.name}-{compressor.level}"
+    )
 
     paths = [str(s.path) for _, s in sources.items()]
     rust_df = rust_compressions(compressor.name, compressor.level, paths).lazy()
@@ -66,7 +68,9 @@ def pairwise_compressions(
 ):
     out = TableBuilder(schema)
 
-    bld.log.info(f"Computing pairwise compressions table for {compressor.name}")
+    bld.log.info(
+        f"Computing pairwise compressions table for {compressor.name}-{compressor.level}"
+    )
     paths = [str(s.path) for _, s in sources.items()]
     rust_df = rust_pairwise_compressions(
         compressor.name, compressor.level, paths
@@ -167,7 +171,7 @@ def generic_distances(
 ) -> pl.LazyFrame:
     out = TableBuilder(schema)
 
-    bld.log.debug("Preprocessing files. This may take a while!")
+    bld.log.debug(f"Preprocessing files with {tool.name}. This may take a while!")
 
     preprocess_lookup = {}
 
@@ -230,7 +234,7 @@ def classifications(
     src_names = pl.Series(src_df.select("src").collect()).to_list()
     src_labels = pl.Series(src_df.select("src_label").collect()).to_list()
 
-    bld.log.debug(f"Classifying using {classifier.name}-{classifier.param}")
+    bld.log.info(f"Classifying using {classifier.name}-{classifier.param}")
 
     with bld.progressbar(len(src_names)) as pb:
         for src, label in zip(src_names, src_labels):
@@ -281,8 +285,8 @@ def performance(schema: pl.Schema, bld: Builder, **classifications) -> pl.LazyFr
         )
         # cm = confusion_matrix(src_labels, labelled_as, labels=labels)
         mcm = multilabel_confusion_matrix(src_labels, labelled_as, labels=labels)
-        FN = sum(mcm[:, 1, 0])
-        FP = sum(mcm[:, 0, 1])
+        FN = int(sum(mcm[:, 1, 0]))
+        FP = int(sum(mcm[:, 0, 1]))
 
         averaging = "macro"
 

@@ -1,39 +1,41 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        if (nextInt2 == 0) {
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        if ((nextInt2 = scanner.nextInt()) == 0) {
             System.out.println(nextInt);
             return;
         }
-        final int[] array2 = new int[103];
+        final int[] array = new int[103];
         for (int i = 0; i < 103; ++i) {
-            array2[i] = i - 1;
+            final int[] array2 = array;
+            final int n = i;
+            array2[n] = n - 1;
         }
         for (int j = 0; j < nextInt2; ++j) {
-            array2[scanner.nextInt() + 1] = -2;
+            array[scanner.nextInt() + 1] = -2;
         }
-        if (array2[nextInt + 1] != -2) {
+        if (array[nextInt + 1] != -2) {
             System.out.println(nextInt);
             return;
         }
-        int n = 104;
+        int n2 = 104;
         int x = -3;
         for (int k = 0; k < 103; ++k) {
-            if (array2[k] != -2) {
-                int n2 = nextInt - array2[k];
-                if (n2 == 0) {
+            if (array[k] != -2) {
+                int n3;
+                if ((n3 = nextInt - array[k]) == 0) {
                     System.out.println(nextInt);
                     return;
                 }
-                if (n2 < 0) {
-                    n2 = -n2;
+                if (n3 < 0) {
+                    n3 = -n3;
                 }
-                if (n2 < n) {
-                    n = n2;
-                    x = array2[k];
+                if (n3 < n2) {
+                    n2 = n3;
+                    x = array[k];
                 }
             }
         }

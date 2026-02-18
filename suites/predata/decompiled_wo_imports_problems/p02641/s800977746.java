@@ -1,58 +1,6 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-    
-    public Character charAt(final int n) {
-        return null;
-    }
-}public class Main
-{
-    static int divisors(final long n) {
+    private static int divisors(final long n) {
         long n2 = n;
         int n3 = 0;
         if (n == 1L) {
@@ -60,8 +8,7 @@ static class FastReader
         }
         for (int n4 = 1; n4 < n2; ++n4) {
             if (n % n4 == 0L) {
-                n2 = n / n4;
-                if (n2 != n4) {
+                if ((n2 = n / n4) != n4) {
                     ++n3;
                 }
                 ++n3;
@@ -70,39 +17,39 @@ static class FastReader
         return n3;
     }
     
-    public static void main(final String[] array) throws IOException {
-        final FastReader fastReader = new FastReader();
-        final int nextInt = fastReader.nextInt();
-        final int nextInt2 = fastReader.nextInt();
+    private static void main$3231c38a() throws IOException {
+        final FastReader fastReader;
+        final int int1 = Integer.parseInt((fastReader = new FastReader()).next());
+        final int int2 = Integer.parseInt(fastReader.next());
         final ArrayList list = new ArrayList();
-        for (int i = 0; i < nextInt2; ++i) {
-            list.add(fastReader.nextInt());
+        for (int i = 0; i < int2; ++i) {
+            list.add(Integer.parseInt(fastReader.next()));
         }
         int j = 0;
         int n = 0;
         while (j == 0) {
-            if (!list.contains(nextInt - n)) {
+            if (!list.contains(int1 - n)) {
                 j = 1;
-                System.out.println(nextInt - n);
+                System.out.println(int1 - n);
             }
-            else if (!list.contains(nextInt + n)) {
+            else if (!list.contains(int1 + n)) {
                 j = 1;
-                System.out.println(nextInt + n);
+                System.out.println(int1 + n);
             }
             ++n;
         }
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreTokens()) {
@@ -119,19 +66,19 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();
@@ -142,7 +89,7 @@ static class FastReader
             return line;
         }
         
-        public Character charAt(final int n) {
+        private static Character charAt$6696934a() {
             return null;
         }
     }

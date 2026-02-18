@@ -1,18 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         int n = 2;
         final int nextInt = scanner.nextInt();
-        for (int i = 0; i < 7; ++i) {
-            if (nextInt == 1) {
-                break;
-            }
-            if (nextInt < n) {
-                break;
-            }
-            n *= 2;
-        }
+        for (int n2 = 0; n2 < 7 && nextInt != 1 && nextInt >= n; n <<= 1, ++n2) {}
         if (nextInt == 1) {
             System.out.println(1);
         }

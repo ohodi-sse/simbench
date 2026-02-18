@@ -1,60 +1,24 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
+    private static FastReader in;
     
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
+    private static void main$3231c38a() {
+        final String[] split = Main.in.nextLine().split("");
+        int max = -1;
+        int n = 0;
+        for (int i = 0; i < split.length; ++i) {
+            if (split[i].equals("R")) {
+                ++n;
             }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
+            else {
+                max = Math.max(max, n);
+                n = 0;
             }
         }
-        return this.st.nextToken();
+        System.out.println(Math.max(max, n));
     }
     
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    static FastReader in;
-    
-    public static void main(final String[] array) {
-        solve(Main.in.nextLine());
-    }
-    
-    static void solve(final String s) {
+    private static void solve(final String s) {
         final String[] split = s.split("");
         int max = -1;
         int n = 0;
@@ -74,16 +38,16 @@ static class FastReader
         Main.in = new FastReader();
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        private String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -100,19 +64,19 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        final String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

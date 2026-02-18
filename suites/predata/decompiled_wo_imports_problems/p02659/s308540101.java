@@ -1,10 +1,15 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         System.out.print(scanner.nextLong() * (int)(Double.parseDouble(scanner.next()) * 100.0 + 0.01) / 100L);
     }
-}interface aisatu
+}
+
+
+
+
+interface aisatu
 {
     public static final String str = "\u3053\u3093\u306b\u3061\u306f";
     

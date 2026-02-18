@@ -1,14 +1,14 @@
-public class Main
+public final class Main
 {
-    static long toLong(final double n) {
+    private static long toLong(final double n) {
         return (long)(n * 100.0 + 0.001);
     }
     
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final long nextLong = scanner.nextLong();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final long nextLong = (scanner = new Scanner(System.in)).nextLong();
         final double nextDouble = scanner.nextDouble();
         scanner.close();
-        System.out.println(Math.floorDiv(nextLong * toLong(nextDouble), 100L));
+        System.out.println(Math.floorDiv(nextLong * (long)(nextDouble * 100.0 + 0.001), 100L));
     }
 }

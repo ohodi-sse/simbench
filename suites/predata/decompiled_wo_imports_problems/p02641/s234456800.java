@@ -1,32 +1,32 @@
-public class Main
+public final class Main
 {
     static long mod;
     static int[] sieve;
     static ArrayList<Integer> primes;
     
-    public static void main(final String[] array) {
-        final fast fast = new fast();
-        final int nextInt = fast.nextInt();
+    private static void main$3231c38a() {
+        final fast fast;
+        final int nextInt = (fast = new fast()).nextInt();
         final int nextInt2 = fast.nextInt();
-        final boolean[] array2 = new boolean[103];
+        final boolean[] array = new boolean[103];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[fast.nextInt() + 1] = true;
+            array[fast.nextInt() + 1] = true;
         }
         int n = nextInt;
         int n2 = nextInt;
         int j = nextInt;
-        if (array2[nextInt + 1]) {
-            while (n > -1 || n2 < 101) {
-                if (n > -1) {
+        if (array[nextInt + 1]) {
+            while (n >= 0 || n2 < 101) {
+                if (n >= 0) {
                     --n;
-                    if (!array2[n + 1]) {
+                    if (!array[n + 1]) {
                         j = n;
                         break;
                     }
                 }
                 if (n2 < 101) {
                     ++n2;
-                    if (!array2[n2 + 1]) {
+                    if (!array[n2 + 1]) {
                         j = n2;
                         break;
                     }
@@ -35,8 +35,8 @@ public class Main
             }
         }
         final PrintWriter printWriter = new PrintWriter(System.out);
-        final StringBuilder x = new StringBuilder("");
-        x.append(j);
+        final StringBuilder x;
+        (x = new StringBuilder("")).append(j);
         printWriter.println(x);
         printWriter.close();
     }
@@ -45,14 +45,14 @@ public class Main
         Main.mod = 1000000007L;
     }
     
-    static class fast
+    static final class fast
     {
         private InputStream i;
         private byte[] buf;
         private int curChar;
         private int numChars;
         
-        public static long log2(long n) {
+        private static long log2(long n) {
             int n2 = 0;
             if ((n & 0xFFFFFFFFFFFF0000L) != 0x0L) {
                 n >>>= 16;
@@ -73,7 +73,7 @@ public class Main
             return n2 + (n >>> 1);
         }
         
-        public static boolean next_permutation(final int[] array) {
+        private static boolean next_permutation(final int[] array) {
             int n = -1;
             final int length = array.length;
             for (int i = 0; i < length - 1; ++i) {
@@ -84,13 +84,13 @@ public class Main
             if (n == -1) {
                 return false;
             }
-            int n2;
             int n3;
-            for (n2 = n, n3 = n2 + 1; n3 < length && array[n2] < array[n3]; ++n3) {}
-            final int n4 = array[n2];
-            array[n2] = array[n3 - 1];
-            array[n3 - 1] = n4;
-            for (int j = n2 + 1, n5 = length - 1; j < n5; ++j, --n5) {
+            int n2;
+            for (n2 = (n3 = n) + 1; n2 < length && array[n3] < array[n2]; ++n2) {}
+            final int n4 = array[n3];
+            array[n3] = array[n2 - 1];
+            array[n2 - 1] = n4;
+            for (int j = n3 + 1, n5 = length - 1; j < n5; ++j, --n5) {
                 final int n6 = array[j];
                 array[j] = array[n5];
                 array[n5] = n6;
@@ -98,16 +98,23 @@ public class Main
             return true;
         }
         
-        public static void sieve(final int n) {
+        private static void sieve(final int n) {
             Main.sieve = new int[n + 1];
             Main.primes = new ArrayList<Integer>();
             Main.sieve[1] = 1;
-            for (int n2 = 2; n2 * n2 <= n; ++n2) {
+            int n2 = 2;
+            while (true) {
+                final int n3 = n2;
+                if (n3 * n3 > n) {
+                    break;
+                }
                 if (Main.sieve[n2] == 0) {
-                    for (int i = n2 * n2; i < n; i += n2) {
+                    final int n4 = n2;
+                    for (int i = n4 * n4; i < n; i += n2) {
                         Main.sieve[i] = 1;
                     }
                 }
+                ++n2;
             }
             for (int j = 2; j <= n; ++j) {
                 if (Main.sieve[j] == 0) {
@@ -116,7 +123,7 @@ public class Main
             }
         }
         
-        public static long pow(long mul, long n) {
+        private static long pow(long mul, long n) {
             long mul2 = 1L;
             while (n > 0L) {
                 if ((n & 0x1L) == 0x1L) {
@@ -128,7 +135,7 @@ public class Main
             return mul2;
         }
         
-        public static long add(final long... array) {
+        private static long add(final long... array) {
             long n = 0L;
             for (int length = array.length, i = 0; i < length; ++i) {
                 n = (n + Main.mod + array[i]) % Main.mod;
@@ -136,35 +143,48 @@ public class Main
             return n;
         }
         
-        public static long mul(final long... array) {
+        private static long mul(final long... array) {
             long n = 1L;
-            for (int length = array.length, i = 0; i < length; ++i) {
+            final int length = array.length;
+            for (int i = 0; i < 2; ++i) {
                 n = (Main.mod + n * array[i] % Main.mod) % Main.mod;
             }
             return n;
         }
         
-        public static long mod_inv(final long n) {
-            return pow(n, Main.mod - 2L);
+        private static long mod_inv(final long n) {
+            long n2 = Main.mod - 2L;
+            long mul = n;
+            long mul2 = 1L;
+            while (n2 > 0L) {
+                if ((n2 & 0x1L) == 0x1L) {
+                    mul2 = mul(mul2, mul);
+                }
+                mul = mul(mul, mul);
+                n2 >>= 1;
+            }
+            return mul2;
         }
         
-        public long gcd(final long n, final long n2) {
-            if (n == 0L) {
-                return n2;
+        private static long gcd(long n, long n2) {
+            while (n != 0L) {
+                final long n3 = n2 % n;
+                n2 = n;
+                n = n3;
             }
-            return this.gcd(n2 % n, n);
+            return n2;
         }
         
         public fast() {
             this(System.in);
         }
         
-        public fast(final InputStream i) {
+        private fast(final InputStream i) {
             this.buf = new byte[1024];
             this.i = i;
         }
         
-        public int read() {
+        private int read() {
             if (this.numChars == -1) {
                 throw new InputMismatchException();
             }
@@ -183,31 +203,30 @@ public class Main
             return this.buf[this.curChar++];
         }
         
-        public String nextLine() {
+        private String nextLine() {
             int codePoint;
-            for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
+            for (codePoint = this.read(); isSpaceChar(codePoint); codePoint = this.read()) {}
             final StringBuilder sb = new StringBuilder();
-            do {
-                sb.appendCodePoint(codePoint);
-                codePoint = this.read();
-            } while (!this.isEndOfLine(codePoint));
-            return sb.toString();
-        }
-        
-        public String nextString() {
-            int codePoint;
-            for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
-            final StringBuilder sb = new StringBuilder();
-            do {
-                sb.appendCodePoint(codePoint);
-                codePoint = this.read();
-            } while (!this.isSpaceChar(codePoint));
-            return sb.toString();
-        }
-        
-        public long nextLong() {
             int n;
-            for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+            do {
+                sb.appendCodePoint(codePoint);
+            } while ((n = (codePoint = this.read())) != 10 && n != 13 && n != -1);
+            return sb.toString();
+        }
+        
+        private String nextString() {
+            int codePoint;
+            for (codePoint = this.read(); isSpaceChar(codePoint); codePoint = this.read()) {}
+            final StringBuilder sb = new StringBuilder();
+            do {
+                sb.appendCodePoint(codePoint);
+            } while (!isSpaceChar(codePoint = this.read()));
+            return sb.toString();
+        }
+        
+        private long nextLong() {
+            int n;
+            for (n = this.read(); isSpaceChar(n); n = this.read()) {}
             int n2 = 1;
             if (n == 45) {
                 n2 = -1;
@@ -216,17 +235,16 @@ public class Main
             long n3 = 0L;
             while (n >= 48 && n <= 57) {
                 n3 = n3 * 10L + (n - 48);
-                n = this.read();
-                if (this.isSpaceChar(n)) {
+                if (isSpaceChar(n = this.read())) {
                     return n3 * n2;
                 }
             }
             throw new InputMismatchException();
         }
         
-        public int nextInt() {
+        public final int nextInt() {
             int n;
-            for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
+            for (n = this.read(); isSpaceChar(n); n = this.read()) {}
             int n2 = 1;
             if (n == 45) {
                 n2 = -1;
@@ -235,225 +253,19 @@ public class Main
             int n3 = 0;
             while (n >= 48 && n <= 57) {
                 n3 = n3 * 10 + (n - 48);
-                n = this.read();
-                if (this.isSpaceChar(n)) {
+                if (isSpaceChar(n = this.read())) {
                     return n3 * n2;
                 }
             }
             throw new InputMismatchException();
         }
         
-        public boolean isSpaceChar(final int n) {
+        private static boolean isSpaceChar(final int n) {
             return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
         }
         
-        public boolean isEndOfLine(final int n) {
+        private static boolean isEndOfLine(final int n) {
             return n == 10 || n == 13 || n == -1;
         }
-    }
-}static class fast
-{
-    private InputStream i;
-    private byte[] buf;
-    private int curChar;
-    private int numChars;
-    
-    public static long log2(long n) {
-        int n2 = 0;
-        if ((n & 0xFFFFFFFFFFFF0000L) != 0x0L) {
-            n >>>= 16;
-            n2 = 16;
-        }
-        if (n >= 256L) {
-            n >>>= 8;
-            n2 += 8;
-        }
-        if (n >= 16L) {
-            n >>>= 4;
-            n2 += 4;
-        }
-        if (n >= 4L) {
-            n >>>= 2;
-            n2 += 2;
-        }
-        return n2 + (n >>> 1);
-    }
-    
-    public static boolean next_permutation(final int[] array) {
-        int n = -1;
-        final int length = array.length;
-        for (int i = 0; i < length - 1; ++i) {
-            if (array[i] < array[i + 1]) {
-                n = i;
-            }
-        }
-        if (n == -1) {
-            return false;
-        }
-        int n2;
-        int n3;
-        for (n2 = n, n3 = n2 + 1; n3 < length && array[n2] < array[n3]; ++n3) {}
-        final int n4 = array[n2];
-        array[n2] = array[n3 - 1];
-        array[n3 - 1] = n4;
-        for (int j = n2 + 1, n5 = length - 1; j < n5; ++j, --n5) {
-            final int n6 = array[j];
-            array[j] = array[n5];
-            array[n5] = n6;
-        }
-        return true;
-    }
-    
-    public static void sieve(final int n) {
-        Main.sieve = new int[n + 1];
-        Main.primes = new ArrayList<Integer>();
-        Main.sieve[1] = 1;
-        for (int n2 = 2; n2 * n2 <= n; ++n2) {
-            if (Main.sieve[n2] == 0) {
-                for (int i = n2 * n2; i < n; i += n2) {
-                    Main.sieve[i] = 1;
-                }
-            }
-        }
-        for (int j = 2; j <= n; ++j) {
-            if (Main.sieve[j] == 0) {
-                Main.primes.add(j);
-            }
-        }
-    }
-    
-    public static long pow(long mul, long n) {
-        long mul2 = 1L;
-        while (n > 0L) {
-            if ((n & 0x1L) == 0x1L) {
-                mul2 = mul(mul2, mul);
-            }
-            mul = mul(mul, mul);
-            n >>= 1;
-        }
-        return mul2;
-    }
-    
-    public static long add(final long... array) {
-        long n = 0L;
-        for (int length = array.length, i = 0; i < length; ++i) {
-            n = (n + Main.mod + array[i]) % Main.mod;
-        }
-        return n;
-    }
-    
-    public static long mul(final long... array) {
-        long n = 1L;
-        for (int length = array.length, i = 0; i < length; ++i) {
-            n = (Main.mod + n * array[i] % Main.mod) % Main.mod;
-        }
-        return n;
-    }
-    
-    public static long mod_inv(final long n) {
-        return pow(n, Main.mod - 2L);
-    }
-    
-    public long gcd(final long n, final long n2) {
-        if (n == 0L) {
-            return n2;
-        }
-        return this.gcd(n2 % n, n);
-    }
-    
-    public fast() {
-        this(System.in);
-    }
-    
-    public fast(final InputStream i) {
-        this.buf = new byte[1024];
-        this.i = i;
-    }
-    
-    public int read() {
-        if (this.numChars == -1) {
-            throw new InputMismatchException();
-        }
-        if (this.curChar >= this.numChars) {
-            this.curChar = 0;
-            try {
-                this.numChars = this.i.read(this.buf);
-            }
-            catch (final IOException ex) {
-                throw new InputMismatchException();
-            }
-            if (this.numChars <= 0) {
-                return -1;
-            }
-        }
-        return this.buf[this.curChar++];
-    }
-    
-    public String nextLine() {
-        int codePoint;
-        for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
-        final StringBuilder sb = new StringBuilder();
-        do {
-            sb.appendCodePoint(codePoint);
-            codePoint = this.read();
-        } while (!this.isEndOfLine(codePoint));
-        return sb.toString();
-    }
-    
-    public String nextString() {
-        int codePoint;
-        for (codePoint = this.read(); this.isSpaceChar(codePoint); codePoint = this.read()) {}
-        final StringBuilder sb = new StringBuilder();
-        do {
-            sb.appendCodePoint(codePoint);
-            codePoint = this.read();
-        } while (!this.isSpaceChar(codePoint));
-        return sb.toString();
-    }
-    
-    public long nextLong() {
-        int n;
-        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
-        int n2 = 1;
-        if (n == 45) {
-            n2 = -1;
-            n = this.read();
-        }
-        long n3 = 0L;
-        while (n >= 48 && n <= 57) {
-            n3 = n3 * 10L + (n - 48);
-            n = this.read();
-            if (this.isSpaceChar(n)) {
-                return n3 * n2;
-            }
-        }
-        throw new InputMismatchException();
-    }
-    
-    public int nextInt() {
-        int n;
-        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
-        int n2 = 1;
-        if (n == 45) {
-            n2 = -1;
-            n = this.read();
-        }
-        int n3 = 0;
-        while (n >= 48 && n <= 57) {
-            n3 = n3 * 10 + (n - 48);
-            n = this.read();
-            if (this.isSpaceChar(n)) {
-                return n3 * n2;
-            }
-        }
-        throw new InputMismatchException();
-    }
-    
-    public boolean isSpaceChar(final int n) {
-        return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
-    }
-    
-    public boolean isEndOfLine(final int n) {
-        return n == 10 || n == 13 || n == -1;
     }
 }

@@ -1,106 +1,23 @@
-static class MyReader extends BufferedReader
+public final class Main
 {
-    char[] cbuf;
-    int head;
-    int tail;
+    private static MyReader in;
     
-    MyReader() {
-        super(new InputStreamReader(System.in));
-        this.cbuf = new char[1024];
-        this.head = 0;
-        this.tail = 0;
-    }
-    
-    char next() {
-        if (this.head == this.tail) {
-            try {
-                this.tail = this.read(this.cbuf, 0, this.cbuf.length);
-            }
-            catch (final IOException ex) {}
-            this.head = 0;
-        }
-        return this.cbuf[this.head++];
-    }
-    
-    void back() {
-        --this.head;
-    }
-    
-    boolean minus() {
-        char next;
-        do {
-            next = this.next();
-        } while (next == ' ' || next == '\n' || next == '\r');
-        final boolean b;
-        if (!(b = (next == '-'))) {
-            this.back();
-        }
-        return b;
-    }
-    
-    void skip() {
-        char next;
-        do {
-            next = this.next();
-        } while (next == ' ' || next == '\n' || next == '\r');
-        this.back();
-    }
-    
-    char[] s(final int n) {
-        this.skip();
-        final char[] array = new char[n];
-        for (int i = 0; i < array.length; ++i) {
-            array[i] = this.next();
-        }
-        return array;
-    }
-    
-    int i() {
-        final boolean minus = this.minus();
-        int n = 0;
-        while (true) {
-            final int n2 = this.next() - '0';
-            if (n2 < 0 || 9 < n2) {
-                break;
-            }
-            n = 10 * n + n2;
-        }
-        return minus ? (-n) : n;
-    }
-    
-    int[] ii(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < array.length; ++i) {
-            array[i] = this.i();
-        }
-        return array;
-    }
-    
-    long l() {
-        final boolean minus = this.minus();
-        long n = 0L;
-        while (true) {
-            final int n2 = this.next() - '0';
-            if (n2 < 0 || 9 < n2) {
-                break;
-            }
-            n = 10L * n + n2;
-        }
-        return minus ? (-n) : n;
-    }
-}public class Main
-{
-    static MyReader in;
-    
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         int i = Main.in.i();
         final int j = Main.in.i();
-        final int[] ii = Main.in.ii(j);
-        final boolean[] array2 = new boolean[102];
-        for (int k = 0; k < j; ++k) {
-            array2[ii[k]] = true;
+        final MyReader in = Main.in;
+        final int n = j;
+        final MyReader myReader = in;
+        final int[] array = new int[n];
+        for (int k = 0; k < array.length; ++k) {
+            array[k] = myReader.i();
         }
-        for (int n = -1; array2[i]; i += n, n = ((n > 0) ? (-n - 1) : (-n + 1))) {}
+        final int[] array2 = array;
+        final boolean[] array3 = new boolean[102];
+        for (int l = 0; l < j; ++l) {
+            array3[array2[l]] = true;
+        }
+        for (int n2 = -1; array3[i]; i += n2, n2 = ((n2 > 0) ? (-n2 - 1) : (-n2 + 1))) {}
         System.out.println(i);
     }
     
@@ -108,11 +25,11 @@ static class MyReader extends BufferedReader
         Main.in = new MyReader();
     }
     
-    static class MyReader extends BufferedReader
+    static final class MyReader extends BufferedReader
     {
-        char[] cbuf;
-        int head;
-        int tail;
+        private char[] cbuf;
+        private int head;
+        private int tail;
         
         MyReader() {
             super(new InputStreamReader(System.in));
@@ -121,7 +38,7 @@ static class MyReader extends BufferedReader
             this.tail = 0;
         }
         
-        char next() {
+        private char next() {
             if (this.head == this.tail) {
                 try {
                     this.tail = this.read(this.cbuf, 0, this.cbuf.length);
@@ -132,15 +49,13 @@ static class MyReader extends BufferedReader
             return this.cbuf[this.head++];
         }
         
-        void back() {
+        private void back() {
             --this.head;
         }
         
-        boolean minus() {
+        private boolean minus() {
             char next;
-            do {
-                next = this.next();
-            } while (next == ' ' || next == '\n' || next == '\r');
+            while ((next = this.next()) == ' ' || next == '\n' || next == '\r') {}
             final boolean b;
             if (!(b = (next == '-'))) {
                 this.back();
@@ -148,16 +63,16 @@ static class MyReader extends BufferedReader
             return b;
         }
         
-        void skip() {
+        private void skip() {
             char next;
-            do {
-                next = this.next();
-            } while (next == ' ' || next == '\n' || next == '\r');
+            while ((next = this.next()) == ' ' || next == '\n' || next == '\r') {}
             this.back();
         }
         
-        char[] s(final int n) {
-            this.skip();
+        private char[] s(final int n) {
+            char next;
+            while ((next = this.next()) == ' ' || next == '\n' || next == '\r') {}
+            this.back();
             final char[] array = new char[n];
             for (int i = 0; i < array.length; ++i) {
                 array[i] = this.next();
@@ -165,20 +80,20 @@ static class MyReader extends BufferedReader
             return array;
         }
         
-        int i() {
+        final int i() {
             final boolean minus = this.minus();
             int n = 0;
-            while (true) {
-                final int n2 = this.next() - '0';
-                if (n2 < 0 || 9 < n2) {
-                    break;
-                }
-                n = 10 * n + n2;
+            int n2;
+            while ((n2 = this.next() - '0') >= 0 && 9 >= n2) {
+                n = n * 10 + n2;
             }
-            return minus ? (-n) : n;
+            if (minus) {
+                return -n;
+            }
+            return n;
         }
         
-        int[] ii(final int n) {
+        private int[] ii(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < array.length; ++i) {
                 array[i] = this.i();
@@ -186,17 +101,17 @@ static class MyReader extends BufferedReader
             return array;
         }
         
-        long l() {
+        private long l() {
             final boolean minus = this.minus();
             long n = 0L;
-            while (true) {
-                final int n2 = this.next() - '0';
-                if (n2 < 0 || 9 < n2) {
-                    break;
-                }
+            int n2;
+            while ((n2 = this.next() - '0') >= 0 && 9 >= n2) {
                 n = 10L * n + n2;
             }
-            return minus ? (-n) : n;
+            if (minus) {
+                return -n;
+            }
+            return n;
         }
     }
 }

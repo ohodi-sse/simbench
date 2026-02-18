@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
         int x = 1;
         for (int i = 0; i < 2; ++i) {
-            final char[] charArray = next.toCharArray();
-            if (charArray[i] == 'S' && charArray[i + 1] == 'S') {
+            final char[] charArray;
+            if ((charArray = next.toCharArray())[i] == 'S' && charArray[i + 1] == 'S') {
                 x = 0;
             }
             else if (charArray[i] == 'R' && charArray[i + 1] == 'R') {

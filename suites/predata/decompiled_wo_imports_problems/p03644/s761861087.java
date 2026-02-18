@@ -1,16 +1,15 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int nextInt = new Scanner(System.in).nextInt();
         int x = 2;
         if (nextInt == 1) {
             System.out.println(1);
+            return;
         }
-        else {
-            while (x * 2 <= nextInt) {
-                x *= 2;
-            }
-            System.out.println(x);
+        while (x << 1 <= nextInt) {
+            x <<= 1;
         }
+        System.out.println(x);
     }
 }

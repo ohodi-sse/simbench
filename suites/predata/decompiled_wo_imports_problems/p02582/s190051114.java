@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final String nextToken = new StringTokenizer(new BufferedReader(new InputStreamReader(System.in)).readLine()).nextToken();
         int x = 0;
         char c = nextToken.charAt(0);

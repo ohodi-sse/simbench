@@ -1,20 +1,22 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         final String next2 = scanner.next();
         scanner.close();
         System.out.println(WeatherMatch(next, next2));
     }
     
-    public static int WeatherMatch(final String s, final String s2) {
-        if (s.length() == 0) {
-            return 0;
+    private static int WeatherMatch(String s, String substring) {
+        while (s.length() != 0) {
+            if (s.charAt(0) == substring.charAt(0)) {
+                return 1 + WeatherMatch(s.substring(1), substring.substring(1));
+            }
+            final String substring2 = s.substring(1);
+            substring = substring.substring(1);
+            s = substring2;
         }
-        if (s.charAt(0) == s2.charAt(0)) {
-            return 1 + WeatherMatch(s.substring(1), s2.substring(1));
-        }
-        return WeatherMatch(s.substring(1), s2.substring(1));
+        return 0;
     }
 }

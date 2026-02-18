@@ -49,7 +49,7 @@ final class FastScanner
         return n3;
     }
     
-    private int gcd(int n, int i) {
+    private static int gcd(int n, int i) {
         while (i != 0) {
             final int n2 = i;
             i = n % i;
@@ -58,7 +58,7 @@ final class FastScanner
         return n;
     }
     
-    private long longgcd(long n, long n2) {
+    private static long longgcd(long n, long n2) {
         while (n2 != 0L) {
             final long n3 = n2;
             n2 = n % n2;

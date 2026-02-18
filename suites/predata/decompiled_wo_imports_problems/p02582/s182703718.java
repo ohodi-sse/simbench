@@ -1,10 +1,12 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
         int x = 0;
         for (int i = 0; i < 3; ++i) {
-            if (next.substring(i, i + 1).equals("R")) {
+            final String s = next;
+            final int beginIndex = i;
+            if (s.substring(beginIndex, beginIndex + 1).equals("R")) {
                 ++x;
             }
         }

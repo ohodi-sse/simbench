@@ -1,14 +1,14 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         int x = 0;
         final String[] split = scanner.next().split("");
         int n = 0;
         scanner.close();
-        final String[] array2 = split;
-        for (int length = array2.length, i = 0; i < length; ++i) {
-            if ("R".equals(array2[i])) {
+        String[] array;
+        for (int length = (array = split).length, i = 0; i < length; ++i) {
+            if ("R".equals(array[i])) {
                 if (n != 0) {
                     ++x;
                 }

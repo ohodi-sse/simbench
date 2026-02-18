@@ -1,61 +1,24 @@
-static class MyScanner
+public final class Main
 {
-    private BufferedReader in;
-    private StringTokenizer st;
-    
-    public MyScanner(final InputStream in) {
-        this.in = new BufferedReader(new InputStreamReader(in));
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                final String line = this.in.readLine();
-                if (line == null) {
-                    return null;
-                }
-                this.st = new StringTokenizer(line);
-                continue;
-            }
-            catch (final IOException ex) {
-                return null;
-            }
-            break;
-        }
-        return this.st.nextToken();
-    }
-    
-    public long Long() {
-        return Long.parseLong(this.next());
-    }
-    
-    public double Double() {
-        return Double.parseDouble(this.next());
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final MyScanner myScanner = new MyScanner(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new C().solve(1, myScanner, printWriter);
+        new C();
+        final MyScanner myScanner2 = myScanner;
+        printWriter.println(BigInteger.valueOf(Long.parseLong(myScanner2.next())).multiply(BigInteger.valueOf(Math.round(Double.parseDouble(myScanner2.next()) * 100.0))).divide(BigInteger.valueOf(100L)).toString());
         printWriter.close();
     }
     
-    static class C
+    static final class C
     {
-        public void solve(final int n, final MyScanner myScanner, final PrintWriter printWriter) {
-            printWriter.println(BigInteger.valueOf(myScanner.Long()).multiply(BigInteger.valueOf(Math.round(myScanner.Double() * 100.0))).divide(BigInteger.valueOf(100L)).toString());
+        private static void solve$32c5fcf9(final MyScanner myScanner, final PrintWriter printWriter) {
+            printWriter.println(BigInteger.valueOf(Long.parseLong(myScanner.next())).multiply(BigInteger.valueOf(Math.round(Double.parseDouble(myScanner.next()) * 100.0))).divide(BigInteger.valueOf(100L)).toString());
         }
     }
     
-    static class MyScanner
+    static final class MyScanner
     {
         private BufferedReader in;
         private StringTokenizer st;
@@ -64,7 +27,7 @@ static class MyScanner
             this.in = new BufferedReader(new InputStreamReader(in));
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreTokens()) {
@@ -72,8 +35,8 @@ static class MyScanner
                     }
                 }
                 try {
-                    final String line = this.in.readLine();
-                    if (line == null) {
+                    final String line;
+                    if ((line = this.in.readLine()) == null) {
                         return null;
                     }
                     this.st = new StringTokenizer(line);
@@ -87,17 +50,12 @@ static class MyScanner
             return this.st.nextToken();
         }
         
-        public long Long() {
+        private long Long() {
             return Long.parseLong(this.next());
         }
         
-        public double Double() {
+        private double Double() {
             return Double.parseDouble(this.next());
         }
-    }
-}static class C
-{
-    public void solve(final int n, final MyScanner myScanner, final PrintWriter printWriter) {
-        printWriter.println(BigInteger.valueOf(myScanner.Long()).multiply(BigInteger.valueOf(Math.round(myScanner.Double() * 100.0))).divide(BigInteger.valueOf(100L)).toString());
     }
 }

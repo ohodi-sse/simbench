@@ -1,13 +1,9 @@
-class Main
+final class Main
 {
-    static int mod;
+    private static int mod;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         System.out.println(scanner.nextLong() * Math.round(scanner.nextDouble() * 100.0) / 100L);
-    }
-    
-    static {
-        Main.mod = (int)(Math.pow(10.0, 9.0) + 7.0);
     }
 }

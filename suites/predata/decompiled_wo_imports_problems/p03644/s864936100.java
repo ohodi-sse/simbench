@@ -1,19 +1,18 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int int1 = Integer.parseInt(new Scanner(System.in).next());
         int i = 2;
         if (int1 < 2) {
             System.out.println(1);
+            return;
         }
-        else {
-            while (i <= int1) {
-                if (i * 2 > int1) {
-                    System.out.println(i);
-                    break;
-                }
-                i *= 2;
+        while (i <= int1) {
+            if (i << 1 > int1) {
+                System.out.println(i);
+                return;
             }
+            i <<= 1;
         }
     }
 }

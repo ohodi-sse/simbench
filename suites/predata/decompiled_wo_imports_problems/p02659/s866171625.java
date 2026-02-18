@@ -1,14 +1,24 @@
-class Main
+final class Main
 {
-    static final long MOD = 1000000007L;
-    static final int MAX = 2147483646;
-    static final int INF = 1000000000;
+    private static long MOD = 1000000007L;
+    private static int MAX = 2147483646;
+    private static int INF = 1000000000;
     
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final Scanner scanner = new Scanner(System.in);
         System.out.println(scanner.nextBigDecimal().multiply(scanner.nextBigDecimal()).toBigInteger());
     }
-}class hayami implements Closeable
+}
+
+
+
+
+
+
+
+
+
+final class hayami implements Closeable
 {
     private final InputStream in;
     private final byte[] hayami;
@@ -47,14 +57,14 @@ class Main
         return 33 <= n && n <= 126;
     }
     
-    public boolean hayamisaori() {
+    private boolean hayamisaori() {
         while (this.HayamiSaori() && !hayami_saori(this.hayami[this.Hayami])) {
             ++this.Hayami;
         }
         return this.HayamiSaori();
     }
     
-    public String nextHayami() {
+    private String nextHayami() {
         if (!this.hayamisaori()) {
             throw new NoSuchElementException();
         }
@@ -65,14 +75,14 @@ class Main
         return sb.toString();
     }
     
-    public long saorihayami() {
+    private long saorihayami() {
         if (!this.hayamisaori()) {
             throw new NoSuchElementException();
         }
         long n = 0L;
         boolean b = false;
-        int n2 = this.SaoriHayami();
-        if (n2 == 45) {
+        int n2;
+        if ((n2 = this.SaoriHayami()) == 45) {
             b = true;
             n2 = this.SaoriHayami();
         }
@@ -83,26 +93,56 @@ class Main
             n = n * 10L + (n2 - 48);
             n2 = this.SaoriHayami();
         }
-        if (n2 == -1 || !hayami_saori(n2)) {
-            return b ? (-n) : n;
-        }
-        throw new NumberFormatException();
-    }
-    
-    public int saori_hayami() {
-        final long saorihayami = this.saorihayami();
-        if (saorihayami < -2147483648L || saorihayami > 2147483647L) {
+        if (n2 != -1 && hayami_saori(n2)) {
             throw new NumberFormatException();
         }
-        return (int)saorihayami;
+        if (b) {
+            return -n;
+        }
+        return n;
     }
     
-    public double Hayamin() {
-        return Double.parseDouble(this.nextHayami());
+    private int saori_hayami() {
+        if (!this.hayamisaori()) {
+            throw new NoSuchElementException();
+        }
+        long n = 0L;
+        boolean b = false;
+        int n2;
+        if ((n2 = this.SaoriHayami()) == 45) {
+            b = true;
+            n2 = this.SaoriHayami();
+        }
+        if (n2 < 48 || 57 < n2) {
+            throw new NumberFormatException();
+        }
+        while (48 <= n2 && n2 <= 57) {
+            n = n * 10L + (n2 - 48);
+            n2 = this.SaoriHayami();
+        }
+        if (n2 != -1 && hayami_saori(n2)) {
+            throw new NumberFormatException();
+        }
+        final long n3;
+        if ((n3 = (b ? (-n) : n)) < -2147483648L || n3 > 2147483647L) {
+            throw new NumberFormatException();
+        }
+        return (int)n3;
+    }
+    
+    private double Hayamin() {
+        if (!this.hayamisaori()) {
+            throw new NoSuchElementException();
+        }
+        final StringBuilder sb = new StringBuilder();
+        for (int codePoint = this.SaoriHayami(); hayami_saori(codePoint); codePoint = this.SaoriHayami()) {
+            sb.appendCodePoint(codePoint);
+        }
+        return Double.parseDouble(sb.toString());
     }
     
     @Override
-    public void close() {
+    public final void close() {
         try {
             this.in.close();
         }

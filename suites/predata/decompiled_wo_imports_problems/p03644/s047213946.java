@@ -1,9 +1,9 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final int nextInt = new Scanner(System.in).nextInt();
+    private static void main$3231c38a() {
+        final int nextInt;
         int x;
-        if (nextInt < 2) {
+        if ((nextInt = new Scanner(System.in).nextInt()) < 2) {
             x = 1;
         }
         else if (nextInt < 4) {

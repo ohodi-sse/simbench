@@ -1,10 +1,7 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final String[] split = new BufferedReader(new InputStreamReader(System.in)).readLine().split(" ");
-        final long long1 = Long.parseLong(split[0]);
-        final double double1 = Double.parseDouble(split[1]);
-        final long n = (long)double1 * 100L;
-        System.out.println(long1 * (long)(double1 * 100.0 + 0.001) / 100L);
+        System.out.println(Long.parseLong(split[0]) * (long)(Double.parseDouble(split[1]) * 100.0 + 0.001) / 100L);
     }
 }

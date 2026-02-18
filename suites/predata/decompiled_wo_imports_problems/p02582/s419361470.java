@@ -1,15 +1,15 @@
-public class Main
+public final class Main
 {
-    static BufferedReader br;
-    static BufferedWriter bw;
-    static StringTokenizer st;
-    static byte[] buffer;
-    static int index;
-    static InputStream input_stream;
-    static int total;
-    static boolean[] al;
+    private static BufferedReader br;
+    private static BufferedWriter bw;
+    private static StringTokenizer st;
+    private static byte[] buffer;
+    private static int index;
+    private static InputStream input_stream;
+    private static int total;
+    private static boolean[] al;
     
-    static String ns() throws IOException {
+    private static String ns() throws IOException {
         final StringBuilder sb = new StringBuilder();
         int n;
         for (n = read(); isWhiteSpace(n); n = read()) {}
@@ -20,21 +20,20 @@ public class Main
         return sb.toString();
     }
     
-    static int read() throws IOException {
+    private static int read() throws IOException {
         if (Main.total < 0) {
             throw new InputMismatchException();
         }
         if (Main.index >= Main.total) {
             Main.index = 0;
-            Main.total = Main.input_stream.read(Main.buffer);
-            if (Main.total <= 0) {
+            if ((Main.total = Main.input_stream.read(Main.buffer)) <= 0) {
                 return -1;
             }
         }
         return Main.buffer[Main.index++];
     }
     
-    static int ni() throws IOException {
+    private static int ni() throws IOException {
         int n = 0;
         int n2;
         for (n2 = read(); isWhiteSpace(n2); n2 = read()) {}
@@ -53,7 +52,7 @@ public class Main
         return n3 * n;
     }
     
-    static long nl() throws IOException {
+    private static long nl() throws IOException {
         long n = 0L;
         int n2;
         for (n2 = read(); isWhiteSpace(n2); n2 = read()) {}
@@ -72,7 +71,7 @@ public class Main
         return n3 * n;
     }
     
-    static double nd() throws IOException {
+    private static double nd() throws IOException {
         double n = 0.0;
         int n2;
         for (n2 = read(); isWhiteSpace(n2); n2 = read()) {}
@@ -103,7 +102,7 @@ public class Main
         return n * n3;
     }
     
-    static String nsl() throws IOException {
+    private static String nsl() throws IOException {
         String line = "";
         try {
             line = Main.br.readLine();
@@ -114,76 +113,89 @@ public class Main
         return line;
     }
     
-    static boolean isWhiteSpace(final int n) {
+    private static boolean isWhiteSpace(final int n) {
         return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
     }
     
-    public static void p(final String csq) throws IOException {
+    private static void p(final String csq) throws IOException {
         Main.bw.append((CharSequence)csq);
     }
     
-    public static void pn(final String s) throws IOException {
-        p(s);
+    private static void pn(final String csq) throws IOException {
+        Main.bw.append((CharSequence)csq);
         Main.bw.append((CharSequence)"\n");
     }
     
-    public static void close() throws IOException {
+    private static void close() throws IOException {
         Main.bw.close();
     }
     
-    public static void flush() throws IOException {
+    private static void flush() throws IOException {
         Main.bw.flush();
     }
     
-    public static void prime() {
-        for (int n = 1000000, n2 = 2; n2 * n2 <= n; ++n2) {
-            if (!Main.al[n2]) {
-                for (int i = n2 * 2; i <= n; i += n2) {
+    private static void prime() {
+        int n = 2;
+        while (true) {
+            final int n2 = n;
+            if (n2 * n2 > 1000000) {
+                break;
+            }
+            if (!Main.al[n]) {
+                for (int i = n << 1; i <= 1000000; i += n) {
                     Main.al[i] = true;
                 }
             }
+            ++n;
         }
     }
     
-    public static void main(final String[] array) throws IOException {
-        final String ns = ns();
-        if (ns.charAt(0) == 'R') {
-            if (ns.charAt(1) == 'R') {
-                if (ns.charAt(2) == 'R') {
+    private static void main$3231c38a() throws IOException {
+        final StringBuilder sb = new StringBuilder();
+        int n;
+        for (n = read(); isWhiteSpace(n); n = read()) {}
+        while (!isWhiteSpace(n)) {
+            sb.append((char)n);
+            n = read();
+        }
+        final String string;
+        if ((string = sb.toString()).charAt(0) == 'R') {
+            if (string.charAt(1) == 'R') {
+                if (string.charAt(2) == 'R') {
                     pn("3");
                 }
-                else if (ns.charAt(2) == 'S') {
+                else if (string.charAt(2) == 'S') {
                     pn("2");
                 }
             }
-            if (ns.charAt(1) == 'S') {
-                if (ns.charAt(2) == 'R') {
+            if (string.charAt(1) == 'S') {
+                if (string.charAt(2) == 'R') {
                     pn("1");
                 }
-                else if (ns.charAt(2) == 'S') {
+                else if (string.charAt(2) == 'S') {
                     pn("1");
                 }
             }
         }
-        if (ns.charAt(0) == 'S') {
-            if (ns.charAt(1) == 'R') {
-                if (ns.charAt(2) == 'R') {
+        if (string.charAt(0) == 'S') {
+            if (string.charAt(1) == 'R') {
+                if (string.charAt(2) == 'R') {
                     pn("2");
                 }
-                else if (ns.charAt(2) == 'S') {
+                else if (string.charAt(2) == 'S') {
                     pn("1");
                 }
             }
-            if (ns.charAt(1) == 'S') {
-                if (ns.charAt(2) == 'R') {
+            if (string.charAt(1) == 'S') {
+                if (string.charAt(2) == 'R') {
                     pn("1");
                 }
-                else if (ns.charAt(2) == 'S') {
+                else if (string.charAt(2) == 'S') {
                     pn("0");
                 }
             }
         }
-        flush();
+        Main.bw.flush();
     }
     
     static {
@@ -194,23 +206,14 @@ public class Main
         Main.al = new boolean[1100000];
     }
     
-    static class Node
+    static final class Node
     {
-        int h;
-        int w;
+        private int h;
+        private int w;
         
-        Node(final int h, final int w) {
+        private Node(final int h, final int w) {
             this.h = h;
             this.w = w;
         }
-    }
-}static class Node
-{
-    int h;
-    int w;
-    
-    Node(final int h, final int w) {
-        this.h = h;
-        this.w = w;
     }
 }

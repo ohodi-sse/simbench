@@ -1,9 +1,9 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         try (final Scanner scanner = new Scanner(System.in)) {
-            final String next = scanner.next();
-            final char char1 = next.charAt(0);
+            final String next;
+            final char char1 = (next = scanner.next()).charAt(0);
             final char char2 = next.charAt(1);
             final char char3 = next.charAt(2);
             int x = 0;

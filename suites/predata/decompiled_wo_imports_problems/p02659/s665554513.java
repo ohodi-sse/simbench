@@ -1,72 +1,24 @@
-static class FastReader
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
+public final class Main
 {
     private static final int MOD;
     private static final long EIGHT = 1000000000000000000L;
     private static final int[][] DIRS;
     
-    public static void main(final String[] array) {
-        final FastReader fastReader = new FastReader();
-        final long nextLong = fastReader.nextLong();
+    private static void main$3231c38a() {
+        final FastReader fastReader;
+        final long long1 = Long.parseLong((fastReader = new FastReader()).next());
         final String next = fastReader.next();
-        System.out.println(nextLong * (0 + (next.charAt(0) - '0') * 100 + (next.charAt(2) - '0') * 10 + (next.charAt(3) - '0') * 1) / 100L);
+        System.out.println(long1 * (0 + (next.charAt(0) - '0') * 100 + (next.charAt(2) - '0') * 10 + (next.charAt(3) - '0')) / 100L);
     }
     
-    static Boolean isOverflowByMul(final long n, final long n2) {
+    private static Boolean isOverflowByMul(final long n, final long n2) {
         if (n == 0L || n2 == 0L) {
-            return false;
+            return Boolean.FALSE;
         }
         if (n == n * n2 / n2) {
-            return false;
+            return Boolean.FALSE;
         }
-        return true;
+        return Boolean.TRUE;
     }
     
     private static void swap(final int[] array, final int n, final int n2) {
@@ -83,7 +35,7 @@ static class FastReader
         }
     }
     
-    private static boolean findNextPermutation(final int[] array) {
+    private static boolean findNextPermutation(int[] array) {
         if (array.length <= 1) {
             return false;
         }
@@ -100,14 +52,25 @@ static class FastReader
             }
         }
         swap(array, n2, n);
-        reverse(array, n + 1, array.length - 1);
+        final int[] array2 = array;
+        final int n3 = n + 1;
+        int n4 = array.length - 1;
+        int j = n3;
+        array = array2;
+        while (j < n4) {
+            swap(array, j, n4);
+            ++j;
+            --n4;
+        }
         return true;
     }
     
     private static int[] generateNArray(final int n) {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = i + 1;
+            final int[] array2 = array;
+            final int n2 = i;
+            array2[n2] = n2 + 1;
         }
         return array;
     }
@@ -120,38 +83,46 @@ static class FastReader
         for (int length = array.length, i = 0; i < length; ++i) {
             System.out.print("" + array[i]);
         }
-        print("");
+        System.out.println("");
     }
     
     private static int log2(final int n) {
         return (int)(Math.log(n) / Math.log(2.0));
     }
     
-    private static long gcd(final long n, final long n2) {
-        if (n < n2) {
-            return gcd(n2, n);
+    private static long gcd(long n, long n2) {
+        while (true) {
+            if (n < n2) {
+                final long n3 = n2;
+                n2 = n;
+                n = n3;
+            }
+            else {
+                if (n % n2 == 0L) {
+                    break;
+                }
+                final long n4 = n2;
+                n2 = n % n2;
+                n = n4;
+            }
         }
-        if (n % n2 == 0L) {
-            return n2;
-        }
-        return gcd(n2, n % n2);
+        return n2;
     }
     
     static {
-        MOD = (int)Math.pow(10.0, 9.0);
-        DIRS = new int[][] { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
+        final int[][] array = { { 0, 1 }, { 0, -1 }, { 1, 0 }, { -1, 0 } };
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -168,19 +139,19 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

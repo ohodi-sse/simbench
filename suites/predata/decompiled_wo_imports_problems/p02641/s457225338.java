@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() throws Exception {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         final ArrayList list = new ArrayList();
         int n = 101;
@@ -26,19 +26,23 @@ public class Main
             }
             --l;
         }
-        if (list == null || list.size() == 0) {
+        if (list.size() == 0) {
             System.out.println(nextInt);
+            return;
         }
-        else if (Math.abs(n - nextInt) < Math.abs(n2 - nextInt)) {
+        if (Math.abs(n - nextInt) < Math.abs(n2 - nextInt)) {
             System.out.println(n);
+            return;
         }
-        else if (Math.abs(n - nextInt) > Math.abs(n2 - nextInt)) {
+        if (Math.abs(n - nextInt) > Math.abs(n2 - nextInt)) {
             System.out.println(n2);
+            return;
         }
-        else if (n < n2) {
+        if (n < n2) {
             System.out.println(n);
+            return;
         }
-        else if (n2 < n) {
+        if (n2 < n) {
             System.out.println(n2);
         }
     }

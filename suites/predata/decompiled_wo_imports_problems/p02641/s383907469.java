@@ -1,11 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final int x = 0;
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         if (!scanner.hasNext()) {
-            System.out.println(x);
+            System.out.println(0);
             return;
         }
         if (scanner.nextInt() == 0) {
@@ -20,12 +19,12 @@ public class Main
             int n;
             for (n = 0; set.contains(nextInt - n); ++n) {
                 if (!set.contains(nextInt + n)) {
-                    final int x2 = nextInt + n;
-                    System.out.println(x2);
+                    final int x = nextInt + n;
+                    System.out.println(x);
                     return;
                 }
             }
-            final int x2 = nextInt - n;
+            final int x = nextInt - n;
             continue;
         }
     }

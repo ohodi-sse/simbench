@@ -1,131 +1,54 @@
-static class InputReader
+public final class Main
 {
-    public BufferedReader reader;
-    public StringTokenizer tokenizer;
-    
-    public InputReader(final InputStream in) {
-        this.reader = new BufferedReader(new InputStreamReader(in), 32768);
-        this.tokenizer = null;
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.tokenizer != null) {
-                if (this.tokenizer.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.tokenizer = new StringTokenizer(this.reader.readLine());
-                continue;
-            }
-            catch (final IOException cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.tokenizer.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    public String nextLine() {
-        try {
-            return this.reader.readLine();
-        }
-        catch (final Exception ex) {
-            ex.printStackTrace();
-            return null;
-        }
-    }
-    
-    public boolean hasNext() {
-        String line = null;
-        try {
-            line = this.reader.readLine();
-        }
-        catch (final Exception ex) {}
-        if (line == null) {
-            return false;
-        }
-        this.tokenizer = new StringTokenizer(line);
-        return true;
-    }
-    
-    public int[] nextInta(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    public long[] nextLonga(final int n) {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    public int[][] nextIntm(final int n, final int n2) {
-        final int[][] array = new int[n][n2];
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n2; ++j) {
-                array[i][j] = this.nextInt();
-            }
-        }
-        return array;
-    }
-    
-    public long[][] nextLongm(final int n, final int n2) {
-        final long[][] array = new long[n][n2];
-        for (int i = 0; i < n; ++i) {
-            for (int j = 0; j < n2; ++j) {
-                array[i][j] = this.nextLong();
-            }
-        }
-        return array;
-    }
-    
-    public BigInteger nextBigInteger() {
-        return new BigInteger(this.next());
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final InputReader inputReader = new InputReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        final Task task = new Task();
-        for (int n = 1, i = 1; i <= n; ++i) {
-            task.solve(i, inputReader, printWriter);
+        new Task();
+        for (int i = 1; i <= 1; ++i) {
+            final InputReader inputReader2 = inputReader;
+            final PrintWriter printWriter2 = printWriter;
+            final char[] charArray = inputReader2.next().toCharArray();
+            int n = 0;
+            int max = 0;
+            for (int j = 0; j < 3; ++j) {
+                if (charArray[j] == 'R') {
+                    ++n;
+                }
+                else {
+                    max = Math.max(max, n);
+                    n = 0;
+                }
+            }
+            printWriter2.println(Math.max(max, n));
         }
         printWriter.close();
     }
     
-    static void sort(final int[] a) {
-        shuffle(a);
+    private static void sort(final int[] a) {
+        final Random random = new Random();
+        for (int i = 0; i < a.length; ++i) {
+            final int nextInt = random.nextInt(a.length);
+            final int n = a[i];
+            a[i] = a[nextInt];
+            a[nextInt] = n;
+        }
         Arrays.sort(a);
     }
     
-    static void sort(final long[] a) {
-        shuffle(a);
+    private static void sort(final long[] a) {
+        final Random random = new Random();
+        for (int i = 0; i < a.length; ++i) {
+            final int nextInt = random.nextInt(a.length);
+            final long n = a[i];
+            a[i] = a[nextInt];
+            a[nextInt] = n;
+        }
         Arrays.sort(a);
     }
     
-    static void shuffle(final int[] array) {
+    private static void shuffle(final int[] array) {
         final Random random = new Random();
         for (int i = 0; i < array.length; ++i) {
             final int nextInt = random.nextInt(array.length);
@@ -135,7 +58,7 @@ static class InputReader
         }
     }
     
-    static void shuffle(final long[] array) {
+    private static void shuffle(final long[] array) {
         final Random random = new Random();
         for (int i = 0; i < array.length; ++i) {
             final int nextInt = random.nextInt(array.length);
@@ -145,36 +68,36 @@ static class InputReader
         }
     }
     
-    static class Task
+    static final class Task
     {
-        public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
+        private static void solve$6080e082(final InputReader inputReader, final PrintWriter printWriter) {
             final char[] charArray = inputReader.next().toCharArray();
-            int n2 = 0;
+            int n = 0;
             int max = 0;
             for (int i = 0; i < 3; ++i) {
                 if (charArray[i] == 'R') {
-                    ++n2;
+                    ++n;
                 }
                 else {
-                    max = Math.max(max, n2);
-                    n2 = 0;
+                    max = Math.max(max, n);
+                    n = 0;
                 }
             }
-            printWriter.println(Math.max(max, n2));
+            printWriter.println(Math.max(max, n));
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
-        public BufferedReader reader;
-        public StringTokenizer tokenizer;
+        private BufferedReader reader;
+        private StringTokenizer tokenizer;
         
         public InputReader(final InputStream in) {
             this.reader = new BufferedReader(new InputStreamReader(in), 32768);
             this.tokenizer = null;
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.tokenizer != null) {
                     if (this.tokenizer.hasMoreTokens()) {
@@ -193,19 +116,19 @@ static class InputReader
             return this.tokenizer.nextToken();
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        public double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        public String nextLine() {
+        private String nextLine() {
             try {
                 return this.reader.readLine();
             }
@@ -215,7 +138,7 @@ static class InputReader
             }
         }
         
-        public boolean hasNext() {
+        private boolean hasNext() {
             String line = null;
             try {
                 line = this.reader.readLine();
@@ -228,61 +151,44 @@ static class InputReader
             return true;
         }
         
-        public int[] nextInta(final int n) {
+        private int[] nextInta(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        public long[] nextLonga(final int n) {
+        private long[] nextLonga(final int n) {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLong();
+                array[i] = Long.parseLong(this.next());
             }
             return array;
         }
         
-        public int[][] nextIntm(final int n, final int n2) {
+        private int[][] nextIntm(final int n, final int n2) {
             final int[][] array = new int[n][n2];
             for (int i = 0; i < n; ++i) {
                 for (int j = 0; j < n2; ++j) {
-                    array[i][j] = this.nextInt();
+                    array[i][j] = Integer.parseInt(this.next());
                 }
             }
             return array;
         }
         
-        public long[][] nextLongm(final int n, final int n2) {
+        private long[][] nextLongm(final int n, final int n2) {
             final long[][] array = new long[n][n2];
             for (int i = 0; i < n; ++i) {
                 for (int j = 0; j < n2; ++j) {
-                    array[i][j] = this.nextLong();
+                    array[i][j] = Long.parseLong(this.next());
                 }
             }
             return array;
         }
         
-        public BigInteger nextBigInteger() {
+        private BigInteger nextBigInteger() {
             return new BigInteger(this.next());
         }
-    }
-}static class Task
-{
-    public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-        final char[] charArray = inputReader.next().toCharArray();
-        int n2 = 0;
-        int max = 0;
-        for (int i = 0; i < 3; ++i) {
-            if (charArray[i] == 'R') {
-                ++n2;
-            }
-            else {
-                max = Math.max(max, n2);
-                n2 = 0;
-            }
-        }
-        printWriter.println(Math.max(max, n2));
     }
 }

@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
         final StringBuilder sb = new StringBuilder();
         final String line = bufferedReader.readLine();
@@ -32,23 +32,14 @@ public class Main
         return array;
     }
     
-    static class Pair<A, B>
+    static final class Pair<A, B>
     {
-        A first;
-        B second;
+        private A first;
+        private B second;
         
-        public Pair(final A first, final B second) {
+        private Pair(final A first, final B second) {
             this.first = first;
             this.second = second;
         }
-    }
-}static class Pair<A, B>
-{
-    A first;
-    B second;
-    
-    public Pair(final A first, final B second) {
-        this.first = first;
-        this.second = second;
     }
 }

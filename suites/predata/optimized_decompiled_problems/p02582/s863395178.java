@@ -48,9 +48,9 @@ public final class Main
     
     static final class ARainySeason
     {
-        private static void solve$6080e082(InputReader inputReader, final PrintWriter printWriter) {
+        private static void solve$6080e082(final InputReader inputReader, final PrintWriter printWriter) {
             int n;
-            for (n = (inputReader = inputReader).read(); inputReader.isSpaceChar(n); n = inputReader.read()) {}
+            for (n = inputReader.read(); inputReader.isSpaceChar(n); n = inputReader.read()) {}
             final StringBuilder sb = new StringBuilder();
             do {
                 if (Character.isValidCodePoint(n)) {
@@ -107,7 +107,7 @@ public final class Main
             return this.buf[this.curChar++];
         }
         
-        public final String nextString() {
+        private String nextString() {
             int n;
             for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
             final StringBuilder sb = new StringBuilder();

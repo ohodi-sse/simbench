@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         final ArrayList list = new ArrayList();
         final String next = scanner.next();
@@ -12,7 +12,10 @@ public class Main
         }
         else {
             for (int i = 0; i < 3; ++i) {
-                list.add(next.substring(i, i + 1));
+                final ArrayList list2 = list;
+                final String s = next;
+                final int beginIndex = i;
+                list2.add(s.substring(beginIndex, beginIndex + 1));
             }
             for (int j = 0; j < 3; ++j) {
                 if (!((String)list.get(j)).equals("R")) {
@@ -33,12 +36,12 @@ public class Main
         }
         if (n == 1) {
             System.out.println("3");
+            return;
         }
-        else if (x > x2) {
+        if (x > x2) {
             System.out.println(x);
+            return;
         }
-        else {
-            System.out.println(x2);
-        }
+        System.out.println(x2);
     }
 }

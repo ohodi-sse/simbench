@@ -1,14 +1,14 @@
-public class Main
+public final class Main
 {
-    static final int max = 100;
+    private static int max = 100;
     
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        cal(scanner.nextLong(), scanner.nextDouble());
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        System.out.println((scanner = new Scanner(System.in)).nextLong() * Math.round(scanner.nextDouble() * 100.0) / 100L);
         scanner.close();
     }
     
-    public static void cal(final long n, final double n2) {
+    private static void cal(final long n, final double n2) {
         System.out.println(n * Math.round(n2 * 100.0) / 100L);
     }
 }

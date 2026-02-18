@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        int i = new Scanner(new BufferedReader(new InputStreamReader(System.in))).nextInt();
-        if (i == 1) {
+    private static void main$3231c38a() {
+        int i;
+        if ((i = new Scanner(new BufferedReader(new InputStreamReader(System.in))).nextInt()) == 1) {
             System.out.println(1);
             return;
         }

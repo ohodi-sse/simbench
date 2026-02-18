@@ -1,16 +1,32 @@
-public class Main
+public final class Main
 {
-    Scanner sc;
-    String S;
+    private Scanner sc;
+    private String S;
     
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final Scanner scanner = new Scanner(System.in);
         final Main main = new Main(scanner);
-        main.show(main.solve());
+        int x = 0;
+        int n = 0;
+        for (int i = 0; i < main.S.length() - 1; ++i) {
+            if (main.S.charAt(i) == 'R' || main.S.charAt(2) == 'R') {
+                x = 1;
+            }
+            if (main.S.charAt(i) == 'R' && main.S.charAt(i + 1) == 'R') {
+                ++n;
+            }
+        }
+        if (n == 1) {
+            x = 2;
+        }
+        else if (n == 2) {
+            x = 3;
+        }
+        System.out.println(x);
         scanner.close();
     }
     
-    Main(final Scanner sc) {
+    private Main(final Scanner sc) {
         this.sc = sc;
         this.S = sc.next();
     }
@@ -35,7 +51,7 @@ public class Main
         return n;
     }
     
-    public void show(final int x) {
+    private static void show(final int x) {
         System.out.println(x);
     }
 }

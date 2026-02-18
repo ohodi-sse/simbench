@@ -1,21 +1,23 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         final int nextInt2 = scanner.nextInt();
         int x = 110;
-        final int[] array2 = new int[110];
+        final int[] array = new int[110];
         if (nextInt2 != 0) {
             for (int i = 0; i < nextInt2; ++i) {
                 final int nextInt3 = scanner.nextInt();
-                array2[nextInt3] = nextInt3;
+                final int[] array2 = array;
+                final int n = nextInt3;
+                array2[n] = n;
             }
-            int n = 110;
+            int n2 = 110;
             for (int j = 0; j <= 101; ++j) {
                 final int abs = Math.abs(nextInt - j);
-                if (array2[j] == 0 && abs < n) {
-                    n = abs;
+                if (array[j] == 0 && abs < n2) {
+                    n2 = abs;
                     x = j;
                 }
             }

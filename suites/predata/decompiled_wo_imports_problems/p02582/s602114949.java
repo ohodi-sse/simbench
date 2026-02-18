@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
         int n = 0;
         if (next.charAt(0) == 'R') {
@@ -14,15 +14,16 @@ public class Main
         }
         if (n == 1 || n == 2 || n == 4 || n == 5) {
             System.out.println(1);
+            return;
         }
-        else if (n == 3 || n == 6) {
+        if (n == 3 || n == 6) {
             System.out.println(2);
+            return;
         }
-        else if (n == 7) {
+        if (n == 7) {
             System.out.println(3);
+            return;
         }
-        else {
-            System.out.println(0);
-        }
+        System.out.println(0);
     }
 }

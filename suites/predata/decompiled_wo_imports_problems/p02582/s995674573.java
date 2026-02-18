@@ -1,10 +1,9 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
         int i = 0;
-        final String s = next;
-        switch (s) {
+        switch (next) {
             case "SSR":
             case "SRS":
             case "RSS":

@@ -1,73 +1,22 @@
-public static class MyScanner
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
+    private static Scanner sc;
+    private static int MOD = 1000000007;
+    private static double PI = 3.141592653589793;
+    private static PrintWriter out;
     
-    public MyScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    static Scanner sc;
-    static final int MOD = 1000000007;
-    static final double PI = 3.141592653589793;
-    public static PrintWriter out;
-    
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String string = Main.sc.nextBigDecimal().multiply(Main.sc.nextBigDecimal()).toString();
         String x = "";
-        for (int i = 0; i < string.length(); ++i) {
-            final char char1 = string.charAt(i);
-            if (char1 == '.') {
-                break;
-            }
+        char char1;
+        for (int index = 0; index < string.length() && (char1 = string.charAt(index)) != '.'; ++index) {
             x += char1;
         }
         Main.out.println(x);
         Main.out.close();
     }
     
-    public static int[] init(final int n) {
+    private static int[] init(final int n) {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
             array[i] = Main.sc.nextInt();
@@ -75,23 +24,30 @@ public static class MyScanner
         return array;
     }
     
-    public static int gcd(final int n, final int n2) {
-        if (n == 0) {
-            return n2;
+    private static int gcd(int i, int n) {
+        while (i != 0) {
+            final int n2 = n % i;
+            n = i;
+            i = n2;
         }
-        return gcd(n2 % n, n);
+        return n;
     }
     
-    public static boolean prime(final int n) {
+    private static boolean prime(final int n) {
         if (n < 2) {
             return false;
         }
-        for (int n2 = 2; n2 * n2 <= n; ++n2) {
+        int n2 = 2;
+        while (true) {
+            final int n3 = n2;
+            if (n3 * n3 > n) {
+                return true;
+            }
             if (n % n2 == 0) {
                 return false;
             }
+            ++n2;
         }
-        return true;
     }
     
     static {
@@ -99,47 +55,46 @@ public static class MyScanner
         Main.out = new PrintWriter(new BufferedOutputStream(System.out));
     }
     
-    static class Pair<S extends Comparable<S>, T extends Comparable<T>> implements Comparable<Pair<S, T>>
+    static final class Pair<S extends Comparable<S>, T extends Comparable<T>> implements Comparable<Pair<S, T>>
     {
-        S first;
-        T second;
+        private S first;
+        private T second;
         
         public Pair() {
         }
         
-        Pair(final S first, final T second) {
+        private Pair(final S first, final T second) {
             this.first = first;
             this.second = second;
         }
         
-        public S getX() {
+        private S getX() {
             return this.first;
         }
         
-        public T getY() {
+        private T getY() {
             return this.second;
         }
         
-        @Override
-        public int compareTo(final Pair<S, T> pair) {
-            final int compareTo = this.first.compareTo(pair.first);
-            if (compareTo == 0) {
+        private int compareTo(final Pair<S, T> pair) {
+            final int compareTo;
+            if ((compareTo = this.first.compareTo(pair.first)) == 0) {
                 return this.second.compareTo(pair.second);
             }
             return compareTo;
         }
         
-        public void show() {
-            System.out.println("[" + String.valueOf(this.getX()) + " , " + String.valueOf(this.getY()));
+        private void show() {
+            System.out.println("[" + String.valueOf(this.first) + " , " + String.valueOf(this.second));
         }
         
         @Override
-        public int hashCode() {
+        public final int hashCode() {
             return (31 + this.first.hashCode()) * 31 + this.second.hashCode();
         }
         
         @Override
-        public boolean equals(final Object o) {
+        public final boolean equals(final Object o) {
             if (!(o instanceof Pair)) {
                 return false;
             }
@@ -151,21 +106,21 @@ public static class MyScanner
         }
         
         @Override
-        public String toString() {
+        public final String toString() {
             return "Pair{" + String.valueOf(this.first) + ", " + String.valueOf(this.second);
         }
     }
     
-    public static class MyScanner
+    public static final class MyScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public MyScanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        private String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -182,19 +137,19 @@ public static class MyScanner
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();
@@ -204,60 +159,5 @@ public static class MyScanner
             }
             return line;
         }
-    }
-}static class Pair<S extends Comparable<S>, T extends Comparable<T>> implements Comparable<Pair<S, T>>
-{
-    S first;
-    T second;
-    
-    public Pair() {
-    }
-    
-    Pair(final S first, final T second) {
-        this.first = first;
-        this.second = second;
-    }
-    
-    public S getX() {
-        return this.first;
-    }
-    
-    public T getY() {
-        return this.second;
-    }
-    
-    @Override
-    public int compareTo(final Pair<S, T> pair) {
-        final int compareTo = this.first.compareTo(pair.first);
-        if (compareTo == 0) {
-            return this.second.compareTo(pair.second);
-        }
-        return compareTo;
-    }
-    
-    public void show() {
-        System.out.println("[" + String.valueOf(this.getX()) + " , " + String.valueOf(this.getY()));
-    }
-    
-    @Override
-    public int hashCode() {
-        return (31 + this.first.hashCode()) * 31 + this.second.hashCode();
-    }
-    
-    @Override
-    public boolean equals(final Object o) {
-        if (!(o instanceof Pair)) {
-            return false;
-        }
-        if (o == this) {
-            return true;
-        }
-        final Pair pair = (Pair)o;
-        return this.first.equals(pair.first) && this.second.equals(pair.second);
-    }
-    
-    @Override
-    public String toString() {
-        return "Pair{" + String.valueOf(this.first) + ", " + String.valueOf(this.second);
     }
 }

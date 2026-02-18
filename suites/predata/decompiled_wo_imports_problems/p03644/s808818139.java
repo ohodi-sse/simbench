@@ -1,14 +1,25 @@
-class Solver
+final class Main
 {
-    public void run() {
-        int i = new Scanner(System.in).nextInt();
-        int x = 1;
-        for (int n = 0; i > 1; i >>= 1, ++n, x *= 2) {}
+    private static void main$3231c38a() {
+        new Solver();
+        int i;
+        int x;
+        for (i = new Scanner(System.in).nextInt(), x = 1; i > 1; i >>= 1, x <<= 1) {}
         System.out.println(x);
     }
-}class Main
+}
+
+
+
+
+
+
+final class Solver
 {
-    public static void main(final String[] array) {
-        new Solver().run();
+    private static void run() {
+        int i;
+        int x;
+        for (i = new Scanner(System.in).nextInt(), x = 1; i > 1; i >>= 1, x <<= 1) {}
+        System.out.println(x);
     }
 }

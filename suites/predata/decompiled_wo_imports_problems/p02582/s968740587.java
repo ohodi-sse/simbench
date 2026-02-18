@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String nextLine = scanner.nextLine();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String nextLine = (scanner = new Scanner(System.in)).nextLine();
         int x = 0;
         switch (nextLine) {
             case "RSS": {

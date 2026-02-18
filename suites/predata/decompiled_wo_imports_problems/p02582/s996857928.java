@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
-        final String line = new BufferedReader(new InputStreamReader(System.in)).readLine();
-        final String substring = line.substring(0, 1);
+    private static void main$3231c38a() throws IOException {
+        final String line;
+        final String substring = (line = new BufferedReader(new InputStreamReader(System.in)).readLine()).substring(0, 1);
         final String substring2 = line.substring(1, 2);
         final String substring3 = line.substring(2, 3);
         int x = 0;

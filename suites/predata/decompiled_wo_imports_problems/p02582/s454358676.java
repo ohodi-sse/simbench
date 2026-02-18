@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String[] split = new Scanner(System.in).next().split("");
-        if (split[0].equals("R") && split[1].equals("R") && split[2].equals("R")) {
+    private static void main$3231c38a() {
+        final String[] split;
+        if ((split = new Scanner(System.in).next().split(""))[0].equals("R") && split[1].equals("R") && split[2].equals("R")) {
             System.out.println(3);
         }
         if (split[0].equals("R") && split[1].equals("R") && split[2].equals("S")) {

@@ -1,26 +1,26 @@
-public class Main
+public final class Main
 {
-    static BufferedReader br;
+    private static BufferedReader br;
     
-    static int[] inputval() throws Exception {
-        final String[] split = Main.br.readLine().trim().split(" ");
-        final int[] array = new int[split.length];
+    private static int[] inputval() throws Exception {
+        final String[] split;
+        final int[] array = new int[(split = Main.br.readLine().trim().split(" ")).length];
         for (int i = 0; i < array.length; ++i) {
             array[i] = Integer.parseInt(split[i]);
         }
         return array;
     }
     
-    static Integer[] inputvalInteger() throws Exception {
-        final String[] split = Main.br.readLine().trim().split(" ");
-        final Integer[] array = new Integer[split.length];
+    private static Integer[] inputvalInteger() throws Exception {
+        final String[] split;
+        final Integer[] array = new Integer[(split = Main.br.readLine().trim().split(" ")).length];
         for (int i = 0; i < array.length; ++i) {
             array[i] = Integer.parseInt(split[i]);
         }
         return array;
     }
     
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         for (int i = Integer.parseInt(Main.br.readLine().trim()); i > 0; --i) {
             for (int j = i; j > 0; j /= 2) {
                 if (j == 1) {

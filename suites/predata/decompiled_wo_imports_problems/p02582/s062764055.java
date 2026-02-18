@@ -1,18 +1,19 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        if (next.contains("RRR")) {
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = new Scanner(System.in).next()).contains("RRR")) {
             System.out.println("3");
+            return;
         }
-        else if (next.contains("RR")) {
+        if (next.contains("RR")) {
             System.out.println("2");
+            return;
         }
-        else if (next.contains("R")) {
+        if (next.contains("R")) {
             System.out.println("1");
+            return;
         }
-        else {
-            System.out.println("0");
-        }
+        System.out.println("0");
     }
 }

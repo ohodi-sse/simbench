@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         int i = new Scanner(System.in).nextInt();
         int n = 0;
         boolean b = true;
@@ -15,9 +15,8 @@ public class Main
         }
         if (!b) {
             System.out.println(i);
+            return;
         }
-        else {
-            System.out.println((int)Math.pow(2.0, n - 1));
-        }
+        System.out.println((int)Math.pow(2.0, n - 1));
     }
 }

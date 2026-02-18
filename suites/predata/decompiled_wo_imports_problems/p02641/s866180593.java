@@ -1,57 +1,22 @@
-static class MyScanner
+public final class Main
 {
-    private BufferedReader br;
-    private StringTokenizer tokenizer;
-    
-    public MyScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.tokenizer != null) {
-                if (this.tokenizer.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.tokenizer = new StringTokenizer(this.br.readLine());
-                continue;
-            }
-            catch (final IOException cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.tokenizer.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-}public class Main
-{
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final MyScanner myScanner = new MyScanner();
         final PrintWriter printWriter = new PrintWriter(System.out);
-        final int nextInt = myScanner.nextInt();
-        final int nextInt2 = myScanner.nextInt();
-        final int[] array2 = new int[nextInt2];
-        for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = myScanner.nextInt();
+        final int int1 = Integer.parseInt(myScanner.next());
+        final int int2;
+        final int[] array = new int[int2 = Integer.parseInt(myScanner.next())];
+        for (int i = 0; i < int2; ++i) {
+            array[i] = Integer.parseInt(myScanner.next());
         }
         int j = -1000;
         int n = 0;
         while (j == -1000) {
             for (int n2 = -1; n2 <= 1 && j == -1000; n2 += 2) {
-                final int n3 = nextInt + n * n2;
+                final int n3 = int1 + n * n2;
                 boolean b = true;
-                for (int k = 0; k < nextInt2; ++k) {
-                    if (array2[k] == n3) {
+                for (int k = 0; k < int2; ++k) {
+                    if (array[k] == n3) {
                         b = false;
                         break;
                     }
@@ -66,7 +31,7 @@ static class MyScanner
         printWriter.flush();
     }
     
-    static class MyScanner
+    static final class MyScanner
     {
         private BufferedReader br;
         private StringTokenizer tokenizer;
@@ -75,7 +40,7 @@ static class MyScanner
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.tokenizer != null) {
                     if (this.tokenizer.hasMoreTokens()) {
@@ -94,11 +59,11 @@ static class MyScanner
             return this.tokenizer.nextToken();
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
     }

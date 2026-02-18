@@ -65,31 +65,29 @@ public final class Main
     
     private static int lcm(int i, int n) {
         final int n2 = i * n;
-        final int n3 = i;
-        n = n;
-        i = n3;
+        i = i;
         while (i != 0) {
-            int n4;
+            int n3;
             if (n == 0) {
-                n4 = i;
+                n3 = i;
             }
             else if (i == n) {
-                n4 = i;
+                n3 = i;
             }
             else {
                 if (i > n) {
                     i -= n;
                     continue;
                 }
-                final int n5 = i;
+                final int n4 = i;
                 n -= i;
-                i = n5;
+                i = n4;
                 continue;
             }
-            return n2 / n4;
+            return n2 / n3;
         }
-        int n4 = n;
-        return n2 / n4;
+        int n3 = n;
+        return n2 / n3;
     }
     
     private static int solve(final int n, final int n2) {

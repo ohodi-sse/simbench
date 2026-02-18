@@ -1,6 +1,6 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         int n = 0;
         int nextInt = scanner.nextInt();
@@ -12,7 +12,7 @@ class Main
         }
         int x = 1;
         for (int j = 0; j < n; ++j) {
-            x *= 2;
+            x <<= 1;
         }
         System.out.println(x);
     }

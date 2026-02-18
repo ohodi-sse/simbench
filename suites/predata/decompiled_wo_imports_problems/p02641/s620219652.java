@@ -1,20 +1,20 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] array2 = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] array = new int[nextInt2 = scanner.nextInt()];
         final int n = nextInt;
         int x = nextInt;
         int x2 = nextInt;
         int n2 = 0;
         for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = scanner.nextInt();
+            array[i] = scanner.nextInt();
         }
         for (int j = 0; j < nextInt2 + 1; ++j) {
             for (int k = 0; k < nextInt2; ++k) {
-                if (array2[k] != nextInt) {
+                if (array[k] != nextInt) {
                     ++n2;
                 }
             }
@@ -29,7 +29,7 @@ public class Main
         int n4 = 0;
         for (int l = 0; l < nextInt2 + 1; ++l) {
             for (int n5 = 0; n5 < nextInt2; ++n5) {
-                if (array2[n5] != n3) {
+                if (array[n5] != n3) {
                     ++n4;
                 }
             }
@@ -42,9 +42,8 @@ public class Main
         }
         if (n - x <= x2 - n) {
             System.out.println(x);
+            return;
         }
-        else {
-            System.out.println(x2);
-        }
+        System.out.println(x2);
     }
 }

@@ -1,43 +1,43 @@
-public class Main
+public final class Main
 {
-    static FastScanner fs;
+    private static FastScanner fs;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = Main.fs.next();
-        final int[] array2 = new int[3];
+        final int[] array = new int[3];
         for (int i = 0; i < 3; ++i) {
             if (next.charAt(i) == 'R') {
-                array2[i] = 1;
+                array[i] = 1;
             }
             else {
-                array2[i] = 0;
+                array[i] = 0;
             }
         }
         for (int j = 1; j < 3; ++j) {
-            if (array2[j] == 1) {
-                final int[] array3 = array2;
+            if (array[j] == 1) {
+                final int[] array2 = array;
                 final int n = j;
-                array3[n] += array2[j - 1];
+                array2[n] += array[j - 1];
             }
         }
-        System.out.println(Math.max(array2[0], Math.max(array2[1], array2[2])));
+        System.out.println(Math.max(array[0], Math.max(array[1], array[2])));
     }
     
     static {
         Main.fs = new FastScanner();
     }
     
-    static class FastScanner
+    static final class FastScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         FastScanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
             this.st = new StringTokenizer("");
         }
         
-        public String next() {
+        public final String next() {
             while (!this.st.hasMoreTokens()) {
                 try {
                     this.st = new StringTokenizer(this.br.readLine());
@@ -49,7 +49,7 @@ public class Main
             return this.st.nextToken();
         }
         
-        public String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();
@@ -60,92 +60,32 @@ public class Main
             return line;
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        public int[] readArray(final int n) {
+        private int[] readArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        public long[] readLongArray(final int n) {
+        private long[] readLongArray(final int n) {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLong();
+                array[i] = Long.parseLong(this.next());
             }
             return array;
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
-    }
-}static class FastScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    FastScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-        this.st = new StringTokenizer("");
-    }
-    
-    public String next() {
-        while (!this.st.hasMoreTokens()) {
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    public String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public int[] readArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    public long[] readLongArray(final int n) {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
     }
 }

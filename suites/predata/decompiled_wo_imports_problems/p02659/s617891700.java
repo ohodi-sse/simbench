@@ -1,14 +1,14 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final long nextLong = scanner.nextLong();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final long nextLong = (scanner = new Scanner(System.in)).nextLong();
         final String next = scanner.next();
         scanner.close();
-        prtln(new BigDecimal(nextLong).multiply(new BigDecimal(next)).toBigInteger());
+        System.out.println(new BigDecimal(nextLong).multiply(new BigDecimal(next)).toBigInteger());
     }
     
-    public static <T> void prtln(final T x) {
+    private static <T> void prtln(final T x) {
         System.out.println(x);
     }
 }

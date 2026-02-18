@@ -1,8 +1,8 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String nextLine = scanner.nextLine();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String nextLine = (scanner = new Scanner(System.in)).nextLine();
         final String nextLine2 = scanner.nextLine();
         final String substring = nextLine.substring(0, 1);
         final String substring2 = nextLine2.substring(0, 1);

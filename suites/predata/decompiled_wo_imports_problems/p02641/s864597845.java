@@ -1,12 +1,12 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         int nextInt2;
         final int n = nextInt2 = scanner.nextInt();
         int x = 999;
-        final int[] array2 = new int[n];
+        final int[] array = new int[n];
         int n2 = 100;
         final HashSet set = new HashSet();
         for (int i = 0; i < n; ++i) {

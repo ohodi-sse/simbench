@@ -1,18 +1,19 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
-        final char[] charArray = new BufferedReader(new InputStreamReader(System.in)).readLine().toCharArray();
-        if (charArray[0] == 'R' && charArray[1] == 'R' && charArray[2] == 'R') {
+    private static void main$3231c38a() throws IOException {
+        final char[] charArray;
+        if ((charArray = new BufferedReader(new InputStreamReader(System.in)).readLine().toCharArray())[0] == 'R' && charArray[1] == 'R' && charArray[2] == 'R') {
             System.out.println(3);
+            return;
         }
-        else if ((charArray[0] == 'R' && charArray[1] == 'R') || (charArray[1] == 'R' && charArray[2] == 'R')) {
+        if ((charArray[0] == 'R' && charArray[1] == 'R') || (charArray[1] == 'R' && charArray[2] == 'R')) {
             System.out.println(2);
+            return;
         }
-        else if (charArray[0] == 'R' || charArray[1] == 'R' || charArray[2] == 'R') {
+        if (charArray[0] == 'R' || charArray[1] == 'R' || charArray[2] == 'R') {
             System.out.println(1);
+            return;
         }
-        else {
-            System.out.println(0);
-        }
+        System.out.println(0);
     }
 }

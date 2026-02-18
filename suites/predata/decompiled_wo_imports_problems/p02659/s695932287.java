@@ -1,10 +1,13 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
-        solve(System.in, System.out);
+    private static void main$3231c38a() throws Exception {
+        final InputStream in = System.in;
+        final PrintStream out = System.out;
+        final Scanner scanner = new Scanner(in);
+        out.println(new BigDecimal(Double.valueOf(scanner.nextDouble()).toString()).multiply(new BigDecimal(scanner.nextLong())).longValue());
     }
     
-    static void solve(final InputStream source, final PrintStream printStream) {
+    private static void solve(final InputStream source, final PrintStream printStream) {
         final Scanner scanner = new Scanner(source);
         printStream.println(new BigDecimal(Double.valueOf(scanner.nextDouble()).toString()).multiply(new BigDecimal(scanner.nextLong())).longValue());
     }

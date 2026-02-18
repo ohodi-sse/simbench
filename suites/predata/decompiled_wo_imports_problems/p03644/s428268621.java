@@ -1,22 +1,4 @@
-public class Main
-{
-    private static int solve(int i) {
-        int n;
-        for (n = 0; i > 1; i /= 2, ++n) {}
-        return 1 << n;
-    }
-    
-    private static void execute(final ContestReader contestReader, final PrintWriter printWriter) {
-        printWriter.println(solve(contestReader.nextInt()));
-    }
-    
-    public static void main(final String[] array) {
-        final ContestReader contestReader = new ContestReader(System.in);
-        final PrintWriter printWriter = new PrintWriter(System.out);
-        execute(contestReader, printWriter);
-        printWriter.flush();
-    }
-}class ContestReader
+final class ContestReader
 {
     private BufferedReader reader;
     private StringTokenizer tokenizer;
@@ -25,7 +7,7 @@ public class Main
         this.reader = new BufferedReader(new InputStreamReader(in));
     }
     
-    public String next() {
+    public final String next() {
         while (true) {
             if (this.tokenizer != null) {
                 if (this.tokenizer.hasMoreTokens()) {
@@ -44,19 +26,19 @@ public class Main
         return this.tokenizer.nextToken();
     }
     
-    public int nextInt() {
+    private int nextInt() {
         return Integer.parseInt(this.next());
     }
     
-    public long nextLong() {
+    private long nextLong() {
         return Long.parseLong(this.next());
     }
     
-    public double nextDouble() {
+    private double nextDouble() {
         return Double.parseDouble(this.next());
     }
     
-    public String[] next(final int n) {
+    private String[] next(final int n) {
         final String[] array = new String[n];
         for (int i = 0; i < n; ++i) {
             array[i] = this.next();
@@ -64,69 +46,104 @@ public class Main
         return array;
     }
     
-    public int[] nextInt(final int n) {
+    private int[] nextInt(final int n) {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
+            array[i] = Integer.parseInt(this.next());
         }
         return array;
     }
     
-    public long[] nextLong(final int n) {
+    private long[] nextLong(final int n) {
         final long[] array = new long[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
+            array[i] = Long.parseLong(this.next());
         }
         return array;
     }
     
-    public double[] nextDouble(final int n) {
+    private double[] nextDouble(final int n) {
         final double[] array = new double[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextDouble();
+            array[i] = Double.parseDouble(this.next());
         }
         return array;
     }
     
-    public char[] nextCharArray() {
+    private char[] nextCharArray() {
         return this.next().toCharArray();
     }
     
-    public int[][] nextInt(final int n, final int n2) {
+    private int[][] nextInt(final int n, final int n2) {
         final int[][] array = new int[n][n2];
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n2; ++j) {
-                array[i][j] = this.nextInt();
+                array[i][j] = Integer.parseInt(this.next());
             }
         }
         return array;
     }
     
-    public long[][] nextLong(final int n, final int n2) {
+    private long[][] nextLong(final int n, final int n2) {
         final long[][] array = new long[n][n2];
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n2; ++j) {
-                array[i][j] = this.nextLong();
+                array[i][j] = Long.parseLong(this.next());
             }
         }
         return array;
     }
     
-    public double[][] nextDouble(final int n, final int n2) {
+    private double[][] nextDouble(final int n, final int n2) {
         final double[][] array = new double[n][n2];
         for (int i = 0; i < n; ++i) {
             for (int j = 0; j < n2; ++j) {
-                array[i][j] = this.nextDouble();
+                array[i][j] = Double.parseDouble(this.next());
             }
         }
         return array;
     }
     
-    public char[][] nextCharArray(final int n) {
+    private char[][] nextCharArray(final int n) {
         final char[][] array = new char[n][];
         for (int i = 0; i < n; ++i) {
             array[i] = this.next().toCharArray();
         }
         return array;
+    }
+}
+
+
+
+
+
+
+
+public final class Main
+{
+    private static int solve(int i) {
+        int n;
+        for (n = 0; i > 1; i /= 2, ++n) {}
+        return 1 << n;
+    }
+    
+    private static void execute(final ContestReader contestReader, final PrintWriter printWriter) {
+        int i;
+        int n;
+        for (i = Integer.parseInt(contestReader.next()), n = 0; i > 1; i /= 2, ++n) {}
+        printWriter.println(1 << n);
+    }
+    
+    private static void main$3231c38a() {
+        final ContestReader contestReader = new ContestReader(System.in);
+        final PrintWriter printWriter = new PrintWriter(System.out);
+        final ContestReader contestReader2 = contestReader;
+        final PrintWriter printWriter2 = printWriter;
+        int i = Integer.parseInt(contestReader2.next());
+        final PrintWriter printWriter3 = printWriter2;
+        int n;
+        for (n = 0; i > 1; i /= 2, ++n) {}
+        printWriter3.println(1 << n);
+        printWriter.flush();
     }
 }

@@ -95,7 +95,7 @@ public final class Main
             return Integer.parseInt(this.next());
         }
         
-        public final Long nextLong() throws NumberFormatException, IOException {
+        private Long nextLong() throws NumberFormatException, IOException {
             return Long.parseLong(this.next());
         }
         

@@ -1,23 +1,23 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String nextLine = new Scanner(System.in).nextLine();
         switch (nextLine) {
             case "SSS": {
                 System.out.println("0");
-                break;
+                return;
             }
             case "SSR":
             case "SRS":
             case "RSS":
             case "RSR": {
                 System.out.println("1");
-                break;
+                return;
             }
             case "SRR":
             case "RRS": {
                 System.out.println("2");
-                break;
+                return;
             }
             case "RRR": {
                 System.out.println("3");

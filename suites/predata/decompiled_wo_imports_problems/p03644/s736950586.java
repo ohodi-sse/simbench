@@ -1,12 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         Integer n;
         Integer n2;
-        Integer n3;
-        for (n = new Integer(scanner.next()), n2 = 0, n3 = 2; n >= n3; n3 *= 2, ++n2) {}
-        System.out.println(n3 / 2);
+        for (n = new Integer(scanner.next()), n2 = 2; n >= n2; n2 <<= 1) {}
+        System.out.println(n2 / 2);
         scanner.close();
     }
 }

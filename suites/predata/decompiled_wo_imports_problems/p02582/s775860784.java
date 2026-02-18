@@ -1,8 +1,8 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        final String[] split = next.split("");
+    private static void main$3231c38a() {
+        final String next;
+        final String[] split = (next = new Scanner(System.in).next()).split("");
         int x = 0;
         for (int i = 0; i < 3; ++i) {
             if (split[i].equals("R")) {

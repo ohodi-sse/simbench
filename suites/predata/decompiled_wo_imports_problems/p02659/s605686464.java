@@ -1,13 +1,18 @@
-public class Main
+public final class Main
 {
-    public static String solve(final BigDecimal bigDecimal, final BigDecimal multiplicand) {
-        final String string = bigDecimal.multiply(multiplicand).toString();
-        final int index = string.indexOf(46);
-        return (index == -1) ? string : string.substring(0, index);
+    private static String solve(final BigDecimal bigDecimal, final BigDecimal multiplicand) {
+        final String string;
+        final int index;
+        if ((index = (string = bigDecimal.multiply(multiplicand).toString()).indexOf(46)) == -1) {
+            return string;
+        }
+        return string.substring(0, index);
     }
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
-        System.out.println(solve(new BigDecimal(scanner.next()), new BigDecimal(scanner.next())));
+        final String string;
+        final int index;
+        System.out.println(((index = (string = new BigDecimal(scanner.next()).multiply(new BigDecimal(scanner.next())).toString()).indexOf(46)) == -1) ? string : string.substring(0, index));
     }
 }

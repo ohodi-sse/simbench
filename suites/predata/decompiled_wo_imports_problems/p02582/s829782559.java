@@ -1,35 +1,35 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
         switch (next) {
             case "SRR": {
                 System.out.println("2");
-                break;
+                return;
             }
             case "RRS": {
                 System.out.println("2");
-                break;
+                return;
             }
             case "RRR": {
                 System.out.println("3");
-                break;
+                return;
             }
             case "RSR": {
                 System.out.println("1");
-                break;
+                return;
             }
             case "SSS": {
                 System.out.println("0");
-                break;
+                return;
             }
             case "SSR": {
                 System.out.println("1");
-                break;
+                return;
             }
             case "SRS": {
                 System.out.println("1");
-                break;
+                return;
             }
             case "RSS": {
                 System.out.println("1");

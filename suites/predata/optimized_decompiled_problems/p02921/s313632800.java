@@ -114,7 +114,7 @@ public final class Main
             this.writer.close();
         }
         
-        public final void printLine(final int x) {
+        private void printLine(final int x) {
             this.writer.println(x);
         }
     }

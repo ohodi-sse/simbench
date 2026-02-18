@@ -1,8 +1,7 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final String next = new Scanner(System.in).next();
-        next.toCharArray();
         final Vector coll = new Vector();
         int i = 0;
         while (i < next.length()) {
@@ -19,9 +18,8 @@ public class Main
         }
         if (coll.isEmpty()) {
             System.out.println(0);
+            return;
         }
-        else {
-            System.out.println(Collections.max((Collection<?>)coll));
-        }
+        System.out.println(Collections.max((Collection<?>)coll));
     }
 }

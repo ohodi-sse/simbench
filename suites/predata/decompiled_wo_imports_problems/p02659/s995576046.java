@@ -1,13 +1,13 @@
-public class Main
+public final class Main
 {
-    static Map<BigInteger, Integer> memo;
+    private static Map<BigInteger, Integer> memo;
     
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final Scanner scanner = new Scanner(System.in);
         System.out.println(scanner.nextBigDecimal().multiply(new BigDecimal(scanner.nextBigInteger())).toBigInteger());
     }
     
-    static int lowerBound(final int[] array, final int n) {
+    private static int lowerBound(final int[] array, final int n) {
         int i = 0;
         int n2 = array.length - 1;
         while (i <= n2) {
@@ -22,7 +22,7 @@ public class Main
         return n2;
     }
     
-    static boolean isPalindrome(final String s) {
+    private static boolean isPalindrome(final String s) {
         int i = 0;
         int n = s.length() - 1;
         while (i <= n) {
@@ -33,7 +33,7 @@ public class Main
         return true;
     }
     
-    static String longestPalindrome(final String[] array, final String s, final int n) {
+    private static String longestPalindrome(final String[] array, final String s, final int n) {
         if (n >= array.length) {
             if (isPalindrome(s)) {
                 return s;
@@ -53,7 +53,7 @@ public class Main
         }
     }
     
-    static int solve(final int[] array, final int n, final int n2, final int n3) {
+    private static int solve(final int[] array, final int n, final int n2, final int n3) {
         if (n == n2 && array[n] <= n3) {
             return 1;
         }
@@ -68,26 +68,19 @@ public class Main
         return n4 + n5;
     }
     
-    static int minMove(final BigInteger bigInteger, final int n) {
+    private static int minMove(final BigInteger bigInteger, final int n) {
         if (bigInteger.equals(BigInteger.ONE)) {
             return n;
         }
-        int minMove = Integer.MAX_VALUE;
-        int minMove2 = Integer.MAX_VALUE;
-        int minMove3 = Integer.MAX_VALUE;
         if (bigInteger.mod(BigInteger.valueOf(2L)).compareTo(BigInteger.ZERO) == 0) {
-            minMove = minMove(bigInteger.divide(BigInteger.valueOf(2L)), n + 1);
+            minMove(bigInteger.divide(BigInteger.valueOf(2L)), n + 1);
         }
         else if (bigInteger.mod(BigInteger.valueOf(3L)).compareTo(BigInteger.ZERO) == 0) {
-            minMove2 = minMove(bigInteger.multiply(BigInteger.valueOf(2L)).divide(BigInteger.valueOf(3L)), n + 1);
+            minMove(bigInteger.multiply(BigInteger.valueOf(2L)).divide(BigInteger.valueOf(3L)), n + 1);
         }
         else if (bigInteger.mod(BigInteger.valueOf(5L)).compareTo(BigInteger.ZERO) == 0) {
-            minMove3 = minMove(bigInteger.multiply(BigInteger.valueOf(4L)).divide(BigInteger.valueOf(5L)), n + 1);
+            minMove(bigInteger.multiply(BigInteger.valueOf(4L)).divide(BigInteger.valueOf(5L)), n + 1);
         }
-        if (Main.memo.containsKey(bigInteger)) {
-            return Main.memo.get(bigInteger);
-        }
-        Main.memo.put(bigInteger, Math.min(minMove, Math.min(minMove2, minMove3)));
-        return Math.min(minMove, Math.min(minMove2, minMove3));
+        throw new NullPointerException();
     }
 }

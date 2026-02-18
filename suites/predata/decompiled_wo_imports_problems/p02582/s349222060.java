@@ -1,21 +1,4 @@
-public class Main
-{
-    public static void main(final String[] array) {
-        final String next = new FastScanner().next();
-        int b = 0;
-        int max = 0;
-        for (int i = 0; i < next.length(); ++i) {
-            if (next.charAt(i) == 'R') {
-                ++b;
-                max = Math.max(max, b);
-            }
-            else {
-                b = 0;
-            }
-        }
-        System.out.println(max);
-    }
-}class FastScanner
+final class FastScanner
 {
     private final InputStream in;
     private final byte[] buffer;
@@ -54,14 +37,14 @@ public class Main
         return 33 <= n && n <= 126;
     }
     
-    public boolean hasNext() {
+    private boolean hasNext() {
         while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
             ++this.ptr;
         }
         return this.hasNextByte();
     }
     
-    public String next() {
+    public final String next() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
@@ -72,14 +55,14 @@ public class Main
         return sb.toString();
     }
     
-    public long nextLong() {
+    private long nextLong() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
         long n = 0L;
         boolean b = false;
-        int n2 = this.readByte();
-        if (n2 == 45) {
+        int n2;
+        if ((n2 = this.readByte()) == 45) {
             b = true;
             n2 = this.readByte();
         }
@@ -90,21 +73,66 @@ public class Main
             n = n * 10L + (n2 - 48);
             n2 = this.readByte();
         }
-        if (n2 == -1 || !isPrintableChar(n2)) {
-            return b ? (-n) : n;
-        }
-        throw new NumberFormatException();
-    }
-    
-    public int nextInt() {
-        final long nextLong = this.nextLong();
-        if (nextLong < -2147483648L || nextLong > 2147483647L) {
+        if (n2 != -1 && isPrintableChar(n2)) {
             throw new NumberFormatException();
         }
-        return (int)nextLong;
+        if (b) {
+            return -n;
+        }
+        return n;
     }
     
-    public double nextDouble() {
+    private int nextInt() {
+        if (!this.hasNext()) {
+            throw new NoSuchElementException();
+        }
+        long n = 0L;
+        boolean b = false;
+        int n2;
+        if ((n2 = this.readByte()) == 45) {
+            b = true;
+            n2 = this.readByte();
+        }
+        if (n2 < 48 || 57 < n2) {
+            throw new NumberFormatException();
+        }
+        while (48 <= n2 && n2 <= 57) {
+            n = n * 10L + (n2 - 48);
+            n2 = this.readByte();
+        }
+        if (n2 != -1 && isPrintableChar(n2)) {
+            throw new NumberFormatException();
+        }
+        final long n3;
+        if ((n3 = (b ? (-n) : n)) < -2147483648L || n3 > 2147483647L) {
+            throw new NumberFormatException();
+        }
+        return (int)n3;
+    }
+    
+    private double nextDouble() {
         return Double.parseDouble(this.next());
+    }
+}
+
+
+
+
+public final class Main
+{
+    private static void main$3231c38a() {
+        final String next = new FastScanner().next();
+        int b = 0;
+        int max = 0;
+        for (int i = 0; i < next.length(); ++i) {
+            if (next.charAt(i) == 'R') {
+                ++b;
+                max = Math.max(max, b);
+            }
+            else {
+                b = 0;
+            }
+        }
+        System.out.println(max);
     }
 }

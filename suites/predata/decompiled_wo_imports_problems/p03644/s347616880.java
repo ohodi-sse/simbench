@@ -1,9 +1,9 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final int int1 = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
         int max = 0;
-        for (int i = 2; i <= int1; i *= 2) {
+        for (int i = 2; i <= int1; i <<= 1) {
             max = Math.max(max, i);
         }
         System.out.println((int1 == 1) ? 1 : max);

@@ -1,27 +1,7 @@
-public class Main
+final class FastScanner
 {
-    public static void main(final String[] array) {
-        final FastScanner fastScanner = new FastScanner(System.in);
-        final int nextInt = fastScanner.nextInt();
-        final int nextInt2 = fastScanner.nextInt();
-        int abs = Integer.MAX_VALUE;
-        int x = 0;
-        final boolean[] array2 = new boolean[102];
-        for (int i = 0; i < nextInt2; ++i) {
-            array2[fastScanner.nextInt()] = true;
-        }
-        for (int j = 0; j < array2.length; ++j) {
-            if (!array2[j] && Math.abs(nextInt - j) < abs) {
-                abs = Math.abs(nextInt - j);
-                x = j;
-            }
-        }
-        System.out.println(x);
-    }
-}class FastScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
+    private BufferedReader br;
+    private StringTokenizer st;
     
     FastScanner(final InputStream in) {
         try {
@@ -32,7 +12,7 @@ public class Main
         }
     }
     
-    FastScanner(final File file) {
+    private FastScanner(final File file) {
         try {
             this.br = new BufferedReader(new FileReader(file));
         }
@@ -41,7 +21,7 @@ public class Main
         }
     }
     
-    String nextLine() {
+    private String nextLine() {
         String line = "";
         try {
             line = this.br.readLine();
@@ -52,7 +32,7 @@ public class Main
         return line;
     }
     
-    String next() {
+    final String next() {
         while (true) {
             if (this.st != null) {
                 if (this.st.hasMoreTokens()) {
@@ -69,15 +49,40 @@ public class Main
         return this.st.nextToken();
     }
     
-    int nextInt() {
+    private int nextInt() {
         return Integer.parseInt(this.next());
     }
     
-    long nextLong() {
+    private long nextLong() {
         return Long.parseLong(this.next());
     }
     
-    double nextDouble() {
+    private double nextDouble() {
         return Double.parseDouble(this.next());
+    }
+}
+
+
+
+
+public final class Main
+{
+    private static void main$3231c38a() {
+        final FastScanner fastScanner;
+        final int int1 = Integer.parseInt((fastScanner = new FastScanner(System.in)).next());
+        final int int2 = Integer.parseInt(fastScanner.next());
+        int abs = Integer.MAX_VALUE;
+        int x = 0;
+        final boolean[] array = new boolean[102];
+        for (int i = 0; i < int2; ++i) {
+            array[Integer.parseInt(fastScanner.next())] = true;
+        }
+        for (int j = 0; j < array.length; ++j) {
+            if (!array[j] && Math.abs(int1 - j) < abs) {
+                abs = Math.abs(int1 - j);
+                x = j;
+            }
+        }
+        System.out.println(x);
     }
 }

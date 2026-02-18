@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final PrintWriter printWriter = new PrintWriter(System.out);
-        final String line = new BufferedReader(new InputStreamReader(System.in)).readLine();
+        final String line;
         int x;
-        if (line.charAt(0) == 'R' && line.charAt(1) == 'R' && line.charAt(2) == 'R') {
+        if ((line = new BufferedReader(new InputStreamReader(System.in)).readLine()).charAt(0) == 'R' && line.charAt(1) == 'R' && line.charAt(2) == 'R') {
             x = 3;
         }
         else if (line.charAt(0) == 'R' && line.charAt(1) == 'R') {

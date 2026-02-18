@@ -1,163 +1,192 @@
-class XY
+public final class Main
 {
-    int h;
-    int c;
+    private static String Y;
+    private static String N;
+    private static long MOD;
+    private static Scanner sc;
     
-    XY(final int h, final int c) {
-        this.h = h;
-        this.c = c;
-    }
-}public class Main
-{
-    public static String Y;
-    public static String N;
-    public static long MOD;
-    public static Scanner sc;
-    
-    public static void main(final String[] array) {
-        final int ni = ni();
+    private static void main$3231c38a() {
+        final int nextInt = Main.sc.nextInt();
         int n = 0;
-        int n2 = 1;
-        for (int i = 1; i <= ni; ++i) {
-            int n3 = i;
-            int n4 = 0;
-            while (n3 % 2 == 0) {
-                ++n4;
-                n3 /= 2;
+        int x = 1;
+        for (int i = 1; i <= nextInt; ++i) {
+            int n2 = i;
+            int n3 = 0;
+            while (n2 % 2 == 0) {
+                ++n3;
+                n2 /= 2;
             }
-            if (n <= n4) {
-                n = n4;
-                n2 = i;
+            if (n <= n3) {
+                n = n3;
+                x = i;
             }
         }
-        out(n2);
+        System.out.println(x);
     }
     
-    static int ketasuu(final int n) {
+    private static int ketasuu(final int n) {
         return ("" + n).length();
     }
     
-    static int abcount(final String s) {
+    private static int abcount(final String s) {
         int n = 0;
         for (int length = s.length(), i = 0; i < length - 1; ++i) {
-            if ("AB".equals(s.substring(i, i + 2))) {
+            final String s2 = "AB";
+            final int beginIndex = i;
+            if (s2.equals(s.substring(beginIndex, beginIndex + 2))) {
                 ++n;
             }
         }
         return n;
     }
     
-    static int ni() {
+    private static int ni() {
         return Main.sc.nextInt();
     }
     
-    static long nl() {
+    private static long nl() {
         return Main.sc.nextLong();
     }
     
-    static double nd() {
+    private static double nd() {
         return Main.sc.nextDouble();
     }
     
-    static String n() {
+    private static String n() {
         return Main.sc.next();
     }
     
-    static char[] nc() {
+    private static char[] nc() {
         return Main.sc.next().toCharArray();
     }
     
-    static int kaijo(final int n) {
+    private static int kaijo(final int n) {
         if (n == 0 || n == 1) {
             return 1;
         }
         return n * kaijo(n - 1);
     }
     
-    static int fib(final int n) {
-        return (n == 1 || n == 0) ? n : (fib(n - 2) + fib(n - 1));
+    private static int fib(final int n) {
+        if (n == 1 || n == 0) {
+            return n;
+        }
+        return fib(n - 2) + fib(n - 1);
     }
     
-    static long lcm(final long n, final long n2) {
-        return n * n2 / gcd(n, n2);
+    private static long lcm(final long n, final long n2) {
+        final long n3 = n * n2;
+        long n4;
+        long n5;
+        long n6;
+        for (n4 = n2, n5 = n; n4 != 0L; n4 = n5 % n4, n5 = n6) {
+            n6 = n4;
+        }
+        return n3 / n5;
     }
     
-    static int lcm(final int n, final int n2) {
-        return n * n2 / gcd(n, n2);
+    private static int lcm(int n, int i) {
+        final int n2 = n * i;
+        int n3;
+        for (n = n; i != 0; i = n % i, n = n3) {
+            n3 = i;
+        }
+        return n2 / n;
     }
     
-    static long gcd(final long n, final long n2) {
-        return (n2 == 0L) ? n : gcd(n2, n % n2);
+    private static long gcd(long n, long n2) {
+        while (n2 != 0L) {
+            final long n3 = n2;
+            n2 = n % n2;
+            n = n3;
+        }
+        return n;
     }
     
-    static int gcd(final int n, final int n2) {
-        return (n2 == 0) ? n : gcd(n2, n % n2);
+    private static int gcd(int n, int i) {
+        while (i != 0) {
+            final int n2 = i;
+            i = n % i;
+            n = n2;
+        }
+        return n;
     }
     
-    static void out(final String x) {
+    private static void out(final String x) {
         System.out.println(x);
     }
     
-    static void out(final int x) {
+    private static void out(final int x) {
         System.out.println(x);
     }
     
-    static void out(final double x) {
+    private static void out(final double x) {
         System.out.println(x);
     }
     
-    static void out(final long x) {
+    private static void out(final long x) {
         System.out.println(x);
     }
     
-    static void out(final char x) {
+    private static void out(final char x) {
         System.out.println(x);
     }
     
-    static void out(final Object o) {
+    private static void out(final Object o) {
         System.out.println(o.toString());
     }
     
-    static void outn(final String s) {
+    private static void outn(final String s) {
         System.out.print(s);
     }
     
-    static void outn(final int i) {
+    private static void outn(final int i) {
         System.out.print(i);
     }
     
-    static void outn(final double d) {
+    private static void outn(final double d) {
         System.out.print(d);
     }
     
-    static void outn(final long l) {
+    private static void outn(final long l) {
         System.out.print(l);
     }
     
-    static void outn(final char c) {
+    private static void outn(final char c) {
         System.out.print(c);
     }
     
-    static double max(final double a, final double b) {
+    private static double max(final double a, final double b) {
         return Math.max(a, b);
     }
     
-    static long max(final long a, final long b) {
+    private static long max(final long a, final long b) {
         return Math.max(a, b);
     }
     
-    static double min(final double a, final double b) {
+    private static double min(final double a, final double b) {
         return Math.min(a, b);
     }
     
-    static long min(final long a, final long b) {
+    private static long min(final long a, final long b) {
         return Math.min(a, b);
     }
     
     static {
-        Main.Y = "Yes";
-        Main.N = "No";
-        Main.MOD = (long)(Math.pow(10.0, 9.0) + 7.0);
         Main.sc = new Scanner(System.in);
+    }
+}
+
+
+
+
+final class XY
+{
+    private int h;
+    private int c;
+    
+    private XY(final int h, final int c) {
+        this.h = h;
+        this.c = c;
     }
 }

@@ -1,86 +1,19 @@
-static class InputStreamScanner
+public final class Main
 {
-    private InputStream in;
-    private byte[] buf;
-    private int len;
-    private int off;
-    
-    InputStreamScanner(final InputStream in) {
-        this.buf = new byte[1024];
-        this.len = 0;
-        this.off = 0;
-        this.in = in;
-    }
-    
-    String next() {
-        final StringBuilder sb = new StringBuilder();
-        for (int codePoint = this.skip(); !this.isSpace(codePoint); codePoint = this.read()) {
-            sb.appendCodePoint(codePoint);
-        }
-        return sb.toString();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    char nextChar() {
-        return (char)this.skip();
-    }
-    
-    int skip() {
-        int read;
-        while ((read = this.read()) != -1) {
-            if (!this.isSpace(read)) {
-                return read;
-            }
-        }
-        return -1;
-    }
-    
-    private boolean isSpace(final int n) {
-        return n < 33 || n > 126;
-    }
-    
-    private int read() {
-        if (this.len == -1) {
-            throw new InputMismatchException("End of Input");
-        }
-        if (this.off >= this.len) {
-            this.off = 0;
-            try {
-                this.len = this.in.read(this.buf);
-            }
-            catch (final IOException ex) {
-                throw new InputMismatchException(ex.getMessage());
-            }
-            if (this.len <= 0) {
-                return -1;
-            }
-        }
-        return this.buf[this.off++];
-    }
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final PrintWriter printWriter = new PrintWriter(System.out);
-        new Main().solve(new InputStreamScanner(System.in), printWriter);
+        final InputStreamScanner inputStreamScanner = new InputStreamScanner(System.in);
+        new Main();
+        final InputStreamScanner inputStreamScanner2 = inputStreamScanner;
+        printWriter.println(new BigDecimal(inputStreamScanner2.next()).multiply(new BigDecimal(inputStreamScanner2.next())).setScale(0, RoundingMode.DOWN));
         printWriter.flush();
     }
     
-    private void solve(final InputStreamScanner inputStreamScanner, final PrintWriter printWriter) {
+    private static void solve(final InputStreamScanner inputStreamScanner, final PrintWriter printWriter) {
         printWriter.println(new BigDecimal(inputStreamScanner.next()).multiply(new BigDecimal(inputStreamScanner.next())).setScale(0, RoundingMode.DOWN));
     }
     
-    static class InputStreamScanner
+    static final class InputStreamScanner
     {
         private InputStream in;
         private byte[] buf;
@@ -94,41 +27,41 @@ static class InputStreamScanner
             this.in = in;
         }
         
-        String next() {
+        final String next() {
             final StringBuilder sb = new StringBuilder();
-            for (int codePoint = this.skip(); !this.isSpace(codePoint); codePoint = this.read()) {
+            for (int codePoint = this.skip(); !isSpace(codePoint); codePoint = this.read()) {
                 sb.appendCodePoint(codePoint);
             }
             return sb.toString();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        char nextChar() {
+        private char nextChar() {
             return (char)this.skip();
         }
         
-        int skip() {
+        private int skip() {
             int read;
             while ((read = this.read()) != -1) {
-                if (!this.isSpace(read)) {
+                if (!isSpace(read)) {
                     return read;
                 }
             }
             return -1;
         }
         
-        private boolean isSpace(final int n) {
+        private static boolean isSpace(final int n) {
             return n < 33 || n > 126;
         }
         

@@ -1,8 +1,8 @@
 public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(new BufferedReader(new InputStreamReader(System.in)));
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(new BufferedReader(new InputStreamReader(System.in)))).nextInt();
         final int nextInt2 = scanner.nextInt();
         scanner.nextLine();
         final Set<? super Integer> set = IntStream.rangeClosed(0, 101).boxed().collect((Collector<? super Integer, ?, Set<? super Integer>>)Collectors.toSet());
@@ -11,8 +11,10 @@ public final class Main
         }
         int abs = Integer.MAX_VALUE;
         int min = Integer.MAX_VALUE;
-        for (final int intValue : set) {
-            if (Math.abs(intValue - nextInt) < abs) {
+        final Iterator<Integer> iterator = set.iterator();
+        while (iterator.hasNext()) {
+            final int intValue;
+            if (Math.abs((intValue = iterator.next()) - nextInt) < abs) {
                 abs = Math.abs(intValue - nextInt);
                 min = intValue;
             }

@@ -177,7 +177,7 @@ public final class Main
             return mul2;
         }
         
-        private long gcd(long n, long n2) {
+        private static long gcd(long n, long n2) {
             while (n != 0L) {
                 final long n3 = n2 % n;
                 n2 = n;

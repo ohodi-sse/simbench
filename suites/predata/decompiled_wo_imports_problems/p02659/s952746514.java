@@ -1,27 +1,33 @@
-public class Main
+public final class Main
 {
-    FastScanner in;
-    PrintWriter out;
-    static final int MOD = 1000000007;
+    private FastScanner in;
+    private PrintWriter out;
+    private static int MOD = 1000000007;
     
-    void solve() {
+    private void solve() {
         this.out.println(this.in.nextLong() * Long.valueOf(this.in.nextStr().replace(".", "")) / 100L);
     }
     
-    public static void main(final String[] array) {
-        new Main().m();
+    private static void main$3231c38a() {
+        final Main main;
+        (main = new Main()).in = new FastScanner(System.in);
+        main.out = new PrintWriter(System.out);
+        final Main main2;
+        main2.out.println((main2 = main).in.nextLong() * Long.valueOf(main2.in.nextStr().replace(".", "")) / 100L);
+        main.out.flush();
+        main.in.close();
+        main.out.close();
     }
     
     private void m() {
         this.in = new FastScanner(System.in);
-        this.out = new PrintWriter(System.out);
-        this.solve();
+        (this.out = new PrintWriter(System.out)).println(this.in.nextLong() * Long.valueOf(this.in.nextStr().replace(".", "")) / 100L);
         this.out.flush();
         this.in.close();
         this.out.close();
     }
     
-    static class FastScanner
+    static final class FastScanner
     {
         private Reader input;
         
@@ -33,7 +39,7 @@ public class Main
             this.input = new BufferedReader(new InputStreamReader(in));
         }
         
-        public void close() {
+        public final void close() {
             try {
                 this.input.close();
             }
@@ -42,15 +48,15 @@ public class Main
             }
         }
         
-        public int nextInt() {
-            final long nextLong = this.nextLong();
-            if (nextLong < -2147483648L || nextLong > 2147483647L) {
+        private int nextInt() {
+            final long nextLong;
+            if ((nextLong = this.nextLong()) < -2147483648L || nextLong > 2147483647L) {
                 throw new NumberFormatException();
             }
             return (int)nextLong;
         }
         
-        public long nextLong() {
+        public final long nextLong() {
             try {
                 int n = 1;
                 int n2;
@@ -63,11 +69,8 @@ public class Main
                     n2 = this.input.read();
                 }
                 long n3 = n2 - 48;
-                while (true) {
-                    final int read = this.input.read();
-                    if (read < 48 || 57 < read) {
-                        break;
-                    }
+                int read;
+                while ((read = this.input.read()) >= 48 && 57 >= read) {
                     n3 = n3 * 10L + (read - 48);
                 }
                 return n3 * n;
@@ -78,7 +81,7 @@ public class Main
             }
         }
         
-        public double nextDouble() {
+        private double nextDouble() {
             try {
                 double n = 1.0;
                 int n2;
@@ -92,11 +95,7 @@ public class Main
                 }
                 double n3 = n2 - 48;
                 int read;
-                while (true) {
-                    read = this.input.read();
-                    if (read < 48 || 57 < read) {
-                        break;
-                    }
+                while ((read = this.input.read()) >= 48 && 57 >= read) {
                     n3 = n3 * 10.0 + (read - 48);
                 }
                 if (read != 46) {
@@ -115,7 +114,7 @@ public class Main
             }
         }
         
-        public char nextChar() {
+        private char nextChar() {
             try {
                 int codePoint;
                 for (codePoint = this.input.read(); Character.isWhitespace(codePoint); codePoint = this.input.read()) {}
@@ -127,7 +126,7 @@ public class Main
             }
         }
         
-        public String nextStr() {
+        public final String nextStr() {
             try {
                 final StringBuilder sb = new StringBuilder();
                 int n;
@@ -144,7 +143,7 @@ public class Main
             }
         }
         
-        public String nextLine() {
+        private String nextLine() {
             try {
                 final StringBuilder sb = new StringBuilder();
                 for (int n = this.input.read(); n != -1 && n != 10; n = this.input.read()) {
@@ -158,7 +157,7 @@ public class Main
             }
         }
         
-        public int[] nextIntArray(final int n) {
+        private int[] nextIntArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
                 array[i] = this.nextInt();
@@ -166,7 +165,7 @@ public class Main
             return array;
         }
         
-        public int[] nextIntArrayDec(final int n) {
+        private int[] nextIntArrayDec(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
                 array[i] = this.nextInt() - 1;
@@ -174,7 +173,7 @@ public class Main
             return array;
         }
         
-        public int[] nextIntArray1Index(final int n) {
+        private int[] nextIntArray1Index(final int n) {
             final int[] array = new int[n + 1];
             for (int i = 0; i < n; ++i) {
                 array[i + 1] = this.nextInt();
@@ -182,7 +181,7 @@ public class Main
             return array;
         }
         
-        public long[] nextLongArray(final int n) {
+        private long[] nextLongArray(final int n) {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
                 array[i] = this.nextLong();
@@ -190,7 +189,7 @@ public class Main
             return array;
         }
         
-        public long[] nextLongArrayDec(final int n) {
+        private long[] nextLongArrayDec(final int n) {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
                 array[i] = this.nextLong() - 1L;
@@ -198,7 +197,7 @@ public class Main
             return array;
         }
         
-        public long[] nextLongArray1Index(final int n) {
+        private long[] nextLongArray1Index(final int n) {
             final long[] array = new long[n + 1];
             for (int i = 0; i < n; ++i) {
                 array[i + 1] = this.nextLong();
@@ -206,204 +205,12 @@ public class Main
             return array;
         }
         
-        public double[] nextDoubleArray(final int n) {
+        private double[] nextDoubleArray(final int n) {
             final double[] array = new double[n];
             for (int i = 0; i < n; ++i) {
                 array[i] = this.nextDouble();
             }
             return array;
         }
-    }
-}static class FastScanner
-{
-    private Reader input;
-    
-    public FastScanner() {
-        this(System.in);
-    }
-    
-    public FastScanner(final InputStream in) {
-        this.input = new BufferedReader(new InputStreamReader(in));
-    }
-    
-    public void close() {
-        try {
-            this.input.close();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-    }
-    
-    public int nextInt() {
-        final long nextLong = this.nextLong();
-        if (nextLong < -2147483648L || nextLong > 2147483647L) {
-            throw new NumberFormatException();
-        }
-        return (int)nextLong;
-    }
-    
-    public long nextLong() {
-        try {
-            int n = 1;
-            int n2;
-            for (n2 = this.input.read(); (n2 < 48 || 57 < n2) && n2 != 45 && n2 != 43; n2 = this.input.read()) {}
-            if (n2 == 45) {
-                n = -1;
-                n2 = this.input.read();
-            }
-            else if (n2 == 43) {
-                n2 = this.input.read();
-            }
-            long n3 = n2 - 48;
-            while (true) {
-                final int read = this.input.read();
-                if (read < 48 || 57 < read) {
-                    break;
-                }
-                n3 = n3 * 10L + (read - 48);
-            }
-            return n3 * n;
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-            return -1L;
-        }
-    }
-    
-    public double nextDouble() {
-        try {
-            double n = 1.0;
-            int n2;
-            for (n2 = this.input.read(); (n2 < 48 || 57 < n2) && n2 != 45 && n2 != 43; n2 = this.input.read()) {}
-            if (n2 == 45) {
-                n = -1.0;
-                n2 = this.input.read();
-            }
-            else if (n2 == 43) {
-                n2 = this.input.read();
-            }
-            double n3 = n2 - 48;
-            int read;
-            while (true) {
-                read = this.input.read();
-                if (read < 48 || 57 < read) {
-                    break;
-                }
-                n3 = n3 * 10.0 + (read - 48);
-            }
-            if (read != 46) {
-                return n * n3;
-            }
-            double n4 = 1.0;
-            for (int n5 = this.input.read(); 48 <= n5 && n5 <= 57; n5 = this.input.read()) {
-                n3 = n3 * 10.0 + (n5 - 48);
-                n4 *= 10.0;
-            }
-            return n * n3 / n4;
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-            return Double.NaN;
-        }
-    }
-    
-    public char nextChar() {
-        try {
-            int codePoint;
-            for (codePoint = this.input.read(); Character.isWhitespace(codePoint); codePoint = this.input.read()) {}
-            return (char)codePoint;
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-            return '\0';
-        }
-    }
-    
-    public String nextStr() {
-        try {
-            final StringBuilder sb = new StringBuilder();
-            int n;
-            for (n = this.input.read(); Character.isWhitespace(n); n = this.input.read()) {}
-            while (n != -1 && !Character.isWhitespace(n)) {
-                sb.append((char)n);
-                n = this.input.read();
-            }
-            return sb.toString();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-            return "";
-        }
-    }
-    
-    public String nextLine() {
-        try {
-            final StringBuilder sb = new StringBuilder();
-            for (int n = this.input.read(); n != -1 && n != 10; n = this.input.read()) {
-                sb.append((char)n);
-            }
-            return sb.toString();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-            return "";
-        }
-    }
-    
-    public int[] nextIntArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    public int[] nextIntArrayDec(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt() - 1;
-        }
-        return array;
-    }
-    
-    public int[] nextIntArray1Index(final int n) {
-        final int[] array = new int[n + 1];
-        for (int i = 0; i < n; ++i) {
-            array[i + 1] = this.nextInt();
-        }
-        return array;
-    }
-    
-    public long[] nextLongArray(final int n) {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    public long[] nextLongArrayDec(final int n) {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong() - 1L;
-        }
-        return array;
-    }
-    
-    public long[] nextLongArray1Index(final int n) {
-        final long[] array = new long[n + 1];
-        for (int i = 0; i < n; ++i) {
-            array[i + 1] = this.nextLong();
-        }
-        return array;
-    }
-    
-    public double[] nextDoubleArray(final int n) {
-        final double[] array = new double[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextDouble();
-        }
-        return array;
     }
 }

@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next;
         int x;
-        if (next.equals("RRR")) {
+        if ((next = (scanner = new Scanner(System.in)).next()).equals("RRR")) {
             x = 3;
         }
         else if (next.equals("RRS") || next.equals("SRR")) {

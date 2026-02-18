@@ -1,18 +1,18 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] array2 = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] array = new int[nextInt2 = scanner.nextInt()];
         int x = 0;
         for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = scanner.nextInt();
+            array[i] = scanner.nextInt();
         }
         for (int j = 0; j < 100; ++j) {
             boolean b = false;
             for (int k = 0; k < nextInt2; ++k) {
-                if (array2[k] == nextInt - j) {
+                if (array[k] == nextInt - j) {
                     b = true;
                 }
             }
@@ -22,7 +22,7 @@ public class Main
             }
             boolean b2 = false;
             for (int l = 0; l < nextInt2; ++l) {
-                if (array2[l] == nextInt + j) {
+                if (array[l] == nextInt + j) {
                     b2 = true;
                 }
             }

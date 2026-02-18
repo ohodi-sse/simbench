@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final int int1 = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
         int n = 0;
         int x = int1;

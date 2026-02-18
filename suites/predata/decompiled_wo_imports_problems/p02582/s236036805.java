@@ -1,21 +1,17 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final char[] charArray = new Scanner(System.in).next().toCharArray();
-        int n = 0;
+        int x = 0;
         for (int i = 0; i < 3; ++i) {
             if (charArray[i] == 'R') {
-                ++n;
+                ++x;
             }
         }
-        if (n != 2) {
-            System.out.println(n);
-        }
-        else if (charArray[1] != 'R') {
+        if (x == 2 && charArray[1] != 'R') {
             System.out.println(1);
+            return;
         }
-        else {
-            System.out.println(n);
-        }
+        System.out.println(x);
     }
 }

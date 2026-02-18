@@ -1,31 +1,35 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        next.length();
-        if (next.charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'R') {
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = new Scanner(System.in).next()).charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'R') {
             System.out.print(3);
+            return;
         }
-        else if (next.charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'S') {
+        if (next.charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'S') {
             System.out.print(2);
+            return;
         }
-        else if (next.charAt(0) == 'R' && next.charAt(1) == 'S' && next.charAt(2) == 'R') {
+        if (next.charAt(0) == 'R' && next.charAt(1) == 'S' && next.charAt(2) == 'R') {
             System.out.print(1);
+            return;
         }
-        else if (next.charAt(0) == 'S' && next.charAt(1) == 'R' && next.charAt(2) == 'R') {
+        if (next.charAt(0) == 'S' && next.charAt(1) == 'R' && next.charAt(2) == 'R') {
             System.out.print(2);
+            return;
         }
-        else if (next.charAt(0) == 'R' && next.charAt(1) == 'S' && next.charAt(2) == 'S') {
+        if (next.charAt(0) == 'R' && next.charAt(1) == 'S' && next.charAt(2) == 'S') {
             System.out.print(1);
+            return;
         }
-        else if (next.charAt(0) == 'S' && next.charAt(1) == 'R' && next.charAt(2) == 'S') {
+        if (next.charAt(0) == 'S' && next.charAt(1) == 'R' && next.charAt(2) == 'S') {
             System.out.print(1);
+            return;
         }
-        else if (next.charAt(0) == 'S' && next.charAt(1) == 'S' && next.charAt(2) == 'R') {
+        if (next.charAt(0) == 'S' && next.charAt(1) == 'S' && next.charAt(2) == 'R') {
             System.out.print(1);
+            return;
         }
-        else {
-            System.out.print(0);
-        }
+        System.out.print(0);
     }
 }

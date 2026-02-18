@@ -1,118 +1,63 @@
-static class InputReader
+public final class Main
 {
-    private InputStream stream;
-    private byte[] buf;
-    private int curChar;
-    private int numChars;
-    private SpaceCharFilter filter;
-    
-    public InputReader(final InputStream stream) {
-        this.buf = new byte[1024];
-        this.stream = stream;
-    }
-    
-    public int read() {
-        if (this.numChars == -1) {
-            throw new InputMismatchException();
-        }
-        if (this.curChar >= this.numChars) {
-            this.curChar = 0;
-            try {
-                this.numChars = this.stream.read(this.buf);
-            }
-            catch (final IOException ex) {
-                throw new InputMismatchException();
-            }
-            if (this.numChars <= 0) {
-                return -1;
-            }
-        }
-        return this.buf[this.curChar++];
-    }
-    
-    public String nextString() {
-        int n;
-        for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
-        final StringBuilder sb = new StringBuilder();
-        do {
-            if (Character.isValidCodePoint(n)) {
-                sb.appendCodePoint(n);
-            }
-            n = this.read();
-        } while (!this.isSpaceChar(n));
-        return sb.toString();
-    }
-    
-    public boolean isSpaceChar(final int n) {
-        if (this.filter != null) {
-            return this.filter.isSpaceChar(n);
-        }
-        return isWhitespace(n);
-    }
-    
-    public static boolean isWhitespace(final int n) {
-        return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
-    }
-    
-    public String next() {
-        return this.nextString();
-    }
-    
-    public interface SpaceCharFilter
-    {
-        boolean isSpaceChar(final int p0);
-    }
-}public interface SpaceCharFilter
-{
-    boolean isSpaceChar(final int p0);
-}public class Main
-{
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final InputReader inputReader = new InputReader(in);
         final OutputWriter outputWriter = new OutputWriter(out);
-        new TaskA().solve(1, inputReader, outputWriter);
-        outputWriter.close();
+        new TaskA();
+        final InputReader inputReader2 = inputReader;
+        final OutputWriter outputWriter2 = outputWriter;
+        final InputReader inputReader3 = inputReader2;
+        final String nextString = inputReader2.nextString();
+        final String nextString2 = inputReader3.nextString();
+        int x = 0;
+        for (int i = 0; i < nextString.length(); ++i) {
+            if (nextString.charAt(i) == nextString2.charAt(i)) {
+                ++x;
+            }
+        }
+        outputWriter2.writer.println(x);
+        outputWriter.writer.close();
     }
     
-    static class TaskA
+    static final class TaskA
     {
-        public void solve(final int n, final InputReader inputReader, final OutputWriter outputWriter) {
-            final String next = inputReader.next();
-            final String next2 = inputReader.next();
-            int n2 = 0;
-            for (int i = 0; i < next.length(); ++i) {
-                if (next.charAt(i) == next2.charAt(i)) {
-                    ++n2;
+        private static void solve$6e5309c7(final InputReader inputReader, final OutputWriter outputWriter) {
+            final String nextString = inputReader.nextString();
+            final String nextString2 = inputReader.nextString();
+            int x = 0;
+            for (int i = 0; i < nextString.length(); ++i) {
+                if (nextString.charAt(i) == nextString2.charAt(i)) {
+                    ++x;
                 }
             }
-            outputWriter.println(n2);
+            outputWriter.writer.println(x);
         }
     }
     
-    static class OutputWriter
+    static final class OutputWriter
     {
-        private final PrintWriter writer;
+        final PrintWriter writer;
         
         public OutputWriter(final OutputStream out) {
             this.writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(out)));
         }
         
-        public OutputWriter(final Writer out) {
+        private OutputWriter(final Writer out) {
             this.writer = new PrintWriter(out);
         }
         
-        public void close() {
+        private void close() {
             this.writer.close();
         }
         
-        public void println(final int x) {
+        private void println(final int x) {
             this.writer.println(x);
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
         private InputStream stream;
         private byte[] buf;
@@ -125,7 +70,7 @@ static class InputReader
             this.stream = stream;
         }
         
-        public int read() {
+        private int read() {
             if (this.numChars == -1) {
                 throw new InputMismatchException();
             }
@@ -144,7 +89,7 @@ static class InputReader
             return this.buf[this.curChar++];
         }
         
-        public String nextString() {
+        public final String nextString() {
             int n;
             for (n = this.read(); this.isSpaceChar(n); n = this.read()) {}
             final StringBuilder sb = new StringBuilder();
@@ -157,56 +102,22 @@ static class InputReader
             return sb.toString();
         }
         
-        public boolean isSpaceChar(final int n) {
-            if (this.filter != null) {
-                return this.filter.isSpaceChar(n);
-            }
+        private boolean isSpaceChar(final int n) {
+            final SpaceCharFilter filter = this.filter;
             return isWhitespace(n);
         }
         
-        public static boolean isWhitespace(final int n) {
+        private static boolean isWhitespace(final int n) {
             return n == 32 || n == 10 || n == 13 || n == 9 || n == -1;
         }
         
-        public String next() {
+        private String next() {
             return this.nextString();
         }
         
         public interface SpaceCharFilter
         {
-            boolean isSpaceChar(final int p0);
+            boolean isSpaceChar$134632();
         }
-    }
-}static class OutputWriter
-{
-    private final PrintWriter writer;
-    
-    public OutputWriter(final OutputStream out) {
-        this.writer = new PrintWriter(new BufferedWriter(new OutputStreamWriter(out)));
-    }
-    
-    public OutputWriter(final Writer out) {
-        this.writer = new PrintWriter(out);
-    }
-    
-    public void close() {
-        this.writer.close();
-    }
-    
-    public void println(final int x) {
-        this.writer.println(x);
-    }
-}static class TaskA
-{
-    public void solve(final int n, final InputReader inputReader, final OutputWriter outputWriter) {
-        final String next = inputReader.next();
-        final String next2 = inputReader.next();
-        int n2 = 0;
-        for (int i = 0; i < next.length(); ++i) {
-            if (next.charAt(i) == next2.charAt(i)) {
-                ++n2;
-            }
-        }
-        outputWriter.println(n2);
     }
 }

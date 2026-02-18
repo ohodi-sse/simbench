@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        int nextInt = new Scanner(System.in).nextInt();
-        if (nextInt % 2 == 1) {
+    private static void main$3231c38a() {
+        int nextInt;
+        if ((nextInt = new Scanner(System.in).nextInt()) % 2 == 1) {
             --nextInt;
         }
         int n = 0;

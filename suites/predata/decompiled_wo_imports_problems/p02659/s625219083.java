@@ -1,23 +1,20 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final Scanner scanner = new Scanner(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new CMultiplication3().solve(1, scanner, printWriter);
+        new CMultiplication3();
+        final Scanner scanner2 = scanner;
+        printWriter.println(scanner2.nextLong() * Math.round(scanner2.nextDouble() * 100.0) / 100L);
         printWriter.close();
     }
     
-    static class CMultiplication3
+    static final class CMultiplication3
     {
-        public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
+        private static void solve$32964a28(final Scanner scanner, final PrintWriter printWriter) {
             printWriter.println(scanner.nextLong() * Math.round(scanner.nextDouble() * 100.0) / 100L);
         }
-    }
-}static class CMultiplication3
-{
-    public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
-        printWriter.println(scanner.nextLong() * Math.round(scanner.nextDouble() * 100.0) / 100L);
     }
 }

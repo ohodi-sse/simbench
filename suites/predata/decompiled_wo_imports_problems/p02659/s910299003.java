@@ -1,19 +1,17 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
-        final Main main = new Main(new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8)));
-        main.calc();
-        main.showResult();
+    private static void main$3231c38a() throws IOException {
+        new Main(new BufferedReader(new InputStreamReader(System.in, StandardCharsets.UTF_8)));
     }
     
-    Main(final BufferedReader bufferedReader) throws IOException {
+    private Main(final BufferedReader bufferedReader) throws IOException {
         final String[] split = bufferedReader.readLine().split(" ");
         System.out.println(new BigDecimal(split[0]).multiply(new BigDecimal(split[1])).toBigInteger());
     }
     
-    void calc() {
+    private static void calc() {
     }
     
-    void showResult() {
+    private static void showResult() {
     }
 }

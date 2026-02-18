@@ -61,8 +61,27 @@ public final class Main
         return n;
     }
     
-    private static int lcm(final int n, final int n2) {
-        return n * n2 / gcd(n, n2);
+    private static int lcm(int n, int i) {
+        final int n2 = n * i;
+        final int n3 = n;
+        i = i;
+        n = n3;
+        while (i != 0) {
+            if (n == 0) {
+                final int n4 = i;
+                return n2 / n4;
+            }
+            if (n > i) {
+                n %= i;
+            }
+            else {
+                final int n5 = n;
+                i %= n;
+                n = n5;
+            }
+        }
+        final int n4 = n;
+        return n2 / n4;
     }
     
     private static int min(final int n, final int n2) {

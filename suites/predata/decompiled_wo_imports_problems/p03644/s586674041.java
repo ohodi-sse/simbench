@@ -1,10 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         for (int i = new Scanner(System.in).nextInt(); i > 0; --i) {
-            if ((i & i - 1) == 0x0) {
+            final int n = i;
+            if ((n & n - 1) == 0x0) {
                 System.out.println(i);
-                break;
+                return;
             }
         }
     }

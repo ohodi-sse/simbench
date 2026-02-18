@@ -47,8 +47,7 @@ public final class Main
     
     static final class TaskB
     {
-        private static void solve$2eaeaa57(FastScanner fastScanner, final PrintWriter printWriter) {
-            fastScanner = (fastScanner = fastScanner);
+        private static void solve$2eaeaa57(final FastScanner fastScanner, final PrintWriter printWriter) {
             long n = 0L;
             int n2;
             for (n2 = fastScanner.readByte(); FastScanner.isSpaceChar(n2); n2 = fastScanner.readByte()) {}
@@ -130,7 +129,7 @@ public final class Main
             return n;
         }
         
-        public final int nextInt() {
+        private int nextInt() {
             long n = 0L;
             int n2;
             for (n2 = this.readByte(); isSpaceChar(n2); n2 = this.readByte()) {}

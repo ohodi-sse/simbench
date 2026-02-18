@@ -3,7 +3,7 @@ use color_eyre::eyre::eyre;
 use color_eyre::{Result, eyre::OptionExt};
 
 use duct::cmd;
-use indicatif::ParallelProgressIterator;
+use indicatif::{ParallelProgressIterator, ProgressStyle};
 use rayon::iter::IntoParallelRefIterator;
 use rayon::prelude::*;
 use std::env;
@@ -11,6 +11,9 @@ use std::fs::File;
 use std::io::Write;
 use std::path::Path;
 use tempfile::tempdir_in;
+
+const BAR_TEMPLATE: &str =
+    "{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})";
 
 fn get_parent_dir(filepath: &Utf8Path) -> Result<&Utf8Path> {
     filepath
@@ -60,7 +63,9 @@ fn compile_java(filepath: impl AsRef<Path>, compiled_path: impl AsRef<Path>) -> 
     cmd!("cp", filepath, &tmp_file).run()?;
     assert!(&tmp_file.exists(), "File was not copied properly");
     // Compile into the temporary directory
-    cmd!("javac", &tmp_file).dir(tmp_dir.path()).run()?;
+    cmd!("javac", "-nowarn", "-Xlint:-deprecation", &tmp_file)
+        .dir(tmp_dir.path())
+        .run()?;
     assert!(
         tmp_dir.path().join("Main.class").exists(),
         "File was not compiled properly"
@@ -200,9 +205,8 @@ fn google_format(filepath: impl AsRef<Path>, formatted_path: impl AsRef<Path>) -
     let output = cmd!("java", "-jar", toolpath, full_file_path)
         .stdout_capture()
         .run()?;
-    println!("{:?}", output.stdout);
-    let mut output_file = File::create(full_formatted_path)?;
 
+    let mut output_file = File::create(full_formatted_path)?;
     output_file.write_all(output.stdout.as_slice())?;
 
     Ok(())
@@ -210,20 +214,21 @@ fn google_format(filepath: impl AsRef<Path>, formatted_path: impl AsRef<Path>) -
 
 pub fn batch_compile(source_files: Vec<String>, target_files: Vec<String>) -> Result<()> {
     assert_eq!(source_files.len(), target_files.len());
-
+    let style = ProgressStyle::with_template(BAR_TEMPLATE)?;
     source_files
         .par_iter()
         .zip(target_files.par_iter())
-        .progress()
+        .progress_with_style(style)
         .try_for_each(|(src, tgt)| compile_java(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt)))
 }
 pub fn batch_optimize(source_files: Vec<String>, target_files: Vec<String>) -> Result<()> {
     assert_eq!(source_files.len(), target_files.len());
 
+    let style = ProgressStyle::with_template(BAR_TEMPLATE)?;
     source_files
         .par_iter()
         .zip(target_files.par_iter())
-        .progress()
+        .progress_with_style(style)
         .try_for_each(|(src, tgt)| {
             optimize_w_proguard(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt))
         })
@@ -231,10 +236,11 @@ pub fn batch_optimize(source_files: Vec<String>, target_files: Vec<String>) -> R
 pub fn batch_decompile(source_files: Vec<String>, target_files: Vec<String>) -> Result<()> {
     assert_eq!(source_files.len(), target_files.len());
 
+    let style = ProgressStyle::with_template(BAR_TEMPLATE)?;
     source_files
         .par_iter()
         .zip(target_files.par_iter())
-        .progress()
+        .progress_with_style(style)
         .try_for_each(|(src, tgt)| {
             decompile_w_procyon(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt))
         })
@@ -243,10 +249,12 @@ pub fn batch_decompile(source_files: Vec<String>, target_files: Vec<String>) -> 
 pub fn batch_format(source_files: Vec<String>, target_files: Vec<String>) -> Result<()> {
     assert_eq!(source_files.len(), target_files.len());
 
+    let style = ProgressStyle::with_template(BAR_TEMPLATE)?;
+
     source_files
         .par_iter()
         .zip(target_files.par_iter())
-        .progress()
+        .progress_with_style(style)
         .try_for_each(|(src, tgt)| google_format(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt)))
 }
 

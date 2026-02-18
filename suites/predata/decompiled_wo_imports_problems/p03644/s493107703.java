@@ -1,12 +1,12 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws NumberFormatException, IOException {
-        final int[] array2 = { 64, 32, 16, 8, 4, 2, 1 };
+    private static void main$3231c38a() throws NumberFormatException, IOException {
+        final int[] array = { 64, 32, 16, 8, 4, 2, 1 };
         final int int1 = Integer.parseInt(new BufferedReader(new InputStreamReader(System.in)).readLine());
-        for (int i = 0; i < array2.length; ++i) {
-            if (int1 >= array2[i]) {
-                System.out.println(array2[i]);
-                break;
+        for (int i = 0; i < array.length; ++i) {
+            if (int1 >= array[i]) {
+                System.out.println(array[i]);
+                return;
             }
         }
     }

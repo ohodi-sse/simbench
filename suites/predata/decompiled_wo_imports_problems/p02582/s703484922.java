@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
     static FastScanner sc;
-    static PrintWriter out;
-    static int n;
-    static String s;
+    private static PrintWriter out;
+    private static int n;
+    private static String s;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         Main.s = Main.sc.next();
         int n = 0;
         if (Main.s.charAt(0) == 'R') {
@@ -17,19 +17,21 @@ public class Main
         if (Main.s.charAt(2) == 'R') {
             n += 4;
         }
-        if (n == 0) {
-            Main.out.println(0);
-        }
-        else if (n == 1 || n == 2 || n == 4 || n == 5) {
-            Main.out.println(1);
-        }
-        else if (n == 3 || n == 6) {
-            Main.out.println(2);
-        }
-        else if (n == 7) {
-            Main.out.println(3);
-        }
-        else {
+        Label_0134: {
+            if (n != 0) {
+                if (n == 1 || n == 2 || n == 4 || n == 5) {
+                    Main.out.println(1);
+                    break Label_0134;
+                }
+                if (n == 3 || n == 6) {
+                    Main.out.println(2);
+                    break Label_0134;
+                }
+                if (n == 7) {
+                    Main.out.println(3);
+                    break Label_0134;
+                }
+            }
             Main.out.println(0);
         }
         Main.out.flush();
@@ -40,7 +42,7 @@ public class Main
         Main.out = new PrintWriter(System.out);
     }
     
-    static class FastScanner
+    static final class FastScanner
     {
         private final InputStream in;
         private final byte[] buffer;
@@ -85,12 +87,14 @@ public class Main
             }
         }
         
-        public boolean hasNext() {
-            this.skipUnprintable();
+        private boolean hasNext() {
+            while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
+                ++this.ptr;
+            }
             return this.hasNextByte();
         }
         
-        public String next() {
+        public final String next() {
             if (!this.hasNext()) {
                 throw new NoSuchElementException();
             }
@@ -101,18 +105,18 @@ public class Main
             return sb.toString();
         }
         
-        public double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        public long nextLong() {
+        private long nextLong() {
             if (!this.hasNext()) {
                 throw new NoSuchElementException();
             }
             long n = 0L;
             boolean b = false;
-            int n2 = this.readByte();
-            if (n2 == 45) {
+            int n2;
+            if ((n2 = this.readByte()) == 45) {
                 b = true;
                 n2 = this.readByte();
             }
@@ -123,32 +127,35 @@ public class Main
                 n = n * 10L + (n2 - 48);
                 n2 = this.readByte();
             }
-            if (n2 == -1 || !isPrintableChar(n2)) {
-                return b ? (-n) : n;
+            if (n2 != -1 && isPrintableChar(n2)) {
+                throw new NumberFormatException();
             }
-            throw new NumberFormatException();
+            if (b) {
+                return -n;
+            }
+            return n;
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return (int)this.nextLong();
         }
         
-        public int[] nextIntArray(final int n, final boolean b) {
+        private static int[] nextIntArray(final int n, final boolean b) {
             if (b) {
                 final int[] array = new int[n + 1];
                 for (int i = 1; i <= n; ++i) {
-                    array[i] = Main.sc.nextInt();
+                    array[i] = (int)Main.sc.nextLong();
                 }
                 return array;
             }
             final int[] array2 = new int[n];
             for (int j = 0; j < n; ++j) {
-                array2[j] = Main.sc.nextInt();
+                array2[j] = (int)Main.sc.nextLong();
             }
             return array2;
         }
         
-        public long[] nextLongArray(final int n, final boolean b) {
+        private static long[] nextLongArray(final int n, final boolean b) {
             if (b) {
                 final long[] array = new long[n + 1];
                 for (int i = 1; i <= n; ++i) {
@@ -163,156 +170,19 @@ public class Main
             return array2;
         }
         
-        public double[] nextDoubleArray(final int n, final boolean b) {
+        private static double[] nextDoubleArray(final int n, final boolean b) {
             if (b) {
                 final double[] array = new double[n + 1];
                 for (int i = 1; i <= n; ++i) {
-                    array[i] = Main.sc.nextDouble();
+                    array[i] = Double.parseDouble(Main.sc.next());
                 }
                 return array;
             }
             final double[] array2 = new double[n];
             for (int j = 0; j < n; ++j) {
-                array2[j] = Main.sc.nextDouble();
+                array2[j] = Double.parseDouble(Main.sc.next());
             }
             return array2;
         }
-    }
-}static class FastScanner
-{
-    private final InputStream in;
-    private final byte[] buffer;
-    private int ptr;
-    private int buflen;
-    
-    FastScanner() {
-        this.in = System.in;
-        this.buffer = new byte[1024];
-        this.ptr = 0;
-        this.buflen = 0;
-    }
-    
-    private boolean hasNextByte() {
-        if (this.ptr < this.buflen) {
-            return true;
-        }
-        this.ptr = 0;
-        try {
-            this.buflen = this.in.read(this.buffer);
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return this.buflen > 0;
-    }
-    
-    private int readByte() {
-        if (this.hasNextByte()) {
-            return this.buffer[this.ptr++];
-        }
-        return -1;
-    }
-    
-    private static boolean isPrintableChar(final int n) {
-        return 33 <= n && n <= 126;
-    }
-    
-    private void skipUnprintable() {
-        while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
-            ++this.ptr;
-        }
-    }
-    
-    public boolean hasNext() {
-        this.skipUnprintable();
-        return this.hasNextByte();
-    }
-    
-    public String next() {
-        if (!this.hasNext()) {
-            throw new NoSuchElementException();
-        }
-        final StringBuilder sb = new StringBuilder();
-        for (int codePoint = this.readByte(); isPrintableChar(codePoint); codePoint = this.readByte()) {
-            sb.appendCodePoint(codePoint);
-        }
-        return sb.toString();
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    public long nextLong() {
-        if (!this.hasNext()) {
-            throw new NoSuchElementException();
-        }
-        long n = 0L;
-        boolean b = false;
-        int n2 = this.readByte();
-        if (n2 == 45) {
-            b = true;
-            n2 = this.readByte();
-        }
-        if (n2 < 48 || 57 < n2) {
-            throw new NumberFormatException();
-        }
-        while (48 <= n2 && n2 <= 57) {
-            n = n * 10L + (n2 - 48);
-            n2 = this.readByte();
-        }
-        if (n2 == -1 || !isPrintableChar(n2)) {
-            return b ? (-n) : n;
-        }
-        throw new NumberFormatException();
-    }
-    
-    public int nextInt() {
-        return (int)this.nextLong();
-    }
-    
-    public int[] nextIntArray(final int n, final boolean b) {
-        if (b) {
-            final int[] array = new int[n + 1];
-            for (int i = 1; i <= n; ++i) {
-                array[i] = Main.sc.nextInt();
-            }
-            return array;
-        }
-        final int[] array2 = new int[n];
-        for (int j = 0; j < n; ++j) {
-            array2[j] = Main.sc.nextInt();
-        }
-        return array2;
-    }
-    
-    public long[] nextLongArray(final int n, final boolean b) {
-        if (b) {
-            final long[] array = new long[n + 1];
-            for (int i = 1; i <= n; ++i) {
-                array[i] = Main.sc.nextLong();
-            }
-            return array;
-        }
-        final long[] array2 = new long[n];
-        for (int j = 0; j < n; ++j) {
-            array2[j] = Main.sc.nextLong();
-        }
-        return array2;
-    }
-    
-    public double[] nextDoubleArray(final int n, final boolean b) {
-        if (b) {
-            final double[] array = new double[n + 1];
-            for (int i = 1; i <= n; ++i) {
-                array[i] = Main.sc.nextDouble();
-            }
-            return array;
-        }
-        final double[] array2 = new double[n];
-        for (int j = 0; j < n; ++j) {
-            array2[j] = Main.sc.nextDouble();
-        }
-        return array2;
     }
 }

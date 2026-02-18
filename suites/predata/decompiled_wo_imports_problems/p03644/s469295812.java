@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    static Scanner sc;
+    private static Scanner sc;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int nextInt = Main.sc.nextInt();
         int x = 0;
         int numberOfTrailingZeros = -1;

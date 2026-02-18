@@ -1,3 +1,4 @@
+from simbench.comparing import wilcoxon_signed_rank_test, find_analysis_difference
 import click
 from pathlib import Path
 import polars as pl
@@ -15,6 +16,7 @@ from simbench.analysis import (
     Config,
     get_all_normalizers,
     init_analysis,
+    get_all_tools,
 )
 
 
@@ -126,16 +128,47 @@ def plot_comparison(
 
 
 @click.command()
-@click.argument("classification1", type=click.Path(file_okay=True, path_type=Path))
-@click.argument("classification2", type=click.Path(file_okay=True, path_type=Path))
+@click.argument("suite", type=click.Path(file_okay=True, path_type=Path))
+@click.argument("tool_pattern")
+@click.argument("normalizer_pattern_1")
+@click.argument("normalizer_pattern_2")
 @click.option("--seed", default=None)
-def diff_class(classification1, classification2, seed):
-    from simbench.comparing import find_classification_difference
+def diff_normalizer(
+    suite: Path, tool_pattern: str, normalizer_pattern_1, normalizer_pattern_2, seed
+):
+    from simbench.classification import KNN
 
-    find_classification_difference(classification1, classification2, seed)
+    tool = [t for t in get_all_tools() if t.matches(tool_pattern)]
+    assert len(tool) == 1, (
+        f"The pattern {tool_pattern} returns {tool}. The pattern must specify exactly one tool"
+    )
+
+    normalizers = get_all_normalizers()
+    normalizer1 = [norm for norm in normalizers if norm.matches(normalizer_pattern_1)]
+    assert len(normalizer1) == 1, (
+        f"The pattern {normalizer_pattern_1} returns {normalizer1}. The pattern must specify exactly one normalizer from {[n.name for n in normalizers]}"
+    )
+    normalizer2 = [norm for norm in normalizers if norm.matches(normalizer_pattern_2)]
+    assert len(normalizer2) == 1, (
+        f"The pattern {normalizer_pattern_2} returns {normalizer2}. The pattern must specify exactly one normalizer from {[n.name for n in normalizers]}"
+    )
+
+    analysis1 = init_analysis(tool[0], Suite(suite), [KNN(1)], normalizer1[0])
+    analysis2 = init_analysis(tool[0], Suite(suite), [KNN(1)], normalizer2[0])
+
+    find_analysis_difference(analysis1, analysis2, seed)
 
 
-cli.add_command(diff_class)
+@click.command()
+@click.argument("file1", type=click.Path(file_okay=True, path_type=Path))
+@click.argument("file2", type=click.Path(file_okay=True, path_type=Path))
+@click.option("--key", default="distance")
+def wilcoxon(file1, file2, key):
+    wilcoxon_signed_rank_test(file1, file2, key)
+
+
+cli.add_command(wilcoxon)
+cli.add_command(diff_normalizer)
 cli.add_command(show_file)
 cli.add_command(analyse)
 cli.add_command(plot_comparison)

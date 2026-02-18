@@ -1,13 +1,14 @@
-class Main
+final class Main
 {
-    final Scanner sc;
+    private Scanner sc;
     
     Main() {
         this.sc = new Scanner(System.in);
     }
     
-    public static void main(final String[] array) {
-        new Main().run();
+    private static void main$3231c38a() {
+        final Main main = new Main();
+        System.out.println(BigDecimal.valueOf(main.sc.nextLong()).multiply(BigDecimal.valueOf(main.sc.nextDouble())).longValue());
     }
     
     private void run() {

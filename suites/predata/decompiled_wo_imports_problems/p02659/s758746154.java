@@ -1,122 +1,97 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
+    private static FastReader sc;
+    private static PrintWriter out;
+    private static long mod;
     
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
+    private static void process() throws IOException {
+        Main.out.println((Object)new BigDecimal(Main.sc.next()).multiply(new BigDecimal(Main.sc.next())).setScale(0, RoundingMode.FLOOR).toString());
     }
     
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    static FastReader sc;
-    static PrintWriter out;
-    static long mod;
-    
-    public static void process() throws IOException {
-        pn(new BigDecimal(Main.sc.next()).multiply(new BigDecimal(Main.sc.next())).setScale(0, RoundingMode.FLOOR).toString());
-    }
-    
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         Main.out = new PrintWriter(System.out);
         Main.sc = new FastReader();
         final long currentTimeMillis = System.currentTimeMillis();
         int n = 1;
         while (n-- > 0) {
-            process();
+            Main.out.println((Object)new BigDecimal(Main.sc.next()).multiply(new BigDecimal(Main.sc.next())).setScale(0, RoundingMode.FLOOR).toString());
         }
         Main.out.flush();
         System.err.println(System.currentTimeMillis() - currentTimeMillis + "ms");
     }
     
-    static void pn(final Object x) {
+    private static void pn(final Object x) {
         Main.out.println(x);
     }
     
-    static void p(final Object obj) {
+    private static void p(final Object obj) {
         Main.out.print(obj);
     }
     
-    static int ni() throws IOException {
+    private static int ni() throws IOException {
         return Integer.parseInt(Main.sc.next());
     }
     
-    static long nl() throws IOException {
+    private static long nl() throws IOException {
         return Long.parseLong(Main.sc.next());
     }
     
-    static double nd() throws IOException {
+    private static double nd() throws IOException {
         return Double.parseDouble(Main.sc.next());
     }
     
-    static String nln() throws IOException {
+    private static String nln() throws IOException {
         return Main.sc.nextLine();
     }
     
-    static long gcd(final long n, final long n2) throws IOException {
-        return (n2 == 0L) ? n : gcd(n2, n % n2);
+    private static long gcd(long n, long n2) throws IOException {
+        while (n2 != 0L) {
+            final long n3 = n2;
+            n2 = n % n2;
+            n = n3;
+        }
+        return n;
     }
     
-    static int gcd(final int n, final int n2) throws IOException {
-        return (n2 == 0) ? n : gcd(n2, n % n2);
+    private static int gcd(int n, int i) throws IOException {
+        while (i != 0) {
+            final int n2 = i;
+            i = n % i;
+            n = n2;
+        }
+        return n;
     }
     
-    static int bit(final long n) throws IOException {
-        return (n == 0L) ? 0 : (1 + bit(n & n - 1L));
+    private static int bit(final long n) throws IOException {
+        if (n == 0L) {
+            return 0;
+        }
+        return 1 + bit(n & n - 1L);
     }
     
-    static <T> void r_sort(final T[] a, final int n) {
+    private static <T> void r_sort(final T[] a, int i) {
         final Random random = new Random();
-        for (int i = n - 1; i > 0; --i) {
+        --i;
+        while (i > 0) {
             final int nextInt = random.nextInt(i + 1);
             final T t = a[i];
             a[i] = a[nextInt];
             a[nextInt] = t;
+            --i;
         }
         Arrays.sort(a);
     }
     
-    static {
-        Main.mod = 1000000007L;
-    }
-    
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -133,7 +108,7 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        String nextLine() {
+        final String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

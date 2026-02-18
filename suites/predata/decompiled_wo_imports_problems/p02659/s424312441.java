@@ -1,14 +1,14 @@
-public class Main
+public final class Main
 {
-    static BigDecimal MAX;
+    private static BigDecimal MAX;
     
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        System.out.println(scanner.nextLong() * Long.valueOf(scanner.next().replace(".", "")) / 100L);
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        System.out.println((scanner = new Scanner(System.in)).nextLong() * Long.valueOf(scanner.next().replace(".", "")) / 100L);
         scanner.close();
     }
     
     static {
-        Main.MAX = new BigDecimal(1000000000000000000L);
+        new BigDecimal(1000000000000000000L);
     }
 }

@@ -1,74 +1,86 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final FastScanner fastScanner = new FastScanner(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new Question().main(fastScanner, printWriter);
+        final Question question = new Question();
+        final FastScanner fastScanner2 = fastScanner;
+        final PrintWriter printWriter2 = printWriter;
+        final FastScanner fastScanner3 = fastScanner2;
+        final Question question2 = question;
+        question.N = Integer.parseInt(fastScanner3.next());
+        final PrintWriter printWriter3 = printWriter2;
+        Question question3;
+        int n;
+        for (question3 = question2, n = 0; n < 7 && 1 << n <= question3.N; ++n) {}
+        printWriter3.println(1 << n - 1);
         printWriter.close();
-        fastScanner.close();
+        fastScanner.br.close();
     }
     
-    static class Question
+    static final class Question
     {
         int N;
         
-        public int solve() {
+        private int solve() {
             int n;
             for (n = 0; n < 7 && 1 << n <= this.N; ++n) {}
             return 1 << n - 1;
         }
         
-        public void main(final FastScanner fastScanner, final PrintWriter printWriter) {
-            this.N = fastScanner.nextInt();
-            printWriter.println(this.solve());
+        private void main(final FastScanner fastScanner, final PrintWriter printWriter) {
+            this.N = Integer.parseInt(fastScanner.next());
+            int n;
+            for (n = 0; n < 7 && 1 << n <= this.N; ++n) {}
+            printWriter.println(1 << n - 1);
         }
         
-        public void p(final Object obj) {
+        private static void p(final Object obj) {
             System.out.print(obj);
         }
         
-        public void pl(final Object x) {
+        private static void pl(final Object x) {
             System.out.println(x);
         }
         
-        public void arp(final int[] a) {
-            this.pl(Arrays.toString(a));
+        private static void arp(final int[] a) {
+            System.out.println((Object)Arrays.toString(a));
         }
         
-        public void arpp(final int[][] array) {
+        private static void arpp(final int[][] array) {
             for (int i = 0; i < array.length; ++i) {
                 for (int j = 0; j < array[0].length; ++j) {
-                    this.p("" + array[i][j]);
+                    System.out.print("" + array[i][j]);
                 }
-                this.pl("");
+                System.out.println((Object)"");
             }
         }
     }
     
-    static class FastScanner
+    static final class FastScanner
     {
         BufferedReader br;
-        StringTokenizer st;
+        private StringTokenizer st;
         
         public FastScanner(final InputStream in) {
             this.br = new BufferedReader(new InputStreamReader(in));
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        public double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreTokens()) {
@@ -85,84 +97,8 @@ public class Main
             return this.st.nextToken();
         }
         
-        public void close() throws IOException {
+        private void close() throws IOException {
             this.br.close();
-        }
-    }
-}static class FastScanner
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastScanner(final InputStream in) {
-        this.br = new BufferedReader(new InputStreamReader(in));
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    public void close() throws IOException {
-        this.br.close();
-    }
-}static class Question
-{
-    int N;
-    
-    public int solve() {
-        int n;
-        for (n = 0; n < 7 && 1 << n <= this.N; ++n) {}
-        return 1 << n - 1;
-    }
-    
-    public void main(final FastScanner fastScanner, final PrintWriter printWriter) {
-        this.N = fastScanner.nextInt();
-        printWriter.println(this.solve());
-    }
-    
-    public void p(final Object obj) {
-        System.out.print(obj);
-    }
-    
-    public void pl(final Object x) {
-        System.out.println(x);
-    }
-    
-    public void arp(final int[] a) {
-        this.pl(Arrays.toString(a));
-    }
-    
-    public void arpp(final int[][] array) {
-        for (int i = 0; i < array.length; ++i) {
-            for (int j = 0; j < array[0].length; ++j) {
-                this.p("" + array[i][j]);
-            }
-            this.pl("");
         }
     }
 }

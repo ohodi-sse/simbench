@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        System.out.println(BigDecimal.valueOf(scanner.nextLong()).multiply(BigDecimal.valueOf(scanner.nextDouble())).longValue());
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        System.out.println(BigDecimal.valueOf((scanner = new Scanner(System.in)).nextLong()).multiply(BigDecimal.valueOf(scanner.nextDouble())).longValue());
         scanner.close();
     }
 }

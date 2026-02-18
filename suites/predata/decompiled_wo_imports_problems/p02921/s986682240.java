@@ -1,16 +1,16 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException, Exception {
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        final String[] split = getStr(bufferedReader).split("");
-        final String[] split2 = getStr(bufferedReader).split("");
-        int n = 0;
+    private static void main$3231c38a() throws IOException, Exception {
+        final BufferedReader bufferedReader;
+        final String[] split = (bufferedReader = new BufferedReader(new InputStreamReader(System.in))).readLine().split("");
+        final String[] split2 = bufferedReader.readLine().split("");
+        int x = 0;
         for (int i = 0; i < 3; ++i) {
             if (split[i].equals(split2[i])) {
-                ++n;
+                ++x;
             }
         }
-        anser(n);
+        System.out.println(x);
     }
     
     private static String getStr(final BufferedReader bufferedReader) throws Exception, IOException {

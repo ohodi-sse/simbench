@@ -1,8 +1,8 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int int1 = Integer.parseInt(scanner.next());
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int int1 = Integer.parseInt((scanner = new Scanner(System.in)).next());
         final int int2 = Integer.parseInt(scanner.next());
         final ArrayList list = new ArrayList();
         for (int i = 1; i <= int2; ++i) {

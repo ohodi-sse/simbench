@@ -1,39 +1,9 @@
-private static final class FastReader
-{
-    private static BufferedReader BF;
-    private static StringTokenizer ST;
-    
-    public FastReader() {
-        FastReader.BF = new BufferedReader(new InputStreamReader(System.in));
-        FastReader.ST = null;
-    }
-    
-    public final String next() {
-        while (true) {
-            if (FastReader.ST != null) {
-                if (FastReader.ST.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                FastReader.ST = new StringTokenizer(FastReader.BF.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return FastReader.ST.nextToken();
-    }
-    
-    final int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-}public class Main
+public final class Main
 {
     private static final FastReader in;
     private static final PrintWriter out;
     
-    public static int solve(final String s) {
+    private static int solve(final String s) {
         if (!s.contains("R")) {
             return 0;
         }
@@ -46,13 +16,14 @@ private static final class FastReader
         return 1;
     }
     
-    public static void main(final String[] array) {
-        Main.out.println(solve(Main.in.next()));
+    private static void main$3231c38a() {
+        final String next;
+        Main.out.println((next = FastReader.next()).contains("R") ? ((next.charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'R') ? 3 : (((next.charAt(0) == 'R' && next.charAt(1) == 'R') || (next.charAt(1) == 'R' && next.charAt(2) == 'R')) ? 2 : 1)) : 0);
         Main.out.flush();
     }
     
     static {
-        in = new FastReader();
+        new FastReader();
         out = new PrintWriter(System.out);
     }
     
@@ -66,7 +37,7 @@ private static final class FastReader
             FastReader.ST = null;
         }
         
-        public final String next() {
+        public static String next() {
             while (true) {
                 if (FastReader.ST != null) {
                     if (FastReader.ST.hasMoreTokens()) {
@@ -83,8 +54,8 @@ private static final class FastReader
             return FastReader.ST.nextToken();
         }
         
-        final int nextInt() {
-            return Integer.parseInt(this.next());
+        private static int nextInt() {
+            return Integer.parseInt(next());
         }
     }
 }

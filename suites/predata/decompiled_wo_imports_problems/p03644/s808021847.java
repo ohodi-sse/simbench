@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    public static int N;
-    public static int K;
-    public static int a;
-    public static String ans;
+    private static int N;
+    private static int K;
+    private static int a;
+    private static String ans;
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         Main.N = new Scanner(System.in).nextInt();
         for (int i = 1; i <= Main.N; ++i) {
             int a = 0;

@@ -1,15 +1,18 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         try (final Scanner scanner = new Scanner(System.in)) {
             final int nextInt = scanner.nextInt();
             int n = 0;
             int x = 0;
             for (int i = 1; i <= nextInt; ++i) {
-                final int returnEvenCnt = returnEvenCnt(i, 0);
-                if (n <= returnEvenCnt) {
+                final int n2 = i;
+                int n3 = 0;
+                for (int n4 = n2; n4 % 2 != 1; n4 /= 2, ++n3) {}
+                final int n5 = n3;
+                if (n <= n5) {
                     x = i;
-                    n = returnEvenCnt;
+                    n = n5;
                 }
             }
             System.out.println(x);
@@ -17,11 +20,10 @@ public class Main
     }
     
     private static int returnEvenCnt(int n, int n2) {
-        if (n % 2 == 1) {
-            return n2;
+        while (n % 2 != 1) {
+            n /= 2;
+            ++n2;
         }
-        n /= 2;
-        ++n2;
-        return returnEvenCnt(n, n2);
+        return n2;
     }
 }

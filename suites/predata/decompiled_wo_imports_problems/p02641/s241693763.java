@@ -1,23 +1,23 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final Integer[] array2 = new Integer[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final Integer[] array = new Integer[nextInt2 = scanner.nextInt()];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = scanner.nextInt();
+            array[i] = scanner.nextInt();
         }
         int x = nextInt;
-        Boolean b = true;
+        Boolean b = Boolean.TRUE;
         for (int n = 0; n <= nextInt && b; ++n) {
-            if (!Arrays.asList(array2).contains(nextInt - n)) {
+            if (!Arrays.asList(array).contains(nextInt - n)) {
                 x = nextInt - n;
-                b = false;
+                b = Boolean.FALSE;
             }
-            else if (!Arrays.asList(array2).contains(nextInt + n)) {
+            else if (!Arrays.asList(array).contains(nextInt + n)) {
                 x = nextInt + n;
-                b = false;
+                b = Boolean.FALSE;
             }
         }
         System.out.println(x);

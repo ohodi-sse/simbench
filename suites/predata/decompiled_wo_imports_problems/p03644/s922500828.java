@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final int nextInt = new Scanner(System.in).nextInt();
         int i = 1;
         int n = 0;
@@ -15,11 +15,8 @@ public class Main
             if (n3 > n) {
                 x = i;
                 n = n3;
-                ++i;
             }
-            else {
-                ++i;
-            }
+            ++i;
         }
         System.out.println(x);
     }

@@ -1,65 +1,30 @@
-static class InputReader
+public final class Main
 {
-    public BufferedReader reader;
-    public StringTokenizer tokenizer;
-    
-    public InputReader(final InputStream in) {
-        this.reader = new BufferedReader(new InputStreamReader(in), 32768);
-        this.tokenizer = null;
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.tokenizer != null) {
-                if (this.tokenizer.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.tokenizer = new StringTokenizer(this.reader.readLine());
-                continue;
-            }
-            catch (final IOException cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.tokenizer.nextToken();
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public char nextChar() {
-        return this.next().charAt(0);
-    }
-    
-    public String nextLine() throws IOException {
-        return this.reader.readLine().trim();
-    }
-}public class Main
-{
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final InputStream in = System.in;
         final PrintStream out = System.out;
         final InputReader inputReader = new InputReader(in);
         final PrintWriter printWriter = new PrintWriter(out);
-        new Task().solve(1, inputReader, printWriter);
+        new Task();
+        final InputReader inputReader2 = inputReader;
+        final PrintWriter printWriter2 = printWriter;
+        final String next = inputReader2.next();
+        int x = 0;
+        for (int i = 0; i < next.length(); ++i) {
+            if (next.charAt(i) == 'R') {
+                ++x;
+                if (i < next.length() - 1 && next.charAt(i + 1) == 'S') {
+                    break;
+                }
+            }
+        }
+        printWriter2.println(x);
         printWriter.close();
     }
     
-    static class Task
+    static final class Task
     {
-        public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) throws IOException {
+        private static void solve$6080e082(final InputReader inputReader, final PrintWriter printWriter) throws IOException {
             final String next = inputReader.next();
             int x = 0;
             for (int i = 0; i < next.length(); ++i) {
@@ -74,17 +39,17 @@ static class InputReader
         }
     }
     
-    static class InputReader
+    static final class InputReader
     {
-        public BufferedReader reader;
-        public StringTokenizer tokenizer;
+        private BufferedReader reader;
+        private StringTokenizer tokenizer;
         
         public InputReader(final InputStream in) {
             this.reader = new BufferedReader(new InputStreamReader(in), 32768);
             this.tokenizer = null;
         }
         
-        public String next() {
+        public final String next() {
             while (true) {
                 if (this.tokenizer != null) {
                     if (this.tokenizer.hasMoreTokens()) {
@@ -103,39 +68,24 @@ static class InputReader
             return this.tokenizer.nextToken();
         }
         
-        public long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        public double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        public int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        public char nextChar() {
+        private char nextChar() {
             return this.next().charAt(0);
         }
         
-        public String nextLine() throws IOException {
+        private String nextLine() throws IOException {
             return this.reader.readLine().trim();
         }
-    }
-}static class Task
-{
-    public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) throws IOException {
-        final String next = inputReader.next();
-        int x = 0;
-        for (int i = 0; i < next.length(); ++i) {
-            if (next.charAt(i) == 'R') {
-                ++x;
-                if (i < next.length() - 1 && next.charAt(i + 1) == 'S') {
-                    break;
-                }
-            }
-        }
-        printWriter.println(x);
     }
 }

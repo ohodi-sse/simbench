@@ -1,10 +1,4 @@
-public class Main
-{
-    public static void main(final String[] array) {
-        final FastScanner fastScanner = new FastScanner();
-        System.out.println(new BigDecimal(fastScanner.next()).multiply(BigDecimal.valueOf(fastScanner.nextLong())).toBigInteger());
-    }
-}class FastScanner
+final class FastScanner
 {
     private final InputStream in;
     private final byte[] buffer;
@@ -43,14 +37,14 @@ public class Main
         return 33 <= n && n <= 126;
     }
     
-    public boolean hasNext() {
+    private boolean hasNext() {
         while (this.hasNextByte() && !isPrintableChar(this.buffer[this.ptr])) {
             ++this.ptr;
         }
         return this.hasNextByte();
     }
     
-    public String next() {
+    public final String next() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
@@ -61,14 +55,14 @@ public class Main
         return sb.toString();
     }
     
-    public long nextLong() {
+    public final long nextLong() {
         if (!this.hasNext()) {
             throw new NoSuchElementException();
         }
         long n = 0L;
         boolean b = false;
-        int n2 = this.readByte();
-        if (n2 == 45) {
+        int n2;
+        if ((n2 = this.readByte()) == 45) {
             b = true;
             n2 = this.readByte();
         }
@@ -79,21 +73,37 @@ public class Main
             n = n * 10L + (n2 - 48);
             n2 = this.readByte();
         }
-        if (n2 == -1 || !isPrintableChar(n2)) {
-            return b ? (-n) : n;
+        if (n2 != -1 && isPrintableChar(n2)) {
+            throw new NumberFormatException();
         }
-        throw new NumberFormatException();
+        if (b) {
+            return -n;
+        }
+        return n;
     }
     
-    public int nextInt() {
-        final long nextLong = this.nextLong();
-        if (nextLong < -2147483648L || 2147483647L < nextLong) {
+    private int nextInt() {
+        final long nextLong;
+        if ((nextLong = this.nextLong()) < -2147483648L || 2147483647L < nextLong) {
             throw new NumberFormatException();
         }
         return (int)nextLong;
     }
     
-    public double nextDouble() {
+    private double nextDouble() {
         return Double.parseDouble(this.next());
+    }
+}
+
+
+
+
+
+
+public final class Main
+{
+    private static void main$3231c38a() {
+        final FastScanner fastScanner = new FastScanner();
+        System.out.println(new BigDecimal(fastScanner.next()).multiply(BigDecimal.valueOf(fastScanner.nextLong())).toBigInteger());
     }
 }

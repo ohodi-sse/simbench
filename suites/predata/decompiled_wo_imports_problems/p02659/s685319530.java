@@ -1,8 +1,8 @@
-public class Main
+public final class Main
 {
-    static Scanner scan;
+    private static Scanner scan;
     
-    public static int pow(final int n) {
+    private static int pow(final int n) {
         int n2 = 1;
         for (int i = 0; i < n; ++i) {
             n2 *= 10;
@@ -10,34 +10,41 @@ public class Main
         return n2;
     }
     
-    public static void main(final String[] array) {
-        final String[] split = line().split(" ");
-        final String[] split2 = split[1].split("\\.");
-        final Long[] array2 = { Long.parseLong(split[0]), Long.parseLong(split2[0]), Long.parseLong(split2[1]) };
-        final String s = String.valueOf((Object)(array2[0] * (array2[1] * pow(split2[1].length()) + array2[2]))).split("\\.")[0];
-        if (s.length() - split2[1].length() <= 0) {
-            puts("0");
+    private static void main$3231c38a() {
+        final String[] split2;
+        final String[] split = (split2 = Main.scan.nextLine().split(" "))[1].split("\\.");
+        final Long[] array;
+        final Long n = (array = new Long[] { Long.parseLong(split2[0]), Long.parseLong(split[0]), Long.parseLong(split[1]) })[0];
+        final long longValue = array[1];
+        final int length = split[1].length();
+        int n2 = 1;
+        for (int i = 0; i < length; ++i) {
+            n2 *= 10;
+        }
+        final String s;
+        if ((s = String.valueOf((Object)(n * (longValue * n2 + array[2]))).split("\\.")[0]).length() - split[1].length() <= 0) {
+            System.out.println((Object)"0");
             return;
         }
-        puts(s.substring(0, s.length() - split2[1].length()));
+        System.out.println((Object)s.substring(0, s.length() - split[1].length()));
         Main.scan.close();
     }
     
-    public static String line() {
+    private static String line() {
         return Main.scan.nextLine();
     }
     
-    public static int[] lineInts() {
-        final String[] split = line().split(" ");
-        final int[] array = new int[split.length];
+    private static int[] lineInts() {
+        final String[] split;
+        final int[] array = new int[(split = Main.scan.nextLine().split(" ")).length];
         for (int i = 0; i < split.length; ++i) {
             array[i] = Integer.parseInt(split[i]);
         }
         return array;
     }
     
-    public static int[] split_piriod_Ints(final String[] array) {
-        line();
+    private static int[] split_piriod_Ints(final String[] array) {
+        Main.scan.nextLine();
         final int[] array2 = new int[array.length];
         for (int i = 0; i < array.length; ++i) {
             array2[i] = Integer.parseInt(array[i]);
@@ -45,20 +52,20 @@ public class Main
         return array2;
     }
     
-    public static long[] lineLongs() {
-        final String[] split = line().split(" ");
-        final long[] array = new long[split.length];
+    private static long[] lineLongs() {
+        final String[] split;
+        final long[] array = new long[(split = Main.scan.nextLine().split(" ")).length];
         for (int i = 0; i < split.length; ++i) {
             array[i] = Long.parseLong(split[i]);
         }
         return array;
     }
     
-    public static void puts(final Object x) {
+    private static void puts(final Object x) {
         System.out.println(x);
     }
     
-    public static void puts(final Object... array) {
+    private static void puts(final Object... array) {
         for (int i = 0; i < array.length; ++i) {
             System.out.println(array[i]);
         }

@@ -1,9 +1,8 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String[] split = new Scanner(System.in).next().split("");
-        final int x = 0;
-        if (!split[0].equals("R") && !split[1].equals("R") && !split[2].equals("R")) {
+    private static void main$3231c38a() {
+        final String[] split;
+        if (!(split = new Scanner(System.in).next().split(""))[0].equals("R") && !split[1].equals("R") && !split[2].equals("R")) {
             System.out.println(0);
             return;
         }
@@ -31,6 +30,6 @@ public class Main
             System.out.println(1);
             return;
         }
-        System.out.println(x);
+        System.out.println(0);
     }
 }

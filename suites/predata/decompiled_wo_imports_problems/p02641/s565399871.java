@@ -1,6 +1,6 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
         final ArrayList list = new ArrayList();
         final ArrayList list2 = new ArrayList();
@@ -31,39 +31,39 @@ class Main
             }
         }
         list3.add((int)list.get(nextInt2 - 1) + 2);
-        int n4 = 0;
         int x = 0;
+        int x2 = 0;
         for (int k = 1; k < list2.size() + 1; ++k) {
-            if (nextInt - k > (int)list2.get(list2.size() - k)) {
+            final int n4 = nextInt - k;
+            final ArrayList list4 = list2;
+            if (n4 > (int)list4.get(list4.size() - k)) {
                 ++n2;
-                n4 = nextInt - k;
+                x = nextInt - k;
                 break;
             }
         }
         if (n2 == 0) {
-            n4 = list2.get(0) - 1;
+            x = list2.get(0) - 1;
         }
         for (int l = 1; l < list3.size() + 1; ++l) {
             if (nextInt + l < (int)list3.get(l - 1)) {
                 ++n3;
-                x = nextInt + l;
+                x2 = nextInt + l;
                 break;
             }
         }
         if (n3 == 0) {
-            x = list2.get(list2.size() - 1) + 1;
+            final ArrayList list5 = list2;
+            x2 = (int)list5.get(list5.size() - 1) + 1;
         }
         if (n == 0) {
             System.out.println(nextInt);
+            return;
         }
-        else if (nextInt - n4 < x - nextInt) {
-            System.out.println(n4);
+        if (nextInt - x >= x2 - nextInt && nextInt - x > x2 - nextInt) {
+            System.out.println(x2);
+            return;
         }
-        else if (nextInt - n4 > x - nextInt) {
-            System.out.println(x);
-        }
-        else {
-            System.out.println(n4);
-        }
+        System.out.println(x);
     }
 }

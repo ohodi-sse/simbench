@@ -1,32 +1,28 @@
-import os
+from simbench.build import Builder
+from simbench.analysis import Analysis
 import sys
 import random
 import polars as pl
 from loguru import logger
 from termcolor import colored
-from simbench.tables import ClassificationTable, schema
 
 
-def find_classification_difference(class1_path, class2_path, seed: int | None = None):
+def find_analysis_difference(
+    analysis_1: Analysis, analysis_2: Analysis, seed: int | None = None
+):
     # This function takes two classification files, and returns a dataframe containing all
     # solutions that were intially misclassified in class1 but rectified in class2
     # The intended use of this function is to locate code examples for which the
     # preprocessing of class2 has improved the performance of the classification
+    bld = Builder(logger)
 
-    assert class1_path.parent.name == "classifications"
-    assert class2_path.parent.name == "classifications"
+    class_df_1 = analysis_1.classification_nodes["knn-1"].pull(bld)
+    class_df_2 = analysis_2.classification_nodes["knn-1"].pull(bld)
 
-    class_df1 = pl.read_parquet(class1_path)
-    class_df2 = pl.read_parquet(class2_path)
-
-    assert isinstance(class_df1, pl.DataFrame)
-    assert isinstance(class_df2, pl.DataFrame)
-
-    assert class_df1.schema == schema(ClassificationTable)
-    prejoindf = class_df2.select(pl.col("src"), pl.col("labelled_as").alias("label2"))
+    prejoindf = class_df_2.select(pl.col("src"), pl.col("labelled_as").alias("label2"))
 
     diff_df = (
-        class_df1.select(
+        class_df_1.select(
             pl.col("src"),
             pl.col("src_label"),
             pl.col("labelled_as").alias("label1"),
@@ -35,25 +31,18 @@ def find_classification_difference(class1_path, class2_path, seed: int | None = 
         .filter(pl.col("src_label") != pl.col("label1"))
         .filter(pl.col("src_label") == pl.col("label2"))
         .filter(pl.col("label1") != pl.col("label2"))
-    )
+    ).collect()
 
-    file, label = pick_random_source(diff_df, seed)
-    root_path = class1_path.parent.parent.parent.parent.parent
-    class_1_normalizer = class1_path.parent.parent.parent.name
-    class_2_normalizer = class2_path.parent.parent.parent.name
-    normalizer1_name = f"{class_1_normalizer + '_' if class_1_normalizer != 'unprocessed' else ''}problems"
+    src = pick_random_source(diff_df, seed)
 
-    normalizer2_name = f"{class_2_normalizer + '_' if class_2_normalizer != 'unprocessed' else ''}problems"
-    def_path_1 = os.path.abspath(root_path / normalizer1_name / label / file)
-    print(def_path_1)
-    def_path_2 = os.path.abspath(root_path / normalizer2_name / label / file)
+    source_1 = analysis_1.source_nodes.pull(bld)[src]
+    source_2 = analysis_2.source_nodes.pull(bld)[src]
 
-    show_file_diff(def_path_1, def_path_2)
+    show_file_diff(source_1.path, source_2.path)
 
 
-def pick_random_source(df: pl.DataFrame, seed: int | None = None):
+def pick_random_source(df: pl.DataFrame, seed: int | None = None) -> str:
     srcs = pl.Series(df.select(pl.col("src"))).to_list()
-    labels = pl.Series(df.select(pl.col("src_label"))).to_list()
 
     if seed:
         random.seed(seed)
@@ -64,9 +53,8 @@ def pick_random_source(df: pl.DataFrame, seed: int | None = None):
 
     rand_index = random.randint(0, len(srcs) - 1)
     file = srcs[rand_index]
-    label = labels[rand_index]
 
-    return file, label
+    return file
 
 
 def pretty_diff(str1, str2):
@@ -106,3 +94,26 @@ def show_file_diff(file1, file2):
             s2 = f2.readlines()
             diffout = pretty_diff(s1, s2)
             print(diffout)
+
+
+def wilcoxon_signed_rank_test(file1, file2, key):
+    from scipy.stats import wilcoxon
+
+    df1 = pl.read_parquet(file1)
+    df2 = pl.read_parquet(file2)
+
+    assert isinstance(df1, pl.DataFrame)
+    assert isinstance(df2, pl.DataFrame)
+
+    col1 = pl.Series(df1.select(pl.col(key))).to_list()
+    col2 = pl.Series(df2.select(pl.col(key))).to_list()
+
+    assert len(col1) == len(col2), (
+        "Can only compare entries with equally many datapoints"
+    )
+
+    diffs = [c1 - c2 for (c1, c2) in zip(col1, col2)]
+
+    result = wilcoxon(diffs)
+    print(f"Statistic: {result.statistic}")
+    print(f"P-value: {result.pvalue}")

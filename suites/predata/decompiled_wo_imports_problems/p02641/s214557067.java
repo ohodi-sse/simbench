@@ -1,24 +1,24 @@
-public class Main
+public final class Main
 {
     private static BufferedReader br;
     private static StringTokenizer tokenizer;
     
     private static void solve() {
-        final int ni = ni();
-        final int ni2 = ni();
+        final int int1 = Integer.parseInt(next());
+        final int int2 = Integer.parseInt(next());
         final ArrayList list = new ArrayList();
-        for (int i = 0; i < ni2; ++i) {
-            list.add(ni());
+        for (int i = 0; i < int2; ++i) {
+            list.add(Integer.parseInt(next()));
         }
         final HashMap hashMap = new HashMap();
         final Iterator iterator = list.iterator();
         while (iterator.hasNext()) {
-            hashMap.put((int)iterator.next(), true);
+            hashMap.put((int)iterator.next(), Boolean.TRUE);
         }
         int x = -1;
         for (int j = 0; j <= 100; ++j) {
-            final int k = ni - j;
-            final int l = ni + j;
+            final int k = int1 - j;
+            final int l = int1 + j;
             if (!hashMap.containsKey(k)) {
                 x = k;
                 break;
@@ -31,10 +31,10 @@ public class Main
         System.out.println(x);
     }
     
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         Main.br = new BufferedReader(new InputStreamReader(System.in));
-        final String getenv = System.getenv("DD_PATH");
-        if (getenv != null) {
+        final String getenv;
+        if ((getenv = System.getenv("DD_PATH")) != null) {
             try {
                 Main.br = new BufferedReader(new InputStreamReader(new FileInputStream(new File(getenv))));
             }
@@ -42,10 +42,34 @@ public class Main
                 throw new RuntimeException(cause);
             }
         }
-        solve();
+        final int int1 = Integer.parseInt(next());
+        final int int2 = Integer.parseInt(next());
+        final ArrayList list = new ArrayList();
+        for (int i = 0; i < int2; ++i) {
+            list.add(Integer.parseInt(next()));
+        }
+        final HashMap hashMap = new HashMap();
+        final Iterator iterator = list.iterator();
+        while (iterator.hasNext()) {
+            hashMap.put((int)iterator.next(), Boolean.TRUE);
+        }
+        int x = -1;
+        for (int j = 0; j <= 100; ++j) {
+            final int k = int1 - j;
+            final int l = int1 + j;
+            if (!hashMap.containsKey(k)) {
+                x = k;
+                break;
+            }
+            if (!hashMap.containsKey(l)) {
+                x = l;
+                break;
+            }
+        }
+        System.out.println(x);
     }
     
-    public static String next() {
+    private static String next() {
         while (true) {
             if (Main.tokenizer != null) {
                 if (Main.tokenizer.hasMoreTokens()) {
@@ -79,7 +103,7 @@ public class Main
     private static int[] na(final int n) {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = ni();
+            array[i] = Integer.parseInt(next());
         }
         return array;
     }
@@ -91,7 +115,7 @@ public class Main
     private static long[] nal(final int n) {
         final long[] array = new long[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = nl();
+            array[i] = Long.parseLong(next());
         }
         return array;
     }

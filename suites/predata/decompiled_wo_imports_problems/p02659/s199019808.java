@@ -1,9 +1,9 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
-        String x = new BigDecimal(scanner.nextLong()).multiply(new BigDecimal(Long.parseLong(scanner.next().replace(".", ""))).divide(new BigDecimal("100"))).toString();
-        if (x.contains(".")) {
+        String x;
+        if ((x = new BigDecimal(scanner.nextLong()).multiply(new BigDecimal(Long.parseLong(scanner.next().replace(".", ""))).divide(new BigDecimal("100"))).toString()).contains(".")) {
             x = x.substring(0, x.indexOf("."));
         }
         System.out.println(x);

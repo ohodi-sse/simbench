@@ -1,70 +1,6 @@
-static class FastReader
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public FastReader() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    int[] readArray(final int n) {
-        final int[] array = new int[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
-        }
-        return array;
-    }
-    
-    long[] readLongArray(final int n) {
-        final long[] array = new long[n];
-        for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
-        }
-        return array;
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    static int getgcd(int i, int n) {
+    private static int getgcd(int i, int n) {
         while (i != n) {
             if (i > n) {
                 i -= n;
@@ -76,7 +12,7 @@ static class FastReader
         return i;
     }
     
-    static boolean isSorted(final int[] array, final int n) {
+    private static boolean isSorted(final int[] array, final int n) {
         for (int i = 1; i < n; ++i) {
             if (array[i] < array[i - 1]) {
                 return false;
@@ -85,7 +21,7 @@ static class FastReader
         return true;
     }
     
-    static boolean isPrime(final long n) {
+    private static boolean isPrime(final long n) {
         if (n == 2L) {
             return true;
         }
@@ -100,51 +36,45 @@ static class FastReader
         return true;
     }
     
-    static void printArray(final int[] array) {
+    private static void printArray(final int[] array) {
         for (int length = array.length, i = 0; i < length; ++i) {
             System.out.print("" + array[i]);
         }
         System.out.println();
     }
     
-    public static void main(final String[] array) throws NumberFormatException, IOException {
-        final FastReader fastReader = new FastReader();
-        final int nextInt = fastReader.nextInt();
-        final int nextInt2 = fastReader.nextInt();
+    private static void main$3231c38a() throws NumberFormatException, IOException {
+        final FastReader fastReader;
+        int int1 = Integer.parseInt((fastReader = new FastReader()).next());
+        final int int2 = Integer.parseInt(fastReader.next());
         final HashSet set = new HashSet();
-        for (int i = 0; i < nextInt2; ++i) {
-            set.add(fastReader.nextInt());
+        for (int i = 0; i < int2; ++i) {
+            set.add(Integer.parseInt(fastReader.next()));
         }
-        final boolean b = true;
-        if (!set.contains(nextInt)) {
-            System.out.println(nextInt);
+        if (!set.contains(int1)) {
+            System.out.println(int1);
+            return;
         }
-        else {
-            int x = nextInt;
-            int x2 = nextInt;
-            while (b) {
-                if (!set.contains(--x)) {
-                    System.out.println(x);
-                    break;
-                }
-                if (!set.contains(++x2)) {
-                    System.out.println(x2);
-                    break;
-                }
+        int x = int1;
+        while (set.contains(--x)) {
+            if (!set.contains(++int1)) {
+                System.out.println(int1);
+                return;
             }
         }
+        System.out.println(x);
     }
     
-    static class FastReader
+    static final class FastReader
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public FastReader() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -161,35 +91,35 @@ static class FastReader
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        int[] readArray(final int n) {
+        private int[] readArray(final int n) {
             final int[] array = new int[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextInt();
+                array[i] = Integer.parseInt(this.next());
             }
             return array;
         }
         
-        long[] readLongArray(final int n) {
+        private long[] readLongArray(final int n) {
             final long[] array = new long[n];
             for (int i = 0; i < n; ++i) {
-                array[i] = this.nextLong();
+                array[i] = Long.parseLong(this.next());
             }
             return array;
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

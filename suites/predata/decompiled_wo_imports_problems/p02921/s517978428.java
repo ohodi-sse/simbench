@@ -1,50 +1,50 @@
-public class Main
+public final class Main
 {
-    static String br;
-    static Scanner sc;
-    static PrintWriter out;
+    private static String br;
+    private static Scanner sc;
+    private static PrintWriter out;
     
-    public static void main(final String[] array) {
-        final char[] charArray = next().toCharArray();
-        final char[] charArray2 = next().toCharArray();
+    private static void main$3231c38a() {
+        final char[] charArray = Main.sc.next().toCharArray();
+        final char[] charArray2 = Main.sc.next().toCharArray();
         int i = 0;
         for (int j = 0; j < charArray.length; ++j) {
             if (charArray[j] == charArray2[j]) {
                 ++i;
             }
         }
-        println(i);
+        Main.out.println((Object)i);
+        Main.out.flush();
     }
     
-    static int nextInt() {
-        return Integer.parseInt(next());
+    private static int nextInt() {
+        return Integer.parseInt(Main.sc.next());
     }
     
-    static Long nextLong() {
-        return Long.parseLong(next());
+    private static Long nextLong() {
+        return Long.parseLong(Main.sc.next());
     }
     
-    static String next() {
+    private static String next() {
         return Main.sc.next();
     }
     
-    static String nextLine() {
+    private static String nextLine() {
         return Main.sc.nextLine();
     }
     
-    static void println(final Object x) {
+    private static void println(final Object x) {
         Main.out.println(x);
         Main.out.flush();
     }
     
-    static void print(final Object obj) {
-        final PrintWriter printWriter = new PrintWriter(System.out);
-        printWriter.print(obj);
+    private static void print(final Object obj) {
+        final PrintWriter printWriter;
+        (printWriter = new PrintWriter(System.out)).print(obj);
         printWriter.flush();
     }
     
     static {
-        Main.br = System.getProperty("line.separator");
         Main.sc = new Scanner(System.in);
         Main.out = new PrintWriter(System.out);
     }

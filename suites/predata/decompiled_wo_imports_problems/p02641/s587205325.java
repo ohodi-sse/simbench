@@ -1,17 +1,17 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final Integer[] array2 = new Integer[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final Integer[] array = new Integer[nextInt2 = scanner.nextInt()];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = scanner.nextInt();
+            array[i] = scanner.nextInt();
         }
         while (true) {
             int n;
-            for (n = 0; Arrays.asList(array2).contains(nextInt - n); ++n) {
-                if (!Arrays.asList(array2).contains(nextInt + n)) {
+            for (n = 0; Arrays.asList(array).contains(nextInt - n); ++n) {
+                if (!Arrays.asList(array).contains(nextInt + n)) {
                     final int n2 = n;
                     System.out.println(nextInt + n2);
                     return;

@@ -1,10 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         int n = 0;
         int x = 1;
-        final Scanner scanner = new Scanner(System.in);
-        for (int nextInt = scanner.nextInt(), i = 1; i <= nextInt; ++i) {
+        Scanner scanner;
+        for (int nextInt = (scanner = new Scanner(System.in)).nextInt(), i = 1; i <= nextInt; ++i) {
             int n2 = 0;
             for (int n3 = i; n3 % 2 == 0; n3 /= 2, ++n2) {}
             if (n2 > n) {

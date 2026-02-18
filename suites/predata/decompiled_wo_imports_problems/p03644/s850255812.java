@@ -1,92 +1,41 @@
-public static class MyScanner
+public final class Main
 {
-    BufferedReader br;
-    StringTokenizer st;
+    private static MyScanner in;
+    private static PrintWriter out;
+    private int N;
+    private static int max;
+    private static int[] dr;
+    private static int[] dc;
     
-    public MyScanner() {
-        this.br = new BufferedReader(new InputStreamReader(System.in));
-    }
-    
-    String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreElements()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-            }
-            catch (final IOException ex) {
-                ex.printStackTrace();
-            }
-        }
-        return this.st.nextToken();
-    }
-    
-    int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    double nextDouble() {
-        return Double.parseDouble(this.next());
-    }
-    
-    String nextLine() {
-        String line = "";
-        try {
-            line = this.br.readLine();
-        }
-        catch (final IOException ex) {
-            ex.printStackTrace();
-        }
-        return line;
-    }
-}public class Main
-{
-    static MyScanner in;
-    static PrintWriter out;
-    int N;
-    static int max;
-    static int[] dr;
-    static int[] dc;
-    
-    public static void main(final String[] array) throws IOException {
-        final int[] array2 = new int[101];
+    private static void main$3231c38a() throws IOException {
+        final int[] array = new int[101];
         for (int i = 1; i <= 100; ++i) {
             int n;
             int n2;
-            for (n = i, n2 = 0; isEven(n); n >>= 1, ++n2) {}
-            array2[i] = n2;
+            for (n = i, n2 = 0; ((long)n & 0x1L) == 0x0L; n >>= 1, ++n2) {}
+            array[i] = n2;
         }
-        final int nextInt = Main.in.nextInt();
+        final int int1 = Integer.parseInt(Main.in.next());
         int n3 = -1;
         int x = 0;
-        for (int j = 1; j <= nextInt; ++j) {
-            if (n3 < array2[j]) {
+        for (int j = 1; j <= int1; ++j) {
+            if (n3 < array[j]) {
                 x = j;
-                n3 = array2[j];
+                n3 = array[j];
             }
         }
         Main.out.println(x);
         Main.out.flush();
     }
     
-    static boolean isEven(final long n) {
+    private static boolean isEven(final long n) {
         return (n & 0x1L) == 0x0L;
     }
     
-    static void swap(int n, int n2) {
-        final int n3 = n2;
-        n2 = n;
-        n = n3;
+    private static void swap$255f295() {
     }
     
-    static boolean same(final int[] a, final int[] a2) {
+    private static boolean same(final int[] a, final int[] a2) {
         Arrays.sort(a);
         Arrays.sort(a2);
         for (int i = 0; i < a.length; ++i) {
@@ -100,21 +49,18 @@ public static class MyScanner
     static {
         Main.in = new MyScanner();
         Main.out = new PrintWriter(new OutputStreamWriter(System.out));
-        Main.max = 200001;
-        Main.dr = new int[] { 1, -1, 0, 0 };
-        Main.dc = new int[] { 0, 0, -1, 1 };
     }
     
-    public static class MyScanner
+    public static final class MyScanner
     {
-        BufferedReader br;
-        StringTokenizer st;
+        private BufferedReader br;
+        private StringTokenizer st;
         
         public MyScanner() {
             this.br = new BufferedReader(new InputStreamReader(System.in));
         }
         
-        String next() {
+        final String next() {
             while (true) {
                 if (this.st != null) {
                     if (this.st.hasMoreElements()) {
@@ -131,19 +77,19 @@ public static class MyScanner
             return this.st.nextToken();
         }
         
-        int nextInt() {
+        private int nextInt() {
             return Integer.parseInt(this.next());
         }
         
-        long nextLong() {
+        private long nextLong() {
             return Long.parseLong(this.next());
         }
         
-        double nextDouble() {
+        private double nextDouble() {
             return Double.parseDouble(this.next());
         }
         
-        String nextLine() {
+        private String nextLine() {
             String line = "";
             try {
                 line = this.br.readLine();

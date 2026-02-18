@@ -1,13 +1,13 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final char[] charArray = scanner.nextLine().toCharArray();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final char[] charArray = (scanner = new Scanner(System.in)).nextLine().toCharArray();
         scanner.close();
         int x = 0;
-        final char[] array2 = charArray;
-        for (int length = array2.length, i = 0; i < length; ++i) {
-            if (array2[i] == 'R') {
+        char[] array;
+        for (int length = (array = charArray).length, i = 0; i < length; ++i) {
+            if (array[i] == 'R') {
                 ++x;
             }
         }

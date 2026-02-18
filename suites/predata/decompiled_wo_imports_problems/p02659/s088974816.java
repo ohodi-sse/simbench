@@ -1,16 +1,22 @@
-public class Main
+public final class Main
 {
-    public void main(final Scanner scanner) {
-        final String string = new Long(scanner.nextLong() * new Long(scanner.next().replace(".", ""))).toString();
-        if (string.length() >= 3) {
+    private static void main(final Scanner scanner) {
+        final String string;
+        if ((string = new Long(scanner.nextLong() * new Long(scanner.next().replace(".", ""))).toString()).length() >= 3) {
             System.out.println(string.substring(0, string.length() - 2));
+            return;
         }
-        else {
-            System.out.println(0);
-        }
+        System.out.println(0);
     }
     
-    public static void main(final String[] array) {
-        new Main().main(new Scanner(System.in));
+    private static void main$3231c38a() {
+        final Scanner scanner = new Scanner(System.in);
+        new Main();
+        final String string;
+        if ((string = new Long(scanner.nextLong() * new Long(scanner.next().replace(".", ""))).toString()).length() >= 3) {
+            System.out.println(string.substring(0, string.length() - 2));
+            return;
+        }
+        System.out.println(0);
     }
 }

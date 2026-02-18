@@ -1,4 +1,4 @@
-public class Main
+public final class Main
 {
     private static final BigDecimal BD1000000007;
     private static BufferedReader brStdin;
@@ -36,7 +36,7 @@ public class Main
     private static int[] getIntArray(final int n) throws IOException {
         final int[] array = new int[n];
         for (int i = 0; i < array.length; ++i) {
-            array[i] = getInt();
+            array[i] = Integer.parseInt(getString());
         }
         return array;
     }
@@ -44,7 +44,7 @@ public class Main
     private static long[] getLongArray(final int n) throws IOException {
         final long[] array = new long[n];
         for (int i = 0; i < array.length; ++i) {
-            array[i] = getLong();
+            array[i] = Long.parseLong(getString());
         }
         return array;
     }
@@ -52,7 +52,7 @@ public class Main
     private static BigDecimal[] getBDArray(final int n) throws IOException {
         final BigDecimal[] array = new BigDecimal[n];
         for (int i = 0; i < array.length; ++i) {
-            array[i] = getBD();
+            array[i] = new BigDecimal(getString());
         }
         return array;
     }
@@ -69,7 +69,7 @@ public class Main
         return mod1000000007(new BigDecimal(val));
     }
     
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final char[] charArray = getString().toCharArray();
         final char[] charArray2 = getString().toCharArray();
         System.out.println(((charArray[0] == charArray2[0]) + (charArray[1] == charArray2[1]) + (charArray[2] == charArray2[2])) ? 1 : 0);

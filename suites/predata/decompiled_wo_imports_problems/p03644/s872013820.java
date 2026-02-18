@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
+    private static void main$3231c38a() throws IOException {
         final int nextInt = new Scanner(System.in).nextInt();
         int n = 0;
         int x = 0;

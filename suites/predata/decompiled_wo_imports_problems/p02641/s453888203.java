@@ -1,39 +1,33 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        final int[] a = new int[nextInt2];
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        final int[] a = new int[nextInt2 = scanner.nextInt()];
         for (int i = 0; i < nextInt2; ++i) {
             a[i] = scanner.nextInt();
         }
         if (nextInt2 == 0) {
             System.out.println(nextInt);
+            return;
         }
-        else {
-            Arrays.sort(a);
-            int n;
-            for (n = 0; a[n] < nextInt; ++n) {}
-            int n2 = 0;
-            boolean b = true;
-            int j;
-            for (j = 0; j <= nextInt + 100; ++j) {
-                if (nextInt - j != a[Math.max(0, n - n2)]) {
-                    break;
-                }
-                if (nextInt + j != a[Math.min(nextInt2 - 1, n + n2)]) {
-                    b = false;
-                    break;
-                }
-                ++n2;
-            }
-            if (b) {
-                System.out.println(nextInt - j);
-            }
-            else {
-                System.out.println(nextInt + j);
+        Arrays.sort(a);
+        int n;
+        for (n = 0; a[n] < nextInt; ++n) {}
+        int n2 = 0;
+        boolean b = true;
+        int n3;
+        for (n3 = 0; n3 <= nextInt + 100 && nextInt - n3 == a[Math.max(0, n - n2)]; ++n2, ++n3) {
+            if (nextInt + n3 != a[Math.min(nextInt2 - 1, n + n2)]) {
+                b = false;
+                break;
             }
         }
+        if (b) {
+            System.out.println(nextInt - n3);
+            return;
+        }
+        System.out.println(nextInt + n3);
     }
 }

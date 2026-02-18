@@ -1,24 +1,24 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
         scanner.close();
-        final int[] array2 = new int[7];
-        array2[0] = 1;
+        final int[] array;
+        (array = new int[7])[0] = 1;
         for (int i = 1; i < 7; ++i) {
-            array2[i] = array2[i - 1] * 2;
+            array[i] = array[i - 1] << 1;
         }
         for (int j = 0; j < 7; ++j) {
-            if (nextInt == array2[j]) {
+            if (nextInt == array[j]) {
                 System.out.println(nextInt);
                 System.exit(0);
             }
-            else if (nextInt < array2[j]) {
-                System.out.println(array2[j - 1]);
+            else if (nextInt < array[j]) {
+                System.out.println(array[j - 1]);
                 System.exit(0);
             }
         }
-        System.out.println(array2[6]);
+        System.out.println(array[6]);
     }
 }

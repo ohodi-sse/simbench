@@ -1,63 +1,154 @@
-class Pair
+final class InputReader
 {
-    int first;
-    int second;
+    private BufferedReader br;
+    private StringTokenizer st;
     
-    Pair(final int first, final int second) {
-        this.first = first;
-        this.second = second;
+    public InputReader(final InputStream in) {
+        this.br = new BufferedReader(new InputStreamReader(in));
+        this.st = null;
     }
-}public class Main
+    
+    public final String next() {
+        while (true) {
+            if (this.st != null) {
+                if (this.st.hasMoreTokens()) {
+                    break;
+                }
+            }
+            try {
+                this.st = new StringTokenizer(this.br.readLine());
+                continue;
+            }
+            catch (final IOException cause) {
+                throw new RuntimeException(cause);
+            }
+            break;
+        }
+        return this.st.nextToken();
+    }
+    
+    private int nextInt() {
+        return Integer.parseInt(this.next());
+    }
+    
+    private long nextLong() {
+        return Long.parseLong(this.next());
+    }
+    
+    private double nextDouble() {
+        return Double.parseDouble(this.next());
+    }
+}
+
+
+
+
+
+
+
+
+
+
+
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final InputReader inputReader = new InputReader(System.in);
         final PrintWriter printWriter = new PrintWriter(new BufferedWriter(new OutputStreamWriter(System.out)), true);
-        new TaskB().solve(1, inputReader, printWriter);
+        new TaskB();
+        final InputReader inputReader2 = inputReader;
+        final PrintWriter printWriter2 = printWriter;
+        final InputReader inputReader3 = inputReader2;
+        final int int1 = Integer.parseInt(inputReader2.next());
+        final int int2 = Integer.parseInt(inputReader3.next());
+        final boolean[] array;
+        Arrays.fill(array = new boolean[102], true);
+        final int[] array2 = new int[int2];
+        for (int i = 0; i < int2; ++i) {
+            array[array2[i] = Integer.parseInt(inputReader3.next())] = false;
+        }
+        int n = Integer.MAX_VALUE;
+        int x = -1;
+        for (int j = 0; j <= int1; ++j) {
+            final int abs;
+            if (array[j] && (abs = Math.abs(int1 - j)) < n) {
+                x = j;
+                n = abs;
+            }
+        }
+        for (int k = int1 + 1; k <= 101; ++k) {
+            final int abs2;
+            if (array[k] && (abs2 = Math.abs(int1 - k)) < n) {
+                x = k;
+                n = abs2;
+            }
+        }
+        printWriter2.println(x);
         printWriter.flush();
         printWriter.close();
     }
-}class TaskB
+}
+
+
+
+
+final class Pair
 {
-    public void solve(final int n, final InputReader inputReader, final PrintWriter printWriter) {
-        final int nextInt = inputReader.nextInt();
-        final int nextInt2 = inputReader.nextInt();
-        final boolean[] a = new boolean[102];
-        Arrays.fill(a, true);
-        final int[] array = new int[nextInt2];
-        for (int i = 0; i < nextInt2; ++i) {
-            a[array[i] = inputReader.nextInt()] = false;
+    private int first;
+    private int second;
+    
+    private Pair(final int first, final int second) {
+        this.first = first;
+        this.second = second;
+    }
+}
+
+
+
+
+
+
+
+final class TaskB
+{
+    private static void solve$ddb01a9(final InputReader inputReader, final PrintWriter printWriter) {
+        final int int1 = Integer.parseInt(inputReader.next());
+        final int int2 = Integer.parseInt(inputReader.next());
+        final boolean[] array;
+        Arrays.fill(array = new boolean[102], true);
+        final int[] array2 = new int[int2];
+        for (int i = 0; i < int2; ++i) {
+            array[array2[i] = Integer.parseInt(inputReader.next())] = false;
         }
-        int n2 = Integer.MAX_VALUE;
+        int n = Integer.MAX_VALUE;
         int x = -1;
-        for (int j = 0; j <= nextInt; ++j) {
-            if (a[j]) {
-                final int abs = Math.abs(nextInt - j);
-                if (abs < n2) {
-                    x = j;
-                    n2 = abs;
-                }
+        for (int j = 0; j <= int1; ++j) {
+            final int abs;
+            if (array[j] && (abs = Math.abs(int1 - j)) < n) {
+                x = j;
+                n = abs;
             }
         }
-        for (int k = nextInt + 1; k <= 101; ++k) {
-            if (a[k]) {
-                final int abs2 = Math.abs(nextInt - k);
-                if (abs2 < n2) {
-                    x = k;
-                    n2 = abs2;
-                }
+        for (int k = int1 + 1; k <= 101; ++k) {
+            final int abs2;
+            if (array[k] && (abs2 = Math.abs(int1 - k)) < n) {
+                x = k;
+                n = abs2;
             }
         }
         printWriter.println(x);
     }
     
-    long __gcd(final long n, final long n2) {
-        if (n2 == 0L) {
-            return n;
+    private static long __gcd(long n, long n2) {
+        while (n2 != 0L) {
+            final long n3 = n2;
+            n2 = n % n2;
+            n = n3;
         }
-        return this.__gcd(n2, n % n2);
+        return n;
     }
     
-    public int getInt(final int n) {
+    private static int getInt(final int n) {
         int n2 = -1;
         switch (n) {
             case 0: {
@@ -104,49 +195,9 @@ class Pair
         return n2;
     }
     
-    public int isPow(long n) {
+    private static int isPow(long n) {
         int n2;
         for (n2 = 0; n > 0L; n /= 2L, ++n2) {}
         return n2;
-    }
-}class InputReader
-{
-    BufferedReader br;
-    StringTokenizer st;
-    
-    public InputReader(final InputStream in) {
-        this.br = new BufferedReader(new InputStreamReader(in));
-        this.st = null;
-    }
-    
-    public String next() {
-        while (true) {
-            if (this.st != null) {
-                if (this.st.hasMoreTokens()) {
-                    break;
-                }
-            }
-            try {
-                this.st = new StringTokenizer(this.br.readLine());
-                continue;
-            }
-            catch (final IOException cause) {
-                throw new RuntimeException(cause);
-            }
-            break;
-        }
-        return this.st.nextToken();
-    }
-    
-    public int nextInt() {
-        return Integer.parseInt(this.next());
-    }
-    
-    public long nextLong() {
-        return Long.parseLong(this.next());
-    }
-    
-    public double nextDouble() {
-        return Double.parseDouble(this.next());
     }
 }

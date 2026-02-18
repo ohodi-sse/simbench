@@ -1,23 +1,23 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final int nextInt = scanner.nextInt();
-        final int nextInt2 = scanner.nextInt();
-        if (nextInt2 == 0) {
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final int nextInt = (scanner = new Scanner(System.in)).nextInt();
+        final int nextInt2;
+        if ((nextInt2 = scanner.nextInt()) == 0) {
             System.out.println(nextInt);
             return;
         }
-        final Integer[] array2 = new Integer[nextInt2];
+        final Integer[] array = new Integer[nextInt2];
         for (int i = 0; i < nextInt2; ++i) {
-            array2[i] = scanner.nextInt();
+            array[i] = scanner.nextInt();
         }
         for (int j = 0; j < 51; ++j) {
-            if (!Arrays.asList(array2).contains(nextInt - j)) {
+            if (!Arrays.asList(array).contains(nextInt - j)) {
                 System.out.println(nextInt - j);
                 return;
             }
-            if (!Arrays.asList(array2).contains(nextInt + j)) {
+            if (!Arrays.asList(array).contains(nextInt + j)) {
                 System.out.println(nextInt + j);
                 return;
             }

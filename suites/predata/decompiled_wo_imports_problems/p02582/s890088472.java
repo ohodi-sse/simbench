@@ -1,6 +1,6 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final char[] charArray = new Scanner(System.in).nextLine().toCharArray();
         int n;
         int x = n = 0;

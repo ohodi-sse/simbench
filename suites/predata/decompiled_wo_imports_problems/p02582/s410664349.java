@@ -1,11 +1,11 @@
-class Main
+final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         scanner.close();
-        final ArrayList coll = new ArrayList();
-        coll.add(0);
+        final ArrayList coll;
+        (coll = new ArrayList()).add(0);
         int n = 0;
         for (int i = 0; i < 3; ++i) {
             if (next.charAt(i) == 'R') {

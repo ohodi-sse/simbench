@@ -66,7 +66,7 @@ public final class Main
             this.writer.close();
         }
         
-        public final void println(final int x) {
+        private void println(final int x) {
             this.writer.println(x);
         }
     }

@@ -1,29 +1,36 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final String next = new Scanner(System.in).next();
-        if (next.charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'S') {
+    private static void main$3231c38a() {
+        final String next;
+        if ((next = new Scanner(System.in).next()).charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'S') {
             System.out.println(2);
+            return;
         }
-        else if (next.charAt(1) == 'R' && next.charAt(2) == 'R' && next.charAt(0) == 'S') {
+        if (next.charAt(1) == 'R' && next.charAt(2) == 'R' && next.charAt(0) == 'S') {
             System.out.println(2);
+            return;
         }
-        else if (next.charAt(0) == 'R' && next.charAt(1) == 'S' && next.charAt(2) == 'R') {
+        if (next.charAt(0) == 'R' && next.charAt(1) == 'S' && next.charAt(2) == 'R') {
             System.out.println(1);
+            return;
         }
-        else if (next.charAt(0) == 'S' && next.charAt(1) == 'S' && next.charAt(2) == 'R') {
+        if (next.charAt(0) == 'S' && next.charAt(1) == 'S' && next.charAt(2) == 'R') {
             System.out.println(1);
+            return;
         }
-        else if (next.charAt(0) == 'R' && next.charAt(1) == 'S' && next.charAt(2) == 'S') {
+        if (next.charAt(0) == 'R' && next.charAt(1) == 'S' && next.charAt(2) == 'S') {
             System.out.println(1);
+            return;
         }
-        else if (next.charAt(0) == 'S' && next.charAt(1) == 'R' && next.charAt(2) == 'S') {
+        if (next.charAt(0) == 'S' && next.charAt(1) == 'R' && next.charAt(2) == 'S') {
             System.out.println(1);
+            return;
         }
-        else if (next.charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'R') {
+        if (next.charAt(0) == 'R' && next.charAt(1) == 'R' && next.charAt(2) == 'R') {
             System.out.println(3);
+            return;
         }
-        else if (next.charAt(0) == 'S' && next.charAt(1) == 'S' && next.charAt(2) == 'S') {
+        if (next.charAt(0) == 'S' && next.charAt(1) == 'S' && next.charAt(2) == 'S') {
             System.out.println(0);
         }
     }

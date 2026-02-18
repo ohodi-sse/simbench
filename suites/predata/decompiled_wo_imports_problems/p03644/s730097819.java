@@ -1,15 +1,10 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final int nextInt = new Scanner(System.in).nextInt();
-        int x = 1;
-        while (true) {
-            final int n = x * 2;
-            if (n > nextInt) {
-                break;
-            }
-            x = n;
-        }
+    private static void main$3231c38a() {
+        int nextInt;
+        int x;
+        int n;
+        for (nextInt = new Scanner(System.in).nextInt(), x = 1; (n = x << 1) <= nextInt; x = n) {}
         System.out.println(x);
     }
 }

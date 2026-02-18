@@ -1,24 +1,24 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
-        final Scanner scanner = new Scanner(System.in);
-        final String next = scanner.next();
+    private static void main$3231c38a() {
+        final Scanner scanner;
+        final String next = (scanner = new Scanner(System.in)).next();
         scanner.close();
-        final char[] array2 = new char[next.length()];
+        final char[] array = new char[next.length()];
         for (int i = 0; i < next.length(); ++i) {
-            array2[i] = next.charAt(i);
+            array[i] = next.charAt(i);
         }
         int x = -1;
-        if (array2[0] != 'R' && array2[1] != 'R' && array2[2] != 'R') {
+        if (array[0] != 'R' && array[1] != 'R' && array[2] != 'R') {
             x = 0;
         }
-        else if ((array2[0] == 'S' && array2[1] == 'S') || (array2[1] == 'S' && array2[2] == 'S') || (array2[2] == 'S' && array2[0] == 'S') || (array2[0] == 'R' && array2[1] == 'S' && array2[2] == 'R')) {
+        else if ((array[0] == 'S' && array[1] == 'S') || (array[1] == 'S' && array[2] == 'S') || (array[2] == 'S' && array[0] == 'S') || (array[0] == 'R' && array[1] == 'S' && array[2] == 'R')) {
             x = 1;
         }
-        else if ((array2[0] == 'R' && array2[1] == 'R' && array2[2] == 'S') || (array2[0] == 'S' && array2[1] == 'R' && array2[2] == 'R')) {
+        else if ((array[0] == 'R' && array[1] == 'R' && array[2] == 'S') || (array[0] == 'S' && array[1] == 'R' && array[2] == 'R')) {
             x = 2;
         }
-        else if (array2[0] == 'R' && array2[1] == 'R' && array2[2] == 'R') {
+        else if (array[0] == 'R' && array[1] == 'R' && array[2] == 'R') {
             x = 3;
         }
         System.out.println(x);

@@ -1,33 +1,32 @@
-public class Main
+public final class Main
 {
-    static Scanner scanner;
+    private static Scanner scanner;
     
-    public static void main(final String[] array) {
-        Main.scanner = new Scanner(System.in);
-        final String gs = gs();
-        final String gs2 = gs();
+    private static void main$3231c38a() {
+        final String next = (Main.scanner = new Scanner(System.in)).next();
+        final String next2 = Main.scanner.next();
         int i = 0;
         for (int j = 0; j < 3; ++j) {
-            if (gs.charAt(j) == gs2.charAt(j)) {
+            if (next.charAt(j) == next2.charAt(j)) {
                 ++i;
             }
         }
         System.out.print(i);
     }
     
-    public static String gs() {
+    private static String gs() {
         return Main.scanner.next();
     }
     
-    public static int gi() {
+    private static int gi() {
         return Integer.parseInt(Main.scanner.next());
     }
     
-    public static long gl() {
+    private static long gl() {
         return Long.parseLong(Main.scanner.next());
     }
     
-    public static double gd() {
+    private static double gd() {
         return Double.parseDouble(Main.scanner.next());
     }
 }

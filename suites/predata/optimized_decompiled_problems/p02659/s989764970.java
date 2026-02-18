@@ -194,7 +194,7 @@ public final class Main
             return n;
         }
         
-        public final long nextLong() throws IOException {
+        private long nextLong() throws IOException {
             long n = 0L;
             byte b;
             for (b = this.read(); b <= 32; b = this.read()) {}
@@ -211,7 +211,7 @@ public final class Main
             return n;
         }
         
-        public final double nextDouble() throws IOException {
+        private double nextDouble() throws IOException {
             double n = 0.0;
             double n2 = 1.0;
             byte b;

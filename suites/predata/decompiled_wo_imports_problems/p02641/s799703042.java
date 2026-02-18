@@ -1,11 +1,11 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws IOException {
-        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
-        final String[] split = bufferedReader.readLine().split(" ");
-        final int int1 = Integer.parseInt(split[0]);
-        final int int2 = Integer.parseInt(split[1]);
-        if (int2 == 0) {
+    private static void main$3231c38a() throws IOException {
+        final BufferedReader bufferedReader;
+        final String[] split;
+        final int int1 = Integer.parseInt((split = (bufferedReader = new BufferedReader(new InputStreamReader(System.in))).readLine().split(" "))[0]);
+        final int int2;
+        if ((int2 = Integer.parseInt(split[1])) == 0) {
             System.out.print(int1);
             return;
         }

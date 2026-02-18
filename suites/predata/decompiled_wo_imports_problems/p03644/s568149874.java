@@ -1,6 +1,6 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) throws Exception {
+    private static void main$3231c38a() throws Exception {
         final int int1 = Integer.parseInt(new Scanner(System.in).next());
         int n = 0;
         int x = 0;
@@ -17,9 +17,8 @@ public class Main
         }
         if (int1 == 1) {
             System.out.println(1);
+            return;
         }
-        else {
-            System.out.println(x);
-        }
+        System.out.println(x);
     }
 }

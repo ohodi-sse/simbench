@@ -1,12 +1,4 @@
-public class Main
-{
-    public static void main(final String[] array) throws Exception {
-        int i;
-        int n;
-        for (i = new FastScanner(System.in).nextInt(), n = 0; i >= 2; i /= 2, ++n) {}
-        System.out.println((int)Math.pow(2.0, n));
-    }
-}class FastScanner
+final class FastScanner
 {
     private BufferedReader reader;
     private StringTokenizer tokenizer;
@@ -18,7 +10,7 @@ public class Main
         this.tokenizer = null;
     }
     
-    public String next() {
+    public final String next() {
         if (this.tokenizer != null) {
             if (this.tokenizer.hasMoreTokens()) {
                 return this.tokenizer.nextToken();
@@ -33,7 +25,7 @@ public class Main
         return this.tokenizer.nextToken();
     }
     
-    public String nextLine() {
+    private String nextLine() {
         if (this.tokenizer != null) {
             if (this.tokenizer.hasMoreTokens()) {
                 return this.tokenizer.nextToken("\n");
@@ -48,31 +40,44 @@ public class Main
         return this.tokenizer.nextToken("\n");
     }
     
-    public long nextLong() {
+    private long nextLong() {
         return Long.parseLong(this.next());
     }
     
-    public int nextInt() {
+    private int nextInt() {
         return Integer.parseInt(this.next());
     }
     
-    public double nextDouble() {
+    private double nextDouble() {
         return Double.parseDouble(this.next());
     }
     
-    public int[] nextIntArray(final int n) {
+    private int[] nextIntArray(final int n) {
         final int[] array = new int[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextInt();
+            array[i] = Integer.parseInt(this.next());
         }
         return array;
     }
     
-    public long[] nextLongArray(final int n) {
+    private long[] nextLongArray(final int n) {
         final long[] array = new long[n];
         for (int i = 0; i < n; ++i) {
-            array[i] = this.nextLong();
+            array[i] = Long.parseLong(this.next());
         }
         return array;
+    }
+}
+
+
+
+
+public final class Main
+{
+    private static void main$3231c38a() throws Exception {
+        int i;
+        int n;
+        for (i = Integer.parseInt(new FastScanner(System.in).next()), n = 0; i >= 2; i /= 2, ++n) {}
+        System.out.println((int)Math.pow(2.0, n));
     }
 }

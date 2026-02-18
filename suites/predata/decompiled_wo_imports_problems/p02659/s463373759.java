@@ -1,7 +1,7 @@
-public class Main
+public final class Main
 {
-    public static void main(final String[] array) {
+    private static void main$3231c38a() {
         final Scanner scanner = new Scanner(System.in);
-        System.out.println(scanner.nextLong() * (long)(100.0 * scanner.nextDouble() + 0.1) / 100L);
+        System.out.println(scanner.nextLong() * (long)(scanner.nextDouble() * 100.0 + 0.1) / 100L);
     }
 }
