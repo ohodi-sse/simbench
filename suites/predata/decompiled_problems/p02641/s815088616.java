@@ -7,9 +7,9 @@ import java.io.InputStream;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class FastScanner
 {
@@ -74,9 +74,9 @@ class FastScanner
         return Double.parseDouble(this.next());
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {

@@ -1,8 +1,8 @@
 import java.io.IOException;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {
@@ -36,9 +36,9 @@ import java.io.InputStream;
 import java.io.BufferedReader;
 import java.util.StringTokenizer;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Scanner
 {

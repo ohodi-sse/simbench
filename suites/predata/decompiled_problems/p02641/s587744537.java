@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class InputReader
 {
@@ -56,9 +56,9 @@ import java.io.BufferedWriter;
 import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {
@@ -70,9 +70,9 @@ public class Main
         printWriter.close();
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Pair
 {
@@ -87,9 +87,9 @@ class Pair
 import java.util.Arrays;
 import java.io.PrintWriter;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class TaskB
 {

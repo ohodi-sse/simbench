@@ -8,12 +8,9 @@ use rayon::iter::IntoParallelRefIterator;
 use rayon::prelude::*;
 use std::env;
 use std::fs::File;
-use std::io::Write;
+use std::io::{BufWriter, Write};
 use std::path::Path;
 use tempfile::tempdir_in;
-
-const BAR_TEMPLATE: &str =
-    "{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})";
 
 fn get_parent_dir(filepath: &Utf8Path) -> Result<&Utf8Path> {
     filepath
@@ -38,7 +35,7 @@ fn compile_java(filepath: impl AsRef<Path>, compiled_path: impl AsRef<Path>) -> 
         "Failed to create Utf8Path from {:?}",
         filepath.as_ref()
     ))?;
-    assert!(
+    debug_assert!(
         get_file_extension(filepath)? == "java",
         "Can only compile java file, found {}",
         filepath
@@ -47,13 +44,13 @@ fn compile_java(filepath: impl AsRef<Path>, compiled_path: impl AsRef<Path>) -> 
         "Failed to create Utf8Path from {:?}",
         compiled_path.as_ref()
     ))?;
-    assert!(
+    debug_assert!(
         get_file_extension(compiled_path)? == "jar",
         "Extension {:?} of {:?} should be jar",
         get_file_extension(compiled_path)?,
         compiled_path
     );
-    assert!(filepath.exists(), "Failed to locate file {}", filepath);
+    debug_assert!(filepath.exists(), "Failed to locate file {}", filepath);
 
     // Create temporary directory
     let tmp_dir = tempdir_in(get_parent_dir(filepath)?.as_std_path())?;
@@ -61,12 +58,12 @@ fn compile_java(filepath: impl AsRef<Path>, compiled_path: impl AsRef<Path>) -> 
 
     // Copy file into new directory
     cmd!("cp", filepath, &tmp_file).run()?;
-    assert!(&tmp_file.exists(), "File was not copied properly");
+    debug_assert!(&tmp_file.exists(), "File was not copied properly");
     // Compile into the temporary directory
     cmd!("javac", "-nowarn", "-Xlint:-deprecation", &tmp_file)
         .dir(tmp_dir.path())
         .run()?;
-    assert!(
+    debug_assert!(
         tmp_dir.path().join("Main.class").exists(),
         "File was not compiled properly"
     );
@@ -76,14 +73,14 @@ fn compile_java(filepath: impl AsRef<Path>, compiled_path: impl AsRef<Path>) -> 
     cmd!("jar", "cf", current_path.join(compiled_path), ".")
         .dir(tmp_dir.path())
         .run()?;
-    assert!(&compiled_path.exists(), "Jar was not created");
+    debug_assert!(&compiled_path.exists(), "Jar was not created");
 
     let check = cmd!("jar", "tf", compiled_path)
         .stdout_capture()
         .run()?
         .stdout;
 
-    assert!(String::from_utf8(check.clone())?.contains("Main.class"));
+    debug_assert!(String::from_utf8(check.clone())?.contains("Main.class"));
 
     tmp_dir.close()?;
 
@@ -91,24 +88,24 @@ fn compile_java(filepath: impl AsRef<Path>, compiled_path: impl AsRef<Path>) -> 
 }
 
 fn optimize_w_proguard(filepath: impl AsRef<Path>, processed_path: impl AsRef<Path>) -> Result<()> {
-    let filepath = Utf8Path::from_path(filepath.as_ref()).ok_or(eyre!(
-        "Failed to create Utf8Path from {:?}",
-        filepath.as_ref()
-    ))?;
+    let filepath = Utf8Path::from_path(filepath.as_ref())
+        .ok_or_else(|| eyre!("Failed to create Utf8Path from {:?}", filepath.as_ref()))?;
 
-    assert!(filepath.try_exists().is_ok());
+    debug_assert!(filepath.try_exists().is_ok());
 
-    let processed_path = Utf8Path::from_path(processed_path.as_ref()).ok_or(eyre!(
-        "Failed to create Utf8Path from {:?}",
-        processed_path.as_ref()
-    ))?;
+    let processed_path = Utf8Path::from_path(processed_path.as_ref()).ok_or_else(|| {
+        eyre!(
+            "Failed to create Utf8Path from {:?}",
+            processed_path.as_ref()
+        )
+    })?;
 
     let proguard_path = env::current_dir()?.join("processing_tools/proguard-7.8.2/");
     let binary_path = proguard_path.join("bin/proguard.sh");
-    assert!(binary_path.try_exists().is_ok());
+    debug_assert!(binary_path.try_exists().is_ok());
 
     let config_file = proguard_path.join("optimizer.pro");
-    assert!(config_file.try_exists().is_ok());
+    debug_assert!(config_file.try_exists().is_ok());
 
     let full_file_path = env::current_dir()?.join(filepath);
 
@@ -134,14 +131,14 @@ fn decompile_w_procyon(
     let filepath = Utf8Path::from_path(filepath.as_ref())
         .ok_or_eyre("Failed to convert filepath to Utf8Path")?;
 
-    assert!(
+    debug_assert!(
         filepath
             .extension()
             .ok_or_eyre("Failed to extract extension")?
             == "jar"
     );
-    assert!(filepath.exists(), "Failed to find file {}", filepath);
-    assert!(
+    debug_assert!(filepath.exists(), "Failed to find file {}", filepath);
+    debug_assert!(
         decompiled_path
             .as_ref()
             .extension()
@@ -156,7 +153,7 @@ fn decompile_w_procyon(
         return Ok(());
     };
 
-    assert!(
+    debug_assert!(
         full_decompiled_path
             .parent()
             .ok_or_eyre("Parent cannot be extracted")?
@@ -206,57 +203,33 @@ fn google_format(filepath: impl AsRef<Path>, formatted_path: impl AsRef<Path>) -
         .stdout_capture()
         .run()?;
 
-    let mut output_file = File::create(full_formatted_path)?;
-    output_file.write_all(output.stdout.as_slice())?;
+    // let mut output_file = File::create(full_formatted_path)?;
+    let mut out = BufWriter::new(File::create(full_formatted_path)?);
+    out.write_all(output.stdout.as_slice())?;
+    out.flush()?;
 
     Ok(())
 }
 
-pub fn batch_compile(source_files: Vec<String>, target_files: Vec<String>) -> Result<()> {
-    assert_eq!(source_files.len(), target_files.len());
-    let style = ProgressStyle::with_template(BAR_TEMPLATE)?;
-    source_files
-        .par_iter()
-        .zip(target_files.par_iter())
-        .progress_with_style(style)
-        .try_for_each(|(src, tgt)| compile_java(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt)))
-}
-pub fn batch_optimize(source_files: Vec<String>, target_files: Vec<String>) -> Result<()> {
-    assert_eq!(source_files.len(), target_files.len());
+macro_rules! batch_process {
+    ($name:ident,$f:ident) => {
+        pub fn $name(source_files: &[String], target_files: &[String]) -> Result<()> {
+            assert_eq!(source_files.len(), target_files.len());
 
-    let style = ProgressStyle::with_template(BAR_TEMPLATE)?;
-    source_files
-        .par_iter()
-        .zip(target_files.par_iter())
-        .progress_with_style(style)
-        .try_for_each(|(src, tgt)| {
-            optimize_w_proguard(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt))
-        })
-}
-pub fn batch_decompile(source_files: Vec<String>, target_files: Vec<String>) -> Result<()> {
-    assert_eq!(source_files.len(), target_files.len());
-
-    let style = ProgressStyle::with_template(BAR_TEMPLATE)?;
-    source_files
-        .par_iter()
-        .zip(target_files.par_iter())
-        .progress_with_style(style)
-        .try_for_each(|(src, tgt)| {
-            decompile_w_procyon(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt))
-        })
+            let style = ProgressStyle::with_template(    "{spinner:.green} [{elapsed_precise}] [{wide_bar:.cyan/blue}] {pos}/{len} ({per_sec}, {eta})")?;
+            source_files
+                .par_iter()
+                .zip(target_files.par_iter())
+                .progress_with_style(style)
+                .try_for_each(|(src, tgt)| $f(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt)))
+        }
+    };
 }
 
-pub fn batch_format(source_files: Vec<String>, target_files: Vec<String>) -> Result<()> {
-    assert_eq!(source_files.len(), target_files.len());
-
-    let style = ProgressStyle::with_template(BAR_TEMPLATE)?;
-
-    source_files
-        .par_iter()
-        .zip(target_files.par_iter())
-        .progress_with_style(style)
-        .try_for_each(|(src, tgt)| google_format(Utf8PathBuf::from(src), Utf8PathBuf::from(tgt)))
-}
+batch_process!(batch_compile, compile_java);
+batch_process!(batch_optimize, optimize_w_proguard);
+batch_process!(batch_decompile, decompile_w_procyon);
+batch_process!(batch_format, google_format);
 
 #[cfg(test)]
 mod tests {

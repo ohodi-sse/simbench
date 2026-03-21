@@ -1,9 +1,9 @@
 import java.math.RoundingMode;
 import java.util.Scanner;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Main
 {

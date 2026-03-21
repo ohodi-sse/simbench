@@ -8,9 +8,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {
@@ -65,9 +65,9 @@ public class Main
         }
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class TaskA
 {

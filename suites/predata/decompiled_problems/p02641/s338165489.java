@@ -4,9 +4,9 @@ import java.io.BufferedReader;
 import java.io.InputStreamReader;
 import java.util.Hashtable;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Main
 {
@@ -59,9 +59,9 @@ class Main
         Main.hash = new Hashtable<String, Long>();
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Pair
 {

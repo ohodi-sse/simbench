@@ -1,3 +1,4 @@
+from hashlib import sha512
 import tree_sitter as ts
 import tree_sitter_java as tsjava
 
@@ -62,6 +63,31 @@ class GoogleFormatter(DependentNormalizer):
         rust_batch_format(sources, targets)
 
 
+def remove_comments(sources):
+    for src_path in sources:
+        src = Source(Path(src_path))
+        bs = src.get_bytes()
+        new_bytes = bytearray(bs)
+        parser = ts.Parser(ts.Language(tsjava.language()))
+        tree = parser.parse(bs)
+
+        query = ts.Query(
+            ts.Language(tsjava.language()),
+            "[(line_comment)] @item",
+        )
+        queryCursor = ts.QueryCursor(query)
+        captures = queryCursor.captures(tree.root_node)
+        if captures:
+            ranges = [(node.start_byte, node.end_byte) for node in captures["item"]]
+
+            for start, end in sorted(ranges, reverse=True):
+                del new_bytes[start:end]
+
+        new_bytes = new_bytes.strip()
+        src.path.write_bytes(bytes(new_bytes))
+        assert src.path.exists()
+
+
 class DecompileNormalizer(DependentNormalizer):
     def __init__(self):
         self.depends_on_normalizer = CompileNormalizer()
@@ -77,6 +103,7 @@ class DecompileNormalizer(DependentNormalizer):
     def __call__(self, sources: list[str], targets: list[str]):
         logger.info("Decompiling compiled files")
         rust_batch_decompile(sources, targets)
+        remove_comments(targets)
 
 
 class OptimizingNormalizer(DependentNormalizer):
@@ -111,6 +138,7 @@ class OptimizedDecompiledNormalizer(DependentNormalizer):
     def __call__(self, sources: list[str], targets: list[str]):
         logger.info("Decompiling optimized files")
         rust_batch_decompile(sources, targets)
+        remove_comments(targets)
 
 
 class DecompileWOImports(DependentNormalizer):
@@ -147,4 +175,26 @@ class DecompileWOImports(DependentNormalizer):
             new_bytes = new_bytes.strip()
             t = Path(t)
             t.write_bytes(bytes(new_bytes))
+            assert t.exists()
+
+
+class HashedProblemLabel(DependentNormalizer):
+    def __init__(self):
+        self.depends_on_normalizer = IDNormalizer()
+
+    @property
+    def name(self):
+        return "hashed_src_label"
+
+    @property
+    def required_output_file_extension(self) -> str | None:
+        return ".txt"
+
+    def __call__(self, sources, targets):
+        for s, t in zip(sources, targets):
+            src = Source(Path(s))
+            hashed_label = sha512(src.label.encode("utf-8")).digest() * 5
+
+            t = Path(t)
+            t.write_bytes(hashed_label)
             assert t.exists()

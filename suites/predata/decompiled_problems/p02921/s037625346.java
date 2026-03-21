@@ -1,8 +1,8 @@
 import java.util.ArrayList;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Edge extends ArrayList<P>
 {
@@ -10,9 +10,9 @@ class Edge extends ArrayList<P>
 import java.util.ArrayList;
 import java.util.Scanner;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Main
 {
@@ -100,9 +100,9 @@ class Main
         Main.ans = 0;
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class P
 {
@@ -114,9 +114,9 @@ class P
         this.cost = cost;
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Pair implements Comparable
 {
@@ -133,9 +133,9 @@ class Pair implements Comparable
         return ((Pair)o).from - this.from;
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Town
 {

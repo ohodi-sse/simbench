@@ -2,9 +2,9 @@ import java.io.IOException;
 import java.util.InputMismatchException;
 import java.io.InputStream;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class FastScanner
 {
@@ -151,9 +151,9 @@ import java.io.FileInputStream;
 import java.io.PrintWriter;
 import java.io.InputStream;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {

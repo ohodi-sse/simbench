@@ -2,9 +2,9 @@ import java.util.NoSuchElementException;
 import java.io.IOException;
 import java.io.InputStream;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class FastScanner
 {
@@ -99,9 +99,9 @@ class FastScanner
         return Double.parseDouble(this.next());
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {

@@ -4,9 +4,9 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class FastReader
 {
@@ -61,9 +61,9 @@ import java.io.IOException;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {
@@ -78,9 +78,9 @@ import java.util.Collections;
 import java.util.ArrayList;
 import java.io.PrintWriter;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class test
 {

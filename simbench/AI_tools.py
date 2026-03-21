@@ -9,6 +9,13 @@ from transformers import (
     PreTrainedTokenizer,
     PreTrainedModel,
 )
+# from utils.tools import TokenIns
+# from utils.model import GNN_encoder
+# import os
+#
+# import argparse
+# import torch.optim as optim
+# import numpy as np
 
 
 class AITool(ABC, NamedCallable):
@@ -93,3 +100,85 @@ class GraphCodeBERT(AITool):
 
     def _load_tokenizer(self):
         return AutoTokenizer.from_pretrained("microsoft/graphcodebert-base")
+
+
+# class GraphCode2Vec(AITool):
+#     @property
+#     def name(self):
+#         return "GraphCode2Vec"
+#
+#     def args(self, gnn, pretrain_path, gp):
+#         args = {}
+#
+#         args["device"] = 0
+#         args["sub_token_path"] = "../processing_tools/graphcode2vec/source/tokens/jars"
+#         args["emb_file"] = "../processing_tools/graphcode2vec/source/emb100.txt"
+#         args["num_layer"] = 5
+#         args["lstm_emb_dim"] = 150
+#         args["JK"] = sum
+#         args["dropout_ratio"] = 0.2
+#         args["graph_pooling"] = gp
+#         args["gnn_type"] = gnn
+#         args["subword_embedding"] = "lstm"
+#         args["bidirection"] = True
+#         args["repWay"] = "append"
+#         args["input_model_file"] = pretrain_path
+#
+#         return args
+#
+#     def _load_model(self):
+#         args = self.args(
+#             gnn="gat",
+#             pretrain_path="../processing_tools/graphcode2vec/pretrain_model/context_attention/gat/model_0.pth",
+#             gp="attention",
+#         )
+#         torch.manual_seed(0)
+#         np.random.seed(0)
+#         device = (
+#             torch.device("cuda:" + str(args["device"]))
+#             if torch.cuda.is_available()
+#             else torch.device("cpu")
+#         )
+#         if torch.cuda.is_available():
+#             torch.cuda.manual_seed_all(0)
+#
+#         num_class = 5
+#
+#         # set up model
+#         tokenizer_word2vec = TokenIns(
+#             word2vec_file=os.path.join(args["sub_token_path"], args["emb_file"]),
+#             tokenizer_file=os.path.join(args["sub_token_path"], "fun.model"),
+#         )
+#         embeddings, word_emb_dim, vocab_size = (
+#             tokenizer_word2vec.load_word2vec_embeddings()
+#         )
+#         model = GNN_encoder(
+#             args["num_layer"],
+#             vocab_size,
+#             word_emb_dim,
+#             args["lstm_emb_dim"],
+#             num_class,
+#             JK=args["JK"],
+#             drop_ratio=args["dropout_ratio"],
+#             graph_pooling=args["graph_pooling"],
+#             gnn_type=args["gnn_type"],
+#             subword_emb=args["subword_embedding"],
+#             bidrection=args["bidirection"],
+#             task="java250",
+#             repWay=args["repWay"],
+#         )
+#         model.gnn.embedding.fine_tune_embeddings(True)
+#
+#         model.gnn.embedding.init_embeddings(embeddings)
+#         print(f"Load Pretraning model {args['input_model_file']}")
+#         model.from_pretrained(args["input_model_file"] + ".pth", device)
+#
+#         return model
+#
+#     def _load_tokenizer(self):
+#         # Since the tokenization has been built into the model in graphcode2vec
+#         # we simply make a dummy function
+#         def tokenizer(code, return_tensors, truncation, padding):
+#             return code
+#
+#         return tokenizer

@@ -5,9 +5,9 @@ import java.util.Scanner;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Main
 {

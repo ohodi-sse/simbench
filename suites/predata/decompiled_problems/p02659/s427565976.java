@@ -6,9 +6,9 @@ import java.io.InputStreamReader;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class In
 {
@@ -81,9 +81,9 @@ class In
         return array;
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {
@@ -113,9 +113,9 @@ import java.util.StringJoiner;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Out
 {

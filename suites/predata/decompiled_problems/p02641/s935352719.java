@@ -8,9 +8,9 @@ import java.io.Reader;
 import java.io.BufferedReader;
 import java.io.InputStreamReader;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public final class Main
 {

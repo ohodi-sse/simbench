@@ -1,3 +1,12 @@
+from simbench.plots import (
+    mds_clustering_plot,
+    cluster_boxplot,
+    good_edges,
+    good_majority_cluster_cover,
+    biggest_cluster,
+    plot_critical_line,
+)
+from simbench.normalizers import IDNormalizer, HashedProblemLabel
 from simbench.comparing import wilcoxon_signed_rank_test, find_analysis_difference
 import click
 from pathlib import Path
@@ -17,6 +26,7 @@ from simbench.analysis import (
     get_all_normalizers,
     init_analysis,
     get_all_tools,
+    CompressionTool,
 )
 
 
@@ -160,6 +170,44 @@ def diff_normalizer(
 
 
 @click.command()
+@click.argument("suite", type=click.Path(file_okay=True, path_type=Path))
+def mds_plot(suite: Path):
+    from simbench.compressors import Zstd
+    from simbench.classification import KNN
+    from simbench.metrics import NCD
+    from simbench.normalizers import OptimizedDecompiledNormalizer
+
+    bld = Builder(logger)
+    analysis1 = init_analysis(
+        CompressionTool(NCD(), Zstd(1)),
+        Suite(suite),
+        [KNN(1)],
+        IDNormalizer(),
+    )
+    analysis2 = init_analysis(
+        CompressionTool(NCD(), Zstd(1)),
+        Suite(suite),
+        [KNN(1)],
+        HashedProblemLabel(),  # OptimizedDecompiledNormalizer(),
+    )
+
+    fig, ax = plt.subplots(3, 1)
+    good_edges(bld, analysis1, ax[0])
+    good_edges(bld, analysis2, ax[0])
+
+    biggest_cluster(bld, analysis1, ax[1])
+    biggest_cluster(bld, analysis2, ax[1])
+
+    good_majority_cluster_cover(bld, analysis1, ax[2])
+    good_majority_cluster_cover(bld, analysis2, ax[2])
+
+    plt.show()
+
+    # cluster_boxplot(bld, analysis1, analysis2)
+    # mds_clustering_plot(bld, analysis1)
+
+
+@click.command()
 @click.argument("file1", type=click.Path(file_okay=True, path_type=Path))
 @click.argument("file2", type=click.Path(file_okay=True, path_type=Path))
 @click.option("--key", default="distance")
@@ -167,6 +215,7 @@ def wilcoxon(file1, file2, key):
     wilcoxon_signed_rank_test(file1, file2, key)
 
 
+cli.add_command(mds_plot)
 cli.add_command(wilcoxon)
 cli.add_command(diff_normalizer)
 cli.add_command(show_file)

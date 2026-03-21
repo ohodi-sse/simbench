@@ -29,6 +29,7 @@ from simbench.normalizers import (
     DecompileWOImports,
     DecompileNormalizer,
     OptimizedDecompiledNormalizer,
+    HashedProblemLabel,
 )
 
 from simbench.tables import (
@@ -135,6 +136,7 @@ def get_all_normalizers():
         OptimizedDecompiledNormalizer(),
         GoogleFormatter(),
         DecompileWOImports(),
+        HashedProblemLabel(),
     ]
 
 

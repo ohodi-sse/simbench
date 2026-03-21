@@ -220,3 +220,7 @@ __marimo__/
 nixfeedback.txt
 prof/
 suites/data/*
+
+# Submodules
+processing_tools/graphcode2vec
+processing_tools/code2vec

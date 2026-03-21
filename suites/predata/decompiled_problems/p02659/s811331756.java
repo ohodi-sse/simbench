@@ -5,9 +5,9 @@ import java.util.Objects;
 import java.io.BufferedReader;
 import java.math.BigDecimal;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {

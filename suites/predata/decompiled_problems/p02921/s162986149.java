@@ -8,9 +8,9 @@ import java.io.InputStream;
 import java.io.OutputStream;
 import java.io.PrintWriter;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {
@@ -94,9 +94,9 @@ public class Main
 }
 import java.util.Objects;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class Pair
 {

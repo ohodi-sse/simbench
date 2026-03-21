@@ -2,9 +2,9 @@ import java.util.NoSuchElementException;
 import java.io.IOException;
 import java.io.InputStream;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class FastScanner
 {
@@ -104,9 +104,9 @@ import java.util.HashSet;
 import java.io.PrintWriter;
 import java.util.Set;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {

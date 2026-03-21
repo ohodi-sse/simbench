@@ -50,38 +50,34 @@ fn rust_pairwise_compressions(
     }
 }
 
-#[pyfunction]
-#[pyo3(name = "rust_batch_compile")]
-#[pyo3(signature = (source_strings, target_strings, /))]
-fn rust_batch_compile(source_strings: Vec<String>, target_strings: Vec<String>) -> PyResult<()> {
-    batch_compile(source_strings, target_strings)
-        .map_err(|e| PyRuntimeError::new_err(format!("{:?}", e)))
-}
-#[pyfunction]
-#[pyo3(name = "rust_batch_optimize")]
-#[pyo3(signature = (source_strings, target_strings, /))]
-fn rust_batch_optimize(source_strings: Vec<String>, target_strings: Vec<String>) -> PyResult<()> {
-    batch_optimize(source_strings, target_strings)
-        .map_err(|e| PyRuntimeError::new_err(format!("{:?}", e)))
-}
-#[pyfunction]
-#[pyo3(name = "rust_batch_decompile")]
-#[pyo3(signature = (source_strings, target_strings, /))]
-fn rust_batch_decompile(source_strings: Vec<String>, target_strings: Vec<String>) -> PyResult<()> {
-    batch_decompile(source_strings, target_strings)
-        .map_err(|e| PyRuntimeError::new_err(format!("{:?}", e)))
+macro_rules! expose_rust_fn {
+    ($name:ident,$python_name:literal,$f:ident) => {
+        #[pyfunction]
+        #[pyo3(name = $python_name)]
+        #[pyo3(signature = (source_strings, target_strings, /))]
+        fn $name(source_strings: Vec<String>, target_strings: Vec<String>) -> PyResult<()> {
+            $f(&source_strings, &target_strings)
+                .map_err(|e| PyRuntimeError::new_err(format!("{:?}", e)))
+        }
+    };
 }
 
-#[pyfunction]
-#[pyo3(name = "rust_batch_format")]
-#[pyo3(signature = (source_strings, target_strings, /))]
-fn rust_batch_format(source_strings: Vec<String>, target_strings: Vec<String>) -> PyResult<()> {
-    batch_format(source_strings, target_strings)
-        .map_err(|e| PyRuntimeError::new_err(format!("{:?}", e)))
-}
+expose_rust_fn!(rust_batch_compile, "rust_batch_compile", batch_compile);
+expose_rust_fn!(
+    rust_batch_decompile,
+    "rust_batch_decompile",
+    batch_decompile
+);
+expose_rust_fn!(rust_batch_optimize, "rust_batch_optimize", batch_optimize);
+expose_rust_fn!(rust_batch_format, "rust_batch_format", batch_format);
 
 #[pymodule]
 fn rust_src(_py: Python, m: &Bound<'_, PyModule>) -> PyResult<()> {
+    rayon::ThreadPoolBuilder::new()
+        .num_threads(4)
+        .build_global()
+        .unwrap();
+
     m.add_function(wrap_pyfunction!(rust_compressions, m)?)?;
     m.add_function(wrap_pyfunction!(rust_pairwise_compressions, m)?)?;
     m.add_function(wrap_pyfunction!(rust_batch_decompile, m)?)?;

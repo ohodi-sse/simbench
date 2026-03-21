@@ -1,7 +1,3 @@
-// 
-// Decompiled by Procyon v0.6.0
-// 
-
 class Main
 {
     static final long MOD = 1000000007L;
@@ -22,9 +18,9 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.Closeable;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class hayami implements Closeable
 {

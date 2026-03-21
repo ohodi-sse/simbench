@@ -5,9 +5,9 @@ import java.io.InputStream;
 import java.util.StringTokenizer;
 import java.io.BufferedReader;
 
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 class FastScanner
 {
@@ -79,9 +79,9 @@ class FastScanner
         return array;
     }
 }
-// 
-// Decompiled by Procyon v0.6.0
-// 
+
+
+
 
 public class Main
 {
