@@ -27,6 +27,9 @@ def test_suite():
     shutil.rmtree(suite.root / "decompiled_problems", ignore_errors=True)
     shutil.rmtree(suite.root / "google_java_formatted_problems", ignore_errors=True)
     shutil.rmtree(suite.root / "imports_removed_problems", ignore_errors=True)
+    shutil.rmtree(suite.root / "optimized_decompiled_problems", ignore_errors=True)
+    shutil.rmtree(suite.root / "decompiled_wo_imports_problems", ignore_errors=True)
+    shutil.rmtree(suite.root / "hashed_src_label_problems", ignore_errors=True)
 
 
 @pytest.fixture(params=[tool for tool in get_all_tools()])

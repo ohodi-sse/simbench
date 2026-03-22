@@ -19,9 +19,10 @@ def test_knn_classify(test_tool, test_suite, test_bld, test_normalizer):
 
     classifiers = analysis.classification_nodes
     cl_df = classifiers["knn-3"].pull(test_bld)
+    print(cl_df.collect())
 
     classification = cl_df.filter(pl.col("src") == test_src).collect()
-
+    print(classification)
     assert classification["labelled_as"].item() in ["class1", "class2"], (
         f"{cl_df.collect()}"
     )

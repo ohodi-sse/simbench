@@ -1,3 +1,5 @@
+import os
+from abc import abstractmethod
 from matplotlib import pyplot as plt
 import numpy as np
 import polars as pl
@@ -8,7 +10,13 @@ from sklearn.metrics import (
 )
 from sklearn import manifold
 
-from simbench.build import figurenode, schema
+from simbench.build import (
+    figurenode,
+    schema,
+    Node,
+    Constant,
+    DataFrameStore,
+)
 from simbench.tables import ClassificationTable, DistanceTable
 
 from matplotlib.patches import Patch
@@ -21,6 +29,55 @@ from collections import deque
 import matplotlib.colors as mcolors
 from simbench.build import Builder
 from loguru import logger
+
+
+class Plot:
+    name: str
+    xlabel: str
+    ylabel: str
+    title: str
+
+    @abstractmethod
+    def compute_data(self, bld, analysis): ...
+
+    def plot(self, data: pl.DataFrame, ax: Axes, label: str, xlog=False, ylog=False):
+        ax.set_xlabel(self.xlabel)
+        ax.set_ylabel(self.ylabel)
+        ax.set_title(self.title)
+
+        if xlog:
+            ax.set_xscale("log")
+        if ylog:
+            ax.set_yscale("log")
+
+        ax.plot(data["x"], data["y"], label=label)
+        ax.legend()
+
+        return ax
+
+
+def plot_node(plotter: Plot):
+    def plot_analysis(bld: Builder, analysis, ax: Axes, force=False):
+        plot_dir = analysis.suite.root / "results" / "plot_data"
+        plot_dir.mkdir(parents=True, exist_ok=True)
+
+        plot_file = plot_dir / f"{analysis.parameter_name}_{plotter.name}.parquet"
+
+        if force:
+            os.remove(plot_file)
+            bld.log.info(f"Deleted {plot_file} to update plot")
+
+        node = Node(
+            plotter.compute_data,
+            DataFrameStore(plot_file),
+            {"analysis": Constant(analysis)},
+        )
+        data = node.pull(bld)
+
+        plot_label = f"{analysis.parameter_name}"
+        plotter.plot(data, ax, label=plot_label)
+
+    return plot_analysis
 
 
 def confusion_matrix_plot(ax: Axes, classifications: pl.LazyFrame) -> Axes:
@@ -446,47 +503,42 @@ def min_1(d: float):
     return 0.0 if d > 1.0 else d
 
 
-def good_edges(bld, analysis, ax, flag=False):
-    dist_df = analysis.distance_node.pull(bld)
-    dist_df = dist_df.filter(pl.col("src") != pl.col("tgt"))
-    dist_df = (
-        dist_df.select(
-            [
-                (pl.col("src_label") == pl.col("tgt_label")).alias("within_class"),
-                pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
-            ]
+class GoodEdges(Plot):
+    def __init__(self):
+        self.name = "good_edges_plot"
+        self.xlabel = "#Edges"
+        self.ylabel = "#Good Edges"
+        self.title = "Number of good edges when including edges in ascending order"
+
+    def compute_data(self, bld, analysis):
+        dist_df = analysis.distance_node.pull(bld)
+        dist_df = dist_df.filter(pl.col("src") != pl.col("tgt"))
+        dist_df = (
+            dist_df.select(
+                [
+                    (pl.col("src_label") == pl.col("tgt_label")).alias("within_class"),
+                    pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
+                ]
+            )
+            .sort(by="distance")
+            .collect()
         )
-        .sort(by="distance")
-        .collect()
-    )
-    plot_label = f"{analysis.normalizer.name}"
 
-    if flag:
-        good_df = dist_df.filter(pl.col("src_label") == pl.col("tgt_label"))
-        bad_df = dist_df.filter(pl.col("src_label") != pl.col("tgt_label"))
-        dist_df = pl.concat([good_df, bad_df])
-        plot_label = "Optimal curve"
+        height = int(dist_df.height)
+        dist_dict = {"x": [], "y": []}
 
-    height = int(dist_df.height)
-    dist_dict = {}
+        good_edges = 0
+        with bld.progressbar(height) as pb:
+            for i, (within_class, dist) in enumerate(dist_df.iter_rows()):
+                if within_class:
+                    good_edges += 1
 
-    good_edges = 0
-    with bld.progressbar(height) as pb:
-        for i, (within_class, dist) in enumerate(dist_df.iter_rows()):
-            if within_class:
-                good_edges += 1
+                dist_dict["x"].append(i)
+                dist_dict["y"].append(good_edges)
 
-            dist_dict[i] = good_edges
-            pb.inc(1)
+                pb.inc(1)
 
-    ax.set_xlabel("#Edges")
-    ax.set_ylabel("#Good Edges")
-    # ax.set_xscale("log")
-    ax.plot(dist_dict.keys(), dist_dict.values(), label=plot_label)
-    ax.set_title("Number of good edges when including edges in ascending order")
-    ax.legend()
-
-    return ax
+        return pl.DataFrame(dist_dict)
 
 
 def greedy_set_cover(sets_dict):
@@ -520,110 +572,107 @@ def greedy_set_cover(sets_dict):
     return selected_sets, covered_elements
 
 
-def good_majority_cluster_cover(bld, analysis, ax):
-    dist_df = analysis.distance_node.pull(bld)
-    dist_df = dist_df.filter(pl.col("src") != pl.col("tgt"))
+class GoodMajorityCluster(Plot):
+    def __init__(self):
+        self.name = "good_majority_cluster_plot"
+        self.xlabel = "#Edges"
+        self.ylabel = "#Clusters required to cover entire space"
+        self.title = "Size of greedy covering of program space"
 
-    dist_df = (
-        dist_df.select(
-            [
-                pl.col("src"),
-                pl.col("tgt"),
-                (pl.col("src_label") == pl.col("tgt_label")).alias("within_class"),
-                pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
-            ]
+    def compute_data(self, bld, analysis):
+        dist_df = analysis.distance_node.pull(bld)
+        dist_df = dist_df.filter(pl.col("src") != pl.col("tgt"))
+
+        dist_df = (
+            dist_df.select(
+                [
+                    pl.col("src"),
+                    pl.col("tgt"),
+                    (pl.col("src_label") == pl.col("tgt_label")).alias("within_class"),
+                    pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
+                ]
+            )
+            .sort(by="distance")
+            .collect()
         )
-        .sort(by="distance")
-        .collect()
-    )
 
-    height = int(dist_df.height)
-    srcs = dist_df["src"].unique().to_list()
-    sphere_dict = {src: {src} for src in srcs}
+        height = int(dist_df.height)
+        srcs = dist_df["src"].unique().to_list()
+        sphere_dict = {src: {src} for src in srcs}
 
-    dist_dict = {}
+        dist_dict = {"x": [], "y": []}
 
-    items = np.array(dist_df)
-    assert len(items) == height
+        items = np.array(dist_df)
+        assert len(items) == height
 
-    count = 50
-    with bld.progressbar(count) as pb:
-        total = 0
+        count = 50
+        with bld.progressbar(count) as pb:
+            total = 0
 
-        x = np.logspace(1, np.log10(height), count, dtype=int)
+            x = np.logspace(1, np.log10(height), count, dtype=int)
 
-        for arr in np.array_split(items, x):
-            for src, tgt, within_class, dist in arr:
+            for arr in np.array_split(items, x):
+                for src, tgt, within_class, dist in arr:
+                    if within_class:
+                        sphere_dict[src].add(tgt)
+
+                selected_sets, covered_elements = greedy_set_cover(sphere_dict.copy())
+                dist_dict["x"].append(total)
+                dist_dict["y"].append(len(selected_sets))
+
+                total += len(arr)
+
+                pb.inc(1)
+
+        return pl.DataFrame(dist_dict)
+
+
+class BiggestCluster(Plot):
+    def __init__(self):
+        self.name = "biggest_cluster_plot"
+        self.xlabel = "#Edges"
+        self.ylabel = "| max(C) |"
+        self.title = "Size of biggest cluster when including edges in ascending order"
+
+    def compute_data(self, bld, analysis):
+        dist_df = analysis.distance_node.pull(bld)
+        dist_df = dist_df.filter(pl.col("src") != pl.col("tgt"))
+
+        dist_df = (
+            dist_df.select(
+                [
+                    pl.col("src"),
+                    pl.col("tgt"),
+                    (pl.col("src_label") == pl.col("tgt_label")).alias("within_class"),
+                    pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
+                ]
+            )
+            .sort(by="distance")
+            .collect()
+        )
+
+        srcs = dist_df["src"].unique().to_list()
+        sphere_dict = {src: {src} for src in srcs}
+
+        height = int(dist_df.height)
+        dist_dict = {"x": [], "y": []}
+
+        with bld.progressbar(height) as pb:
+            biggest_cluster = 0
+            for i, (src, tgt, within_class, dist) in enumerate(dist_df.iter_rows()):
                 if within_class:
                     sphere_dict[src].add(tgt)
 
-            selected_sets, covered_elements = greedy_set_cover(sphere_dict.copy())
-            dist_dict[total] = len(selected_sets)
+                if len(sphere_dict[src]) > biggest_cluster:
+                    biggest_cluster = len(sphere_dict[src])
 
-            total += len(arr)
+                dist_dict["x"].append(i)
+                dist_dict["y"].append(biggest_cluster)
+                pb.inc(1)
 
-            pb.inc(1)
+        new_dist_df = pl.from_dict(dist_dict)
 
-    ax.set_xlabel("#Edges")
-    ax.set_xscale("log")
-    ax.set_ylabel("#Clusters required to cover entire space")
-    ax.set_title("Size of greedy covering of program space")
-    ax.plot(dist_dict.keys(), dist_dict.values(), label=f"{analysis.normalizer.name}")
-
-    ax.legend()
-
-    return ax
-
-
-def biggest_cluster(bld, analysis, ax, flag=False):
-    dist_df = analysis.distance_node.pull(bld)
-    dist_df = dist_df.filter(pl.col("src") != pl.col("tgt"))
-
-    dist_df = (
-        dist_df.select(
-            [
-                pl.col("src"),
-                pl.col("tgt"),
-                (pl.col("src_label") == pl.col("tgt_label")).alias("within_class"),
-                pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
-            ]
-        )
-        .sort(by="distance")
-        .collect()
-    )
-    plot_label = f"{analysis.normalizer.name}"
-
-    if flag:
-        good_df = dist_df.filter(pl.col("src_label") == pl.col("tgt_label"))
-        bad_df = dist_df.filter(pl.col("src_label") != pl.col("tgt_label"))
-        dist_df = pl.concat([good_df, bad_df])
-        plot_label = "Optimal curve"
-
-    srcs = dist_df["src"].unique().to_list()
-    sphere_dict = {src: {src} for src in srcs}
-
-    height = int(dist_df.height)
-    dist_dict = {}
-
-    with bld.progressbar(height) as pb:
-        biggest_cluster = 0
-        for i, (src, tgt, within_class, dist) in enumerate(dist_df.iter_rows()):
-            if within_class:
-                sphere_dict[src].add(tgt)
-
-            if len(sphere_dict[src]) > biggest_cluster:
-                biggest_cluster = len(sphere_dict[src])
-
-            dist_dict[i] = biggest_cluster
-            pb.inc(1)
-
-    ax.set_xlabel("#Edges")
-    ax.set_ylabel("| max(C) |")
-    ax.set_title("Size of biggest cluster when including edges in ascending order")
-    ax.plot(dist_dict.keys(), dist_dict.values(), label=plot_label)
-    ax.legend()
-
-    return ax
+        return new_dist_df
 
 
 @figurenode

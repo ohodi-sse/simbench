@@ -159,6 +159,28 @@ class ParquetStore(Store[pl.LazyFrame], Pullable[pl.LazyFrame]):
 
 
 @dataclass
+class DataFrameStore(Store[pl.DataFrame], Pullable[pl.DataFrame]):
+    file: Path
+
+    def __post_init__(self):
+        assert self.file.parent.exists(), (
+            f"Cannot find {self.file.parent} at callsite {Path.cwd()}"
+        )
+
+    def load(self, bld) -> pl.DataFrame | None:
+        if self.file.exists():
+            return self.pull(bld)
+        return
+
+    def store(self, item: pl.DataFrame, bld):
+        item.write_parquet(self.file)
+        assert self.file.exists(), f"Failed to create file {self.file}"
+
+    def pull(self, bld) -> pl.DataFrame:
+        return pl.read_parquet(self.file)
+
+
+@dataclass
 class FigureStore(Store[Figure]):
     file: Path
 
@@ -177,13 +199,11 @@ class Node[A](Pullable[A]):
     dependencies: dict[str, Pullable]
 
     def updated_dependencies(self):
-        status_pairs = [
-            (dep.store.store_time < self.store.store_time, dep.store.file.name)
-            for _, dep in self.dependencies.items()
-            if isinstance(dep, Node)
+        return [
+            dep.store.file.name
+            for dep in self.dependencies.values()
+            if isinstance(dep, Node) and dep.store.store_time < self.store.store_time
         ]
-
-        return [file for (val, file) in status_pairs if not val]
 
     def pull(self, bld) -> A:
         if self.updated_dependencies():

@@ -1,10 +1,11 @@
 from simbench.plots import (
     mds_clustering_plot,
     cluster_boxplot,
-    good_edges,
-    good_majority_cluster_cover,
-    biggest_cluster,
     plot_critical_line,
+    plot_node,
+    BiggestCluster,
+    GoodMajorityCluster,
+    GoodEdges,
 )
 from simbench.normalizers import IDNormalizer, HashedProblemLabel
 from simbench.comparing import wilcoxon_signed_rank_test, find_analysis_difference
@@ -192,14 +193,18 @@ def mds_plot(suite: Path):
     )
 
     fig, ax = plt.subplots(3, 1)
+
+    good_edges = plot_node(GoodEdges())
     good_edges(bld, analysis1, ax[0])
     good_edges(bld, analysis2, ax[0])
 
-    biggest_cluster(bld, analysis1, ax[1])
-    biggest_cluster(bld, analysis2, ax[1])
+    cluster_plot = plot_node(BiggestCluster())
+    cluster_plot(bld, analysis1, ax[1])
+    cluster_plot(bld, analysis2, ax[1])
 
-    good_majority_cluster_cover(bld, analysis1, ax[2])
-    good_majority_cluster_cover(bld, analysis2, ax[2])
+    good_majority = plot_node(GoodMajorityCluster())
+    good_majority(bld, analysis1, ax[2])
+    good_majority(bld, analysis2, ax[2])
 
     plt.show()
 

@@ -188,7 +188,7 @@ class HashedProblemLabel(DependentNormalizer):
 
     @property
     def required_output_file_extension(self) -> str | None:
-        return ".txt"
+        return ".java"
 
     def __call__(self, sources, targets):
         for s, t in zip(sources, targets):
@@ -196,5 +196,5 @@ class HashedProblemLabel(DependentNormalizer):
             hashed_label = sha512(src.label.encode("utf-8")).digest() * 5
 
             t = Path(t)
-            t.write_bytes(hashed_label)
+            t.write_text(hashed_label.hex())
             assert t.exists()
