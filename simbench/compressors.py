@@ -149,7 +149,7 @@ class Difflib(NamedCallable):
 class EditDistanceDiff(Diff):
     @property
     def name(self) -> str:
-        return "edit_distance_diff"
+        return "edit_distance"
 
     def __call__(self, file1: list[str], file2: list[str]) -> int:
         matcher = difflib.SequenceMatcher(None, file1, file2)

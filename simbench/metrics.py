@@ -37,7 +37,7 @@ class Metric(ABC):
 class NCD(Metric):
     @property
     def name(self) -> str:
-        return "ncd"
+        return "NCD"
 
     def metric_expr(self) -> pl.Expr:
         return (
@@ -53,7 +53,7 @@ class NCD(Metric):
 class DiffMetric(Metric):
     @property
     def name(self) -> str:
-        return "diffdistance"
+        return "diff_similarity"
 
     def metric_expr(self) -> pl.Expr:
         return (1 - pl.col("diff_len") / pl.max("diff_len")).cast(pl.Float32)
@@ -65,7 +65,7 @@ class DiffMetric(Metric):
 class NormalizedDiffMetric(Metric):
     @property
     def name(self) -> str:
-        return "normdiffdistance"
+        return "normalized_diff_similarity"
 
     def metric_expr(self) -> pl.Expr:
         return (1 - pl.min_horizontal("tgt_len", "diff_len") / pl.col("tgt_len")).cast(
@@ -79,7 +79,7 @@ class NormalizedDiffMetric(Metric):
 class SummedDiffMetric(Metric):
     @property
     def name(self) -> str:
-        return "summeddiffdistance"
+        return "summed_diff_similarity"
 
     def metric_expr(self) -> pl.Expr:
         return (1 - pl.col("diff_len") / (pl.col("src_len") + pl.col("tgt_len"))).cast(
@@ -93,7 +93,7 @@ class SummedDiffMetric(Metric):
 class GenericMetric(Metric):
     @property
     def name(self) -> str:
-        return "derived"
+        return "without_similarity_measure"
 
     def metric_expr(self) -> pl.Expr:
         return 1 - pl.col("distance")

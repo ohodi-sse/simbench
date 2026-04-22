@@ -1,26 +1,16 @@
+from simbench.evaluation import dataframe_as_latex_table
 from simbench.compressors import Diff, EditDistanceDiff, Zstd
 from simbench.AI_tools import Code2Vec
 from simbench.metrics import (
-    GenericMetric,
     DiffMetric,
     NormalizedDiffMetric,
     SummedDiffMetric,
-    NCD,
 )
 from simbench.plots import (
-    mds_clustering_plot,
-    cluster_boxplot,
-    plot_critical_line,
     plot_node,
-    BiggestCluster,
-    GoodMajorityCluster,
     GoodEdges,
     logistic_regression,
-    SumGoodEdges,
-    plot_histogram,
     Histogram,
-    gamma_regression,
-    beta_regression,
     chrissers_plot,
 )
 from simbench.normalizers import (
@@ -50,7 +40,6 @@ from simbench.analysis import (
     get_all_tools,
     CompressionTool,
     DiffTool,
-    GenericTool,
 )
 
 
@@ -159,6 +148,50 @@ def plot_comparison(
         plt.show()
 
     click.echo("Done")
+
+
+@click.command()
+@click.argument("suite", type=click.Path(file_okay=False, path_type=Path))
+@click.option("--tool", "tool_pattern", help="filter the tools to be run", default=".*")
+@click.option(
+    "--classifier",
+    "classifier_pattern",
+    help="filter on which classifiers to run",
+    default=".*",
+)
+@click.option(
+    "--normalizer",
+    "normalizer_pattern",
+    help="filter the normalizers to be run",
+    default=".*",
+)
+@click.option("--show/--no-show", default=False)
+@click.pass_obj
+def perr_table_comparisons(
+    cfg, suite, tool_pattern, classifier_pattern, normalizer_pattern, show
+):
+    bld = Builder(logger)
+
+    patterns = [
+        (".*diff.*", "(unprocessed)"),
+        ("(.*diff.*|.*ncd.*)", "(unprocessed|decompiled)"),
+    ]
+    for tool_pattern, normalizer_pattern in patterns:
+        filtered_tools = [t for t in cfg.tools if t.matches(tool_pattern)]
+        filtered_classifiers = [
+            c for c in cfg.classifiers if c.matches(classifier_pattern)
+        ]
+        normalizers = [
+            norm for norm in get_all_normalizers() if norm.matches(normalizer_pattern)
+        ]
+
+        comparison = AnalysisComparison(
+            Suite(suite), filtered_tools, filtered_classifiers, normalizers
+        )
+
+        table = comparison.table_comparison.pull(bld).collect()
+        latex_table = dataframe_as_latex_table(table)
+        print(latex_table)
 
 
 @click.command()
@@ -330,90 +363,6 @@ def perr_fit(suite: Path, force: bool):
 
     bld = Builder(logger)
 
-    analysis1 = init_analysis(
-        DiffTool(DiffMetric(), EditDistanceDiff()),
-        Suite(suite),
-        [KNN(1)],
-        IDNormalizer(),
-    )
-
-    analysis2 = init_analysis(
-        DiffTool(NormalizedDiffMetric(), EditDistanceDiff()),
-        Suite(suite),
-        [KNN(1)],
-        IDNormalizer(),
-    )
-    analysis3 = init_analysis(
-        DiffTool(SummedDiffMetric(), EditDistanceDiff()),
-        Suite(suite),
-        [KNN(1)],
-        IDNormalizer(),
-    )
-
-    analysis4 = init_analysis(
-        DiffTool(DiffMetric(), EditDistanceDiff()),
-        Suite(suite),
-        [KNN(1)],
-        DecompileNormalizer(),
-    )
-
-    analysis5 = init_analysis(
-        DiffTool(NormalizedDiffMetric(), EditDistanceDiff()),
-        Suite(suite),
-        [KNN(1)],
-        DecompileNormalizer(),
-    )
-    analysis6 = init_analysis(
-        DiffTool(SummedDiffMetric(), EditDistanceDiff()),
-        Suite(suite),
-        [KNN(1)],
-        DecompileNormalizer(),
-    )
-
-    analysis7 = init_analysis(
-        CompressionTool(NCD(), Zstd(1)),
-        Suite(suite),
-        [KNN(1)],
-        DecompileNormalizer(),
-    )
-
-    analysis8 = init_analysis(
-        CompressionTool(NCD(), Zstd(1)),
-        Suite(suite),
-        [KNN(1)],
-        DecompileNormalizer(),
-    )
-    analysis9 = init_analysis(
-        CompressionTool(NCD(), Zstd(1)),
-        Suite(suite),
-        [KNN(1)],
-        DecompileNormalizer(),
-    )
-
-    # fig, ax = plt.subplots(3, 3, figsize=(8, 3), layout="constrained")
-    fig, ax = plt.subplots(1, 1, figsize=(8, 3), layout="constrained")
-    # plot_histogram(bld, analysis1, ax[0], "diff max")
-    # plot_histogram(bld, analysis2, ax[1], "diff norm")
-    # plot_histogram(bld, analysis3, ax[2], "diff sum")
-    chrissers_plot(bld, analysis6, ax, "diff max")
-    # chrissers_plot(bld, analysis2, ax[0][1], "diff norm")
-    # chrissers_plot(bld, analysis3, ax[0][2], "diff sum")
-    #
-    # chrissers_plot(bld, analysis4, ax[1][0], "diff max")
-    # chrissers_plot(bld, analysis5, ax[1][1], "diff norm")
-    # chrissers_plot(bld, analysis6, ax[1][2], "diff sum")
-    #
-    # chrissers_plot(bld, analysis7, ax[2][0], "diff max")
-    # chrissers_plot(bld, analysis8, ax[2][1], "diff norm")
-    # chrissers_plot(bld, analysis9, ax[2][2], "diff sum")
-    #
-    # gamma_regression(bld, analysis1, ax[0], "diff max")
-    # gamma_regression(bld, analysis2, ax[1], "diff norm")
-    # gamma_regression(bld, analysis3, ax[2], "diff sum")
-    # beta_regression(bld, analysis1, ax[0], "diff max")
-    # beta_regression(bld, analysis2, ax[1], "diff norm")
-    # beta_regression(bld, analysis3, ax[2], "diff sum")
-
     plt.savefig("christians_plot_ide.pdf", dpi=300, bbox_inches="tight")
     plt.show()
 
@@ -434,3 +383,4 @@ cli.add_command(diff_normalizer)
 cli.add_command(show_file)
 cli.add_command(analyse)
 cli.add_command(plot_comparison)
+cli.add_command(perr_table_comparisons)

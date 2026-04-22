@@ -1,4 +1,12 @@
-def log_loss(bld: Builder, analysis):
+import polars as pl
+from great_tables import GT
+
+
+def min_1(d: float):
+    return 0.0 if d > 1.0 else d
+
+
+def log_loss(bld, analysis):
     from sklearn.metrics import log_loss
 
     dist_df = analysis.distance_node.pull(bld)
@@ -16,5 +24,10 @@ def log_loss(bld: Builder, analysis):
     y_true = dist_df["within_class"]
     y_pred = dist_df["distance"]
 
-    res = log_loss(y_true, y_pred)
-    print(res)
+    return log_loss(y_true, y_pred)
+
+
+def dataframe_as_latex_table(df: pl.DataFrame):
+    df = df.with_columns(pl.col(pl.Utf8).str.replace_all("_", " "))
+    gt = GT(df).fmt_number(columns=["Loss"], decimals=3)
+    return gt.as_latex()

@@ -1,4 +1,5 @@
 from __future__ import annotations
+import hashlib
 from simbench.AI_tools import CodeBERT, GraphCodeBERT, Code2Vec
 
 from typing import Sequence
@@ -11,7 +12,7 @@ from abc import ABC, abstractmethod
 
 
 from simbench.compressors import Compressor, Diff, EditDistanceDiff
-from simbench.metrics import Metric
+from simbench.metrics import Metric, NormalizedDiffMetric, SummedDiffMetric
 import time
 
 import loguru
@@ -42,6 +43,7 @@ from simbench.tables import (
     pairwise_diff,
     classifications,
     performance,
+    evaluation,
 )
 from simbench.plots import (
     classification_overview_figure,
@@ -56,7 +58,15 @@ class Tool(ABC):
 
     @property
     @abstractmethod
-    def name(self) -> str: ...
+    def tool_name(self) -> str: ...
+
+    @property
+    def similarity_name(self) -> str:
+        return self.metric.name
+
+    @property
+    def name(self) -> str:
+        return f"{self.tool_name}_{self.similarity_name}"
 
     def matches(self, match):
         import re
@@ -69,8 +79,8 @@ class CompressionTool(Tool):
     compressor: Compressor
 
     @property
-    def name(self):
-        return f"{self.compressor.name}-{self.compressor.level}-{self.metric.name}"
+    def tool_name(self):
+        return f"{self.compressor.name}-{self.compressor.level}"
 
 
 @dataclass
@@ -78,8 +88,8 @@ class DiffTool(Tool):
     diff: Diff
 
     @property
-    def name(self):
-        return f"{self.diff.name}-{self.metric.name}"
+    def tool_name(self):
+        return self.diff.name
 
 
 @dataclass
@@ -89,8 +99,8 @@ class GenericTool(Tool):
     generic: NamedCallable
 
     @property
-    def name(self):
-        return f"{self.generic.name}-{self.metric.name}"
+    def tool_name(self):
+        return f"{self.generic.name}"
 
     def __call__(self):
         return self.generic
@@ -111,16 +121,18 @@ def get_all_tools():
 
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
     diff_tools = [
-        DiffTool(DiffMetric(), EditDistanceDiff())
+        DiffTool(DiffMetric(), EditDistanceDiff()),
+        DiffTool(NormalizedDiffMetric(), EditDistanceDiff()),
+        DiffTool(SummedDiffMetric(), EditDistanceDiff()),
     ]  # BSDiff is veeeery slooow
-    other_tools = [GenericTool(GenericMetric(), Difflib())]
+    # other_tools = [GenericTool(GenericMetric(), Difflib())]
     ai_tools = [
         GenericTool(GenericMetric(), CodeBERT()),
         GenericTool(GenericMetric(), GraphCodeBERT()),
         GenericTool(GenericMetric(), Code2Vec()),
     ]
 
-    return comp_tools + ai_tools + other_tools
+    return comp_tools + ai_tools + diff_tools
 
 
 def get_all_classifiers(steps: int = 20) -> Sequence[Classifier]:
@@ -188,10 +200,19 @@ class Analysis(ABC):
     @property
     def default_path(self):
         default_path = (
-            self.suite.root / "results" / f"{self.normalizer.name}" / self.tool.name
+            self.suite.root
+            / "results"
+            / f"{self.normalizer.name}"
+            / self.tool.tool_name
         )
         default_path.mkdir(parents=True, exist_ok=True)
         return default_path
+
+    @property
+    def with_metric_path(self):
+        metric_path = self.default_path / f"{self.tool.similarity_name}"
+        metric_path.mkdir(parents=True, exist_ok=True)
+        return metric_path
 
     @property
     def parameter_name(self):
@@ -199,26 +220,26 @@ class Analysis(ABC):
 
     @property
     def distance_file(self):
-        return self.default_path / "distances.parquet"
+        return self.with_metric_path / "distances.parquet"
 
     @property
     def performance_file(self):
-        return self.default_path / "performances.parquet"
+        return self.with_metric_path / "performances.parquet"
 
     @property
     def classification_dir(self):
-        classification_dir = self.default_path / "classifications"
+        classification_dir = self.with_metric_path / "classifications"
         classification_dir.mkdir(parents=True, exist_ok=True)
 
         return classification_dir
 
     @property
     def performance_overview_file(self):
-        return self.default_path / "performance_overview.pdf"
+        return self.with_metric_path / "performance_overview.pdf"
 
     @property
     def classification_plot_file(self):
-        return self.default_path / "classification_plots.pdf"
+        return self.with_metric_path / "classification_plots.pdf"
 
     @property
     def source_nodes(self):
@@ -379,5 +400,15 @@ class AnalysisComparison:
     def performance_comparison_pdf(self):
         return fscore_comparison_figure(
             path=self.suite.root / "results" / "performance_comparison.pdf",
+            **self.analyses,
+        )
+
+    @property
+    def table_comparison(self):
+        h = hashlib.new("sha256")
+        h.update("".join(self.analyses.keys()).encode("utf-8"))
+        hashstr = h.hexdigest()[:16]
+        return evaluation(
+            path=self.suite.root / "results" / f"{hashstr}_table_comparison.parquet",
             **self.analyses,
         )

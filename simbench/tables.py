@@ -1,3 +1,4 @@
+from simbench.evaluation import log_loss
 import polars as pl
 from sklearn.metrics import (
     precision_recall_fscore_support,
@@ -322,6 +323,30 @@ def performance(schema: pl.Schema, bld: Builder, **classifications) -> pl.LazyFr
             Prec=precision,
             Rec=recall,
             F1=f_score,
+        )
+
+    return out.getvalue()
+
+
+class EvaluationTable:
+    SimilarityMeasure: pl.String
+    Tool: pl.String
+    Normalizer: pl.String
+    Loss: pl.Float32
+
+
+@tablenode(schema(EvaluationTable))
+def evaluation(schema: pl.Schema, bld: Builder, **analyses) -> pl.LazyFrame:
+    out = TableBuilder(schema)
+
+    for _, analysis in analyses.items():
+        mean_log_loss = log_loss(bld, analysis)
+
+        out.add(
+            SimilarityMeasure=analysis.tool.similarity_name,
+            Tool=analysis.tool.tool_name,
+            Normalizer=analysis.normalizer.name,
+            Loss=mean_log_loss,
         )
 
     return out.getvalue()

@@ -17,6 +17,7 @@ dependencies = [
     "click>=8.3.0",
     "code2vec",
     "graphcode2vec",
+    "great-tables>=0.21.0",
     "jupyter>=1.1.1",
     "loguru>=0.7.3",
     "matplotlib>=3.10.7",
