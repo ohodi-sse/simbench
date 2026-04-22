@@ -1,0 +1,51 @@
+import java.util.StringTokenizer;
+import java.io.IOException;
+import java.io.Reader;
+import java.io.BufferedReader;
+import java.io.InputStreamReader;
+
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final BufferedReader bufferedReader = new BufferedReader(new InputStreamReader(System.in));
+        final StringBuilder sb = new StringBuilder();
+        final String line = bufferedReader.readLine();
+        int max = 0;
+        int n = 0;
+        for (int i = 0; i < line.length(); ++i) {
+            if (line.charAt(i) == 'R') {
+                ++n;
+            }
+            else {
+                max = Math.max(max, n);
+                n = 0;
+            }
+        }
+        sb.append(Math.max(max, n));
+        System.out.print(sb.toString());
+    }
+    
+    private static int nextInt(final BufferedReader bufferedReader) throws IOException {
+        return Integer.parseInt(bufferedReader.readLine());
+    }
+    
+    private static int[] nextIntArray(final BufferedReader bufferedReader, final int n) throws IOException {
+        final StringTokenizer stringTokenizer = new StringTokenizer(bufferedReader.readLine());
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = Integer.parseInt(stringTokenizer.nextToken());
+        }
+        return array;
+    }
+    
+    static class Pair<A, B>
+    {
+        A first;
+        B second;
+        
+        public Pair(final A first, final B second) {
+            this.first = first;
+            this.second = second;
+        }
+    }
+}

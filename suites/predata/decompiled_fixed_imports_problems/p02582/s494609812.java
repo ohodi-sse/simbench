@@ -1,0 +1,154 @@
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.io.IOException;
+import java.io.BufferedReader;
+
+class Main
+{
+    static final BufferedReader br;
+    
+    public static void main(final String[] array) throws IOException {
+        final char c = readC();
+        final char c2 = readC();
+        final char c3 = readC();
+        if (c == 'R' && c2 == 'R' && c3 == 'R') {
+            pl("3");
+        }
+        else if ((c == 'R' && c2 == 'R') || (c3 == 'R' && c2 == 'R')) {
+            pl("2");
+        }
+        else if (c == 'R' || c2 == 'R' || c3 == 'R') {
+            pl("1");
+        }
+        else {
+            pl("0");
+        }
+    }
+    
+    public static void pr(final String s) {
+        System.out.print(s);
+    }
+    
+    public static void pl(final String x) {
+        System.out.println(x);
+    }
+    
+    public static String read() {
+        try {
+            return ctos((char)Main.br.read());
+        }
+        catch (final IOException ex) {
+            ex.printStackTrace();
+            return "";
+        }
+    }
+    
+    public static char readC() {
+        try {
+            return (char)Main.br.read();
+        }
+        catch (final IOException ex) {
+            ex.printStackTrace();
+            return '\uffff';
+        }
+    }
+    
+    public static String readL() {
+        try {
+            return Main.br.readLine();
+        }
+        catch (final IOException ex) {
+            ex.printStackTrace();
+            return "";
+        }
+    }
+    
+    public static String readS() {
+        final StringBuilder sb = new StringBuilder();
+    Label_0008_Outer:
+        while (true) {
+            while (true) {
+                try {
+                    while (true) {
+                        final int read = Main.br.read();
+                        if (read == -1 || (char)read == ' ' || (char)read == '\n') {
+                            break;
+                        }
+                        sb.append((char)read);
+                    }
+                    break;
+                }
+                catch (final IOException ex) {
+                    ex.printStackTrace();
+                    continue Label_0008_Outer;
+                }
+                continue;
+            }
+        }
+        return sb.toString();
+    }
+    
+    public static int readI() {
+        return stoi(readS());
+    }
+    
+    public static long readLong() {
+        return stol(readS());
+    }
+    
+    public static long stol(final String s) {
+        return Long.parseLong(s);
+    }
+    
+    public static String[] readSs() {
+        return readL().split(" ");
+    }
+    
+    public static int[] readIs() {
+        return stoi(readSs());
+    }
+    
+    public static int stoi(final String s) {
+        return Integer.parseInt(s);
+    }
+    
+    public static int[] stoi(final String[] array) {
+        final int[] array2 = new int[array.length];
+        for (int i = 0; i < array.length; ++i) {
+            array2[i] = stoi(array[i]);
+        }
+        return array2;
+    }
+    
+    public static String itos(final int i) {
+        return String.valueOf(i);
+    }
+    
+    public static String[] itos(final int[] array) {
+        final String[] array2 = new String[array.length];
+        for (int i = 0; i < array.length; ++i) {
+            array2[i] = itos(array[i]);
+        }
+        return array2;
+    }
+    
+    public static String ctos(final char c) {
+        return String.valueOf(c);
+    }
+    
+    public static String cstos(final char[] value) {
+        return new String(value);
+    }
+    
+    public static char stoc(final String s) {
+        return s.charAt(0);
+    }
+    
+    public static char[] stocs(final String s) {
+        return s.toCharArray();
+    }
+    
+    static {
+        br = new BufferedReader(new InputStreamReader(System.in));
+    }
+}

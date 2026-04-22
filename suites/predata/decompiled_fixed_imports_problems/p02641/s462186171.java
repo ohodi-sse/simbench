@@ -1,0 +1,36 @@
+import java.util.Collections;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        int x = nextInt;
+        int x2 = nextInt;
+        final Integer[] array2 = new Integer[nextInt2];
+        for (int i = 0; i < nextInt2; ++i) {
+            array2[i] = scanner.nextInt();
+        }
+        Arrays.sort(array2);
+        for (final int intValue : array2) {
+            if (x == intValue) {
+                x = intValue + 1;
+            }
+        }
+        Arrays.sort(array2, Collections.reverseOrder());
+        for (final int intValue2 : array2) {
+            if (x2 == intValue2) {
+                x2 = intValue2 - 1;
+            }
+        }
+        if (Math.abs(x - nextInt) < Math.abs(x2 - nextInt)) {
+            System.out.println(x);
+        }
+        else {
+            System.out.println(x2);
+        }
+    }
+}

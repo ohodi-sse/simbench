@@ -1,0 +1,75 @@
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.io.BufferedReader;
+import java.io.IOException;
+
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        int i = new MyReader().i();
+        int n = 1;
+        while ((i >>= 1) > 0) {
+            ++n;
+        }
+        println(1 << n - 1);
+    }
+    
+    static void print(final Object o) {
+        System.out.print(o.toString());
+    }
+    
+    static void println(final Object o) {
+        System.out.println(o.toString());
+    }
+    
+    static int Int(final String s) {
+        return Integer.parseInt(s);
+    }
+    
+    static long Long(final String s) {
+        return Long.parseLong(s);
+    }
+    
+    static class MyReader extends BufferedReader
+    {
+        MyReader() {
+            super(new InputStreamReader(System.in));
+        }
+        
+        String s() throws IOException {
+            return this.readLine();
+        }
+        
+        String[] ss() throws IOException {
+            return this.s().split(" ");
+        }
+        
+        int i() throws IOException {
+            return Main.Int(this.s());
+        }
+        
+        int[] ii() throws IOException {
+            final String[] ss = this.ss();
+            final int length = ss.length;
+            final int[] array = new int[length];
+            for (int i = 0; i < length; ++i) {
+                array[i] = Main.Int(ss[i]);
+            }
+            return array;
+        }
+        
+        long l() throws IOException {
+            return Main.Long(this.s());
+        }
+        
+        long[] ll() throws IOException {
+            final String[] ss = this.ss();
+            final int length = ss.length;
+            final long[] array = new long[length];
+            for (int i = 0; i < length; ++i) {
+                array[i] = Main.Long(ss[i]);
+            }
+            return array;
+        }
+    }
+}

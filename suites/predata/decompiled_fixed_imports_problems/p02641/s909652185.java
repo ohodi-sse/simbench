@@ -1,0 +1,27 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final ArrayList list = new ArrayList();
+        final int nextInt = scanner.nextInt();
+        for (int nextInt2 = scanner.nextInt(), i = 0; i < nextInt2; ++i) {
+            list.add(scanner.nextInt());
+        }
+        for (int j = 0; j <= nextInt; ++j) {
+            final int n = nextInt - j;
+            final int n2 = nextInt + j;
+            if (!list.contains(n)) {
+                System.out.println(n);
+                System.exit(0);
+            }
+            if (!list.contains(n2)) {
+                System.out.println(n2);
+                System.exit(0);
+            }
+        }
+        System.out.println("-1");
+    }
+}

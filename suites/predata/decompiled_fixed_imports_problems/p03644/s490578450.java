@@ -1,0 +1,20 @@
+import java.util.Scanner;
+
+class Main
+{
+    public static void main(final String[] array) {
+        final int int1 = Integer.parseInt(new Scanner(System.in).next());
+        final int[] array2 = { 1, 2, 4, 8, 16, 32, 64 };
+        int length = array2.length;
+        int n = 0;
+        while (n + 1 != length) {
+            if (int1 >= array2[(length + n) / 2]) {
+                n = (length + n) / 2;
+            }
+            else {
+                length = (length + n) / 2;
+            }
+        }
+        System.out.println(array2[n]);
+    }
+}

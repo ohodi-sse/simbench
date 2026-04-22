@@ -1,0 +1,50 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        final ArrayList list = new ArrayList();
+        if (nextInt2 == 0) {
+            System.out.println(nextInt);
+            return;
+        }
+        for (int i = 1; i <= nextInt2; ++i) {
+            list.add(scanner.nextInt());
+        }
+        if (!list.contains(nextInt)) {
+            System.out.println(nextInt);
+            return;
+        }
+        int n = Math.abs(nextInt - 0);
+        int n2 = 0;
+        for (int j = nextInt - 1; j >= 0; --j) {
+            if (!list.contains(j)) {
+                n2 = j;
+                n = Math.abs(nextInt - j);
+                break;
+            }
+        }
+        int n3 = Math.abs(101 - nextInt);
+        int x = 101;
+        for (int k = nextInt + 1; k <= 101; ++k) {
+            if (!list.contains(k)) {
+                x = k;
+                n3 = Math.abs(nextInt - k);
+                break;
+            }
+        }
+        if (n < n3) {
+            System.out.println(n2);
+        }
+        else if (n > n3) {
+            System.out.println(x);
+        }
+        else {
+            System.out.println(n2);
+        }
+    }
+}

@@ -1,0 +1,23 @@
+import java.util.Scanner;
+
+class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        int x = 0;
+        final String next = scanner.next();
+        if (next.equals("SSR") || next.equals("SRS") || next.equals("RSS") || next.equals("RSR")) {
+            x = 1;
+        }
+        else if (next.equals("RRS") || next.equals("SRR")) {
+            x = 2;
+        }
+        else if (next.equals("RRR")) {
+            x = 3;
+        }
+        else if (next.equals("SSS")) {
+            x = 0;
+        }
+        System.out.println(x);
+    }
+}

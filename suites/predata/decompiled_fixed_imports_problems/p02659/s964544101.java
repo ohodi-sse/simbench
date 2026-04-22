@@ -1,0 +1,9 @@
+import java.util.Scanner;
+
+class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        System.out.println(Long.parseLong(scanner.next()) * (long)(Double.parseDouble(scanner.next()) * 500.0) / 500L);
+    }
+}

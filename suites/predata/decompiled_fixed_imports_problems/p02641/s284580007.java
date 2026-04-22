@@ -1,0 +1,44 @@
+import java.util.Iterator;
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) throws Exception {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        final HashSet set = new HashSet();
+        final HashSet set2 = new HashSet();
+        int abs = 1000;
+        int n = 0;
+        for (int i = 0; i < nextInt2; ++i) {
+            set.add(scanner.nextInt());
+        }
+        for (int j = 0; j < 100; ++j) {
+            if (!set.contains(j + 1)) {
+                set2.add(j + 1);
+            }
+        }
+        for (final int intValue : set2) {
+            if (Math.abs(intValue - nextInt) < abs) {
+                abs = Math.abs(intValue - nextInt);
+                n = intValue;
+            }
+        }
+        if (nextInt <= 50) {
+            if (nextInt <= Math.abs(n - nextInt)) {
+                System.out.println(0);
+            }
+            else {
+                System.out.println(n);
+            }
+        }
+        else if (101 - nextInt < Math.abs(n - nextInt)) {
+            System.out.println(101);
+        }
+        else {
+            System.out.println(n);
+        }
+    }
+}

@@ -35,35 +35,40 @@ class Plot:
     name: str
     xlabel: str
     ylabel: str
-    title: str
+    title: str | None
 
     @abstractmethod
     def compute_data(self, bld, analysis): ...
 
     def plot(self, data: pl.DataFrame, ax: Axes, label: str, xlog=False, ylog=False):
-        ax.set_xlabel(self.xlabel)
-        ax.set_ylabel(self.ylabel)
-        ax.set_title(self.title)
-
         if xlog:
             ax.set_xscale("log")
         if ylog:
             ax.set_yscale("log")
 
-        ax.plot(data["x"], data["y"], label=label)
-        ax.legend()
+        if self.title:
+            ax.set_title(self.title)
+            ax.legend(loc="lower right")
 
+        ax.set_xlabel(self.xlabel)
+        ax.set_ylabel(self.ylabel)
+        ax.grid(True, which="both", color="0.9")
+
+        ax.plot(data["x"], data["y"], label=label)
+        plt.rcParams.update({"text.usetex": True, "font.family": "Helvetica"})
         return ax
 
 
 def plot_node(plotter: Plot):
-    def plot_analysis(bld: Builder, analysis, ax: Axes, force=False):
+    def plot_analysis(
+        bld: Builder, analysis, ax: Axes, force=False, xlog=False, ylog=False
+    ):
         plot_dir = analysis.suite.root / "results" / "plot_data"
         plot_dir.mkdir(parents=True, exist_ok=True)
 
         plot_file = plot_dir / f"{analysis.parameter_name}_{plotter.name}.parquet"
 
-        if force:
+        if force and plot_file.exists():
             os.remove(plot_file)
             bld.log.info(f"Deleted {plot_file} to update plot")
 
@@ -75,7 +80,7 @@ def plot_node(plotter: Plot):
         data = node.pull(bld)
 
         plot_label = f"{analysis.parameter_name}"
-        plotter.plot(data, ax, label=plot_label)
+        plotter.plot(data, ax, label=plot_label, xlog=xlog, ylog=ylog)
 
     return plot_analysis
 
@@ -246,9 +251,11 @@ def classification_probability_plot(
     ax.set_xlim(0.0, max_elements)
     ax.set_ylim(0.0, 1.02)
     ax.set_xlabel("n", fontsize=24)
-    ax.set_ylabel("P( a = b | dist(a,b) <= d)", fontsize=24)
+    ax.set_ylabel("P( a = b | dist(a,b) <= d_n)", fontsize=24)
     ax.legend(loc="lower left", fontsize=24)
-
+    ax.set_title(
+        "Probability of correctly classifying programs by taking edges in ascending order"
+    )
     return ax
 
 
@@ -503,12 +510,12 @@ def min_1(d: float):
     return 0.0 if d > 1.0 else d
 
 
-class GoodEdges(Plot):
+class SumGoodEdges(Plot):
     def __init__(self):
-        self.name = "good_edges_plot"
-        self.xlabel = "#Edges"
-        self.ylabel = "#Good Edges"
-        self.title = "Number of good edges when including edges in ascending order"
+        self.name = "sum_good_edges_plot"
+        self.xlabel = r"$s(p,q)$"
+        self.ylabel = r"$P( p \equiv q \mid s(p,q) \geq x)$"
+        self.title = None
 
     def compute_data(self, bld, analysis):
         dist_df = analysis.distance_node.pull(bld)
@@ -533,8 +540,70 @@ class GoodEdges(Plot):
                 if within_class:
                     good_edges += 1
 
-                dist_dict["x"].append(i)
-                dist_dict["y"].append(good_edges)
+                dist_dict["x"].append(dist)
+                dist_dict["y"].append((good_edges / (height / 5)))
+
+                pb.inc(1)
+
+        return pl.DataFrame(dist_dict)
+
+
+class Histogram:
+    def __init__(self):
+        self.name = "good_histogram_plot"
+        self.xlabel = r"$d(p,q)$"
+        self.ylabel = "Frequency"
+        self.title = None
+
+    def compute_data(self, bld, analysis, ax, xlabel):
+        dist_df = analysis.distance_node.pull(bld)
+        dist_df = dist_df.filter(pl.col("src") != pl.col("tgt")).collect()
+        distances = dist_df["distance"]
+        counts, bins = np.histogram(distances, density=True, bins=100)
+
+        plt.rcParams.update({"text.usetex": True, "font.family": "Helvetica"})
+        ax.set_xlabel(xlabel)
+
+        ax.set_axisbelow(True)
+        ax.grid(True, which="both", color="0.9", linestyle="dashed")
+
+        ax.hist(bins[:-1], bins, weights=counts)
+
+        return ax
+
+
+class GoodEdges(Plot):
+    def __init__(self):
+        self.name = "good_edges_plot"
+        self.xlabel = r"$s(p,q)$"
+        self.ylabel = r"$P( p \equiv q \mid s(p,q) \geq x)$"
+        self.title = None
+
+    def compute_data(self, bld, analysis):
+        dist_df = analysis.distance_node.pull(bld)
+        dist_df = dist_df.filter(pl.col("src") != pl.col("tgt"))
+        dist_df = (
+            dist_df.select(
+                [
+                    (pl.col("src_label") == pl.col("tgt_label")).alias("within_class"),
+                    pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
+                ]
+            )
+            .sort(by="distance")
+            .collect()
+        )
+
+        height = int(dist_df.height)
+        dist_dict = {"x": [], "y": []}
+
+        good_edges = 0
+        with bld.progressbar(height) as pb:
+            for i, (within_class, dist) in enumerate(dist_df.iter_rows()):
+                if within_class:
+                    good_edges += 1
+
+                dist_dict["x"].append(dist)
+                dist_dict["y"].append(good_edges / (i + 1))
 
                 pb.inc(1)
 
@@ -729,3 +798,257 @@ def fscore_comparison_figure(
             )
 
     return fig
+
+
+def log_loss(bld: Builder, analysis):
+    from sklearn.metrics import log_loss
+
+    dist_df = analysis.distance_node.pull(bld)
+
+    dist_df = dist_df.select(
+        [
+            pl.col("src"),
+            pl.col("tgt"),
+            (pl.col("src_label") == pl.col("tgt_label"))
+            .alias("within_class")
+            .cast(pl.Int8),
+            pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
+        ]
+    ).collect()
+    y_true = dist_df["within_class"]
+    y_pred = dist_df["distance"]
+
+    res = log_loss(y_true, y_pred)
+    print(res)
+
+
+def logistic_regression(bld: Builder, analysis, ax, xlabel):
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import log_loss
+    from scipy.stats import beta, gamma
+
+    dist_df = analysis.distance_node.pull(bld)
+    dist_df = dist_df.filter(pl.col("src") != pl.col("tgt")).collect()
+    distances = dist_df["distance"]
+    counts, bins = np.histogram(distances, density=True, bins=100)
+
+    X = (
+        dist_df.pivot(values="distance", index="tgt", columns="src")
+        .select(pl.exclude("tgt"))
+        .to_numpy()
+    )
+    dist_df = dist_df.select(
+        [
+            pl.col("src"),
+            pl.col("tgt"),
+            (pl.col("src_label") == pl.col("tgt_label"))
+            .alias("within_class")
+            .cast(pl.Int8),
+            pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
+        ]
+    ).sort(by="distance")
+    y_true = dist_df["within_class"].to_numpy()
+    distances = dist_df["distance"].to_numpy().reshape(-1, 1)
+
+    model = LogisticRegression(max_iter=1000)
+    mfit = model.fit(bins.reshape(-1, 1), counts)
+
+    y_pred = mfit.predict(distances)
+
+    d_vals = np.linspace(0, 1, 200).reshape(-1, 1)
+    probs = mfit.predict_proba(d_vals)[:, 1]
+
+    ax.plot(d_vals, probs, label="Logistic fit")
+
+    probs = counts / counts.sum()
+    plt.rcParams.update({"text.usetex": True, "font.family": "Helvetica"})
+    ax.set_xlabel(xlabel)
+
+    ax.set_axisbelow(True)
+    ax.grid(True, which="both", color="0.9", linestyle="dashed")
+
+    ax.hist(bins[:-1], bins, weights=probs)
+
+    res = log_loss(y_true, y_pred)
+    print(res)
+
+
+def gamma_regression(bld: Builder, analysis, ax, xlabel):
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import log_loss
+    from scipy.stats import beta, gamma
+
+    dist_df = analysis.distance_node.pull(bld)
+    dist_df = dist_df.filter(pl.col("src") != pl.col("tgt")).collect()
+    distances = dist_df["distance"]
+    counts, bins = np.histogram(distances, density=True, bins=200)
+
+    dist_df = dist_df.select(
+        [
+            pl.col("src"),
+            pl.col("tgt"),
+            (pl.col("src_label") == pl.col("tgt_label"))
+            .alias("within_class")
+            .cast(pl.Int8),
+            pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
+        ]
+    ).sort(by="distance")
+
+    y_true = dist_df["within_class"].to_numpy()
+    distances = dist_df["distance"].to_numpy().reshape(-1, 1)
+    distances = np.clip(distances, 1e-8, None)
+    params = gamma.fit(distances, floc=0)
+
+    d_vals = np.linspace(0, 1, 200).reshape(-1, 1)
+    shape, loc, scale = params
+    pdf = gamma.pdf(d_vals, shape, loc=loc, scale=scale)
+
+    ax.plot(d_vals, pdf, label="Logistic fit")
+
+    plt.rcParams.update({"text.usetex": True, "font.family": "Helvetica"})
+    ax.set_xlabel(xlabel)
+
+    ax.set_axisbelow(True)
+    ax.grid(True, which="both", color="0.9", linestyle="dashed")
+
+
+def beta_regression(bld: Builder, analysis, ax, xlabel):
+    from sklearn.linear_model import LogisticRegression
+    from sklearn.metrics import log_loss
+    from scipy.stats import beta
+
+    dist_df = analysis.distance_node.pull(bld)
+    dist_df = dist_df.filter(pl.col("src") != pl.col("tgt")).collect()
+    distances = dist_df["distance"]
+    counts, bins = np.histogram(distances, density=True, bins=200)
+
+    dist_df = dist_df.select(
+        [
+            pl.col("src"),
+            pl.col("tgt"),
+            (pl.col("src_label") == pl.col("tgt_label"))
+            .alias("within_class")
+            .cast(pl.Int8),
+            pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
+        ]
+    ).sort(by="distance")
+    y_true = dist_df["within_class"].to_numpy()
+    distances = dist_df["distance"].to_numpy().reshape(-1, 1)
+    distances = np.clip(distances, 1e-8, None)
+    d_scaled = (distances - distances.min()) / (distances.max() - distances.min())
+    a, b, _, _ = beta.fit(d_scaled, floc=0)
+
+    d_vals = np.linspace(0, 1, 200).reshape(-1, 1)
+    pdf = beta.pdf(d_vals, a, b)
+
+    ax.plot(d_vals, pdf, label="Logistic fit")
+
+    plt.rcParams.update({"text.usetex": True, "font.family": "Helvetica"})
+    ax.set_xlabel(xlabel)
+
+    ax.set_axisbelow(True)
+    ax.grid(True, which="both", color="0.9", linestyle="dashed")
+
+
+def plot_histogram(bld: Builder, analysis, ax, xlabel):
+    dist_df = analysis.distance_node.pull(bld)
+    dist_df = dist_df.filter(pl.col("src") != pl.col("tgt")).collect()
+
+    good_distances = (
+        dist_df.filter(pl.col("src_label") == pl.col("tgt_label"))["distance"]
+    ).to_list()
+
+    bad_distances = (
+        dist_df.filter(pl.col("src_label") != pl.col("tgt_label"))["distance"]
+    ).to_list()
+    colors = ["blue", "green"]
+    n_bins = 200
+
+    # good_counts, good_bins = np.histogram(good_distances, density=True, bins=n_bins)
+    # bad_counts, bad_bins = np.histogram(bad_distances, density=True, bins=n_bins)
+    ax.hist([good_distances, bad_distances], bins=n_bins, stacked=True, label=colors)
+
+
+def chrissers_plot(bld: Builder, analysis, ax, xlabel):
+    from sklearn.linear_model import LogisticRegression
+    from scipy.stats import beta
+
+    dist_df = analysis.distance_node.pull(bld)
+    dist_df = dist_df.filter(pl.col("src") != pl.col("tgt")).collect()
+
+    good_distances = (
+        dist_df.filter(pl.col("src_label") == pl.col("tgt_label"))["distance"]
+    ).to_list()
+    bad_distances = (
+        dist_df.filter(pl.col("src_label") != pl.col("tgt_label"))["distance"]
+    ).to_list()
+    all_distances = dist_df["distance"].to_list()
+
+    bins = np.histogram_bin_edges(
+        np.concatenate([good_distances, bad_distances]), bins=100
+    )
+    colors = ["blue", "green"]
+    counts1, _ = np.histogram(good_distances, bins=bins)
+    counts2, _ = np.histogram(all_distances, bins=bins)
+
+    ratio = counts1 / np.where(counts2 == 0, np.nan, counts2)
+    ratio = [0 if c2 == 0 else c1 / c2 for (c1, c2) in zip(counts1, counts2)]
+    bin_centers = (bins[:-1] + bins[1:]) / 2
+    ax.hist(
+        [good_distances, all_distances],
+        bins=bins,
+        stacked=True,
+        color=["#d9d9d9", "#969696"],
+        label=["equivalent", "all"],
+        alpha=0.9,
+    )
+    ax.set_yscale("log")
+    # ax.hist(all_distances, bins=bins, density=True, alpha=0.5, label="all distances")
+    ax.set_xlabel("Similarity")
+    ax.set_ylabel("Density")
+
+    # Ratio on second axis
+    ax2 = ax.twinx()
+    ax2.plot(bin_centers, ratio, linestyle="-", label="ratio ", color="#ffb703")
+    ax2.set_ylabel("Ratio")
+
+    # Combine legends
+    lines1, labels1 = ax.get_legend_handles_labels()
+    lines2, labels2 = ax2.get_legend_handles_labels()
+    ax.legend(lines1 + lines2, labels1 + labels2)
+
+    dist_df = dist_df.select(
+        [
+            pl.col("src"),
+            pl.col("tgt"),
+            (pl.col("src_label") == pl.col("tgt_label"))
+            .alias("within_class")
+            .cast(pl.Int8),
+            pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
+        ]
+    ).sort(by="distance")
+    y_true = dist_df["within_class"].to_numpy()
+    distances = dist_df["distance"].to_numpy().reshape(-1, 1)
+
+    y_true = dist_df["within_class"].to_numpy()
+    distances = dist_df["distance"].to_numpy()
+
+    model = LogisticRegression(max_iter=1000)
+    mfit = model.fit(distances.reshape(-1, 1), y_true)
+
+    d_vals = np.linspace(0, 1, 100).reshape(-1, 1)
+    probs = mfit.predict_proba(d_vals)[:, 1]
+
+    # ax2.plot(d_vals, probs, linestyle="-", label="ratio ", color="red")
+
+    distances = np.clip(distances, 1e-8, None)
+    d_scaled = (distances - distances.min()) / (distances.max() - distances.min())
+    a, b, _, _ = beta.fit(d_scaled, floc=0)
+    print(f"{analysis.tool.name} has parameters alpha: {a}, beta: {b}")
+    pdf = beta.pdf(distances, a, b)
+
+    ax.plot(d_vals, pdf, label="Beta fit", color="blue")
+
+    # ax.plot(bin_centers, ratio)
+    # ax.hist(good_distances, bins=bins, alpha=0.5, label="dist1")
+    # ax.hist(all_distances, bins=bins, alpha=0.5, label="dist2")

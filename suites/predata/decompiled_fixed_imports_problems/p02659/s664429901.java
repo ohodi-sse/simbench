@@ -1,0 +1,17 @@
+import java.math.BigInteger;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final PrintWriter printWriter = new PrintWriter(System.out);
+        final BigInteger one = BigInteger.ONE;
+        final Long value = Long.parseLong(scanner.next());
+        final String next = scanner.next();
+        printWriter.println(one.multiply(BigInteger.valueOf(value)).multiply(BigInteger.valueOf((next.charAt(0) - 48L) * 1000L + 100L * (next.charAt(2) - 48L) + (next.charAt(3) - 48L) * 10L)).divide(BigInteger.valueOf(1000L)));
+        printWriter.flush();
+    }
+}

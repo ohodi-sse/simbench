@@ -1,0 +1,23 @@
+import java.math.BigDecimal;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final BigDecimal multiply = scanner.nextBigDecimal().multiply(scanner.nextBigDecimal().multiply(new BigDecimal(100.0)));
+        String substring;
+        if (new BigDecimal(100.0).compareTo(multiply) <= 0) {
+            String s = multiply.toString();
+            final int index = s.indexOf(".");
+            if (index > -1) {
+                s = s.substring(0, index);
+            }
+            substring = s.substring(0, s.length() - 2);
+        }
+        else {
+            substring = "0";
+        }
+        System.out.println(substring);
+    }
+}

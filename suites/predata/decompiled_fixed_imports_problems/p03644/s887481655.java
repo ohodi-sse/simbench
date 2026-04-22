@@ -1,0 +1,17 @@
+import java.util.Scanner;
+
+public class Main
+{
+    static Scanner sc;
+    
+    public static void main(final String[] array) {
+        int i;
+        int n;
+        for (i = Main.sc.nextInt(), n = 1; i >= n; n *= 2) {}
+        System.out.print(n / 2);
+    }
+    
+    static {
+        Main.sc = new Scanner(System.in);
+    }
+}

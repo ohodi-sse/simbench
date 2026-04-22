@@ -1,0 +1,22 @@
+import java.util.List;
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        int x = 0;
+        final List<String> list = Arrays.asList(scanner.nextLine().split(""));
+        final String[] array2 = list.toArray(new String[list.size()]);
+        for (int i = 0; i < 3; ++i) {
+            if (array2[i].equals("R")) {
+                ++x;
+            }
+            else if (i == 1 && x == 1) {
+                break;
+            }
+        }
+        System.out.println(x);
+    }
+}

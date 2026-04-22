@@ -1,0 +1,50 @@
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.io.IOException;
+
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final FastReader fastReader = new FastReader();
+        final long nextLong = fastReader.nextLong();
+        final String next = fastReader.next();
+        System.out.println(nextLong * ((next.charAt(0) - '0') * 100 + (next.charAt(2) - '0') * 10 + (next.charAt(3) - '0')) / 100L);
+    }
+    
+    static class FastReader
+    {
+        BufferedReader br;
+        StringTokenizer st;
+        
+        public FastReader() {
+            this.br = new BufferedReader(new InputStreamReader(System.in));
+        }
+        
+        String next() {
+            while (true) {
+                if (this.st != null) {
+                    if (this.st.hasMoreElements()) {
+                        break;
+                    }
+                }
+                try {
+                    this.st = new StringTokenizer(this.br.readLine());
+                }
+                catch (final IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            return this.st.nextToken();
+        }
+        
+        int nextInt() {
+            return Integer.parseInt(this.next());
+        }
+        
+        long nextLong() {
+            return Long.parseLong(this.next());
+        }
+    }
+}

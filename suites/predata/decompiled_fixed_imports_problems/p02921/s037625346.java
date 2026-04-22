@@ -1,0 +1,148 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+class Edge extends ArrayList<P>
+{
+}
+
+
+
+
+
+
+
+class Main
+{
+    static final int MOD = 1000000007;
+    static int ans;
+    
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final String next = scanner.next();
+        final String next2 = scanner.next();
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (next.charAt(i) == next2.charAt(i)) {
+                ++x;
+            }
+        }
+        System.out.println(x);
+    }
+    
+    static void sieve(final ArrayList<Long> list) {
+        final int n = 50000000;
+        final boolean[] array = new boolean[n + 1];
+        final int[] array2 = new int[n];
+        for (int i = 0; i <= n; ++i) {
+            array[i] = true;
+        }
+        list.add(1L);
+        for (int j = 2; j <= n; ++j) {
+            if (array[j]) {
+                list.add((long)j);
+                for (int k = 2 * j; k <= n; k += j) {
+                    array[k] = false;
+                }
+            }
+        }
+    }
+    
+    static int upperbond(final int n, int n2, final int[] array) {
+        int length = array.length;
+        while (length - n2 > 1) {
+            final int n3 = (length + n2) / 2;
+            if (array[n3] >= n) {
+                length = n3;
+            }
+            else {
+                n2 = n3;
+            }
+        }
+        return length;
+    }
+    
+    static int lowerbond(final int n, int n2, final int[] array) {
+        int length = array.length;
+        while (length - n2 > 1) {
+            final int n3 = (length + n2) / 2;
+            if (array[n3] >= n) {
+                length = n3;
+            }
+            else {
+                n2 = n3;
+            }
+        }
+        return n2;
+    }
+    
+    static int gcd(final int n, final int n2) {
+        if (n2 == 0) {
+            return n;
+        }
+        return gcd(n2, n % n2);
+    }
+    
+    static long gcd(final long n, final long n2) {
+        if (n2 == 0L) {
+            return n;
+        }
+        return gcd(n2, n % n2);
+    }
+    
+    static long lcm(final long n, final long n2) {
+        return n / gcd(n, n2) * n2;
+    }
+    
+    static {
+        Main.ans = 0;
+    }
+}
+
+
+
+
+class P
+{
+    int to;
+    long cost;
+    
+    P(final int to, final long cost) {
+        this.to = to;
+        this.cost = cost;
+    }
+}
+
+
+
+
+class Pair implements Comparable
+{
+    int from;
+    int end;
+    
+    public Pair(final int from, final int end) {
+        this.from = from;
+        this.end = end;
+    }
+    
+    @Override
+    public int compareTo(final Object o) {
+        return ((Pair)o).from - this.from;
+    }
+}
+
+
+
+
+class Town
+{
+    int index;
+    int x;
+    int y;
+    
+    public Town(final int index, final int x, final int y) {
+        this.index = index;
+        this.x = x;
+        this.y = y;
+    }
+}

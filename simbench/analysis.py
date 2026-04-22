@@ -1,5 +1,5 @@
 from __future__ import annotations
-from simbench.AI_tools import CodeBERT, GraphCodeBERT
+from simbench.AI_tools import CodeBERT, GraphCodeBERT, Code2Vec
 
 from typing import Sequence
 from contextlib import contextmanager
@@ -10,7 +10,7 @@ from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 
 
-from simbench.compressors import Compressor, Diff
+from simbench.compressors import Compressor, Diff, EditDistanceDiff
 from simbench.metrics import Metric
 import time
 
@@ -30,6 +30,8 @@ from simbench.normalizers import (
     DecompileNormalizer,
     OptimizedDecompiledNormalizer,
     HashedProblemLabel,
+    PartitionedProblemClasses,
+    DecompileFixedImports,
 )
 
 from simbench.tables import (
@@ -95,7 +97,7 @@ class GenericTool(Tool):
 
 
 def get_all_tools():
-    from simbench.compressors import Zstd, Gzip, Zlib, Difflib, BSDiff
+    from simbench.compressors import Zstd, Gzip, Zlib, Difflib
     from simbench.metrics import NCD
     from simbench.metrics import GenericMetric, DiffMetric
 
@@ -108,14 +110,17 @@ def get_all_tools():
     comp_metrics = [NCD()]
 
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
-    # diff_tools = [DiffTool(DiffMetric(), BSDiff())]  # BSDiff is veeeery slooow
+    diff_tools = [
+        DiffTool(DiffMetric(), EditDistanceDiff())
+    ]  # BSDiff is veeeery slooow
     other_tools = [GenericTool(GenericMetric(), Difflib())]
     ai_tools = [
         GenericTool(GenericMetric(), CodeBERT()),
         GenericTool(GenericMetric(), GraphCodeBERT()),
+        GenericTool(GenericMetric(), Code2Vec()),
     ]
 
-    return comp_tools + ai_tools  # + other_tools
+    return comp_tools + ai_tools + other_tools
 
 
 def get_all_classifiers(steps: int = 20) -> Sequence[Classifier]:
@@ -136,7 +141,10 @@ def get_all_normalizers():
         OptimizedDecompiledNormalizer(),
         GoogleFormatter(),
         DecompileWOImports(),
+        DecompileFixedImports(),
         HashedProblemLabel(),
+        PartitionedProblemClasses(5),
+        PartitionedProblemClasses(25),
     ]
 
 
@@ -150,7 +158,7 @@ class Config:
     def __init__(self):
         self.log = logger
         self.log.remove(0)
-        self.log.add(sys.stderr, level="INFO")
+        self.log.add(sys.stderr, level="DEBUG")
 
         self.tools = get_all_tools()
         self.classifiers = get_all_classifiers()

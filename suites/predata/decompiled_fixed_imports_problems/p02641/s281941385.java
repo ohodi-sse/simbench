@@ -1,0 +1,43 @@
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        final int[] array2 = new int[nextInt2];
+        final int[] array3 = new int[nextInt2];
+        final int[] array4 = new int[100];
+        int n = 0;
+        array4[0] = 1;
+        for (int i = 1; i < 100; ++i) {
+            array4[i] = 2;
+        }
+        for (int j = 0; j < nextInt2; ++j) {
+            array2[j] = scanner.nextInt();
+            array4[array3[j] = Math.abs(array2[j] - nextInt)] = array4[array3[j]] - 1;
+        }
+        for (int k = 0; k < 100; ++k) {
+            if (array4[k] == 2) {
+                System.out.println(nextInt - k);
+                System.exit(0);
+            }
+            if (array4[k] == 1) {
+                for (int l = 0; l < nextInt2; ++l) {
+                    if (array2[l] == nextInt + k) {
+                        ++n;
+                    }
+                }
+                if (n == 0) {
+                    System.out.println(nextInt + k);
+                    System.exit(0);
+                }
+                else {
+                    System.out.println(nextInt - k);
+                    System.exit(0);
+                }
+            }
+        }
+    }
+}

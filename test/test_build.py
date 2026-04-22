@@ -1,3 +1,4 @@
+from simbench.AI_tools import AITool
 from simbench.analysis import CompressionAnalysis
 from simbench.build import Node, schema
 from simbench.tables import (
@@ -31,12 +32,23 @@ def test_pair_node(test_analysis, test_bld):
 
 
 def test_dist_node(test_analysis, test_bld):
-    dist_node = test_analysis.distance_node
-    assert isinstance(dist_node, Node)
+    if not isinstance(test_analysis.tool, AITool):
+        dist_node = test_analysis.distance_node
+        assert isinstance(dist_node, Node)
 
-    dist_df = dist_node.pull(test_bld)
-    assert isinstance(dist_df, pl.LazyFrame)
-    assert schema(DistanceTable) == dist_df.collect().schema
+        dist_df = dist_node.pull(test_bld)
+        assert isinstance(dist_df, pl.LazyFrame)
+        assert schema(DistanceTable) == dist_df.collect().schema
+    elif (
+        isinstance(test_analysis.tool, AITool)
+        and test_analysis.normalizer.name == "unprocessed"
+    ):
+        dist_node = test_analysis.distance_node
+        assert isinstance(dist_node, Node)
+
+        dist_df = dist_node.pull(test_bld)
+        assert isinstance(dist_df, pl.LazyFrame)
+        assert schema(DistanceTable) == dist_df.collect().schema
 
 
 def test_classification_node(test_analysis, test_bld):

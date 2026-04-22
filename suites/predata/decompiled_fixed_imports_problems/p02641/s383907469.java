@@ -1,0 +1,35 @@
+import java.util.HashSet;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final int x = 0;
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        if (!scanner.hasNext()) {
+            System.out.println(x);
+            return;
+        }
+        if (scanner.nextInt() == 0) {
+            System.out.println(nextInt);
+            return;
+        }
+        final HashSet set = new HashSet();
+        while (scanner.hasNext()) {
+            set.add(scanner.nextInt());
+        }
+        while (true) {
+            int n;
+            for (n = 0; set.contains(nextInt - n); ++n) {
+                if (!set.contains(nextInt + n)) {
+                    final int x2 = nextInt + n;
+                    System.out.println(x2);
+                    return;
+                }
+            }
+            final int x2 = nextInt - n;
+            continue;
+        }
+    }
+}

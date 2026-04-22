@@ -1,0 +1,39 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        final Integer[] array2 = new Integer[nextInt2];
+        for (int i = 0; i < nextInt2; ++i) {
+            array2[i] = scanner.nextInt();
+        }
+        if (nextInt2 == 0) {
+            System.out.println(nextInt);
+            return;
+        }
+        if (!checkForbiddenList(array2, nextInt)) {
+            System.out.println(nextInt);
+            return;
+        }
+        int x = 0;
+        for (int j = 0; j < 100; ++j) {
+            if (!checkForbiddenList(array2, nextInt - j)) {
+                x = nextInt - j;
+                break;
+            }
+            if (!checkForbiddenList(array2, nextInt + j)) {
+                x = nextInt + j;
+                break;
+            }
+        }
+        System.out.println(x);
+    }
+    
+    private static boolean checkForbiddenList(final Integer[] a, final int i) {
+        return Arrays.asList(a).contains(i);
+    }
+}

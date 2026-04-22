@@ -1,0 +1,88 @@
+import java.io.IOException;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final char[] charArray = new FastReader().nextLine().toCharArray();
+        int x = 0;
+        if (charArray[0] == 'S' && charArray[1] == 'S' && charArray[2] == 'S') {
+            x = 0;
+        }
+        else if (charArray[0] == 'S' && charArray[1] == 'S' && charArray[2] == 'R') {
+            x = 1;
+        }
+        else if (charArray[0] == 'S' && charArray[1] == 'R' && charArray[2] == 'S') {
+            x = 1;
+        }
+        else if (charArray[0] == 'R' && charArray[1] == 'S' && charArray[2] == 'S') {
+            x = 1;
+        }
+        else if (charArray[0] == 'S' && charArray[1] == 'R' && charArray[2] == 'R') {
+            x = 2;
+        }
+        else if (charArray[0] == 'R' && charArray[1] == 'R' && charArray[2] == 'S') {
+            x = 2;
+        }
+        else if (charArray[0] == 'R' && charArray[1] == 'S' && charArray[2] == 'R') {
+            x = 1;
+        }
+        else if (charArray[0] == 'R' && charArray[1] == 'R' && charArray[2] == 'R') {
+            x = 3;
+        }
+        System.out.println(x);
+    }
+    
+    static class FastReader
+    {
+        BufferedReader br;
+        StringTokenizer st;
+        
+        public FastReader() {
+            this.br = new BufferedReader(new InputStreamReader(System.in));
+        }
+        
+        String next() {
+            while (true) {
+                if (this.st != null) {
+                    if (this.st.hasMoreElements()) {
+                        break;
+                    }
+                }
+                try {
+                    this.st = new StringTokenizer(this.br.readLine());
+                }
+                catch (final IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            return this.st.nextToken();
+        }
+        
+        int nextInt() {
+            return Integer.parseInt(this.next());
+        }
+        
+        long nextLong() {
+            return Long.parseLong(this.next());
+        }
+        
+        double nextDouble() {
+            return Double.parseDouble(this.next());
+        }
+        
+        String nextLine() {
+            String line = "";
+            try {
+                line = this.br.readLine();
+            }
+            catch (final IOException ex) {
+                ex.printStackTrace();
+            }
+            return line;
+        }
+    }
+}

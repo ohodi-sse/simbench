@@ -1,0 +1,11 @@
+import java.util.Scanner;
+
+class Main
+{
+    public static void main(final String[] array) {
+        int i;
+        int n;
+        for (i = new Scanner(System.in).nextInt(), n = 0; i > 0; i /= 2, ++n) {}
+        System.out.println(1 << n - 1);
+    }
+}

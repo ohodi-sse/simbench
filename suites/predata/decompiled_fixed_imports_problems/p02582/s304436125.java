@@ -1,0 +1,25 @@
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final char[] charArray = new Scanner(System.in).next().toCharArray();
+        int i = 0;
+        int max = 0;
+        while (i < charArray.length) {
+            if (charArray[i] != 'R') {
+                ++i;
+            }
+            else {
+                int b = 0;
+                while (i < charArray.length && charArray[i] == 'R') {
+                    ++b;
+                    ++i;
+                }
+                max = Math.max(max, b);
+                ++i;
+            }
+        }
+        System.out.println(max);
+    }
+}

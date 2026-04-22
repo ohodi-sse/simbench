@@ -1,3 +1,12 @@
+from simbench.compressors import Diff, EditDistanceDiff, Zstd
+from simbench.AI_tools import Code2Vec
+from simbench.metrics import (
+    GenericMetric,
+    DiffMetric,
+    NormalizedDiffMetric,
+    SummedDiffMetric,
+    NCD,
+)
 from simbench.plots import (
     mds_clustering_plot,
     cluster_boxplot,
@@ -6,8 +15,20 @@ from simbench.plots import (
     BiggestCluster,
     GoodMajorityCluster,
     GoodEdges,
+    logistic_regression,
+    SumGoodEdges,
+    plot_histogram,
+    Histogram,
+    gamma_regression,
+    beta_regression,
+    chrissers_plot,
 )
-from simbench.normalizers import IDNormalizer, HashedProblemLabel
+from simbench.normalizers import (
+    IDNormalizer,
+    HashedProblemLabel,
+    PartitionedProblemClasses,
+    DecompileNormalizer,
+)
 from simbench.comparing import wilcoxon_signed_rank_test, find_analysis_difference
 import click
 from pathlib import Path
@@ -28,6 +49,8 @@ from simbench.analysis import (
     init_analysis,
     get_all_tools,
     CompressionTool,
+    DiffTool,
+    GenericTool,
 )
 
 
@@ -172,7 +195,8 @@ def diff_normalizer(
 
 @click.command()
 @click.argument("suite", type=click.Path(file_okay=True, path_type=Path))
-def mds_plot(suite: Path):
+@click.option("--force", default=None, is_flag=True)
+def mds_plot(suite: Path, force: bool):
     from simbench.compressors import Zstd
     from simbench.classification import KNN
     from simbench.metrics import NCD
@@ -185,31 +209,213 @@ def mds_plot(suite: Path):
         [KNN(1)],
         IDNormalizer(),
     )
+    analysis1 = init_analysis(
+        DiffTool(DiffMetric(), EditDistanceDiff()),
+        Suite(suite),
+        [KNN(1)],
+        IDNormalizer(),
+    )
+    analysis5 = init_analysis(
+        CompressionTool(NCD(), Zstd(1)),
+        Suite(suite),
+        [KNN(1)],
+        DecompileNormalizer(),
+    )
     analysis2 = init_analysis(
         CompressionTool(NCD(), Zstd(1)),
         Suite(suite),
         [KNN(1)],
         HashedProblemLabel(),  # OptimizedDecompiledNormalizer(),
     )
+    analysis3 = init_analysis(
+        CompressionTool(NCD(), Zstd(1)),
+        Suite(suite),
+        [KNN(1)],
+        PartitionedProblemClasses(25),  # OptimizedDecompiledNormalizer(),
+    )
 
-    fig, ax = plt.subplots(3, 1)
-
+    analysis4 = init_analysis(
+        CompressionTool(NCD(), Zstd(1)),
+        Suite(suite),
+        [KNN(1)],
+        PartitionedProblemClasses(5),  # OptimizedDecompiledNormalizer(),
+    )
+    # analysis5 = init_analysis(
+    #     GenericTool(GenericMetric(), Code2Vec()),
+    #     Suite(suite),
+    #     [KNN(1)],
+    #     IDNormalizer(),
+    # )
+    fig, ax = plt.subplots(1, 1)
+    logistic_regression(bld, analysis1)
     good_edges = plot_node(GoodEdges())
-    good_edges(bld, analysis1, ax[0])
-    good_edges(bld, analysis2, ax[0])
-
-    cluster_plot = plot_node(BiggestCluster())
-    cluster_plot(bld, analysis1, ax[1])
-    cluster_plot(bld, analysis2, ax[1])
-
-    good_majority = plot_node(GoodMajorityCluster())
-    good_majority(bld, analysis1, ax[2])
-    good_majority(bld, analysis2, ax[2])
+    good_edges(bld, analysis1, ax, xlog=True, force=force)
+    good_edges(bld, analysis2, ax, xlog=True, force=force)
+    good_edges(bld, analysis3, ax, xlog=True, force=force)
+    good_edges(bld, analysis4, ax, xlog=True, force=force)
+    good_edges(bld, analysis5, ax, xlog=True, force=force)
+    #
+    # cluster_plot = plot_node(BiggestCluster())
+    # cluster_plot(bld, analysis1, ax[1], xlog=True, force=force)
+    # cluster_plot(bld, analysis2, ax[1], xlog=True, force=force)
+    # cluster_plot(bld, analysis3, ax[1], xlog=True, force=force)
+    # cluster_plot(bld, analysis4, ax[1], xlog=True, force=force)
+    # cluster_plot(bld, analysis5, ax[1], xlog=True, force=force)
+    #
+    # good_majority = plot_node(GoodMajorityCluster())
+    # good_majority(bld, analysis1, ax[2], xlog=True, force=force)
+    # good_majority(bld, analysis2, ax[2], xlog=True, force=force)
+    # good_majority(bld, analysis3, ax[2], xlog=True, force=force)
+    # good_majority(bld, analysis4, ax[2], xlog=True, force=force)
+    # good_majority(bld, analysis5, ax[2], xlog=True, force=force)
 
     plt.show()
 
     # cluster_boxplot(bld, analysis1, analysis2)
     # mds_clustering_plot(bld, analysis1)
+
+
+@click.command()
+@click.argument("suite", type=click.Path(file_okay=True, path_type=Path))
+@click.option("--force", default=None, is_flag=True)
+def perr_plot(suite: Path, force: bool):
+    from simbench.compressors import Zstd
+    from simbench.classification import KNN
+    from simbench.metrics import NCD
+    from simbench.normalizers import OptimizedDecompiledNormalizer
+
+    bld = Builder(logger)
+
+    diff = init_analysis(
+        DiffTool(DiffMetric(), EditDistanceDiff()),
+        Suite(suite),
+        [KNN(1)],
+        IDNormalizer(),
+    )
+
+    normdiff = init_analysis(
+        DiffTool(NormalizedDiffMetric(), EditDistanceDiff()),
+        Suite(suite),
+        [KNN(1)],
+        IDNormalizer(),
+    )
+    sumdiff = init_analysis(
+        DiffTool(SummedDiffMetric(), EditDistanceDiff()),
+        Suite(suite),
+        [KNN(1)],
+        IDNormalizer(),
+    )
+    fig, ax = plt.subplots(1, 3, figsize=(8, 3), layout="constrained")
+
+    histogram = Histogram()
+    ax[0].set_ylabel("Frequency")
+    histogram.compute_data(bld, diff, ax[0], "diff max")
+    histogram.compute_data(bld, normdiff, ax[1], "diff norm")
+    histogram.compute_data(bld, sumdiff, ax[2], "diff sum")
+
+    plot_name = "diff_unprocessed_histogram.pdf"
+    bld.log.debug("Saving plot to file: " + plot_name)
+    plt.savefig(plot_name, dpi=300, bbox_inches="tight")
+    plt.show()
+
+
+@click.command()
+@click.argument("suite", type=click.Path(file_okay=True, path_type=Path))
+@click.option("--force", default=None, is_flag=True)
+def perr_fit(suite: Path, force: bool):
+    from simbench.compressors import Zstd
+    from simbench.classification import KNN
+    from simbench.metrics import NCD
+    from simbench.normalizers import OptimizedDecompiledNormalizer
+
+    bld = Builder(logger)
+
+    analysis1 = init_analysis(
+        DiffTool(DiffMetric(), EditDistanceDiff()),
+        Suite(suite),
+        [KNN(1)],
+        IDNormalizer(),
+    )
+
+    analysis2 = init_analysis(
+        DiffTool(NormalizedDiffMetric(), EditDistanceDiff()),
+        Suite(suite),
+        [KNN(1)],
+        IDNormalizer(),
+    )
+    analysis3 = init_analysis(
+        DiffTool(SummedDiffMetric(), EditDistanceDiff()),
+        Suite(suite),
+        [KNN(1)],
+        IDNormalizer(),
+    )
+
+    analysis4 = init_analysis(
+        DiffTool(DiffMetric(), EditDistanceDiff()),
+        Suite(suite),
+        [KNN(1)],
+        DecompileNormalizer(),
+    )
+
+    analysis5 = init_analysis(
+        DiffTool(NormalizedDiffMetric(), EditDistanceDiff()),
+        Suite(suite),
+        [KNN(1)],
+        DecompileNormalizer(),
+    )
+    analysis6 = init_analysis(
+        DiffTool(SummedDiffMetric(), EditDistanceDiff()),
+        Suite(suite),
+        [KNN(1)],
+        DecompileNormalizer(),
+    )
+
+    analysis7 = init_analysis(
+        CompressionTool(NCD(), Zstd(1)),
+        Suite(suite),
+        [KNN(1)],
+        DecompileNormalizer(),
+    )
+
+    analysis8 = init_analysis(
+        CompressionTool(NCD(), Zstd(1)),
+        Suite(suite),
+        [KNN(1)],
+        DecompileNormalizer(),
+    )
+    analysis9 = init_analysis(
+        CompressionTool(NCD(), Zstd(1)),
+        Suite(suite),
+        [KNN(1)],
+        DecompileNormalizer(),
+    )
+
+    # fig, ax = plt.subplots(3, 3, figsize=(8, 3), layout="constrained")
+    fig, ax = plt.subplots(1, 1, figsize=(8, 3), layout="constrained")
+    # plot_histogram(bld, analysis1, ax[0], "diff max")
+    # plot_histogram(bld, analysis2, ax[1], "diff norm")
+    # plot_histogram(bld, analysis3, ax[2], "diff sum")
+    chrissers_plot(bld, analysis6, ax, "diff max")
+    # chrissers_plot(bld, analysis2, ax[0][1], "diff norm")
+    # chrissers_plot(bld, analysis3, ax[0][2], "diff sum")
+    #
+    # chrissers_plot(bld, analysis4, ax[1][0], "diff max")
+    # chrissers_plot(bld, analysis5, ax[1][1], "diff norm")
+    # chrissers_plot(bld, analysis6, ax[1][2], "diff sum")
+    #
+    # chrissers_plot(bld, analysis7, ax[2][0], "diff max")
+    # chrissers_plot(bld, analysis8, ax[2][1], "diff norm")
+    # chrissers_plot(bld, analysis9, ax[2][2], "diff sum")
+    #
+    # gamma_regression(bld, analysis1, ax[0], "diff max")
+    # gamma_regression(bld, analysis2, ax[1], "diff norm")
+    # gamma_regression(bld, analysis3, ax[2], "diff sum")
+    # beta_regression(bld, analysis1, ax[0], "diff max")
+    # beta_regression(bld, analysis2, ax[1], "diff norm")
+    # beta_regression(bld, analysis3, ax[2], "diff sum")
+
+    plt.savefig("christians_plot_ide.pdf", dpi=300, bbox_inches="tight")
+    plt.show()
 
 
 @click.command()
@@ -221,6 +427,8 @@ def wilcoxon(file1, file2, key):
 
 
 cli.add_command(mds_plot)
+cli.add_command(perr_plot)
+cli.add_command(perr_fit)
 cli.add_command(wilcoxon)
 cli.add_command(diff_normalizer)
 cli.add_command(show_file)

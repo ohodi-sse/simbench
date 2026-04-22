@@ -1,0 +1,22 @@
+import java.util.Arrays;
+import java.util.Collections;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int int1 = Integer.parseInt(scanner.next());
+        scanner.close();
+        final Integer[] a = { 2, 4, 8, 16, 32, 64 };
+        Arrays.sort(a, Collections.reverseOrder());
+        int intValue = 1;
+        for (int i = 0; i < a.length; ++i) {
+            if (a[i] <= int1) {
+                intValue = a[i];
+                break;
+            }
+        }
+        System.out.println(intValue);
+    }
+}

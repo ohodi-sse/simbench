@@ -1,0 +1,14 @@
+import java.util.Scanner;
+
+public class Main
+{
+    static Scanner scanner;
+    
+    public static void main(final String[] array) {
+        System.out.println(Integer.highestOneBit(Main.scanner.nextInt()));
+    }
+    
+    static {
+        Main.scanner = new Scanner(System.in);
+    }
+}

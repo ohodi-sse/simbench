@@ -1,0 +1,32 @@
+import java.io.PrintStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final InputStream in = System.in;
+        final PrintStream out = System.out;
+        final Scanner scanner = new Scanner(in);
+        final PrintWriter printWriter = new PrintWriter(out);
+        new abc139_a().solve(1, scanner, printWriter);
+        printWriter.close();
+    }
+    
+    static class abc139_a
+    {
+        public void solve(final int n, final Scanner scanner, final PrintWriter printWriter) {
+            final String[] split = scanner.next().split("");
+            final String[] split2 = scanner.next().split("");
+            int x = 0;
+            for (int i = 0; i < split.length; ++i) {
+                if (split[i].compareTo(split2[i]) == 0) {
+                    ++x;
+                }
+            }
+            printWriter.println(x);
+        }
+    }
+}

@@ -1,0 +1,13 @@
+import java.util.Scanner;
+
+class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        int nextInt;
+        int x;
+        for (nextInt = scanner.nextInt(), x = 1; x * 2 <= nextInt; x *= 2) {}
+        System.out.println(x);
+        scanner.close();
+    }
+}

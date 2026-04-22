@@ -1,0 +1,23 @@
+import java.util.Scanner;
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final int nextInt = new Scanner(System.in).nextInt();
+        int n = 0;
+        int x = 1;
+        final int[] array2 = new int[nextInt + 1];
+        for (int i = 1; i <= nextInt; ++i) {
+            for (int n2 = i; n2 % 2 == 0; n2 /= 2) {
+                final int[] array3 = array2;
+                final int n3 = i;
+                ++array3[n3];
+            }
+            if (array2[i] > n) {
+                n = array2[i];
+                x = i;
+            }
+        }
+        System.out.println(x);
+    }
+}

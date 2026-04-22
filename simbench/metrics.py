@@ -41,7 +41,8 @@ class NCD(Metric):
 
     def metric_expr(self) -> pl.Expr:
         return (
-            (pl.col("srctgt_comp") - pl.min_horizontal("src_comp", "tgt_comp"))
+            1
+            - (pl.col("srctgt_comp") - pl.min_horizontal("src_comp", "tgt_comp"))
             / pl.max_horizontal("src_comp", "tgt_comp")
         ).cast(pl.Float32)
 
@@ -55,7 +56,33 @@ class DiffMetric(Metric):
         return "diffdistance"
 
     def metric_expr(self) -> pl.Expr:
-        return (pl.min_horizontal("tgt_len", "diff_len") / pl.col("tgt_len")).cast(
+        return (1 - pl.col("diff_len") / pl.max("diff_len")).cast(pl.Float32)
+
+    def time_expr(self) -> pl.Expr:
+        return pl.col("diff_time")
+
+
+class NormalizedDiffMetric(Metric):
+    @property
+    def name(self) -> str:
+        return "normdiffdistance"
+
+    def metric_expr(self) -> pl.Expr:
+        return (1 - pl.min_horizontal("tgt_len", "diff_len") / pl.col("tgt_len")).cast(
+            pl.Float32
+        )
+
+    def time_expr(self) -> pl.Expr:
+        return pl.col("diff_time")
+
+
+class SummedDiffMetric(Metric):
+    @property
+    def name(self) -> str:
+        return "summeddiffdistance"
+
+    def metric_expr(self) -> pl.Expr:
+        return (1 - pl.col("diff_len") / (pl.col("src_len") + pl.col("tgt_len"))).cast(
             pl.Float32
         )
 
@@ -69,7 +96,7 @@ class GenericMetric(Metric):
         return "derived"
 
     def metric_expr(self) -> pl.Expr:
-        return pl.col("distance")
+        return 1 - pl.col("distance")
 
     def time_expr(self) -> pl.Expr:
         return pl.col("time")

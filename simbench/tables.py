@@ -85,6 +85,7 @@ class DiffTable:
     tgt: pl.String
     src_label: pl.String
     tgt_label: pl.String
+    src_len: pl.UInt64
     tgt_len: pl.UInt64
     diff_len: pl.UInt64
     diff_time: pl.UInt64
@@ -108,16 +109,20 @@ def pairwise_diff(
     with bld.progressbar(n) as pb:
         for src, tgt in itertools.product(srcs, repeat=2):
             pb.inc(1)
+            strls1 = byte_lookup[src.name].decode("utf-8").splitlines(keepends=True)
+            strls2 = byte_lookup[tgt.name].decode("utf-8").splitlines(keepends=True)
 
             with bld.profile() as timed:
-                difflen = diff.diff_length(byte_lookup[src.name], byte_lookup[tgt.name])
+                difflen = diff(strls1, strls2)
 
-            tgtlen = len(byte_lookup[tgt.name])
+            srclen = len(strls1)
+            tgtlen = len(strls2)
             out.add(
                 src=src.name,
                 tgt=tgt.name,
                 src_label=src.label,
                 tgt_label=tgt.label,
+                src_len=srclen,
                 tgt_len=tgtlen,
                 diff_len=difflen,
                 diff_time=timed(),
@@ -178,6 +183,7 @@ def generic_distances(
     srcs = [src for _, src in sources.items()]
     with bld.progressbar(len(srcs)) as pb:
         for name, src in sources.items():
+            bld.log.debug(f"Preprocessing {src} with {tool.name}")
             preprocess_lookup[name] = tool.preprocess(src)
             pb.inc(1)
 

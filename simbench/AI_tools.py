@@ -1,3 +1,6 @@
+from interactive_predict import InteractivePredictor
+from functools import reduce
+import argparse
 from simbench.build import NamedCallable, Source
 from abc import ABC, abstractmethod
 import torch
@@ -9,6 +12,11 @@ from transformers import (
     PreTrainedTokenizer,
     PreTrainedModel,
 )
+from loguru import logger
+
+from code2vec import load_model_dynamically
+from config import Config
+from extractor import Extractor
 # from utils.tools import TokenIns
 # from utils.model import GNN_encoder
 # import os
@@ -39,24 +47,11 @@ class AITool(ABC, NamedCallable):
     @abstractmethod
     def _load_model(self) -> PreTrainedModel: ...
 
-    @property
-    @abstractmethod
-    def _load_tokenizer(self) -> PreTrainedTokenizer: ...
-
     def normalize(self, embedding):
         return embedding / embedding.norm(p=2)
 
-    def embed_code(self, code: str):
-        inputs = self.tokenizer(
-            code, return_tensors="pt", truncation=True, padding=True
-        )
-        with torch.no_grad():
-            outputs = self.model(**inputs)
-
-        # Using mean as it should be better at finding semantic similarity
-        embedding = outputs.last_hidden_state.mean(dim=1)
-
-        return embedding.squeeze(0)  # shape: (768,)
+    @abstractmethod
+    def embed_code(self, code: str) -> torch.Tensor: ...
 
     def cosine_distance(self, e1, e2):
         import torch.nn.functional as F
@@ -70,11 +65,32 @@ class AITool(ABC, NamedCallable):
     def __call__(self, file1, file2):
         return self.cosine_distance(file1, file2)
 
+    @abstractmethod
+    def preprocess(self, src: Source): ...
+
+
+class HuggingFace(AITool):
+    @property
+    @abstractmethod
+    def _load_tokenizer(self) -> PreTrainedTokenizer: ...
+
+    def embed_code(self, code: str) -> torch.Tensor:
+        inputs = self.tokenizer(
+            code, return_tensors="pt", truncation=True, padding=True
+        )
+        with torch.no_grad():
+            outputs = self.model(**inputs)
+
+        # Using mean as it should be better at finding semantic similarity
+        embedding = outputs.last_hidden_state.mean(dim=1)
+
+        return embedding.squeeze(0)  # shape: (768,)
+
     def preprocess(self, src: Source):
         return self.normalize(self.embed_code(src.get_bytes().decode("utf-8")))
 
 
-class CodeBERT(AITool):
+class CodeBERT(HuggingFace):
     @property
     def name(self):
         return "CodeBERT"
@@ -88,7 +104,7 @@ class CodeBERT(AITool):
         return RobertaTokenizer.from_pretrained("microsoft/codebert-base")
 
 
-class GraphCodeBERT(AITool):
+class GraphCodeBERT(HuggingFace):
     @property
     def name(self):
         return "GraphCodeBERT"
@@ -100,6 +116,38 @@ class GraphCodeBERT(AITool):
 
     def _load_tokenizer(self):
         return AutoTokenizer.from_pretrained("microsoft/graphcodebert-base")
+
+
+class Code2Vec(AITool):
+    @property
+    def name(self):
+        return "Code2Vec"
+
+    @property
+    def config(self):
+        model_path = "processing_tools/code2vec/src/models/java14_model/saved_model_iter8.release"
+        conf = Config(
+            set_defaults=True,
+            load_from_args=False,
+            verify=True,
+        )
+
+        return conf
+
+    def _load_model(self):
+        model = load_model_dynamically(self.config)
+        predictor = InteractivePredictor(self.config, model)
+        return predictor
+
+    def embed_code(self, code: str) -> torch.Tensor:
+        # predict_lines, hash_to_string_dict = self.path_extractor.extract_paths(code)
+        predictor = self.model
+        code_vector = predictor.one_time_predict(code)
+        code_vector_as_tensor = torch.from_numpy(code_vector)
+        return code_vector_as_tensor
+
+    def preprocess(self, src: Source):
+        return self.normalize(self.embed_code(str(src.path)))
 
 
 # class GraphCode2Vec(AITool):
