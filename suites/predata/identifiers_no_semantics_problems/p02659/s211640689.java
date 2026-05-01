@@ -1,0 +1,1 @@
+// Main Scanner String System a args arr b charAt class gcd import in int java long main new next nextLong out println public return s scan static swap temp util void while ŏclass Main {}

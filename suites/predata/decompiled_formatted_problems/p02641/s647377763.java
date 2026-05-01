@@ -1,0 +1,44 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    Scanner sc;
+    final int MOD = 998244353;
+    final int MAX = Integer.MAX_VALUE;
+    final long LMAX = Long.MAX_VALUE;
+    int len;
+    
+    public Main() {
+        this.sc = new Scanner(System.in);
+        this.len = 1000001;
+    }
+    
+    void doIt() {
+        final int nextInt = this.sc.nextInt();
+        final int nextInt2 = this.sc.nextInt();
+        final boolean[] a = new boolean[201];
+        Arrays.fill(a, true);
+        for (int i = 0; i < nextInt2; ++i) {
+            a[this.sc.nextInt()] = false;
+        }
+        for (int j = 0; j <= 100; ++j) {
+            if (a[nextInt - j]) {
+                System.out.println(nextInt - j);
+                return;
+            }
+            if (a[nextInt + j]) {
+                System.out.println(nextInt + j);
+                return;
+            }
+        }
+    }
+    
+    public static void main(final String[] array) {
+        new Main().doIt();
+    }
+}

@@ -1,0 +1,1 @@
+// Main N Scanner String System abc ans args atcoder b class contests https import in int java jp main new nextInt out println public sc static tasks util void whileclass Main {}

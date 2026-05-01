@@ -1,0 +1,1 @@
+// Main Scanner String System a args b charAt class for i if import in int java koike main new next out println public sc static util voidclass Main {}

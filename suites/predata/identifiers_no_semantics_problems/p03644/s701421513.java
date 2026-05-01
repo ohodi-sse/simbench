@@ -1,0 +1,1 @@
+// Main Scanner String StringBuilder System args class for i import in int java main n new nextInt out println public sb sc static util voidclass Main {}

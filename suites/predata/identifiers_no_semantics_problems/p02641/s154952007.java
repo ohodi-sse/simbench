@@ -1,0 +1,1 @@
+// Arrays HashMap Integer Main Map Math PrintWriter Scanner String System args boolean class close ebishu else false fill flush for hs i if import in int io java main max min n new next ou out parseInt print public q s sc static true util void while xclass Main {}

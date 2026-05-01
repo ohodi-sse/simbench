@@ -1,0 +1,1 @@
+// Main N Scanner String System X a acount args b bcount box break class con else for i if import in int j java judge main min nbox new nextInt out print public scan static util voidclass Main {}

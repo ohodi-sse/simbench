@@ -1,0 +1,1 @@
+// A B BigDecimal C Main Scanner String System args class import in java long longValue main math multiply new nextBigDecimal out println public sc seki static util voidclass Main {}

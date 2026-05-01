@@ -1,0 +1,1 @@
+// Main Scanner String System args class cnt equals f for forecast i if import in int java main new nextLine out println public r real sc split static util voidclass Main {}

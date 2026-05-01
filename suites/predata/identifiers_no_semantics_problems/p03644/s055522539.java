@@ -1,0 +1,1 @@
+// Main N Scanner String System args break class close d else for i if import in int java main new nextInt out print public sc static util voidclass Main {}

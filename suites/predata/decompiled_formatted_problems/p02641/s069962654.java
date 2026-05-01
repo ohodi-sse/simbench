@@ -1,0 +1,49 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        final int[] a = new int[nextInt2];
+        for (int i = 0; i < nextInt2; ++i) {
+            a[i] = scanner.nextInt();
+        }
+        final int[] array2 = new int[102];
+        Arrays.sort(a);
+        int n = 0;
+        for (int j = 0; j <= 101; ++j) {
+            if (n < nextInt2) {
+                if (a[n] == j) {
+                    ++n;
+                }
+                else {
+                    array2[j] = j;
+                }
+            }
+            else {
+                array2[j] = j;
+            }
+        }
+        int x = 0;
+        int n2 = 200;
+        for (int k = 0; k <= 101; ++k) {
+            int n3 = nextInt - array2[k];
+            if (n3 < 0) {
+                n3 *= -1;
+            }
+            if (n2 > n3) {
+                n2 = n3;
+                x = array2[k];
+            }
+        }
+        System.out.println(x);
+        scanner.close();
+    }
+}

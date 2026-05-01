@@ -1,0 +1,1 @@
+// BF BufferedReader FastReader IOException InputStreamReader Integer Main PrintWriter R ST String StringTokenizer System args catch charAt class contains e else final flush hasMoreTokens if import in int io java main new next nextInt nextToken null out parseInt printStackTrace println private public readLine return s solve static try util void whileclass Main {}

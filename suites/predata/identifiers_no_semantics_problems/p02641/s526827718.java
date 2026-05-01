@@ -1,0 +1,1 @@
+// BufferedReader C HashSet IOException InputStreamReader Integer K Long MAX Main Math N No String System VALUE X Yes a abs add ans args array boolean br can class contains diff false flag for h ht i if import in instead int io java lang long main mindiff new of out parseInt parseLong println public readLine s set split static throws true use util void youclass Main {}

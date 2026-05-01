@@ -1,0 +1,1 @@
+// A Arrays B BufferedReader FastReader IOException InputStreamReader Integer Long Main String StringTokenizer System args br catch charAt class e fs hasMoreElements import in int io java long main new next nextInt nextLong nextToken null out parseInt parseLong printStackTrace println public readLine res return st static throws try util void whileclass Main {}

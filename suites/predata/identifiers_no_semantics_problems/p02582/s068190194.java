@@ -1,0 +1,1 @@
+// Integer MOD Main R Scanner String System args charAt class cnt else final for i if import in int java length main max n new next out parseInt println public s sc static util voidclass Main {}

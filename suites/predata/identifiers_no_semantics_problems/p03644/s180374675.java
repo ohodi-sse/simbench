@@ -1,0 +1,1 @@
+// Auto Main Math Scanner String System TODO args break class for generated i if import in int java main method n new nextInt out pow print public sc static stub util voidclass Main {}

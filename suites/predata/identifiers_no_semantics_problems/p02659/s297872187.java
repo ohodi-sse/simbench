@@ -1,0 +1,1 @@
+// Main Math Scanner String System a ans args b class close double import in java lb long main new nextDouble nextLong out println public round run sc static util voidclass Main {}

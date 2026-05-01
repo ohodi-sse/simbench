@@ -1,0 +1,41 @@
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final String next = new Scanner(System.in).next();
+        int x;
+        if (next.charAt(1) == 'S') {
+            if (next.charAt(0) == 'R' || next.charAt(2) == 'R') {
+                x = 1;
+            }
+            else {
+                x = 0;
+            }
+        }
+        else if (next.charAt(0) == 'R') {
+            if (next.charAt(2) == 'R') {
+                x = 3;
+            }
+            else {
+                x = 2;
+            }
+        }
+        else if (next.charAt(2) == 'R') {
+            if (next.charAt(0) == 'R') {
+                x = 3;
+            }
+            else {
+                x = 2;
+            }
+        }
+        else {
+            x = 1;
+        }
+        System.out.println(x);
+    }
+}

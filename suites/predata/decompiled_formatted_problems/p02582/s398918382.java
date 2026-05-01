@@ -1,0 +1,31 @@
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String... array) {
+        final char[] charArray = new Scanner(System.in).next().toCharArray();
+        int x = 0;
+        int i = 0;
+        int n = 0;
+        while (i < charArray.length) {
+            if (charArray[i] == 'R') {
+                ++n;
+                if (x < n) {
+                    x = n;
+                }
+            }
+            else {
+                if (x < n) {
+                    x = n;
+                }
+                n = 0;
+            }
+            ++i;
+        }
+        System.out.println(x);
+    }
+}

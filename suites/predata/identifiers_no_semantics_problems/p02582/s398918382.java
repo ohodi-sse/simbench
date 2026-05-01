@@ -1,0 +1,1 @@
+// Main R S Scanner String System args char class currentCnt else for i if import in int java length main maxCount new next out println public scanner static toCharArray util voidclass Main {}

@@ -1,0 +1,1 @@
+// Actual Built CHelper IOException InputStream Long Main Multiplication OutputStream PrintWriter Scanner String System a append args at b class close import in inputStream inputs int io is java long main new nextLine out outputStream parseLong plug public replaceAll solution solve solver split static testNumber the top using util valueOf voidclass Main {}

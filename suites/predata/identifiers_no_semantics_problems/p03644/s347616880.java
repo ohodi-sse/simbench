@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Integer Main Math String System args class for i import in int io java main max n new out parseInt println public readLine static throws voidclass Main {}

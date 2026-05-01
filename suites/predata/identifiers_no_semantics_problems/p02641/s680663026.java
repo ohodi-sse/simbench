@@ -1,0 +1,1 @@
+// Integer Main Scanner String System ans args break class else for i if import in index int java main maxIndex minIndex n new nextLine num out parseInt println public sc split static str util void xclass Main {}

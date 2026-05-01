@@ -1,0 +1,1 @@
+// Long Main Pattern Scanner String System a args b class import in java long main new next nextLong out parseLong println public regex replace sc static util voidclass Main {}

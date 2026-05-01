@@ -1,0 +1,1 @@
+// A B BigDecimal Main Scanner String SuppressWarnings System ans args bd byte class compareTo else if import in indexOf int java length main math multiply new next nextBigDecimal nextByte nextInt null out println public resource sc static str substring toString util voidclass Main {}

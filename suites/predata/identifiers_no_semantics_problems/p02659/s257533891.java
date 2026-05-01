@@ -1,0 +1,1 @@
+// A B BigDecimal DOWN Double Long Main ROUND Scanner String System ans args class double import in java long main math multiply new nextDouble nextLong out println public sc setScale static str toString util value voidclass Main {}

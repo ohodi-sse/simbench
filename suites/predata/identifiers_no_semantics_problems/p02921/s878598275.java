@@ -1,0 +1,1 @@
+// Main Scanner String System alpha ans args class close equals for i if import in int ipt java length main n new next null out println public split static util voidclass Main {}

@@ -1,0 +1,1 @@
+// Main N Pz Scanner String System X ans args break class continue for i if import in int java main new nextInt out println public sc sort static util voidclass Main {}

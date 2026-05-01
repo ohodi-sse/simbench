@@ -1,0 +1,62 @@
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final String next = scanner.next();
+        final String next2 = scanner.next();
+        int n = 0;
+        if (next.substring(0, 1).equals(next2.substring(0, 1))) {
+            ++n;
+        }
+        if (next.substring(1, 2).equals(next2.substring(1, 2))) {
+            ++n;
+        }
+        if (next.substring(2, 3).equals(next2.substring(2, 3))) {
+            ++n;
+        }
+        log(n);
+    }
+    
+    private static int countSwapBabbleSort(final int[] array) {
+        int n = 0;
+        final int[] array2 = new int[array.length + 1];
+        for (int i = 0; i < array.length; ++i) {
+            n += i - sum(array2, array[i]);
+            add(array2, array[i], 1);
+        }
+        return n;
+    }
+    
+    private static void add(final int[] array, final int n, final int n2) {
+        for (int i = n; i < array.length; i += (i & -i)) {
+            final int n3 = i;
+            array[n3] += n2;
+        }
+    }
+    
+    private static int sum(final int[] array, final int n) {
+        int n2 = 0;
+        for (int i = n; i > 0; i -= (i & -i)) {
+            n2 += array[i];
+        }
+        return n2;
+    }
+    
+    private static void log(final String x) {
+        System.out.println(x);
+    }
+    
+    private static void log(final int x) {
+        System.out.println(x);
+    }
+    
+    private static void log(final double x) {
+        System.out.println(x);
+    }
+}

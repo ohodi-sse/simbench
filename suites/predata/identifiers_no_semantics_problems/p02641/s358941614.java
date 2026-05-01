@@ -1,0 +1,1 @@
+// Arrays Integer Main Scanner String System args asList break class contains else for i if import in index indexOf int intValue java length main minus n new next now out parseInt plus println public return sc sort static target toString util void while xclass Main {}

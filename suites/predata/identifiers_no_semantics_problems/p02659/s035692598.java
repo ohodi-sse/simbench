@@ -1,0 +1,1 @@
+// Auto BufferedReader Double Exception InputStreamReader Long Main PrintWriter String StringTokenizer System TODO a args b bf c class close d double generated import in int io java long main method new nextToken num out parseDouble parseLong println public readLine st static stub throws util voidclass Main {}

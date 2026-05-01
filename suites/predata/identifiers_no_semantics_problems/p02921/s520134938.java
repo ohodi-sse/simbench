@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Main String System ans args bf charAt class for i if import in int io java main new null out println public readLine s static t throws voidclass Main {}

@@ -1,0 +1,1 @@
+// Main Scanner String System args class for i if import in int java main n new nextInt nextLine nn out println public return s sc static util voidclass Main {}

@@ -1,0 +1,1 @@
+// Main R S Scanner String System args ch char class close for if import in int java main n new next out p println public sc solve static toCharArray up util void warmclass Main {}

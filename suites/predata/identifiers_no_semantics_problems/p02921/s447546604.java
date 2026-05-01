@@ -1,0 +1,1 @@
+// Main Scanner String System args charAt class close for i if import in int java main new next out println public static util void yoclass Main {}

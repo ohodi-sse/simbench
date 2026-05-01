@@ -1,0 +1,1 @@
+// ArrayList Collections Integer Main Math Scanner String System abs add ans args boolean class contains continue else f false for i if import in int java main min n new nextInt out p println public sc sort static tmp true util void xclass Main {}

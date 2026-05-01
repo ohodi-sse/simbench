@@ -1,0 +1,1 @@
+// ExTargetNumber Main Scanner String System args break class dividing else for i if import in int java main manyOfdividing max new nextInt number out println public sc static targetNumber true util void whileclass Main {}

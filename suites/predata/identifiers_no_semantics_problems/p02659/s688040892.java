@@ -1,0 +1,1 @@
+// BufferedReader Double IOException InputStreamReader Long Main String System a args b br c class d double import in io java long main new out parseDouble parseLong println public readLine split static str throws voidclass Main {}

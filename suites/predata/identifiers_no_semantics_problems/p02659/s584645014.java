@@ -1,0 +1,1 @@
+// Auto E Main Scanner String System TODO a args b c class double eps generated import in java long main method new nextDouble nextLong out println public scn static stub util voidclass Main {}

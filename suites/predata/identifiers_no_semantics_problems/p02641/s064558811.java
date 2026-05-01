@@ -1,0 +1,1 @@
+// HashMap Integer Main Scanner String System args class containsKey else for i if import in int java left main map n new nextInt out println public put right sc static util void while xclass Main {}

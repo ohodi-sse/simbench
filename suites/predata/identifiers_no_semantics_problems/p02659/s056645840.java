@@ -1,0 +1,1 @@
+// A B BigDecimal BigInteger C D Main Scanner String System args class import in java main math multiply new nextBigDecimal out print public sc static toBigInteger util voidclass Main {}

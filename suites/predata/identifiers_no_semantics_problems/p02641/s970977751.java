@@ -1,0 +1,1 @@
+// Main Math N Scanner String System X abs ans args class for i if import in int java main minDiff new nextInt out pNot println public sc static util voidclass Main {}

@@ -1,0 +1,1 @@
+// ArrayList Collections HashMap Integer MAX MIN Main Math Scanner String System VALUE a abs add al ans args class containsKey else for get i if import in int io java lang main mans map max min n new nextInt out p println public put remove return scn size some sort static temp util void while xclass Main {}

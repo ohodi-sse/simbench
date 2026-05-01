@@ -1,0 +1,1 @@
+// ArrayList Integer List Main Math N P Scanner String System X abs add ans args class contains continue for i if import in int java main min new nextInt nextLine out println public sc static stream util voidclass Main {}

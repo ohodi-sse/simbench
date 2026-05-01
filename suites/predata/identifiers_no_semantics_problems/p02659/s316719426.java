@@ -1,0 +1,1 @@
+// BufferedReader Exception InputStreamReader Long Main PrintWriter String System ans args br charAt class close flush import in io java long m main n new out parseLong println public readLine split static throws voidclass Main {}

@@ -1,0 +1,1 @@
+// Main Scanner String System a ans args boolean cap capminus capplus class count else false flag for if import in int java main new nextInt num out println public scan static stk tmp true util void whileclass Main {}

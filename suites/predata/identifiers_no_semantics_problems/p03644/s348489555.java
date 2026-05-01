@@ -1,0 +1,1 @@
+// Main Math Scanner String System args boolean class false for if import in ind int isRoot java main most new nextInt num out pow println private public return scan static true util voidclass Main {}

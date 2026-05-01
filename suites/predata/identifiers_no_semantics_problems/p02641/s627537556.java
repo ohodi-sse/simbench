@@ -1,0 +1,1 @@
+// ArrayList Integer List Main N Scanner String System X Xindex add args b boolean class close data else exit false for get i if import in indexOf int j java main new nextInt nums out println public remove scanner size static true util voidclass Main {}

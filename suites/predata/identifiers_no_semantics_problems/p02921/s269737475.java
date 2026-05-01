@@ -1,0 +1,1 @@
+// Main S Scanner String System T args charAt class for i if import in int java length main new next out println public rightPrediction sc static try util voidclass Main {}

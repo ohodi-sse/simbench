@@ -1,0 +1,1 @@
+// Main Scanner String SuppressWarnings System actual args char class cnt expected for i import in int java main new next out println public resource sc static toCharArray util voidclass Main {}

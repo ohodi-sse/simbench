@@ -1,0 +1,1 @@
+// Main Math R Scanner String System args break charAt class close else for i if import in int j java length main max new next ob out patt println public result static temp util voidclass Main {}

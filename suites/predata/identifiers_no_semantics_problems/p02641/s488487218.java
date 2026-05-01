@@ -1,0 +1,1 @@
+// Boolean Exception Main N Scanner String System X Your answer args break check class code false for here i if import in int java maiN main new nextInt out println public puraN s static throws true util void whileclass Main {}

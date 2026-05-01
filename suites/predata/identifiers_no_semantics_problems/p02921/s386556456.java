@@ -1,0 +1,1 @@
+// Main Scanner String System ans args class count equals for forecast i if import in int java main new nextLine out println public sc split static util voidclass Main {}

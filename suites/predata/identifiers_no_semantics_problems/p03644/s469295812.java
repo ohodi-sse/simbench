@@ -1,0 +1,1 @@
+// Integer Main N Scanner String System ans args class for i if import in int java main max new nextInt numberOfTrailingZeros out println public sc static util voidclass Main {}

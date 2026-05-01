@@ -1,0 +1,1 @@
+// Double Main Scanner String System a aisatu args b class final import in int interface java long main mesod new next nextLong out parseDouble print public sc static str util voidclass Main {}

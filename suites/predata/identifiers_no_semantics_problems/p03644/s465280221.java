@@ -1,0 +1,1 @@
+// Main N Scanner String System args class cnt import in int java main math new nextInt out println public sc static util void whileclass Main {}

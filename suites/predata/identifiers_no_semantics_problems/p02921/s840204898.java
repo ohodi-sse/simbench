@@ -1,0 +1,1 @@
+// IOException Main Scanner String System a ans args b char class else for i if import in int io java length long main mod myMod myModPow n new next out param primeNumMod println public ret return s scan static t throws toCharArray trueCount util void while ｓclass Main {}

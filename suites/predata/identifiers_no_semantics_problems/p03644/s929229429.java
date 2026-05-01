@@ -1,0 +1,1 @@
+// Main Math Scanner String System ans args break class cnt double if import in int java main n new nextInt out pow println public scan static true util void whileclass Main {}

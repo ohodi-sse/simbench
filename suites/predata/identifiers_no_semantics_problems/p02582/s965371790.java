@@ -1,0 +1,1 @@
+// Arrays List Main R Scanner String System a ans args array asList break class else equals for hikaku i if import in int java main n new nextInt nextLine out println public s sc size split static toArray util voidclass Main {}

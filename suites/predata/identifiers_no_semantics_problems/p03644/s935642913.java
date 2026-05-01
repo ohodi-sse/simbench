@@ -1,0 +1,1 @@
+// Main Scanner String System TODO ans args class close count for i if import in int java main n new nextInt out println public sc static tmp util void whileclass Main {}

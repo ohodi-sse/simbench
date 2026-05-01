@@ -1,0 +1,1 @@
+// Main Math Reader Scanner String System a abs ans args calc class cnt continue dist extends for i if import in ini int java left main mini n new nextInt out println public return right sc show solve static util vi void xclass Main {}

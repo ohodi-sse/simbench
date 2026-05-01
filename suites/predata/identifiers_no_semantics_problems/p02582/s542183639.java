@@ -1,0 +1,1 @@
+// Main Math S Scanner String System args ch char class cnt else for if import in int io java main max mval new next out println public record sc static toCharArray util voidclass Main {}

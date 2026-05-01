@@ -1,0 +1,1 @@
+// Main Scanner String System args atari class equals for i if import in int java main new nextLine out println public s scanner static substring t util voidclass Main {}

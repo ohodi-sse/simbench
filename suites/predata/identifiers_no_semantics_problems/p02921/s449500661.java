@@ -1,0 +1,1 @@
+// Main Scanner String System actual ans args class equals for i if import in int java length main new next out println public sc split static util void yohoclass Main {}

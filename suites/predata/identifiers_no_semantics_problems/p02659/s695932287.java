@@ -1,0 +1,1 @@
+// A B BB BD BigDecimal Double Exception InputStream Main PrintStream Scanner String System Your args class code here import in io is java long longValue main math multiply new nextDouble nextLong os out println public scan solve static throws toString util voidclass Main {}

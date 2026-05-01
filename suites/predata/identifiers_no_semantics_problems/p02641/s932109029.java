@@ -1,0 +1,1 @@
+// Exception Main Math N Scanner String System X Your abs ans args class code for here i if import in int j java length main min new nextInt num out p println public result sc static throws util voidclass Main {}

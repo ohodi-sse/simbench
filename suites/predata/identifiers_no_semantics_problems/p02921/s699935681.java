@@ -1,0 +1,1 @@
+// ArrayList Arrays Collections Main Scanner String System actual actualChar args char class counter for forecast forecastChar i if import in int java main new next out println public sc static toCharArray util voidclass Main {}

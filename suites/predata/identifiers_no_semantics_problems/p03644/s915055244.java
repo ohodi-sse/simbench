@@ -1,0 +1,1 @@
+// Count High Main Scanner String System args be class close count for hiCount i if import in int io java judges main most n new nextInt online out println public result sc should static temp tempNumb used util void whileclass Main {}

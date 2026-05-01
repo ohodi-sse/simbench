@@ -1,0 +1,1 @@
+// Actual BBreakNumber Built CHelper IOException InputStream Main Math OutputStream PrintWriter Scanner String System args at author class close floor import in inputStream int io is java log main mikit new nextInt out outputStream plug pow println public solution solve solver static testNumber the top using util voidclass Main {}

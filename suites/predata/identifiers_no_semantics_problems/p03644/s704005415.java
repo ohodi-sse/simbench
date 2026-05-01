@@ -1,0 +1,1 @@
+// Main Math Scanner String System TODO ans args break class count double else for i if import in int java main n new nextDouble out pow println public scan static util voidclass Main {}

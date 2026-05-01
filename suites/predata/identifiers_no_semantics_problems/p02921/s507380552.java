@@ -1,0 +1,1 @@
+// ATenki Actual Akash Built CHelper IOException InputStream Main OutputStream PrintWriter Scanner String System a ans args at author b charAt class close for i if import in inputStream int io is java main new nextLine out outputStream plug println public solution solve solver static testNumber the top using util voidclass Main {}

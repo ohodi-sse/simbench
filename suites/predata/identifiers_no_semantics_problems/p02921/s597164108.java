@@ -1,0 +1,1 @@
+// Main PrintWriter S Scanner String System T args class equals flush for i if import in int io java main new next out println public static stdin substring sum util voidclass Main {}

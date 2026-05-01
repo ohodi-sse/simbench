@@ -1,0 +1,1 @@
+// Integer Main Scanner String System a args b class count equals for i if import in int java length main new nextLine num nyu nyureal out parseInt println public sc sn split static util voidclass Main {}

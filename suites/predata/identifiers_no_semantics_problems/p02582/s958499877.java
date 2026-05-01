@@ -1,0 +1,1 @@
+// Main R RR RRR Scanner String System args class close if import in indexOf int java main new next out println public record result sc static util voidclass Main {}

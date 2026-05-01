@@ -1,0 +1,1 @@
+// Main Scanner String System TODO ans args che class dif for i if import in int j java main n new nextInt out p println public sc static util void xclass Main {}

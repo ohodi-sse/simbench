@@ -1,0 +1,1 @@
+// Exception InputStream Main Math PrintStream R S Scanner String System Your ans args boolean charAt class code else false for here i if import in int io is isR java main max new next os out println public scan solve static temp throws true util void wasRclass Main {}

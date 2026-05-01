@@ -1,0 +1,1 @@
+// Main Scanner String System ans args charAt class for forecast i if import in int java main new next out println public result sc static util voidclass Main {}

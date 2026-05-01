@@ -1,0 +1,1 @@
+// Exception Main Scanner String System Your args class code here import in int java main n new nextInt out println public sc static throws two util void whileclass Main {}

@@ -1,0 +1,1 @@
+// Actual Built CHelper IOException InputStream Main OutputStream PrintWriter Scanner String System TaskB args at class close div for i if import in inputStream int io is java m main n new nextInt out outputStream plug println public res return sn solution solve solver static testNumber the top using util void whileclass Main {}

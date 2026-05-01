@@ -1,0 +1,1 @@
+// A B Double Integer Long Main Math NO Scanner String System YES ab args charAt class double else flg for gd gi gl gs i if import in int java length long main new next out parseDouble parseInt parseLong print public return round s scanner static util valueOf voidclass Main {}

@@ -1,0 +1,1 @@
+// Integer Main Scanner String System a args b c charAt class double for g i if import in int java length long main new nextDouble nextLong out parseInt print println public return scan static t util valueOf voidclass Main {}

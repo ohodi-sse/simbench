@@ -1,0 +1,1 @@
+// Exception Main S Scanner String System T Your ans args char class code for here i if import in int java main new nextLine out println public scan static tenki throws toCharArray util void yohouclass Main {}

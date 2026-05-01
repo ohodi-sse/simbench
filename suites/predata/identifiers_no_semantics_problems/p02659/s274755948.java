@@ -1,0 +1,1 @@
+// Integer Main Scanner String System a args b bb class import in int java long main new next nextLong out parseInt println public replace sc static util voidclass Main {}

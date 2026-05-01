@@ -12,7 +12,12 @@ from abc import ABC, abstractmethod
 
 
 from simbench.compressors import Compressor, Diff, EditDistanceDiff
-from simbench.metrics import Metric, NormalizedDiffMetric, SummedDiffMetric
+from simbench.metrics import (
+    Metric,
+    NormalizedDiffMetric,
+    SummedDiffMetric,
+    NormalizedCosine,
+)
 import time
 
 import loguru
@@ -33,6 +38,9 @@ from simbench.normalizers import (
     HashedProblemLabel,
     PartitionedProblemClasses,
     DecompileFixedImports,
+    TokenNormalizer,
+    IdentifierNoSemantics,
+    DecompiledFormatted,
 )
 
 from simbench.tables import (
@@ -93,23 +101,23 @@ class DiffTool(Tool):
 
 
 @dataclass
-class GenericTool(Tool):
+class AITool(Tool):
     from simbench.build import NamedCallable
 
-    generic: NamedCallable
+    AItool: NamedCallable
 
     @property
     def tool_name(self):
-        return f"{self.generic.name}"
+        return f"{self.AItool.name}"
 
     def __call__(self):
-        return self.generic
+        return self.AItool
 
 
 def get_all_tools():
     from simbench.compressors import Zstd, Gzip, Zlib, Difflib
     from simbench.metrics import NCD
-    from simbench.metrics import GenericMetric, DiffMetric
+    from simbench.metrics import DiffMetric
 
     comp_lvls = [1, 9]
     zlib = [Zlib(comp_lvl) for comp_lvl in comp_lvls]
@@ -121,18 +129,18 @@ def get_all_tools():
 
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
     diff_tools = [
-        DiffTool(DiffMetric(), EditDistanceDiff()),
         DiffTool(NormalizedDiffMetric(), EditDistanceDiff()),
+        DiffTool(DiffMetric(), EditDistanceDiff()),
         DiffTool(SummedDiffMetric(), EditDistanceDiff()),
     ]  # BSDiff is veeeery slooow
     # other_tools = [GenericTool(GenericMetric(), Difflib())]
     ai_tools = [
-        GenericTool(GenericMetric(), CodeBERT()),
-        GenericTool(GenericMetric(), GraphCodeBERT()),
-        GenericTool(GenericMetric(), Code2Vec()),
+        AITool(NormalizedCosine(), CodeBERT()),
+        AITool(NormalizedCosine(), GraphCodeBERT()),
+        AITool(NormalizedCosine(), Code2Vec()),
     ]
 
-    return comp_tools + ai_tools + diff_tools
+    return diff_tools + comp_tools + ai_tools
 
 
 def get_all_classifiers(steps: int = 20) -> Sequence[Classifier]:
@@ -152,9 +160,12 @@ def get_all_normalizers():
         DecompileNormalizer(),
         OptimizedDecompiledNormalizer(),
         GoogleFormatter(),
+        TokenNormalizer(),
         DecompileWOImports(),
         DecompileFixedImports(),
         HashedProblemLabel(),
+        IdentifierNoSemantics(),
+        DecompiledFormatted(),
         PartitionedProblemClasses(5),
         PartitionedProblemClasses(25),
     ]
@@ -199,9 +210,14 @@ class Analysis(ABC):
 
     @property
     def default_path(self):
+        if self.suite.seed and self.suite.n_samples:
+            result_path = f"results_w_seed_{self.suite.seed}"
+        else:
+            result_path = "results"
+
         default_path = (
             self.suite.root
-            / "results"
+            / result_path
             / f"{self.normalizer.name}"
             / self.tool.tool_name
         )
@@ -349,19 +365,34 @@ class DiffAnalysis(Analysis):
         )
 
 
-class GenericAnalysis(Analysis):
+class AIToolAnalysis(Analysis):
     def __post_init__(self):
-        assert isinstance(self.tool, GenericTool)
+        assert isinstance(self.tool, AITool)
+
+    @property
+    def raw_distance_file(self):
+        return self.default_path / "raw_distances.parquet"
+
+    @property
+    def raw_distance_node(self):
+        from simbench.tables import ai_distances
+
+        assert isinstance(self.tool, AITool)
+        return ai_distances(
+            self.raw_distance_file,
+            tool=Constant(self.tool.AItool),
+            sources=self.source_nodes,
+        )
 
     @property
     def distance_node(self):
-        from simbench.tables import generic_distances
+        from simbench.tables import ai_similarities
 
-        assert isinstance(self.tool, GenericTool)
-        return generic_distances(
+        assert isinstance(self.tool, AITool)
+        return ai_similarities(
             self.distance_file,
-            tool=Constant(self.tool.generic),
-            sources=self.source_nodes,
+            metric=Constant(self.tool.metric),
+            raw_ai_dist_df=self.raw_distance_node,
         )
 
 
@@ -374,8 +405,8 @@ def init_analysis(
     if isinstance(tool, DiffTool):
         return DiffAnalysis(tool, suite, classifiers, normalizer)
 
-    if isinstance(tool, GenericTool):
-        return GenericAnalysis(tool, suite, classifiers, normalizer)
+    if isinstance(tool, AITool):
+        return AIToolAnalysis(tool, suite, classifiers, normalizer)
 
     assert False, f"Unrecognized tool type: {type(tool)}"
 
@@ -404,11 +435,16 @@ class AnalysisComparison:
         )
 
     @property
-    def table_comparison(self):
+    def comparison_table_file(self):
         h = hashlib.new("sha256")
         h.update("".join(self.analyses.keys()).encode("utf-8"))
         hashstr = h.hexdigest()[:16]
+
+        return self.suite.root / "results" / f"{hashstr}_table_comparison.parquet"
+
+    @property
+    def table_comparison(self):
         return evaluation(
-            path=self.suite.root / "results" / f"{hashstr}_table_comparison.parquet",
+            self.comparison_table_file,
             **self.analyses,
         )

@@ -1,0 +1,1 @@
+// Main Scanner String System args class currentHighestDivisible currentWinner else if import in int io java main new nextInt out println public sc static test testDividedByTwo testFactorsOfTwo util void while xclass Main {}

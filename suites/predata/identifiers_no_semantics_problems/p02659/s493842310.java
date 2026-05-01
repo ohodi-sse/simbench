@@ -1,0 +1,1 @@
+// Actual BigDecimal Built CHelper IOException InputStream Main OutputStream PrintWriter Scanner String System Task a args at b class close import in inputStream int io is java main math multiply new nextDouble out outputStream plug println public solution solve solver static testNumber the toBigInteger top using util voidclass Main {}

@@ -1,0 +1,1 @@
+// Ent Main Scanner String System actual args arr char class for i if import in int java length main new next numero out pred println public static toCharArray util voidclass Main {}

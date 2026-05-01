@@ -1,0 +1,1 @@
+// Main Scanner String System a args b class close double flooredB import in java long main new nextDouble nextLong out println public static util voidclass Main {}

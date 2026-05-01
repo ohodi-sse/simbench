@@ -1,0 +1,1 @@
+// Integer Main Scanner String System class highestOneBit in java main new nextInt out println public static util voidclass Main {}

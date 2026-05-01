@@ -1,0 +1,1 @@
+// HashSet Integer MAX Main Math N Scanner String System VALUE X abs add ans args class contains continue for gap i if import in int java main min new nextInt out println public sc set static util voidclass Main {}

@@ -1,0 +1,1 @@
+// Auto Main Scanner String System TODO args c charAt class for generated i if import in int java main method new next out println public s sc static stub t util voidclass Main {}

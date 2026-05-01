@@ -1,0 +1,1 @@
+// Main Scanner String System args break class currentDividedCount dividedCount else for givenNumber i if import in int java main new nextInt out output println public scanner static target tmp true util void whileclass Main {}

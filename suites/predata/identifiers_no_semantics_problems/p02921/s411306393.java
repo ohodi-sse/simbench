@@ -1,0 +1,1 @@
+// A B Main Scanner String System args class count equals for gcd i if import in int java lcm long m main n new next out println private public return sc static substring util voidclass Main {}

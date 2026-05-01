@@ -1,0 +1,1 @@
+// Main Rain S Scanner String System args class for if import in int java length main max new next out println public r sc split static util voidclass Main {}

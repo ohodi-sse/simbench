@@ -1,0 +1,1 @@
+// A B BigDecimal BigInteger BufferedReader IOException InputStreamReader Main StandardCharsets String System UTF args calc charset class import in ins io java main math multiply new nio out println public readLine reader result showResult split static throws toBigInteger tokens util voidclass Main {}

@@ -1,0 +1,1 @@
+// Integer Ints Long Main Object Scanner String System a args b calc class close first floor for i if in int java l length line lineInts lineLongs long main new nextLine out parse parseInt parseLong period piriod pow println public puts return scan second sliced split static substring util valueOf vars voidclass Main {}

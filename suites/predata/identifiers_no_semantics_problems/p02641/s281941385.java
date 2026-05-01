@@ -1,0 +1,1 @@
+// Main Math N P Q R Scanner String System X abs args class else exit for i if import in int j java k l main new nextInt out println public sc static util void xclass Main {}

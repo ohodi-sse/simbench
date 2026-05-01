@@ -1,0 +1,1 @@
+// Entry HashMap Integer Main Map Scanner String System an ans args c class e entrySet exit for getKey getValue i if import in int j java main max n new nextInt out println public put sc static util void whileclass Main {}

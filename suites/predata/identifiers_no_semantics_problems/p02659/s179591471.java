@@ -1,0 +1,1 @@
+// BufferedReader Double IOException InputStreamReader Long Main String StringTokenizer System a args b br c class double import in io java long main new nextToken out parseDouble parseLong println public readLine res st static throws util voidclass Main {}

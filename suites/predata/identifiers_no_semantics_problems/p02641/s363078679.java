@@ -1,0 +1,1 @@
+// Integer Main N Scanner String System X args boolean class for i if import in int java main new next out p parseInt println public return sc static true try util voidclass Main {}

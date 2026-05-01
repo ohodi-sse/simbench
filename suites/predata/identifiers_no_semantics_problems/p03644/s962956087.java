@@ -1,0 +1,1 @@
+// Main Scanner String System args class close counter for i if import in int io java main new nextInt number out previousCounter print public sc static util void while xclass Main {}

@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Integer Main String System ans args br class count for i id if import in int io java main n new num out parseInt println public readLine static str throws void whileclass Main {}

@@ -1,0 +1,1 @@
+// Main N Scanner String System a args b c class close for i if import in int java k main new nextInt out print public sc static util void whileclass Main {}

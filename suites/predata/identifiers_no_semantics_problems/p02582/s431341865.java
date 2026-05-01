@@ -1,0 +1,1 @@
+// Main R RRR RRS SRR Scanner String System args class contains else equals f if import in input int java main new next out output println private public result sc solve static util voidclass Main {}

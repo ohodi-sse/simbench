@@ -1,0 +1,1 @@
+// Main Scanner String System args charAt class count foc for i if import in int java main new next out println public real scan static util voidclass Main {}

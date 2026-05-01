@@ -1,0 +1,1 @@
+// Double Float Integer Long Main No Object R RR RRR Scanner String System Yes a args b boolean c class contains double else flag float gcd if import in int java lcm long main new next nextDouble nextFloat nextInt nextLong or out parseDouble parseFloat parseInt parseLong print println public return s scan static tmp util void while yesNoclass Main {}

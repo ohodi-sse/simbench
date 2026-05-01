@@ -1,0 +1,1 @@
+// A B BigDecimal DOWN Main ROUND Scanner String System ans args class divide import in int java main math multiply new nextBigDecimal nextDouble out print public sc setScale static util valueOf voidclass Main {}

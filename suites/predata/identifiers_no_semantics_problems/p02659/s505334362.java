@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Long Main String StringTokenizer System a args b br class import in indexOf io java long main new nextToken out parseLong println public readLine st static substring throws util voidclass Main {}

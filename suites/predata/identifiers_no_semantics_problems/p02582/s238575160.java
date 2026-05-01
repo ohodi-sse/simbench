@@ -1,0 +1,1 @@
+// Main R S Scanner String System args class else equals for i if import in int java length main maxResult new nextLine out println public result sc scLine static substring util voidclass Main {}

@@ -1,0 +1,1 @@
+// ArrayList BigDecimal Collectors FLOOR IntStream List Main RoundingMode Scanner String System a args b class import in java main math multiply new next out println public result sc setScale static stream util voidclass Main {}

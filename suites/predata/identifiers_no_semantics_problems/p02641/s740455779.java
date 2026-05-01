@@ -1,0 +1,1 @@
+// Exception Main Math Scanner String System abs ans args class else for i if import in int java main n new nextInt num out p println public sc static throws util void xclass Main {}

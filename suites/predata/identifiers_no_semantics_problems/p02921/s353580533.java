@@ -1,0 +1,1 @@
+// Main S Scanner String System T args charAt class count for hasNext i if import in int java length main new next out println public static util void whileclass Main {}

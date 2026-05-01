@@ -1,0 +1,1 @@
+// Main Objects P Scanner String System args calc case charAt class equals final for i if import in int java jissai kekka main new nextLine out p println public res return sc static switch util void yohouclass Main {}

@@ -1,3 +1,4 @@
+import random
 from dataclasses import dataclass, field
 import time
 import functools
@@ -225,11 +226,31 @@ class Node[A](Pullable[A]):
 @dataclass
 class Suite:
     root: Path
+    seed: None | int
+    n_samples: None | int
+
+    def __init__(self, root, seed=None, n_samples=None):
+        self.root = root
+        self.seed = seed
+        self.n_samples = n_samples
 
     def problems(self):
         return (self.root / "problems").iterdir()
 
     def sources(self):
+        if self.seed and self.n_samples:
+            random.seed(self.seed)
+            source_list = list(
+                itertools.chain.from_iterable(
+                    (Source(s) for s in p.iterdir() if s.is_file())
+                    for p in self.problems()
+                )
+            )
+
+            k = min(self.n_samples, len(source_list))
+            sample_sources = random.sample(list(source_list), k)
+            return itertools.chain(sample_sources)
+
         return itertools.chain.from_iterable(
             (Source(s) for s in p.iterdir() if s.is_file()) for p in self.problems()
         )

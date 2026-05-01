@@ -1,0 +1,1 @@
+// Integer MAX Main Math Scanner String System VALUE abs ans args class for i if import in index int java main minDiff n new nextInt out pArray println public sc static try util void xclass Main {}

@@ -1,0 +1,1 @@
+// Long Main Scanner String System a args b class import in java long main new next nextLong out parseLong println public replaceAll sc static util voidclass Main {}

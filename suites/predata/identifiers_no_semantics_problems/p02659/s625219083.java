@@ -1,0 +1,1 @@
+// Actual Built CHelper CMultiplication IOException InputStream Main Math OutputStream PrintWriter Scanner String System args at author class close d import in inputStream int io is java long main new nextDouble nextLong out outputStream plug println public round silviase solution solve solver static testNumber the top using util void xclass Main {}

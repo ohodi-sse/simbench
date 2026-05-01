@@ -1,0 +1,1 @@
+// Main N Scanner Solver String System ans args class cnt import in int java main new nextInt out println public return run sc static util v void whileclass Main {}

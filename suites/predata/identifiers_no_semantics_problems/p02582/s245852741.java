@@ -1,0 +1,1 @@
+// Main Math R Scanner String System a args aux class else equals for i if import in int java length main max new next out println public s sn split static util voidclass Main {}

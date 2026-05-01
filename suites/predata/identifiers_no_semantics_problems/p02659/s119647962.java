@@ -1,0 +1,1 @@
+// A B BigDecimal Main Scanner String System ans args class double import in java longValue main math multiply new nextBigDecimal nextDouble out println public sc static util valueOf voidclass Main {}

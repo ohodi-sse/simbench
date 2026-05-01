@@ -1,0 +1,1 @@
+// Main Scanner String System args charAt class diffCount for i if import in int java length main new next out println public s scanner static t util voidclass Main {}

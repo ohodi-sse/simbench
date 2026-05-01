@@ -1,0 +1,1 @@
+// Main N Scanner String System args break class count else for i if import in int java main max new nextInt out println public sc soeji static util void while xclass Main {}

@@ -1,0 +1,1 @@
+// Actual Built CHelper ForbiddenList IOException InputStream Main OutputStream PrintWriter Scanner String System a append args at boolean class close for i if import in inputStream int io is java main minus n new nextInt out outputStream p plug plus pos public return solution solve solver static testNumber the top true using util valueOf void while xclass Main {}

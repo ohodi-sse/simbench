@@ -1,0 +1,22 @@
+import java.io.IOException;
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) throws IOException {
+        final Scanner scanner = new Scanner(System.in);
+        final String nextLine = scanner.nextLine();
+        final String nextLine2 = scanner.nextLine();
+        int x = 0;
+        for (int i = 0; i < 3; ++i) {
+            if (nextLine.charAt(i) == nextLine2.charAt(i)) {
+                ++x;
+            }
+        }
+        System.out.println(x);
+    }
+}

@@ -1,0 +1,1 @@
+// Main Math N Scanner String SuppressWarnings System ans args break class cnt else for i if import in int java main max new nextInt out println public resource sc static tmp tmpCnt true util void whileclass Main {}

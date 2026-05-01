@@ -1,0 +1,1 @@
+// Collections Main Scanner String System User args atcoder charAt class cnt contests for herp https i if import in int io java jp lang main new next out println public s sc sorting static submission sy t use util voidclass Main {}

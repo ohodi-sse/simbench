@@ -1,0 +1,22 @@
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final long nextLong = scanner.nextLong();
+        final String next = scanner.next();
+        String s = "";
+        for (int i = 0; i < 4; ++i) {
+            if (next.charAt(i) != '.') {
+                s += next.charAt(i);
+            }
+        }
+        System.out.println(Integer.parseInt(s) * nextLong / 100L);
+        scanner.close();
+    }
+}

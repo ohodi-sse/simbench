@@ -1,0 +1,1 @@
+// Main PrintStream PrintWriter Printer Scanner String System args class close else extends if import in int io java main n new nextInt out p pr println private public sc solve static super util void whileclass Main {}

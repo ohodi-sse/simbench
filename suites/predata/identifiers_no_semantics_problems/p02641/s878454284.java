@@ -1,0 +1,1 @@
+// ArrayList Arrays Integer List Main Math N Object Scanner String System X abs add args arr class else for i if import in index info int intMin java junban junbanList length list main minIndex new nextInt out println public removeAll return sabun sabunAtai sabunAtaiList sabunList scanner size sort static suuretu suuretuList t toArray toList util voidclass Main {}

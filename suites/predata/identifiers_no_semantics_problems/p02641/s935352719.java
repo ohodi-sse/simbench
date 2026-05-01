@@ -1,0 +1,1 @@
+// BufferedReader Collectors InputStreamReader IntStream Integer MAX Main Math Scanner Set String System VALUE abs args boxed class collect diff else final for i if import in int io item java main min n new nextInt nextLine out println public rangeClosed remove res set static stream toSet util void xclass Main {}

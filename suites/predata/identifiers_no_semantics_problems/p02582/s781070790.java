@@ -1,0 +1,1 @@
+// Main R Scanner String System args char character class close else findMaxConsecutiveDays for i if import in int java length main maxDays new next out println public return scanner static str temporaryCount toCharArray util void weatherChar weatherStringclass Main {}

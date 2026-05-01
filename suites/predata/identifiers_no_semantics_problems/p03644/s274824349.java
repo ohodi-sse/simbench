@@ -1,0 +1,1 @@
+// Exception Main N Scanner String System args class close count for i if import in int java main maxNum new nextInt out println public sc static targetNum throws tmpCount util void whileclass Main {}

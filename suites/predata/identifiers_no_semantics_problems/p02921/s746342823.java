@@ -1,0 +1,1 @@
+// CONST L Main Scanner String System args class count equals final for i if import in int java long main new next out println public scan static strS strT substring util voidclass Main {}

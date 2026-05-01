@@ -1,0 +1,1 @@
+// Main N Scanner String System args class cnt divCnt for i if import in int java main maxDivCnt maxN new nextInt out println private public return sc static util voidclass Main {}

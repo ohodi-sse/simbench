@@ -1,0 +1,1 @@
+// A B Integer Main NB Scanner String System args b charAt class close for if import in int java keyboard long main nb new next nextLong out parseInt println public static util voidclass Main {}

@@ -1,0 +1,1 @@
+// Main Math R Scanner Solver String System args c char charAt class else for i if import in int java left length main max new next out println public return s sc solve solverObj static util voidclass Main {}

@@ -1,0 +1,1 @@
+// AList Arrays List Main RList Scanner String System a anticipation args asList class count equals for get i if import in int java main new next out println public r real sc split static util voidclass Main {}

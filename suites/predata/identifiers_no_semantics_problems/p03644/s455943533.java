@@ -1,0 +1,1 @@
+// Actual BBreakNumber Built CHelper IOException InputStream Main OutputStream PrintWriter Scanner String System args at author class close import in inputStream int io is java ky main n new nextInt num out outputStream plug println public solution solve solver static testNumber the top using util void whileclass Main {}

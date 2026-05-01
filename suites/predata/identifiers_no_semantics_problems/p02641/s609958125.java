@@ -1,0 +1,1 @@
+// Main Math Scanner String SuppressWarnings System ab abs ans args boolean class false flg for i if import in int j java main n new nextInt out p println public resource sc static true util void xclass Main {}

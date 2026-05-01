@@ -1,0 +1,1 @@
+// Main Scanner String System args char class equals for i if import in int java main new next out println public result s scanner static substring t util voidclass Main {}

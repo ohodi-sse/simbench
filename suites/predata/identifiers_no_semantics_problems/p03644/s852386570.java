@@ -1,0 +1,1 @@
+// Main N Scanner String System Your args class code count for here i if import in int java main maxCount new nextInt num out println public result sc static util void whileclass Main {}

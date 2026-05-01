@@ -1,0 +1,1 @@
+// Main N Scanner String System X ans args boolean break class dis exist false for if import in int java loop main new nextInt out p println public scanner sol static true util void whileclass Main {}

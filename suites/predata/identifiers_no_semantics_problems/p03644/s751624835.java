@@ -1,0 +1,1 @@
+// EVEN Main Scanner String System args class final for i if import in int java length main max n new nextInt out println public sc static util voidclass Main {}

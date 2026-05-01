@@ -1,0 +1,1 @@
+// A B BigDecimal DOWN Main RoundingMode Scanner String System args bd class double import in java main math multiply new nextDouble nextLong out println public result setScale sn static toPlainString util valueOf voidclass Main {}

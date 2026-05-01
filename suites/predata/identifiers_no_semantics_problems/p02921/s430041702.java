@@ -1,0 +1,1 @@
+// Main Scanner String System args charAt class for i if import in int io java length main math new next num out println public s sc static t util voidclass Main {}

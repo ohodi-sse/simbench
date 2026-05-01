@@ -1,0 +1,1 @@
+// Ans Main Scanner String System args class equals for if import in int java main new next out println public scan sp split static util void xclass Main {}

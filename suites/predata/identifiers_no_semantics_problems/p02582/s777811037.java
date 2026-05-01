@@ -1,0 +1,1 @@
+// Main R Scanner String System TODO args char charAt class count else for i if import in int java main new nextLine out println public s sc static temp tenki util voidclass Main {}

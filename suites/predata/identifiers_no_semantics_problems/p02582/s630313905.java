@@ -1,0 +1,1 @@
+// AtCorder Auto Main RRR RRS S SRR SSS Scanner String System TODO args class else equals generated if import in java main method new nextLine out print public sc static stub util voidclass Main {}

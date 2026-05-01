@@ -1,0 +1,1 @@
+// ArrayList List Main S Scanner String System T args char charAt class cnt for i import in int java length main new next out println public s sc static t util voidclass Main {}

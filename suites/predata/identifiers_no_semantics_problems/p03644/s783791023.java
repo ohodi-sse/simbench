@@ -1,0 +1,1 @@
+// A Main N Scanner String System ans args class cnt for i if import in int java main max new nextInt out println public sc static util void whileclass Main {}

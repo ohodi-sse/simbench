@@ -1,0 +1,1 @@
+// Main R S Scanner String System args class close count equals for i if import in int java length main new next out println public rs sc static str substring util voidclass Main {}

@@ -1,0 +1,14 @@
+import java.math.BigDecimal;
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        System.out.println(BigDecimal.valueOf(scanner.nextLong() * Math.round(scanner.nextFloat() * 100.0f) / 100L).toPlainString());
+    }
+}

@@ -1,0 +1,1 @@
+// Main R Scanner String System args charAt class else for i if import in int java length main maxR new next numR out println public sc static text util voidclass Main {}

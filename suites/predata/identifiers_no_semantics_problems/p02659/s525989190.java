@@ -1,0 +1,1 @@
+// BigDecimal Main Scanner String System a args b class double for i if import in int java lb long main math new nextDouble nextLong out println public run sc static tmp util voidclass Main {}

@@ -1,0 +1,1 @@
+// File IOException Main N Scanner String System args break class file for i if import in input int io java length main new nextInt out println public sc static t throws txt util voidclass Main {}

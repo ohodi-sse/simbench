@@ -1,0 +1,1 @@
+// Integer Main N PrintWriter Scanner String System args class close count flush for i if import in int io java main maxCount new next out parseInt println public result sc static tmp util void whileclass Main {}

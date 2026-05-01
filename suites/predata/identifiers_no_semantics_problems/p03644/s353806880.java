@@ -1,0 +1,1 @@
+// Main Math N Scanner String System ans args boolean check class else false if import in int java main new nextInt out pow println public sc static true util void whileclass Main {}

@@ -1,0 +1,1 @@
+// Arrays BufferedReader Exception IOException InputStreamReader List Main NumberFormatException String System args asList br catch class e equals exit final firstRow for get i if import in int io java main new out printStackTrace println public readLine result secondRow split static throws try util voidclass Main {}

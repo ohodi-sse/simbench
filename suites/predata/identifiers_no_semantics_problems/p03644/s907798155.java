@@ -1,0 +1,1 @@
+// Integer Main Scanner String System args break class close for i if import in int java main n new next num out parseInt println public sc static util voidclass Main {}

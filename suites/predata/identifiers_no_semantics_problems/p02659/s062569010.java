@@ -1,0 +1,1 @@
+// A B C D Main Math Scanner String System args class close double floorDiv if import in java long main new nextDouble nextLong out println public return round sc static util voidclass Main {}

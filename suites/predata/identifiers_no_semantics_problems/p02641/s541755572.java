@@ -1,0 +1,1 @@
+// Main Math Scanner String System abs ans args class comp diff exit for i if import in int java main n new nextInt out p println public sc static util void xclass Main {}

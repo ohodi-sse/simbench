@@ -1,0 +1,1 @@
+// ArrayList BufferedReader IOException InputStreamReader Integer List Main StandardCharsets String System UTF add args arrays break charset class contains else for i if import in int io java main new nio num out parseInt println public readLine reader split static str throws util voidclass Main {}

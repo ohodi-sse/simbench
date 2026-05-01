@@ -1,0 +1,1 @@
+// ArrayList Arrays Main N P Q Scanner String System X ans args class close d else for i if import in int java main new nextInt out p println public s sort static tmp util voidclass Main {}

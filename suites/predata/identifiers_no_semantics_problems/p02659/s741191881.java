@@ -1,0 +1,1 @@
+// Main Scanner String System args class close import in java long main new nextDouble nextLong out println public scan static sum util value voidclass Main {}

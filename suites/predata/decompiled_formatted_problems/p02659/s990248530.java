@@ -1,0 +1,19 @@
+import java.math.BigDecimal;
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final long nextLong = scanner.nextLong();
+        final BigDecimal nextBigDecimal = scanner.nextBigDecimal();
+        final int val = 100;
+        final BigDecimal bigDecimal = new BigDecimal(nextLong);
+        final BigDecimal bigDecimal2 = new BigDecimal(val);
+        System.out.println(bigDecimal.multiply(nextBigDecimal.multiply(bigDecimal2)).divide(bigDecimal2).setScale(0, 1));
+    }
+}

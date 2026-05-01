@@ -1,0 +1,1 @@
+// Long Main Scanner String System a args b class import in java long m main new next nextLong out println public res s sc static substring util valueOf voidclass Main {}

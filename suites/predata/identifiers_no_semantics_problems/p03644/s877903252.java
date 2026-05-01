@@ -1,0 +1,1 @@
+// Integer Main Math N Scanner String System ans args break class close continue count else floor for i if import in int java main new next out parseInt pow println public sc static tmp util voidclass Main {}

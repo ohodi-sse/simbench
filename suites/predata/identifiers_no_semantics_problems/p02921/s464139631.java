@@ -1,0 +1,1 @@
+// A Actual Built CHelper IOException InputStream Main OutputStream PrintWriter S Scanner String System T ans args at charAt class close if import in inputStream int io is java main new next out outputStream plug println public solution solve solver static testNumber the top using util voidclass Main {}

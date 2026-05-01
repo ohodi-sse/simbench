@@ -1,0 +1,1 @@
+// BigInteger Long Main ONE PrintWriter Scanner String System a args b bb charAt class divide flush import in io java long main math multiply n new next ou out parseLong println public sc static util valueOf voidclass Main {}

@@ -1,0 +1,1 @@
+// Main Math Scanner String System a args b c class close import in int java main n new nextInt out pow println public sc solve static up util void warm whileclass Main {}

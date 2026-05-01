@@ -1,0 +1,1 @@
+// Actual Built CHelper IOException InputStream Main OutputStream PrintWriter Scanner String System TaskA args at c charAt class close for forecasted i if import in inputStream int io is java length main new next out outputStream plug predicted print public solution solve solver static testNumber the top using util voidclass Main {}

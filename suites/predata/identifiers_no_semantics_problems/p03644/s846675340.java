@@ -1,0 +1,1 @@
+// Integer Main N Scanner String System ans args break class count else for i if import in int java main max n new next out parseInt println public sc static true util void whileclass Main {}

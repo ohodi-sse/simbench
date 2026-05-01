@@ -1,0 +1,1 @@
+// Main Math Scanner String System a args class counter double import in int java lang log main new nextInt num out pow print public scan static util void xclass Main {}

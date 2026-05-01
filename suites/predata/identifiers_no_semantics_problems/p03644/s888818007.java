@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Int Integer Long Main MyReader Object String System args class digit extends for i ii import in int io j java l length ll long main n new o out parseInt parseLong print println public r readLine return s size split ss static super throws toString util void whileclass Main {}

@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Main String System catch charAt class count e for i if import in int io java main new out printStackTrace println public readLine reader s srgs static t try voidclass Main {}

@@ -1,0 +1,1 @@
+// Main Scanner Stream String System args astr class close equals flag for i if import in int java length main new nextLine out println public sc split static str stream util voidclass Main {}

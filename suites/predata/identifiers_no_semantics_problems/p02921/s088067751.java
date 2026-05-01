@@ -1,0 +1,1 @@
+// A AtCoder Main S Scanner String System T ans args charAt class close for i if import in int java main new nextLine out println public sc static util voidclass Main {}

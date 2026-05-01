@@ -1,0 +1,1 @@
+// A B BigDecimal Main Scanner String System args class close double if import in index indexOf int java main math multiply new nextDouble out println public res sc static substring toPlainString util val valueOf voidclass Main {}

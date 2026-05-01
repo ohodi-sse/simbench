@@ -1,0 +1,1 @@
+// BigInteger Long Main Scanner String System a args b bigA bigC bigD class divide import in java long longValue main math multiply new next out parseLong println public replace sc static util valueOf voidclass Main {}

@@ -1,0 +1,1 @@
+// Cloudy Double HashMap Integer List Long Main Map Math N Rainy Scanner String Sunny System args break class double else equals gd gi gl gs i if import in int java long m main new next out parseDouble parseInt parseLong pow print public return scanner static t true util void whileclass Main {}

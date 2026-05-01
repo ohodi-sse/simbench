@@ -1,0 +1,1 @@
+// Main Scanner String System a ans ansc class count for i if import in int j java main new nextInt out println public scan srgs static util voidclass Main {}

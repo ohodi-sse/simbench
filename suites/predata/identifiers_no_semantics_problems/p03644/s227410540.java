@@ -1,0 +1,1 @@
+// Integer Main N Scanner String System args class import in int java main new nextInt out parseInt println public replaceAll replaceFirst scanner static toBinaryString try util voidclass Main {}

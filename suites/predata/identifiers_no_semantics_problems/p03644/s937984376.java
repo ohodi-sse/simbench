@@ -1,0 +1,1 @@
+// Main Scanner String System a ag class for i if import in int java lastN main new nextInt out println public res sc static util voidclass Main {}

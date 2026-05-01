@@ -1,0 +1,1 @@
+// Main R RR RRR Scanner String System args class contains equals import in java main new next out println public s static util voidclass Main {}

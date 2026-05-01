@@ -1,0 +1,1 @@
+// BufferedOutputStream Integer Main Math PrintWriter Scanner String System args class close count for i import in int io java main new next out parseInt pnum pow println private public result return run sc static util voidclass Main {}

@@ -1,0 +1,1 @@
+// Integer Main N Scanner String System args b class close import in int java length main new nextInt out println public scan static toBinaryString util voidclass Main {}

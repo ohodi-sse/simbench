@@ -1,0 +1,1 @@
+// ArrayDeque ArrayList BufferedReader Collections Deque IOException InputStreamReader Main String System a ans args br class equals for i if import in int io java length main new out println public readLine split static str throws util voidclass Main {}

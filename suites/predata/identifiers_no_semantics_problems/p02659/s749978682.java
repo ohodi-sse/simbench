@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Long Main String System a args char class continue else for h i if import in int io java length lo long main new out parseLong pol pow println public readLine reader res split static throws toCharArray util voidclass Main {}

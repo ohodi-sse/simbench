@@ -1,0 +1,1 @@
+// Arrays Main Scanner String System args asList class close contains for i if import in int j java ma main max mi min n new next nextInt out p println public return scn static util valueOf void xclass Main {}

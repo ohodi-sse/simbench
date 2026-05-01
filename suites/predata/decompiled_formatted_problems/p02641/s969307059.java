@@ -1,0 +1,48 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        if (nextInt2 == 0) {
+            System.out.println(nextInt);
+        }
+        else {
+            final int[] a = new int[nextInt2];
+            final int[] array2 = new int[102 - nextInt2];
+            array2[0] = 0;
+            array2[101 - nextInt2] = 101;
+            for (int i = 0; i < nextInt2; ++i) {
+                a[i] = scanner.nextInt();
+            }
+            Arrays.sort(a);
+            int n = 0;
+            int n2 = 0;
+            for (int j = 0; j <= 101; ++j) {
+                if (a[n2] != j) {
+                    array2[n] = j;
+                    ++n;
+                }
+                else if (++n2 >= nextInt2) {
+                    --n2;
+                }
+            }
+            int abs = nextInt;
+            int x = 0;
+            for (int k = 0; k < array2.length; ++k) {
+                if (abs > Math.abs(array2[k] - nextInt)) {
+                    abs = Math.abs(array2[k] - nextInt);
+                    x = array2[k];
+                }
+            }
+            System.out.println(x);
+        }
+    }
+}

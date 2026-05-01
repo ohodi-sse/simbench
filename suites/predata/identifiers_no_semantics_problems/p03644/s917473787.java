@@ -1,0 +1,1 @@
+// Main Math N Scanner String System amari args class dasshu do else for i if import in int java main max maxcount new nextInt out pow println public scan shou static util void whileclass Main {}

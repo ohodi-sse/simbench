@@ -1,0 +1,1 @@
+// BufferedReader InputStreamReader Main Math Scanner String System answer args class if import in int io java main n new nextInt out pow println public return scan static util void whileclass Main {}

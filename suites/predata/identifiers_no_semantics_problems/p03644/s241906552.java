@@ -1,0 +1,1 @@
+// Main N Scanner String System args class count for idx import in int java main n new nextInt out pow println public return sc static util void whileclass Main {}

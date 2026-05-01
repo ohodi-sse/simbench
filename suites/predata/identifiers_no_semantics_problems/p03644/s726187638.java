@@ -1,0 +1,1 @@
+// Main Scanner String System args class count for i if import in int java main n new nextInt out println public res sc static targetNumber tmpCount util void whileclass Main {}

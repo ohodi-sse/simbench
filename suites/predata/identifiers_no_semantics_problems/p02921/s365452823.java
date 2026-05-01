@@ -1,0 +1,1 @@
+// Exception Generated Main S Scanner String System T You ans args atcoder by can charAt class com custom default final for github https i if import in int io java kyuridenamida length line main new next now out println public remove sc solve static template the this throws tips tools use using util void yourclass Main {}

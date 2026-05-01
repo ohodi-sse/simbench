@@ -1,0 +1,1 @@
+// Main Math N Scanner String System args class count for i if import in int j java main max new nextInt out pow println public scanner static util voidclass Main {}

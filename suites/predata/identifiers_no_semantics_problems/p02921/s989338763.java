@@ -1,0 +1,1 @@
+// Main Scanner String System TODO args class equals for i if import in int j java jissai k length main new next out println public scan static substring util void y yohouclass Main {}

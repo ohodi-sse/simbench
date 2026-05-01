@@ -1,0 +1,1 @@
+// BigDecimal HashSet Main Math Scanner String System abs add ans args check class exit for hs i if import in int java main math n new nextInt out p println public sc size static util void x zclass Main {}

@@ -1,0 +1,1 @@
+// Main Scanner String SuppressWarnings System args class count for i if import in int java main max n new nextInt num out println public resource sc static util void while xclass Main {}

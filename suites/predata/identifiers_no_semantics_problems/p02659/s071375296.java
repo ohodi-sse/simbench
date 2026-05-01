@@ -1,0 +1,1 @@
+// Main Scanner String System a args b c class d double import in int java long main new nextDouble nextLong out println public sc static util voidclass Main {}

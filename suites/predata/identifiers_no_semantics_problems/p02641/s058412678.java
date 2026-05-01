@@ -1,0 +1,1 @@
+// ArrayList Collections Integer List MAX Main Math N Scanner String System VALUE X abs add ans args class contains en for get i if import in int java main min new nextInt out println ps public res return sc size sort st static util voidclass Main {}

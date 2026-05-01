@@ -1,0 +1,1 @@
+// Exception Main Name RRR RRS RSR RSS SRR SRS SSR SSS Scanner String System args be class don equals has if import in input io is java lang main name new next of only out package place println public scanner static t the throws to util void whateverclass Main {}

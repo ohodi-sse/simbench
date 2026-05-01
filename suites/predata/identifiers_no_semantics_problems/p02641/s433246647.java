@@ -1,0 +1,1 @@
+// Main N Scanner String System Val X ans args arr binarySearch boolean bs class false for hi i if import in int java l left lo main mid new nextInt out pivot println public quickSort r return right scn start static temp true util val void while xclass Main {}

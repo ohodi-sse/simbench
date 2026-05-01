@@ -1,0 +1,51 @@
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    static Scanner scanner;
+    
+    public static void main(final String[] array) {
+        Main.scanner = new Scanner(System.in);
+        final int gi = gi();
+        final int gi2 = gi();
+        final int[] array2 = new int[gi2];
+        for (int i = 0; i < gi2; ++i) {
+            array2[i] = gi();
+        }
+        int n = 0;
+        int x = gi;
+        boolean b;
+        do {
+            x += (int)(Math.pow(-1.0, n) * n);
+            b = false;
+            for (int j = 0; j < gi2; ++j) {
+                if (array2[j] == x) {
+                    ++n;
+                    b = true;
+                    break;
+                }
+            }
+        } while (b);
+        System.out.println(x);
+    }
+    
+    public static String gs() {
+        return Main.scanner.next();
+    }
+    
+    public static int gi() {
+        return Integer.parseInt(Main.scanner.next());
+    }
+    
+    public static long gl() {
+        return Long.parseLong(Main.scanner.next());
+    }
+    
+    public static double gd() {
+        return Double.parseDouble(Main.scanner.next());
+    }
+}

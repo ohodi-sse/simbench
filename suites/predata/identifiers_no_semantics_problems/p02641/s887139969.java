@@ -1,0 +1,1 @@
+// Arrays Main Math N Scanner String System X abs args class diff else exit for i if import in int java length main new nextInt np npc out p pc println public res sc sort static util voidclass Main {}

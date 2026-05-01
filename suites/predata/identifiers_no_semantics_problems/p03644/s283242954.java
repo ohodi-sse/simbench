@@ -1,0 +1,1 @@
+// Main Math Scanner String System args class in int java log main new nextInt out pow println public static util voidclass Main {}

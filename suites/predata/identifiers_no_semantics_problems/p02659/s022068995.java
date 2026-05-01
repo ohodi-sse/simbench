@@ -1,0 +1,1 @@
+// Exception Long Main Scanner String System a ans args b class f import in java long main new next nextLong out parseLong println public replace s scan seisuu static substring t temp throws util voidclass Main {}

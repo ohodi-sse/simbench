@@ -1,0 +1,1 @@
+// Main Math R Scanner String System args charAt class else for getConcRainy i if import in int java lang length main max new nextLine out println public return scan static str total totalRainy util voidclass Main {}

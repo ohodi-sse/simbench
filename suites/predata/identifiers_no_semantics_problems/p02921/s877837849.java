@@ -1,0 +1,1 @@
+// Exception Main N Scanner String System ans args class equals for i if import in int java main new next out println public sc static throws useDelimiter util voidclass Main {}

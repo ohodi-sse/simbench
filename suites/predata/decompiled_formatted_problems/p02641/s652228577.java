@@ -1,0 +1,35 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        final ArrayList list = new ArrayList();
+        for (int i = 0; i < nextInt2; ++i) {
+            list.add(scanner.nextInt());
+        }
+        scanner.close();
+        int n = 100;
+        int x = 0;
+        for (int j = -100; j <= 101; ++j) {
+            if (!list.contains(j)) {
+                int n2 = nextInt - j;
+                if (n2 < 0) {
+                    n2 = j - nextInt;
+                }
+                if (n2 < n) {
+                    n = n2;
+                    x = j;
+                }
+            }
+        }
+        System.out.println(x);
+    }
+}

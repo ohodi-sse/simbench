@@ -1,0 +1,1 @@
+// Double Integer Long Main Math N NO P Scanner String System X Y YES args boolean break class double else false flg for gd gi gl gs i if import in int java long main new next out parseDouble parseInt parseLong pow print println public q return scanner static true util void whileclass Main {}

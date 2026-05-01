@@ -1,0 +1,1 @@
+// Main Math Scanner String System abs ans args break class for i if import in int java main n new nextInt out p pArray println public return sc static util void xclass Main {}

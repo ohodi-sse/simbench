@@ -1,0 +1,1 @@
+// A B Main Scanner String System args class float import in java long main math new nextFloat nextLong out println public res sc static util voidclass Main {}

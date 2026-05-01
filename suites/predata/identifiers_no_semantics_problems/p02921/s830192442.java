@@ -1,0 +1,1 @@
+// Main S SArray Scanner String System T TArray args class equals if import in int java main new next out println public sc split static util void xclass Main {}

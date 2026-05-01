@@ -1,0 +1,1 @@
+// Boolean HashMap Integer Main Scanner String System a args break check class containsKey diff else for i if import in int java main map n new nextInt out println public put scn static true util void while xclass Main {}

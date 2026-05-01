@@ -227,7 +227,11 @@ def classification_probability_plot(
         "Must provide a distance file to plot f-score"
     )
 
-    df = distances.collect().sort(by="distance").filter(pl.col("src") != pl.col("tgt"))
+    df = (
+        distances.collect()
+        .sort(by="distance", descending=True)
+        .filter(pl.col("src") != pl.col("tgt"))
+    )
 
     Relevant = df["src_label"] == df["tgt_label"]
     F = df["src_label"] != df["tgt_label"]
@@ -385,27 +389,25 @@ def classification_overview_figure(bld: Builder, **classifications):
 def analysis_styling(analyses, colors) -> dict[str, tuple[str, str]]:
     styling = {}
 
-    linestyles = ["-", "--", "-.", ":", "None", " ", ""]
+    linestyles = ["-", "--", "-.", ":"]
 
     colormap = {}
     linemap = {}
     if len(analyses) > len(colors):
         logger.warning("Not enough colors!")
 
-    n_norms = len(set([a.normalizer for a in analyses]))
+    tools = list(set([a.tool.name for a in analyses]))
+    norms = list(set([a.normalizer.name for a in analyses]))
 
-    for i, analysis in enumerate(analyses):
-        tool = analysis.tool.name
-        norm = analysis.normalizer.name
+    for i, tool in enumerate(tools):
+        linemap[tool] = linestyles[i % len(linestyles)]
 
-        if norm not in linemap.keys():
-            linemap[norm] = linestyles[int(i) % len(colors)]
+    for i, norm in enumerate(norms):
+        colormap[norm] = colors[int(i) % len(colors)]
 
-        if tool not in colormap.keys():
-            colormap[tool] = colors[int(i / n_norms) % len(colors)]
-
-        linecolor = colormap[tool]
-        linetype = linemap[norm]
+    for analysis in analyses:
+        linecolor = colormap[analysis.normalizer.name]
+        linetype = linemap[analysis.tool.name]
 
         styling[analysis.parameter_name] = (linetype, linecolor)
 
@@ -564,6 +566,7 @@ class Histogram:
         plt.rcParams.update({"text.usetex": True, "font.family": "Helvetica"})
         ax.set_xlabel(xlabel)
 
+        ax.set_yscale("log")
         ax.set_axisbelow(True)
         ax.grid(True, which="both", color="0.9", linestyle="dashed")
 
@@ -800,55 +803,25 @@ def fscore_comparison_figure(
     return fig
 
 
-def logistic_regression(bld: Builder, analysis, ax, xlabel):
-    from sklearn.linear_model import LogisticRegression
-    from sklearn.metrics import log_loss
-    from scipy.stats import beta, gamma
-
+def plot_regression(bld, analysis, ax, xlabel, model):
     dist_df = analysis.distance_node.pull(bld)
     dist_df = dist_df.filter(pl.col("src") != pl.col("tgt")).collect()
+
     distances = dist_df["distance"]
     counts, bins = np.histogram(distances, density=True, bins=100)
 
-    X = (
-        dist_df.pivot(values="distance", index="tgt", columns="src")
-        .select(pl.exclude("tgt"))
-        .to_numpy()
-    )
-    dist_df = dist_df.select(
-        [
-            pl.col("src"),
-            pl.col("tgt"),
-            (pl.col("src_label") == pl.col("tgt_label"))
-            .alias("within_class")
-            .cast(pl.Int8),
-            pl.col("distance").map_elements(min_1, return_dtype=pl.Float64),
-        ]
-    ).sort(by="distance")
-    y_true = dist_df["within_class"].to_numpy()
-    distances = dist_df["distance"].to_numpy().reshape(-1, 1)
-
-    model = LogisticRegression(max_iter=1000)
-    mfit = model.fit(bins.reshape(-1, 1), counts)
-
-    y_pred = mfit.predict(distances)
-
     d_vals = np.linspace(0, 1, 200).reshape(-1, 1)
-    probs = mfit.predict_proba(d_vals)[:, 1]
+    probs = model.predict_proba(d_vals)[:, 1]
 
     ax.plot(d_vals, probs, label="Logistic fit")
 
     probs = counts / counts.sum()
     plt.rcParams.update({"text.usetex": True, "font.family": "Helvetica"})
     ax.set_xlabel(xlabel)
-
     ax.set_axisbelow(True)
     ax.grid(True, which="both", color="0.9", linestyle="dashed")
 
     ax.hist(bins[:-1], bins, weights=probs)
-
-    res = log_loss(y_true, y_pred)
-    print(res)
 
 
 def gamma_regression(bld: Builder, analysis, ax, xlabel):

@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Integer Main String System a args br class for import in int io java main n new out parseInt println public readLine split static str throws voidclass Main {}

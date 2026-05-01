@@ -1,0 +1,1 @@
+// BigDecimal L Long MAX Main Scanner String System a ans args b class close import in java long main math new next nextLong out println public replace sc static util valueOf voidclass Main {}

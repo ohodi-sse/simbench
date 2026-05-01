@@ -1,0 +1,1 @@
+// Main N Scanner String System ans args class evenCnt for i if import in int java main maxIndex maxValue n new nextInt out println private public return returnEvenCnt scanner static try util voidclass Main {}

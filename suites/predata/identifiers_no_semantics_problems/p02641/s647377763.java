@@ -1,0 +1,1 @@
+// Arrays Integer LMAX Long MAX MOD Main N Scanner String System VALUE X able args boolean class doIt e false fill final for i if import in int java len long main new nextInt out p println public return sc static true util voidclass Main {}

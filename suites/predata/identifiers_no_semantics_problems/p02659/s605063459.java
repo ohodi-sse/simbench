@@ -1,0 +1,1 @@
+// B Exception Long Main Math Scanner String System a args b class import in io java lang long main new next nextLong out println public replace result sc static throws util valueOf voidclass Main {}

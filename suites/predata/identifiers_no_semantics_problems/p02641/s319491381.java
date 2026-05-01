@@ -1,0 +1,1 @@
+// Main Scanner String System a abs args class continue for i if import in int j java main n new nextInt out p println public return scan small static t util val void xclass Main {}

@@ -1,0 +1,1 @@
+// A B Main Scanner String System ans ansstr args b class double else final if import in java length long main new nextDouble nextLong out println public sc static substring util valueOf voidclass Main {}

@@ -1,0 +1,15 @@
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        Integer value;
+        int x;
+        for (value = new Scanner(System.in).nextInt(), x = 1; x * 2 <= value; x *= 2) {}
+        System.out.println(x);
+    }
+}

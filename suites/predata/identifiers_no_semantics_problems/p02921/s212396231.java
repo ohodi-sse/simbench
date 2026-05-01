@@ -1,0 +1,1 @@
+// Main S Scanner Sichimojime Snimojime Ssanmojime String System T TODO Tichimojime Tnimojime Tsanmojime args class equals if import in int java main new next out println public sc seikai static substring util voidclass Main {}

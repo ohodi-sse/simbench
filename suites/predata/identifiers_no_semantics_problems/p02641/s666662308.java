@@ -1,0 +1,1 @@
+// Main Math Scanner String System TODO abs ans args boolean break class continue else false flag for i if import in int j java main min n new nextInt out p println public sc static true util void xclass Main {}

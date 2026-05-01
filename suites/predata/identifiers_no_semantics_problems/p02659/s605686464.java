@@ -1,0 +1,1 @@
+// BigDecimal Main Scanner String System a args b class decimalIndex import in indexOf int java main math multiply new next out println public result return sn solve static substring toString util voidclass Main {}

@@ -1,0 +1,1 @@
+// A B Integer Main Scanner Solver String System ans args b class import in int java long main new next nextLong out parseInt println public return run sc split static util voidclass Main {}

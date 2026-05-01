@@ -1,0 +1,1 @@
+// Main Scanner String System args break class else for i if import in int java key main map minus n new nextInt num out plus println public sc static util void whileclass Main {}

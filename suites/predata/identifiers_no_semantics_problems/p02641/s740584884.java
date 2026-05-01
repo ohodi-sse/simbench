@@ -1,0 +1,1 @@
+// Main Math Scanner String System abs ans args boolean class false for i if import in int j java main min n new nextInt out p pos println public sc static true util void xclass Main {}

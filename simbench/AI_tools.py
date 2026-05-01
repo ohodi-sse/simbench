@@ -1,6 +1,5 @@
 from interactive_predict import InteractivePredictor
-from functools import reduce
-import argparse
+import numpy as np
 from simbench.build import NamedCallable, Source
 from abc import ABC, abstractmethod
 import torch
@@ -16,14 +15,6 @@ from loguru import logger
 
 from code2vec import load_model_dynamically
 from config import Config
-from extractor import Extractor
-# from utils.tools import TokenIns
-# from utils.model import GNN_encoder
-# import os
-#
-# import argparse
-# import torch.optim as optim
-# import numpy as np
 
 
 class AITool(ABC, NamedCallable):
@@ -48,15 +39,20 @@ class AITool(ABC, NamedCallable):
     def _load_model(self) -> PreTrainedModel: ...
 
     def normalize(self, embedding):
-        return embedding / embedding.norm(p=2)
-
-    @abstractmethod
-    def embed_code(self, code: str) -> torch.Tensor: ...
-
-    def cosine_distance(self, e1, e2):
         import torch.nn.functional as F
 
-        return 1 - F.cosine_similarity(e1.unsqueeze(0), e2.unsqueeze(0)).item()
+        return F.normalize(embedding, p=2, dim=-1, eps=1e-8)
+
+    @abstractmethod
+    def embed_code(self, src: Source) -> torch.Tensor: ...
+
+    def cosine_distance(self, e1, e2):
+        from torch.nn.functional import cosine_similarity
+
+        # computing the normalized cosine similarity
+        cos = cosine_similarity(e1.unsqueeze(0), e2.unsqueeze(0), dim=-1).item()
+
+        return cos
 
     @property
     @abstractmethod
@@ -74,7 +70,8 @@ class HuggingFace(AITool):
     @abstractmethod
     def _load_tokenizer(self) -> PreTrainedTokenizer: ...
 
-    def embed_code(self, code: str) -> torch.Tensor:
+    def embed_code(self, src: Source) -> torch.Tensor:
+        code = src.get_bytes().decode("utf-8")
         inputs = self.tokenizer(
             code, return_tensors="pt", truncation=True, padding=True
         )
@@ -87,7 +84,7 @@ class HuggingFace(AITool):
         return embedding.squeeze(0)  # shape: (768,)
 
     def preprocess(self, src: Source):
-        return self.normalize(self.embed_code(src.get_bytes().decode("utf-8")))
+        return self.normalize(self.embed_code(src))
 
 
 class CodeBERT(HuggingFace):
@@ -139,15 +136,21 @@ class Code2Vec(AITool):
         predictor = InteractivePredictor(self.config, model)
         return predictor
 
-    def embed_code(self, code: str) -> torch.Tensor:
+    def embed_code(self, src: Source) -> torch.Tensor:
         # predict_lines, hash_to_string_dict = self.path_extractor.extract_paths(code)
         predictor = self.model
-        code_vector = predictor.one_time_predict(code)
+        try:
+            code_vector = predictor.one_time_predict(str(src.path))
+        except:
+            logger.warning(f"Failed to embed code for {src.name}")
+            code_vector = np.array([0.0])
+
         code_vector_as_tensor = torch.from_numpy(code_vector)
+
         return code_vector_as_tensor
 
     def preprocess(self, src: Source):
-        return self.normalize(self.embed_code(str(src.path)))
+        return self.normalize(self.embed_code(src))
 
 
 # class GraphCode2Vec(AITool):

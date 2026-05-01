@@ -1,0 +1,1 @@
+// Main Scanner String SuppressWarnings System ans args buf class equals for i if import in int java main new next out println public resource sc split static util voidclass Main {}

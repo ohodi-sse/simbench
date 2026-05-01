@@ -1,0 +1,1 @@
+// Auto Main R Scanner String System TODO ans args charAt class else generated if import in int java main method new next out println public s scn static stub util voidclass Main {}

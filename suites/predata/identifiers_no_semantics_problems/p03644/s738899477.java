@@ -1,0 +1,1 @@
+// BufferedReader Exception Here InputStreamReader Integer Main String System args br class code else for if import in int io java line main new out parseInt println public readLine static throws void x yourclass Main {}

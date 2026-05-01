@@ -1,0 +1,1 @@
+// Main N Scanner String System args break class for i if import in int java k main max maxidx new nextInt num out println public sc static util void xclass Main {}

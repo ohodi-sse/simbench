@@ -1,0 +1,1 @@
+// Main Math Scanner String System args class continue else for i if import in int java main n new nextInt out pow println public return sc static util voidclass Main {}

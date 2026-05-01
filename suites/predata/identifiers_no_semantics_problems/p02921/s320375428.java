@@ -1,0 +1,1 @@
+// Main Scanner String System args charAt class count for if import in int java main n new next out println public s sc static t util voidclass Main {}

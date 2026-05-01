@@ -1,0 +1,1 @@
+// BigDecimal Collections DOWN HashMap HashSet Main Map ROUND Scanner Set String System args class import in java m main math multiply n new nextBigDecimal out println public sc setScale static util voidclass Main {}

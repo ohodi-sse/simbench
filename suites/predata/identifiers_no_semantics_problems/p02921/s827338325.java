@@ -1,0 +1,1 @@
+// Main S Scanner String System T args class count equals if import in int java main new next oneS oneT out println public sc static substring threeS threeT twoS twoT util voidclass Main {}

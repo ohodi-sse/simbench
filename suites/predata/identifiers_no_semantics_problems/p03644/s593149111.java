@@ -1,0 +1,1 @@
+// Exception Main N Scanner String System args array break class for i if import in int java length main new nextInt out println public sc static throws util voidclass Main {}

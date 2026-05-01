@@ -1,0 +1,1 @@
+// A B Main Math N Scanner String System args class close double floorDiv import in java l long main new nextDouble nextLong num out println public result return sc static toLong util voidclass Main {}

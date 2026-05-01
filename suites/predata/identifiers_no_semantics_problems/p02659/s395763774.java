@@ -1,0 +1,1 @@
+// A B BigDecimal BigInteger Exception Main Math Scanner String System a args b class import in io java lang long main math multiply new next nextLong out println public sc static throws toBigInteger util voidclass Main {}

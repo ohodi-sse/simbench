@@ -1,0 +1,1 @@
+// BufferedReader Exception IOException InputStreamReader Main String System ans anser args class equals for getStr i if import in int io java main new num out println private public readLine return split st static str t throws voidclass Main {}

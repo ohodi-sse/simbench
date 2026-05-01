@@ -1,0 +1,1 @@
+// ArrayList Collections Integer Main Math OUT Scanner String System a abs add ans args break class else for get i if import in int j java main n new nextInt out p println public scn size sort static util void xclass Main {}

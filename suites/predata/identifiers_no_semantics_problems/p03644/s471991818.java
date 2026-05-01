@@ -1,0 +1,1 @@
+// Main Scanner String System ans args class cout for i if import in int java main n new nextInt out println public sc static temp util void while xclass Main {}

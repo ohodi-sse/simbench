@@ -1,0 +1,1 @@
+// Main S Scanner String System args charAt class currentStreak else for i if import in int java length longestStreak main new next out println public s sc static util voidclass Main {}

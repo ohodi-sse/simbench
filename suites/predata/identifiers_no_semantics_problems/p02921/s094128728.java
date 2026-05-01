@@ -1,0 +1,1 @@
+// Main Scanner String System arg char charAt class final for i if import in int java main new next out println private public r real sc static sum t tipp util voidclass Main {}

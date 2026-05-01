@@ -1,0 +1,1 @@
+// Main N Scanner String System X args boolean class close exit false for i if import in int j java main new nextInt out p println public result sc static true util voidclass Main {}

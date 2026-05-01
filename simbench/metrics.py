@@ -56,7 +56,7 @@ class DiffMetric(Metric):
         return "diff_similarity"
 
     def metric_expr(self) -> pl.Expr:
-        return (1 - pl.col("diff_len") / pl.max("diff_len")).cast(pl.Float32)
+        return (1 / (1 + pl.col("diff_len"))).cast(pl.Float32)
 
     def time_expr(self) -> pl.Expr:
         return pl.col("diff_time")
@@ -90,13 +90,13 @@ class SummedDiffMetric(Metric):
         return pl.col("diff_time")
 
 
-class GenericMetric(Metric):
+class NormalizedCosine(Metric):
     @property
     def name(self) -> str:
-        return "without_similarity_measure"
+        return "normalized_cosine"
 
     def metric_expr(self) -> pl.Expr:
-        return 1 - pl.col("distance")
+        return (pl.col("distance").fill_nan(0) + 1) / 2
 
     def time_expr(self) -> pl.Expr:
         return pl.col("time")

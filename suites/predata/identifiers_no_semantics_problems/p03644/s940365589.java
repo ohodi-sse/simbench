@@ -1,0 +1,1 @@
+// Main Scanner String System args class for i if import in int java main memo nam new nextInt out print public static util voidclass Main {}

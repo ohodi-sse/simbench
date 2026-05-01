@@ -1,0 +1,1 @@
+// Main Math N Scanner String System X abs args class for hairetu i if import in int java main min new nextInt number out p print println public sc static syoki tmp util voidclass Main {}

@@ -1,0 +1,1 @@
+// Main Scanner String System args boolean class cnt element else false for i if import in int java main max n new nextInt ok out println public sc static true util val void whileclass Main {}

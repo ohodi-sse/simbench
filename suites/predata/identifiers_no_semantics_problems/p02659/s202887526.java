@@ -1,0 +1,1 @@
+// A B C D Long Main S Scanner String System ans args class decimal import in input io java long main math new next nextLong out parseLong println public static substring util void wholeclass Main {}

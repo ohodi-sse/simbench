@@ -1,3 +1,4 @@
+import subprocess
 import shutil
 from collections import Counter
 from loguru import logger
@@ -111,6 +112,31 @@ def remove_comments(sources):
             ranges = [(node.start_byte, node.end_byte) for node in captures["item"]]
 
             for start, end in sorted(ranges, reverse=True):
+                del new_bytes[start:end]
+
+        new_bytes = new_bytes.strip()
+        src.path.write_bytes(bytes(new_bytes))
+        assert src.path.exists()
+
+
+def rewrite_instanceof(sources):
+    for src_path in sources:
+        src = Source(Path(src_path))
+        bs = src.get_bytes()
+        new_bytes = bytearray(bs)
+        parser = ts.Parser(ts.Language(tsjava.language()))
+        tree = parser.parse(bs)
+
+        query = ts.Query(
+            ts.Language(tsjava.language()),
+            "(instanceof_expression name: (identifier) @item)",
+        )
+        queryCursor = ts.QueryCursor(query)
+        captures = queryCursor.captures(tree.root_node)
+        if captures:
+            ranges = [(node.start_byte, node.end_byte) for node in captures["item"]]
+            for start, end in sorted(ranges, reverse=True):
+                logger.debug(f"Found: {new_bytes[start:end]}")
                 del new_bytes[start:end]
 
         new_bytes = new_bytes.strip()
@@ -318,6 +344,70 @@ class PartitionedProblemClasses(DependentNormalizer):
             assert t.exists()
 
 
+class TokenNormalizer(DependentNormalizer):
+    def __init__(self):
+        self.depends_on_normalizer = DecompileNormalizer()
+
+    @property
+    def name(self):
+        return "token_format"
+
+    @property
+    def required_output_file_extension(self) -> str | None:
+        return ".java"
+
+    def write_tokens(self, node, source, target):
+        # If no children → leaf node → token
+        if node.child_count == 0:
+            token = source[node.start_byte : node.end_byte]
+            target.write(f"{token.decode('utf-8')}\n")
+            return
+
+        for child in node.children:
+            self.write_tokens(child, source, target)
+
+    def __call__(self, sources: list[str], targets: list[str]):
+        logger.info("Reformatting tokens")
+        for s, t in zip(sources, targets):
+            src = Source(Path(s))
+            bs = src.get_bytes()
+            parser = ts.Parser(ts.Language(tsjava.language()))
+            tree = parser.parse(bs)
+            cursor = tree.walk()
+
+            with open(Path(t), "w") as tgt:
+                self.write_tokens(cursor.node, bs, tgt)
+
+
+class IdentifierNoSemantics(DependentNormalizer):
+    def __init__(self):
+        self.depends_on_normalizer = IDNormalizer()
+
+    @property
+    def name(self):
+        return "identifiers_no_semantics"
+
+    @property
+    def required_output_file_extension(self) -> str | None:
+        return ".java"
+
+    def __call__(self, sources: list[str], targets: list[str]):
+        logger.info("Formatting decompiled files")
+        for s, t in zip(sources, targets):
+            grep = subprocess.run(
+                ["grep", "-oE", "[a-zA-Z]+", s], capture_output=True, text=True
+            )
+
+            words = sorted(set(grep.stdout.split()))
+
+            joined = " ".join(words)
+            with open(t, "w") as tgt_file:
+                tgt_file.write(
+                    f"// {joined}"
+                    + "\npublic class Main { public static void main(String[] args) {} }"
+                )
+
+
 class DecompileFixedImports(DependentNormalizer):
     def __init__(self):
         self.depends_on_normalizer = DecompileNormalizer()
@@ -335,9 +425,26 @@ class DecompileFixedImports(DependentNormalizer):
         for s, t in zip(sources, targets):
             shutil.copy(s, t)
 
-        move_and_sort_imports(targets)
-        remove_comments(targets)
         remove_final(targets)
-
+        remove_comments(targets)
         for t in targets:
             logger.debug(t)
+
+
+class DecompiledFormatted(DependentNormalizer):
+    def __init__(self):
+        self.depends_on_normalizer = DecompileNormalizer()
+
+    @property
+    def name(self):
+        return "decompiled_formatted"
+
+    @property
+    def required_output_file_extension(self) -> str | None:
+        return ".java"
+
+    def __call__(self, sources: list[str], targets: list[str]):
+        logger.info("Cleaning decompiled files")
+        rust_batch_format(sources, targets)
+        remove_final(targets)
+        remove_comments(targets)

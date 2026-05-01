@@ -1,0 +1,1 @@
+// ArrayList HashMap Integer List MAX Main Map Math N Scanner String System VALUE X abs absMap add args array class close contains else for get i if import in int java keySet main minVal new nextInt out println public put res sc static util val voidclass Main {}

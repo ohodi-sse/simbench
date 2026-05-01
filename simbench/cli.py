@@ -1,3 +1,5 @@
+import os
+import shutil
 from simbench.evaluation import dataframe_as_latex_table
 from simbench.compressors import Diff, EditDistanceDiff, Zstd
 from simbench.AI_tools import Code2Vec
@@ -9,7 +11,6 @@ from simbench.metrics import (
 from simbench.plots import (
     plot_node,
     GoodEdges,
-    logistic_regression,
     Histogram,
     chrissers_plot,
 )
@@ -57,7 +58,11 @@ def cli(ctx):
 )
 def show_file(file: str, filter, csv) -> None:
     assert file.endswith(".parquet"), "Can only show parquet file"
-    data = pl.scan_parquet(Path(file))
+    data = (
+        pl.scan_parquet(Path(file))
+        .sort(by="distance", descending=True)
+        .filter(pl.col("src") != pl.col("tgt"))
+    )
 
     if filter:
         data = data.filter(pl.col("src") == filter)
@@ -166,16 +171,37 @@ def plot_comparison(
     default=".*",
 )
 @click.option("--show/--no-show", default=False)
+@click.option("--force", default=None, is_flag=True)
+@click.option("--seed", default=None, type=int)
+@click.option("--samples", default=None, type=int)
 @click.pass_obj
 def perr_table_comparisons(
-    cfg, suite, tool_pattern, classifier_pattern, normalizer_pattern, show
+    cfg,
+    suite,
+    tool_pattern,
+    classifier_pattern,
+    normalizer_pattern,
+    show,
+    force,
+    seed,
+    samples,
 ):
     bld = Builder(logger)
-
+    if tool_pattern or normalizer_pattern:
+        patterns = [(tool_pattern, normalizer_pattern)]
+    else:
+        bld.log.info("Running with prespecified filters")
     patterns = [
-        (".*diff.*", "(unprocessed)"),
-        ("(.*diff.*|.*ncd.*)", "(unprocessed|decompiled)"),
+        # (".*zstd-1.*", "token_format"),
+        # ("(Code2Vec).*", ".*"),
+        # ("^(?!Code2Vec).*", "(unprocessed)"),  # (.*diff.*|.*NCD.*)
+        (
+            "^(zstd-1.*|.*BERT.*|Code2Vec).*",
+            "(unprocessed|.*token.*|.*google.*|decompiled)",
+        ),  # (.*diff.*|.*NCD.*)
+        # ("^(?!Code2Vec).*", ".*"),
     ]
+
     for tool_pattern, normalizer_pattern in patterns:
         filtered_tools = [t for t in cfg.tools if t.matches(tool_pattern)]
         filtered_classifiers = [
@@ -186,12 +212,19 @@ def perr_table_comparisons(
         ]
 
         comparison = AnalysisComparison(
-            Suite(suite), filtered_tools, filtered_classifiers, normalizers
+            Suite(suite, seed=seed, n_samples=samples),
+            filtered_tools,
+            filtered_classifiers,
+            normalizers,
         )
+        if force and Path(comparison.comparison_table_file).exists():
+            os.remove(comparison.comparison_table_file)
 
         table = comparison.table_comparison.pull(bld).collect()
-        latex_table = dataframe_as_latex_table(table)
-        print(latex_table)
+
+        if show:
+            latex_table = dataframe_as_latex_table(table)
+            print(latex_table)
 
 
 @click.command()
@@ -280,7 +313,6 @@ def mds_plot(suite: Path, force: bool):
     #     IDNormalizer(),
     # )
     fig, ax = plt.subplots(1, 1)
-    logistic_regression(bld, analysis1)
     good_edges = plot_node(GoodEdges())
     good_edges(bld, analysis1, ax, xlog=True, force=force)
     good_edges(bld, analysis2, ax, xlog=True, force=force)

@@ -1,0 +1,1 @@
+// Arrays Boolean Integer Main N Scanner String System X ans args asList class contains else false flag for i if import in int java main nList new nextInt out println public sc static true util voidclass Main {}

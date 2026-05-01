@@ -1,0 +1,1 @@
+// A B BigDecimal BufferedReader Double IOException InputStreamReader Main NumberFormatException String System args br class close import in io java longValue main math multiply new out println private public read readLine split static throws valueOf void wordclass Main {}

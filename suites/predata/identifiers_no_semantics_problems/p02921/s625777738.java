@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Integer Long Main MyScanner String StringTokenizer System a args b catch charAt class cnt for hasMoreTokens i if ignored import in int io java long main new next nextInt nextLong nextToken null out parseInt parseLong println public readLine reader return sc static tokenizer try util void whileclass Main {}

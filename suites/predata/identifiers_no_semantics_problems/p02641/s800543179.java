@@ -1,0 +1,1 @@
+// ArrayList Arrays Integer List MAX Main Math Scanner String System VALUE a abs add args class contains final for i if import in int java list main n new nextInt out println public r res sc static t util void xclass Main {}

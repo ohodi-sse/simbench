@@ -1,0 +1,1 @@
+// Main Math N Scanner String System answer args break class double else for i if import in int java main max new nextInt out pow println public sc static util voidclass Main {}

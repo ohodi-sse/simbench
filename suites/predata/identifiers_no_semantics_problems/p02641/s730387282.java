@@ -1,0 +1,1 @@
+// ArrayList Collections Integer List Main N Scanner String System X add ans args class exit for frequency i if import in int j java length list main new nextInt out p println public scanner static util voidclass Main {}

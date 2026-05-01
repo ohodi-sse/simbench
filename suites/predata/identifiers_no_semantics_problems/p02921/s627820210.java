@@ -1,0 +1,1 @@
+// Main Scanner String System ans args char class if import in int java main new nextLine out println public return s sc static t toCharArray util voidclass Main {}

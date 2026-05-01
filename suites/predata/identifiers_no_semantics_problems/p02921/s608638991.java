@@ -1,0 +1,1 @@
+// Main S SArray Scanner String System T TArray args class count equals for i if import in int java main new nextLine out println public sc split static util voidclass Main {}

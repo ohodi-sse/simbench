@@ -1,0 +1,1 @@
+// A B BigDecimal C Exception Main Scanner String System args bd class double import in java l long longValue main math multiply new nextDouble nextLong out println public sc static throws util valueOf voidclass Main {}

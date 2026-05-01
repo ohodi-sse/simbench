@@ -1,0 +1,1 @@
+// Exception Main Math Scanner String System args c class cnt for i if import in int java lang main n new nextInt out println public result sc static throws tmp util void whileclass Main {}

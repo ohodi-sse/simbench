@@ -1,0 +1,1 @@
+// Main N Scanner String System args break class conut exit for i if import in int java kai main new nextInt out println public sc static util voidclass Main {}

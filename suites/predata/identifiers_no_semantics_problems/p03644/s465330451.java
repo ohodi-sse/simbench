@@ -1,0 +1,1 @@
+// Main Scanner String System args class count for i if import in int java k lang main max maxn n new nextInt out println public sc static util void whileclass Main {}

@@ -1,0 +1,1 @@
+// Actual Built CHelper IleRazy Main Scanner String System args at class for i if ilosc import in int is java licznik main n new nextInt out plug println public res return solution static the top using util void while wynikclass Main {}

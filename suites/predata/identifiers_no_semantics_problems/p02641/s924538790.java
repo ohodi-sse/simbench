@@ -1,0 +1,1 @@
+// Main N Scanner String System X args break class else exit for i if import in int j java main max min new nextInt out p println public result scan static util voidclass Main {}

@@ -1,0 +1,1 @@
+// ArrayList List Main Scanner String System args arrS arrT class equals for i if import in int java length main new next out println public result s sc split static t util voidclass Main {}

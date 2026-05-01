@@ -1,0 +1,1 @@
+// B Double Exception Main Math Scanner String System a args b class double import in io java lang long longValue main new nextDouble nextLong out println public result sc static throws util valueOf voidclass Main {}

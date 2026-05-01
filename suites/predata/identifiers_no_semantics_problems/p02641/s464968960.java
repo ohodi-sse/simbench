@@ -1,0 +1,1 @@
+// Exception Main Scanner String System args class countm countp else for i if import in int j java main n new nextInt out p println public return sc static throws util void xclass Main {}

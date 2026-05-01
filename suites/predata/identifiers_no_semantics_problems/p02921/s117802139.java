@@ -1,0 +1,1 @@
+// BufferedReader Exception InputStreamReader Main S String System T args br class count equals for i if import in int io java lang length main new out println public readLine split static throws voidclass Main {}

@@ -1,0 +1,1 @@
+// Arrays BigDecimal Integer MAX Main Math N Scanner String System VALUE X a abs args asList atcoder class contains continue else for i if import in int j java main math min new nextInt out p package println public sc static util voidclass Main {}

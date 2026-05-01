@@ -1,0 +1,1 @@
+// Integer Main Scanner String System args class close count data import in input java main new next out println public scanner static util void whileclass Main {}

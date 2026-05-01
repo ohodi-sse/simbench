@@ -1,0 +1,1 @@
+// BigDecimal Long Main Scanner String System args big class contains divide if import in indexOf java long main math multiply new next nextLong out parseLong println public replace res sc static substring toString util void x yclass Main {}

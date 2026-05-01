@@ -1,0 +1,1 @@
+// K Main N Scanner String System a ans args break class else for get i if import in int java main new nextInt out println public sc static tri util voidclass Main {}

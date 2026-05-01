@@ -1,0 +1,1 @@
+// A Main P Scanner String System args class equals for i if import in int java main new next out println public result sc static substring util voidclass Main {}

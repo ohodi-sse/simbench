@@ -1,0 +1,1 @@
+// Main Scanner String System args array char charAt class close continue count else for i if import in int java main new nextLine out println public scanner static tenki util void yohou yohouA zissai zissaiAclass Main {}

@@ -1,0 +1,1 @@
+// Main Scanner String System ans args class close count countPower for i if import in int java main max n new nextInt out println private public return sc static util void whileclass Main {}

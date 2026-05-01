@@ -1,0 +1,1 @@
+// A Exception Integer Long Main Scanner String System a ans args b c charAt class close import in int java long main new next out parseInt parseLong println public sc static str throws tmp tmpb tmpc tmpx util valueOf voidclass Main {}

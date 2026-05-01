@@ -1,0 +1,1 @@
+// Main N Scanner String System a args class count for i if import in int java length main new nextInt out println public return sc static temp util voidclass Main {}

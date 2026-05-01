@@ -1,0 +1,1 @@
+// Main Scanner String System args class cnt equals for i if import in int java main new nextLine out println public s scn split static t util voidclass Main {}

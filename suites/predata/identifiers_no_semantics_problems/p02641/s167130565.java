@@ -1,0 +1,1 @@
+// Main Math N Scanner String System X args break class cn cp dnx dpx else for i if import in int j java main min new nextInt nx out p println public px sc static util voidclass Main {}

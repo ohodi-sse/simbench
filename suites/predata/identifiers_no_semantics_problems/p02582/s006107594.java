@@ -1,0 +1,1 @@
+// Main R Scanner String System args char charAt class for i if import in int java length main new next out println public rChar rCount sc someString static util voidclass Main {}

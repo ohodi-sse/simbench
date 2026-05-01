@@ -1,0 +1,29 @@
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final String next = new Scanner(System.in).next();
+        int x = 1;
+        for (int i = 0; i < 2; ++i) {
+            final char[] charArray = next.toCharArray();
+            if (charArray[i] == 'S' && charArray[i + 1] == 'S') {
+                x = 0;
+            }
+            else if (charArray[i] == 'R' && charArray[i + 1] == 'R') {
+                ++x;
+            }
+            else if (charArray[i] == 'S' && charArray[i + 1] == 'R') {
+                x = 1;
+            }
+            if (next.charAt(0) == 'R' && next.charAt(1) == 'S' && next.charAt(2) == 'S') {
+                x = 1;
+            }
+        }
+        System.out.println(x);
+    }
+}

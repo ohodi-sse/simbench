@@ -1,0 +1,1 @@
+// BigDecimal BigInteger Main Multiplication Scanner String System a abc ans args atcoder b c class contests https import in java jp main math multiply new nextDouble nextLong out println public sc static tasks toBigInteger try util valueOf voidclass Main {}

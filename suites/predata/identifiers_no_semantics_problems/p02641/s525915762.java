@@ -1,0 +1,1 @@
+// Integer Main Math Scanner String System a abs ans args class count for i if import in int java list main min n new nextLine out parseInt println public scanner split static tmp util void xclass Main {}

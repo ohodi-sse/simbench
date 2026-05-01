@@ -1,0 +1,1 @@
+// Main R Scanner String System a ans args boolean class else equals false flg for i if import in int java main n new next out println public sc static substring true util voidclass Main {}

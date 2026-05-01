@@ -1,0 +1,1 @@
+// Main Scanner String System ans args charAt class e import in int java main mod new next out println public s sc static stream t util voidclass Main {}

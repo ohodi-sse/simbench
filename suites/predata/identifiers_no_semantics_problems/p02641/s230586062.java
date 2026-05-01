@@ -1,0 +1,1 @@
+// Main Math Scanner String System abs args boolean c class diff else for i if import in int java main min n new nextInt ok out println public result sc static true util void xclass Main {}

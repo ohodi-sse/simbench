@@ -1,0 +1,1 @@
+// Arrays Collections Integer Main Math Scanner String System abs args bigans class else for i if import in int java lang main n new nextInt ns nx out println public reverseOrder sc smlans sort static util void xclass Main {}

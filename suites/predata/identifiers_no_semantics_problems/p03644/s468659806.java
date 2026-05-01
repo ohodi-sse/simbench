@@ -1,0 +1,1 @@
+// Main Math Scanner String System a ans arg break class double for i if import in java main new nextInt out pow println public round sc static util voidclass Main {}

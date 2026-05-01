@@ -1,0 +1,1 @@
+// Arrays BigDecimal BigInteger File FileNotFoundException Main Scanner String System a args b class import in indexOf input io java long main math multiply new nextDouble nextLong out println public s static substring throws toString txt util valueOf voidclass Main {}

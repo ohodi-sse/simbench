@@ -1,0 +1,1 @@
+// A B BigDecimal DOWN Main Multiplication RoundingMode Scanner String System ans args class import in java main math multiply new nextBigDecimal out println public sc setScale static util void wclass Main {}

@@ -1,0 +1,1 @@
+// Arrays Integer Main N Scanner String System X args asList class close else for i if import in indexOf int java main new nextInt num out p println public return sc static util voidclass Main {}

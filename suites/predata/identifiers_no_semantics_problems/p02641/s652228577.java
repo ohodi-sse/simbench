@@ -1,0 +1,1 @@
+// ArrayList H Integer Main N Scanner String System X add args class close contains for i if import in int java main min new nextInt out println public result scan static tmp util voidclass Main {}

@@ -1,0 +1,1 @@
+// Main Math R S Scanner String System args charAt class for i if import in int java main max n new next out print public sc static tmp try util voidclass Main {}

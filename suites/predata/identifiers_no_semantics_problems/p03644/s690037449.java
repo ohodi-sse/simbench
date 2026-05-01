@@ -1,0 +1,1 @@
+// Main Math N Scanner String System args class close count import in int java main new nextInt out pow println public sc static sum util void whileclass Main {}

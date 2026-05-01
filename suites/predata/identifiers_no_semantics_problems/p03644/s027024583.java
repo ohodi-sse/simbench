@@ -1,0 +1,1 @@
+// Main N Scanner String System ans args class close cnt count else for i if ii import in int java main new nextInt out println public sc static util void whileclass Main {}

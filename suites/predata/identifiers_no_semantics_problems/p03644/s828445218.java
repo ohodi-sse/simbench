@@ -1,0 +1,1 @@
+// Integer Main Math Scanner String System ans args break class for i if import in int java main n new next out parseInt pow println public round sc static util voidclass Main {}

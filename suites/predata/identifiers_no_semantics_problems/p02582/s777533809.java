@@ -1,0 +1,1 @@
+// Character Main R Scanner String System Word args charAt class close count else equals for i if import in int java main max new next out println public sc static util void wordclass Main {}

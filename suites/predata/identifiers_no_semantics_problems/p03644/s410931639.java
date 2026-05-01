@@ -1,0 +1,1 @@
+// Main Scanner String System args be class count counter for i if import in int io java judges main most n new nextInt online out println public sc should static test times used util void whileclass Main {}

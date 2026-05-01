@@ -1,0 +1,1 @@
+// Main Scanner String System args class close cnt equals for i if import in int java main new next out predict println public real s sc static substring t util voidclass Main {}

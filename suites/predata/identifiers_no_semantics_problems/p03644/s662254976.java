@@ -1,0 +1,1 @@
+// Main Scanner String SuppressWarnings System a ans args class for i import in int java main new nextInt out println public resource sc static util voidclass Main {}

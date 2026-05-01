@@ -1,0 +1,1 @@
+// Main Math S Scanner String System ans args class for i import in int java length main max new next out println public s split static stdIn util voidclass Main {}

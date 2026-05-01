@@ -1,0 +1,1 @@
+// Main PrintWriter Scanner String System a ans args b char class flush for i if import in int io java main new next out println public solve static toCharArray util voidclass Main {}

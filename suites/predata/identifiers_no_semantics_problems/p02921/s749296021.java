@@ -1,0 +1,1 @@
+// Main Scanner String System args class cnt equals for i if import in int java length list main new next out println public regex sc split static util void w wrclass Main {}

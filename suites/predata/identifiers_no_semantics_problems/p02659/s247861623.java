@@ -1,0 +1,1 @@
+// Long Main Scanner String System a args b c char class import in int java long main new next out parseLong println public sc static toCharArray util voidclass Main {}

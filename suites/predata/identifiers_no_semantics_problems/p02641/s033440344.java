@@ -1,0 +1,1 @@
+// ArrayList C Collections Forbidden Integer List Main N Scanner String System X add args break class contains continue else for i idx if import in int java lstA main minus new nextInt out plus println public return sc sort static true util void while xclass Main {}

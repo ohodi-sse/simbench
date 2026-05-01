@@ -1,0 +1,1 @@
+// BigDecimal BigInteger Long Main Scanner String System a ans args b bd bi class import in java long main math multiply new next nextLong out parseLong println public sc static toBigInteger toString util voidclass Main {}

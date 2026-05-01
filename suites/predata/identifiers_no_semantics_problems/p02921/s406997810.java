@@ -1,0 +1,1 @@
+// Double Integer List Long Main Scanner String System a args c charAt class double else for gd gi gl gs i if import in int java long main new next out parseDouble parseInt parseLong print public red return s scanner static t util voidclass Main {}

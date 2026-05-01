@@ -1,0 +1,1 @@
+// Main Scanner String System args class count import in int java main n new nextInt out p println public sc static util void whileclass Main {}

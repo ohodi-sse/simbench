@@ -1,0 +1,1 @@
+// Created Echizen Integer Main Scanner String System args by class highestOneBit import in int java main new nextInt num on out println public static util voidclass Main {}

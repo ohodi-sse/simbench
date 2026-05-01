@@ -1,0 +1,1 @@
+// BigDecimal MOD Main Math Scanner String System a args b class double import in int java lb long main math new nextDouble nextLong out println public round run sc static util voidclass Main {}

@@ -1,0 +1,1 @@
+// IntStream Main Math N Scanner String System ans args class final for i import in int java main max new nextInt out println public sc static stream util voidclass Main {}

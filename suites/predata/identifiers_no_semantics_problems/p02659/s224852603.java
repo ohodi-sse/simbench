@@ -1,0 +1,1 @@
+// A Bx Long Main Scanner String System args class function import in io java lang long main new next nextLong out println public replace sc static util valueOf voidclass Main {}

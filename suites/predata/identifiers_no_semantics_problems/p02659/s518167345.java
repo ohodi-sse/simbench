@@ -1,0 +1,1 @@
+// A B Integer Long Main Scanner String System args class else err if import in int java length long main new next nextLong out parseInt println public replace result sc static strB substring tmp tmpStr toString util voidclass Main {}

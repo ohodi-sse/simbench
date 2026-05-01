@@ -1,0 +1,1 @@
+// A B C Entry Main Map Math Scanner String System ans args class double import in int java long main mod new nextDouble nextLong out pow println public round sc static util voidclass Main {}

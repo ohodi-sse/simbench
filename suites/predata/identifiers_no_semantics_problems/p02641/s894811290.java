@@ -1,0 +1,1 @@
+// Arrays Integer Main Math N Scanner String System X abs args asList class contains for i if import in int java main min new nextInt out p println public result scan static util voidclass Main {}

@@ -1,0 +1,1 @@
+// Main R S Scanner String System args char charAt class count else for i if import in int j java main new next out println public sc static tmp util void weatherclass Main {}

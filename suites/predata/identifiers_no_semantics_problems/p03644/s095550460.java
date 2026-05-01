@@ -1,0 +1,1 @@
+// BigInteger C H Integer K Long Main N Scanner String System W args break class count e for i if import in int io java long main math max n new nextLine nyuA nyuB out parseInt parseLong println public res s sc split static t temp true util void whileclass Main {}

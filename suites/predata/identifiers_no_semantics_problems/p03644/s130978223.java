@@ -1,0 +1,1 @@
+// Integer Main Scanner String System args class do else for i if import in input int java m main n new nextLine out parseInt pow println public result s static util void whileclass Main {}

@@ -1,0 +1,1 @@
+// ArrayList List Main Scanner String System actual args char charAt class for i if import in int java length main new nextLine out predict predictChar println public result sc static util voidclass Main {}

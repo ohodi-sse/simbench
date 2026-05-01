@@ -1,0 +1,1 @@
+// BigDecimal BigInteger Main ONE Scanner String System ZERO ans args atemp b break class compareTo else for i if import in index indexOf int java limit main math multiply n new nextBigDecimal nextBigInteger nextInt out println public sc static substring toString util val voidclass Main {}

@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Integer Main String System args boolean br catch class count do e else false flag for i if import in int io java main new num out parseInt printStackTrace println public readLine result static temp true try void whileclass Main {}

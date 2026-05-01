@@ -1,0 +1,24 @@
+import java.util.Scanner;
+
+
+
+
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final String nextLine = scanner.nextLine();
+        final String nextLine2 = scanner.nextLine();
+        int n = 0;
+        int x = 0;
+        final String[] split = nextLine.split("");
+        for (int length = split.length, i = 0; i < length; ++i) {
+            if (split[i].equals(nextLine2.split("")[n])) {
+                ++x;
+            }
+            ++n;
+        }
+        System.out.println(x);
+    }
+}

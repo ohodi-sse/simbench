@@ -1,4 +1,5 @@
-from simbench.evaluation import log_loss
+import simbench.evaluation
+from simbench.evaluation import log_loss, isotonic_regression
 import polars as pl
 from sklearn.metrics import (
     precision_recall_fscore_support,
@@ -171,6 +172,72 @@ def comp_distances(
     return out.getvalue()
 
 
+class AIDistanceTable:
+    src: pl.String
+    tgt: pl.String
+    src_label: pl.String
+    tgt_label: pl.String
+    distance: pl.Float32
+    time: pl.UInt64
+    failed_emb: pl.Boolean
+
+
+@tablenode(schema(AIDistanceTable))
+def ai_distances(
+    schema: pl.Schema, bld: Builder, tool: NamedCallable, sources: dict[str, Source]
+) -> pl.LazyFrame:
+    out = TableBuilder(schema)
+
+    bld.log.debug(f"Preprocessing files with {tool.name}. This may take a while!")
+
+    preprocess_lookup = {}
+    preprocess_time = {}
+
+    srcs = [src for _, src in sources.items()]
+    with bld.progressbar(len(srcs)) as pb:
+        for name, src in sources.items():
+            # bld.log.debug(f"Preprocessing {src} with {tool.name}")
+            with bld.profile() as process_time:
+                preprocessed = tool.preprocess(src)
+            preprocess_lookup[name] = preprocessed
+            preprocess_time[name] = process_time()
+            pb.inc(1)
+
+    n = len(preprocess_lookup) ** 2
+    with bld.progressbar(n) as pb:
+        for src, tgt in itertools.product(srcs, repeat=2):
+            pb.inc(1)
+
+            with bld.profile() as timed:
+                dist = tool(preprocess_lookup[src.name], preprocess_lookup[tgt.name])
+
+            emb_status = np.isnan(dist)
+            total_time = timed() + preprocess_time[src.name] + preprocess_time[tgt.name]
+            out.add(
+                src=src.name,
+                tgt=tgt.name,
+                src_label=src.label,
+                tgt_label=tgt.label,
+                distance=dist,
+                time=total_time,
+                failed_emb=emb_status,
+            )
+
+    return out.getvalue().collect().fill_nan(0).lazy()
+
+
+@tablenode(schema(DistanceTable))
+def ai_similarities(
+    schema: pl.Schema, bld: Builder, metric: Metric, raw_ai_dist_df: pl.LazyFrame
+) -> pl.LazyFrame:
+    out = TableBuilder(schema)
+    filtered_df = raw_ai_dist_df.select(pl.exclude("failed_emb"))
+
+    out.from_lazyframe(metric(filtered_df))
+
+    return out.getvalue()
+
+
 @tablenode(schema(DistanceTable))
 def generic_distances(
     schema: pl.Schema, bld: Builder, tool: NamedCallable, sources: dict[str, Source]
@@ -184,7 +251,7 @@ def generic_distances(
     srcs = [src for _, src in sources.items()]
     with bld.progressbar(len(srcs)) as pb:
         for name, src in sources.items():
-            bld.log.debug(f"Preprocessing {src} with {tool.name}")
+            # bld.log.debug(f"Preprocessing {src} with {tool.name}")
             preprocess_lookup[name] = tool.preprocess(src)
             pb.inc(1)
 
@@ -329,10 +396,12 @@ def performance(schema: pl.Schema, bld: Builder, **classifications) -> pl.LazyFr
 
 
 class EvaluationTable:
-    SimilarityMeasure: pl.String
+    Similarity_Measure: pl.String
     Tool: pl.String
     Normalizer: pl.String
-    Loss: pl.Float32
+    Time: pl.Float32
+    Raw_Loss: pl.Float32
+    Iso_Loss: pl.Float32
 
 
 @tablenode(schema(EvaluationTable))
@@ -340,13 +409,16 @@ def evaluation(schema: pl.Schema, bld: Builder, **analyses) -> pl.LazyFrame:
     out = TableBuilder(schema)
 
     for _, analysis in analyses.items():
-        mean_log_loss = log_loss(bld, analysis)
-
+        _, iso_log_loss = isotonic_regression(bld, analysis)
+        raw_loss = log_loss(bld, analysis)
+        mean_time = simbench.evaluation.mean_time(bld, analysis)
         out.add(
-            SimilarityMeasure=analysis.tool.similarity_name,
+            Similarity_Measure=analysis.tool.similarity_name,
             Tool=analysis.tool.tool_name,
             Normalizer=analysis.normalizer.name,
-            Loss=mean_log_loss,
+            Time=mean_time,
+            Raw_Loss=1 - raw_loss,
+            Iso_Loss=(iso_log_loss - 0.5) * 1e3,
         )
 
     return out.getvalue()

@@ -1,0 +1,1 @@
+// Main Scanner String System a args boolean class continue count f false for i if import in int java main max n new nextInt nmax out println public scan static true util void whileclass Main {}

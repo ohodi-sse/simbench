@@ -1,0 +1,120 @@
+import java.io.OutputStream;
+import java.io.IOException;
+import java.io.PrintWriter;
+
+
+
+
+
+public class Main
+{
+    static int MIN;
+    static int MAX;
+    static Reader in;
+    static PrintWriter out;
+    
+    public static void main(final String[] array) throws IOException {
+        println(Main.in.nextLong() * Math.round(Main.in.nextDouble() * 100.0) / 100L);
+        Main.in.close();
+        Main.out.close();
+    }
+    
+    static int[] readInt(final int n) throws IOException {
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = Main.in.nextInt();
+        }
+        return array;
+    }
+    
+    static long[] readLong(final int n) throws IOException {
+        final long[] array = new long[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = Main.in.nextLong();
+        }
+        return array;
+    }
+    
+    static String[] readString(final int n) throws IOException {
+        final String[] array = new String[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = Main.in.next();
+        }
+        return array;
+    }
+    
+    static void print(final Object obj) {
+        Main.out.print(obj);
+    }
+    
+    static void println(final Object x) {
+        Main.out.println(x);
+    }
+    
+    static void println(final int[] array) {
+        for (int i = 0; i < array.length; ++i) {
+            print("" + array[i]);
+        }
+        println("");
+    }
+    
+    static void debug(final Object... array) {
+        for (int length = array.length, i = 0; i < length; ++i) {
+            System.out.print(String.valueOf(array[i]));
+        }
+        System.out.println();
+    }
+    
+    static {
+        Main.MIN = Integer.MIN_VALUE;
+        Main.MAX = Integer.MAX_VALUE;
+        Main.in = new Reader();
+        Main.out = new PrintWriter(System.out);
+    }
+}
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+
+
+
+
+
+class Reader
+{
+    BufferedReader reader;
+    StringTokenizer tokenizer;
+    
+    Reader() {
+        this.reader = new BufferedReader(new InputStreamReader(System.in));
+        this.tokenizer = new StringTokenizer("");
+    }
+    
+    String next() throws IOException {
+        while (!this.tokenizer.hasMoreTokens()) {
+            this.tokenizer = new StringTokenizer(this.reader.readLine());
+        }
+        return this.tokenizer.nextToken();
+    }
+    
+    int nextInt() throws IOException {
+        return Integer.parseInt(this.next());
+    }
+    
+    double nextDouble() throws IOException {
+        return Double.parseDouble(this.next());
+    }
+    
+    long nextLong() throws IOException {
+        return Long.parseLong(this.next());
+    }
+    
+    String nextLine() throws IOException {
+        return this.reader.readLine();
+    }
+    
+    void close() throws IOException {
+        this.reader.close();
+    }
+}

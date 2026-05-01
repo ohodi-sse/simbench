@@ -1,0 +1,1 @@
+// Main Scanner String System ans args break class else for i if import in int java le left length main n new nextInt out p println public return ri right sc static util v void xclass Main {}

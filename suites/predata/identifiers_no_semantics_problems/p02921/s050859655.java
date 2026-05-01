@@ -1,0 +1,1 @@
+// BufferedReader IOException InputStreamReader Main String System args checkTenki class convertArr count equals for i if import in int io java jissai jissaiArr length main new out println private public readLine return static stdin str strArr substring throws void yohou yohouArrclass Main {}

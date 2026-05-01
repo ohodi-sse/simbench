@@ -1,0 +1,1 @@
+// Main Scanner String System class final import in int java main n new nextInt out println public r s static util void whileclass Main {}

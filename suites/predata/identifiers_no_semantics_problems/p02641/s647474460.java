@@ -1,0 +1,1 @@
+// Main Scanner String System ans args b boolean class count else exit false for i if import in int j java k main n new nextInt out p println public scan static true util void xclass Main {}

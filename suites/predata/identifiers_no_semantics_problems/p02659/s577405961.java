@@ -1,0 +1,1 @@
+// ArrayList BigDecimal BigInteger HashMap HashSet Main Scanner String System a args bd class double doubleWithStringValue import in java long longValue main math multiply myBI new next nextDouble out println public result sc static toBigInteger util valueOf voidclass Main {}

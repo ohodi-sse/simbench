@@ -1,0 +1,44 @@
+import java.util.ArrayList;
+import java.util.Scanner;
+
+
+
+
+
+class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        int nextInt;
+        final int n = nextInt = scanner.nextInt();
+        int x = 0;
+        final int nextInt2 = scanner.nextInt();
+        final ArrayList list = new ArrayList();
+        final boolean b = true;
+        for (int i = 0; i < nextInt2; ++i) {
+            list.add(scanner.nextInt());
+        }
+        if (b) {
+            for (int j = 0; j < list.size(); ++j) {
+                if (nextInt == (int)list.get(j)) {
+                    --nextInt;
+                    list.remove(j);
+                    j = -1;
+                }
+            }
+            x = nextInt;
+            int n2 = n + 1;
+            for (int k = 0; k < list.size(); ++k) {
+                if (n2 == (int)list.get(k)) {
+                    ++n2;
+                    list.remove(k);
+                    k = -1;
+                }
+            }
+            if (Math.abs(n2 - n) < Math.abs(x - n)) {
+                x = n2;
+            }
+        }
+        System.out.println(x);
+    }
+}

@@ -1,0 +1,1 @@
+// Main N Scanner String System args class close count if import in int java main max new nextInt out println public return sc static util void whileclass Main {}

@@ -1,0 +1,1 @@
+// Main Scanner String System args break class count else flg for i if import in int java length list main math minus n new nextInt out plus println public sc static true util void while xclass Main {}

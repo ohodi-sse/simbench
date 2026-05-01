@@ -1,0 +1,1 @@
+// Character Main Scanner String System a args b base c char charAt class for getNumericValue i if import in int java length long main mul new next nextLong out println public s static util voidclass Main {}

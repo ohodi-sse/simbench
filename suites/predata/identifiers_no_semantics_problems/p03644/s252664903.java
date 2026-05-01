@@ -1,0 +1,1 @@
+// Exception Main N Scanner String System Your args class code else here if import in int java main new nextInt out println public sc static throws util voidclass Main {}

@@ -1,0 +1,1 @@
+// Main Scanner String System args charAt class close for forecast i if import in int java main new nextLine out println public result return scanner static tenki util void weatherclass Main {}

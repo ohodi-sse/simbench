@@ -1,0 +1,1 @@
+// A B BigDecimal DOWN MOD Main NO No RoundingMode Scanner String System YES Yes args b class double eps final import in int java long main math multiply new nextDouble nextLong out println private public return sc setScale solve static toString util valueOf voidclass Main {}

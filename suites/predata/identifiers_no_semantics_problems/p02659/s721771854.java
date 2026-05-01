@@ -1,0 +1,1 @@
+// BigDecimal DOWN M Main N ROUND Scanner String System args b class code here import in java main math multiply new nextBigDecimal out p println public scan setScale static util void write yourclass Main {}

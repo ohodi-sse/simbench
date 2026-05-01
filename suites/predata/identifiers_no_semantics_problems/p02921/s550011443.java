@@ -1,0 +1,1 @@
+// Main Scanner String System args class count equals for i if import in int java main new next out println public sc split static str util voidclass Main {}

@@ -1,0 +1,1 @@
+// Integer Main Scanner String System ans args class count divi for i if import in int java main n new next out parseInt println public roop sc static util void whileclass Main {}

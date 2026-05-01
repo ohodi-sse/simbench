@@ -1,0 +1,1 @@
+// Main N Scanner String System X ans args break class close else final for hako i if import in int j java keyboard main new nextInt nmax out p print public static util voidclass Main {}

@@ -1,0 +1,74 @@
+public class Main extends Reader
+{
+    int x;
+    int n;
+    int[] a;
+    
+    public static void main(final String[] array) {
+        final Main main = new Main();
+        main.show(main.solve());
+    }
+    
+    public Main() {
+        this.x = this.ini();
+        this.n = this.ini();
+        this.a = this.vi();
+    }
+    
+    int solve() {
+        int n = 0;
+        int x = this.x;
+        final int[] array = new int[102];
+        for (int i = 0; i < this.n; ++i) {
+            array[this.a[i]] = 1;
+        }
+        for (int j = 0; j <= 101; ++j) {
+            if (array[j] == 0) {
+                final int abs = Math.abs(j - this.x);
+                if (abs < x) {
+                    x = abs;
+                    n = j;
+                }
+            }
+        }
+        return n;
+    }
+    
+    int calc(final int n, final int n2) {
+        int n3 = 0;
+        for (int i = n; i <= n2; ++i) {
+            n3 += i;
+        }
+        return n3;
+    }
+    
+    void show(final int x) {
+        System.out.println(x);
+    }
+}
+import java.util.Scanner;
+
+
+
+
+
+class Reader
+{
+    Scanner sc;
+    
+    Reader() {
+        this.sc = new Scanner(System.in);
+    }
+    
+    public int ini() {
+        return this.sc.nextInt();
+    }
+    
+    public int[] vi(final int n) {
+        final int[] array = new int[n];
+        for (int i = 0; i < n; ++i) {
+            array[i] = this.sc.nextInt();
+        }
+        return array;
+    }
+}

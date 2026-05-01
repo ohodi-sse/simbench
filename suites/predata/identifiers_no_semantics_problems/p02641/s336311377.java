@@ -1,0 +1,1 @@
+// ArrayList Collections Integer Main N Scanner String System X add args big bigger break class close contains else for get i if import in int java main new nextInt out println public reverse scanner size small smaller sort static temp util voidclass Main {}

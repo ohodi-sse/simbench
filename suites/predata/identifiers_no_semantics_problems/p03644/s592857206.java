@@ -1,0 +1,1 @@
+// Main N Scanner String System args break class cnt count else for hoge i if import in int java main new nextInt out println public sc static true util values void whileclass Main {}

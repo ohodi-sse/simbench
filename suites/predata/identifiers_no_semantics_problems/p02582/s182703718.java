@@ -1,0 +1,1 @@
+// ArrayList Collections List Main R RSR Scanner String System args c class cnt equals for i if import in int java main new next out println public sn static str substring util voidclass Main {}

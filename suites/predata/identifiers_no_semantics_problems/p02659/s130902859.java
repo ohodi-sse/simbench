@@ -1,0 +1,1 @@
+// A B BigInteger BufferedReader Exception InputStreamReader Main String System args bufferedReader class compareTo else equals if import in io java length lim line main math multiply new out println public r readLine res s split startsWith static substring throws toString voidclass Main {}

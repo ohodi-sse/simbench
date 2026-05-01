@@ -1,0 +1,1 @@
+// Main Math Scanner String System args class double f floor import in int java long main n new nextDouble nextLong out println public sc static temp util voidclass Main {}

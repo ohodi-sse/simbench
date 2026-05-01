@@ -1,0 +1,1 @@
+// BufferedReader Exception IOException InputStreamReader Integer Main Math N String System a args br break catch class e else exit if import in int io java main new out parseInt pow println public readLine static str throws true try void whileclass Main {}

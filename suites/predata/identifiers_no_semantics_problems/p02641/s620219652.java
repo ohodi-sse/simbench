@@ -1,0 +1,1 @@
+// Main N Scanner String System TODO X a ans args break class else for i if import in int j java main new nextInt out p println public s sc static util voidclass Main {}

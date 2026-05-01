@@ -1,0 +1,1 @@
+// A BigDecimal BufferedReader IOException InputStreamReader Long Main String System args br class hum import in input int intValue io java long main math mul multiply new num out parseLong println public readLine result split static throws tmp try util voidclass Main {}

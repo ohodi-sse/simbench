@@ -1,0 +1,1 @@
+// BufferedReader Exception InputStreamReader Main R String System args br catch charAt class e else for i if import in int io java kariResult length main new out println public readLine result static str throws try voidclass Main {}

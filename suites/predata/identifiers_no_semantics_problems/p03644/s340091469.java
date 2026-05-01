@@ -1,0 +1,1 @@
+// Integer Main Scanner String System args break class close cnt cntmax for i if ii imax import in int java main n new next out parseInt println public sc static true util void whileclass Main {}

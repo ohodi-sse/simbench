@@ -1,0 +1,1 @@
+// Main R S Scanner String System args ch char class close count else for i if import in int java length main n new next out println public si static str toCharArray util voidclass Main {}

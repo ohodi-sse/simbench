@@ -1,0 +1,1 @@
+// BufferedReader Exception InputStreamReader Integer Long MOD Main N String System Ws ans args check class final for i if import in int io java length long main new nextInt nextInts nextLong nextLongs nextString nextStrings null out parseInt parseLong println public readLine return split static throws tmp void while wsIndxclass Main {}
