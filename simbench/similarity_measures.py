@@ -4,7 +4,7 @@ import polars as pl
 from abc import ABC, abstractmethod
 
 
-class Metric(ABC):
+class Measure(ABC):
     @property
     @abstractmethod
     def name(self) -> str: ...
@@ -34,7 +34,7 @@ class Metric(ABC):
 
 
 @dataclass(frozen=True)
-class NCD(Metric):
+class NCD(Measure):
     @property
     def name(self) -> str:
         return "NCD"
@@ -51,7 +51,7 @@ class NCD(Metric):
 
 
 @dataclass(frozen=True)
-class CDM(Metric):
+class CDM(Measure):
     @property
     def name(self) -> str:
         return "CDM"
@@ -65,7 +65,7 @@ class CDM(Metric):
         return pl.col("src_time") + pl.col("tgt_time") + pl.col("srctgt_time")
 
 
-class DiffMetric(Metric):
+class DiffMeasure(Measure):
     @property
     def name(self) -> str:
         return "diff_similarity"
@@ -77,7 +77,7 @@ class DiffMetric(Metric):
         return pl.col("diff_time")
 
 
-class NormalizedDiffMetric(Metric):
+class NormalizedDiffMeasure(Measure):
     @property
     def name(self) -> str:
         return "normalized_diff_similarity"
@@ -91,7 +91,7 @@ class NormalizedDiffMetric(Metric):
         return pl.col("diff_time")
 
 
-class SummedDiffMetric(Metric):
+class SummedDiffMeasure(Measure):
     @property
     def name(self) -> str:
         return "summed_diff_similarity"
@@ -105,7 +105,7 @@ class SummedDiffMetric(Metric):
         return pl.col("diff_time")
 
 
-class NormalizedCosine(Metric):
+class NormalizedCosine(Measure):
     @property
     def name(self) -> str:
         return "normalized_cosine"

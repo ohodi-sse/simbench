@@ -7,7 +7,7 @@ from contextlib import contextmanager
 from numpy import arange
 import sys
 
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from abc import ABC, abstractmethod
 
 
@@ -20,8 +20,8 @@ from simbench.differs import (
     EditDistanceLines,
     EditDistanceChars,
 )
-from simbench.metrics import (
-    Metric,
+from simbench.similarity_measures import (
+    Measure,
     NormalizedCosine,
     CDM,
 )
@@ -71,7 +71,7 @@ from simbench.plots import (
 
 @dataclass
 class Tool(ABC):
-    metric: Metric
+    metric: Measure
 
     @property
     @abstractmethod
@@ -125,22 +125,24 @@ class AITool(Tool):
 
 def get_all_tools():
     from simbench.compressors import Zstd, Gzip, Zlib
-    from simbench.metrics import NCD
-    from simbench.metrics import DiffMetric
+    from simbench.similarity_measures import NCD
+    from simbench.similarity_measures import DiffMeasure
 
     comp_lvls = [1, 9]  # 3, 5, 7,
     zlib = [Zlib(comp_lvl) for comp_lvl in comp_lvls]
     gzip = [Gzip(comp_lvl) for comp_lvl in comp_lvls]
     zstd = [Zstd(comp_lvl) for comp_lvl in comp_lvls]
     compressors = gzip + zstd + zlib
-    comp_metrics = [NCD(), CDM()]
-    comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
+    comp_similarity_measures = [NCD(), CDM()]
+    comp_tools = [
+        CompressionTool(m, c) for c in compressors for m in comp_similarity_measures
+    ]
 
-    diff_metrics = [
-        DiffMetric()
-    ]  # [NormalizedDiffMetric(), DiffMetric(), SummedDiffMetric()]
+    diff_similarity_measures = [
+        DiffMeasure()
+    ]  # [NormalizedDiffMeasure(), DiffMeasure(), SummedDiffMeasure()]
     diffs = [EditDistanceLines(), EditDistanceChars()]
-    diff_tools = [DiffTool(m, d) for m in diff_metrics for d in diffs]
+    diff_tools = [DiffTool(m, d) for m in diff_similarity_measures for d in diffs]
 
     ai_tools = [
         AITool(NormalizedCosine(), CodeBERT()),
@@ -184,9 +186,9 @@ def get_all_normalizers():
 @dataclass
 class Config:
     log: loguru.Logger
-    # tools: Sequence[Tool] = field(default_factory=list)
-    # classifiers: Sequence[Classifier] = field(default_factory=list)
-    # normalizers: list[Tool] = field(default_factory=list)
+    tools: Sequence[Tool] = field(default_factory=list)
+    classifiers: Sequence[Classifier] = field(default_factory=list)
+    normalizers: list[Tool] = field(default_factory=list)
 
     def __init__(self):
         self.log = logger
@@ -421,6 +423,7 @@ def init_analysis(
     assert False, f"Unrecognized tool type: {type(tool)}"
 
 
+# The AnalysisComparison collects multiple analyses, and computes and collects evaluation and performance plots and tables for the collection.
 @dataclass
 class AnalysisComparison:
     suite: Suite
@@ -438,32 +441,35 @@ class AnalysisComparison:
         return {a.parameter_name: Constant(a) for a in analyses}
 
     @property
-    def performance_comparison_pdf(self):
-        return fscore_comparison_figure(
-            path=self.suite.root / "results" / "performance_comparison.pdf",
-            **self.analyses,
-        )
-
-    @property
     def comparison_hash(self):
         h = hashlib.new("sha256")
         h.update("".join(self.analyses.keys()).encode("utf-8"))
         return h.hexdigest()[:16]
 
     @property
+    def performance_comparison_pdf(self):
+        plots_path = self.suite.root / "results" / "plots"
+        plots_path.mkdir(parents=True, exist_ok=True)
+
+        return fscore_comparison_figure(
+            path=plots_path / f"{self.comparison_hash}_performance_comparison_plot.pdf",
+            **self.analyses,
+        )
+
+    @property
     def comparison_evaluation_table_file(self):
+        table_path = self.suite.root / "results" / "tables"
+        table_path.mkdir(parents=True, exist_ok=True)
         return (
-            self.suite.root
-            / "results"
-            / f"{self.comparison_hash}_evaluation_table_comparison.parquet"
+            table_path / f"{self.comparison_hash}_evaluation_table_comparison.parquet"
         )
 
     @property
     def comparison_performance_table_file(self):
+        table_path = self.suite.root / "results" / "tables"
+        table_path.mkdir(parents=True, exist_ok=True)
         return (
-            self.suite.root
-            / "results"
-            / f"{self.comparison_hash}_performance_table_comparison.parquet"
+            table_path / f"{self.comparison_hash}_performance_table_comparison.parquet"
         )
 
     @property

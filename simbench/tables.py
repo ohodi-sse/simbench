@@ -18,7 +18,7 @@ from simbench.build import (
 )
 from simbench.compressors import Compressor
 from simbench.differs import Diff
-from simbench.metrics import Metric
+from simbench.similarity_measures import Measure
 from simbench.classification import Classifier
 from rust_src import rust_compressions, rust_pairwise_compressions
 
@@ -147,7 +147,7 @@ class DistanceTable:
 def comp_distances(
     schema: pl.Schema,
     bld: Builder,
-    metric: Metric,
+    metric: Measure,
     comp_df: pl.LazyFrame,
     compare_comp_df: pl.LazyFrame,
 ) -> pl.LazyFrame:
@@ -231,7 +231,7 @@ def ai_distances(
 
 @tablenode(schema(DistanceTable))
 def ai_similarities(
-    schema: pl.Schema, bld: Builder, metric: Metric, raw_ai_dist_df: pl.LazyFrame
+    schema: pl.Schema, bld: Builder, metric: Measure, raw_ai_dist_df: pl.LazyFrame
 ) -> pl.LazyFrame:
     out = TableBuilder(schema)
     filtered_df = raw_ai_dist_df.select(pl.exclude("failed_emb"))
@@ -282,7 +282,7 @@ def generic_distances(
 def diff_distances(
     schema: pl.Schema,
     bld: Builder,
-    metric: Metric,
+    metric: Measure,
     diff_df: pl.LazyFrame,
 ) -> pl.LazyFrame:
     out = TableBuilder(schema)

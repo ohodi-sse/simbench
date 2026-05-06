@@ -1,8 +1,6 @@
-from interactive_predict import InteractivePredictor
 import numpy as np
 from simbench.build import NamedCallable, Source
 from abc import ABC, abstractmethod
-import torch
 from transformers import (
     RobertaTokenizer,
     RobertaModel,
@@ -13,8 +11,8 @@ from transformers import (
 )
 from loguru import logger
 
-from code2vec import load_model_dynamically
 from config import Config
+from torch import Tensor, no_grad, from_numpy
 
 
 class AITool(ABC, NamedCallable):
@@ -39,7 +37,7 @@ class AITool(ABC, NamedCallable):
         return F.normalize(embedding, p=2, dim=-1, eps=1e-8)
 
     @abstractmethod
-    def embed_code(self, src: Source) -> torch.Tensor: ...
+    def embed_code(self, src: Source) -> Tensor: ...
 
     def cosine_distance(self, e1, e2):
         from torch.nn.functional import cosine_similarity
@@ -75,12 +73,12 @@ class HuggingFace(AITool):
             self._tokenizer = self._load_tokenizer()
         return self._tokenizer
 
-    def embed_code(self, src: Source) -> torch.Tensor:
+    def embed_code(self, src: Source) -> Tensor:
         code = src.get_bytes().decode("utf-8")
         inputs = self.tokenizer(
             code, return_tensors="pt", truncation=True, padding=True
         )
-        with torch.no_grad():
+        with no_grad():
             outputs = self.model(**inputs)
 
         # Using mean as it should be better at finding semantic similarity
@@ -141,12 +139,14 @@ class Code2Vec(AITool):
         return self._config
 
     def _load_model(self):
+        from code2vec import load_model_dynamically
+        from interactive_predict import InteractivePredictor
+
         model = load_model_dynamically(self.config)
         predictor = InteractivePredictor(self.config, model)
         return predictor
 
-    def embed_code(self, src: Source) -> torch.Tensor:
-        # predict_lines, hash_to_string_dict = self.path_extractor.extract_paths(code)
+    def embed_code(self, src: Source) -> Tensor:
         predictor = self.model
         try:
             code_vector = predictor.one_time_predict(str(src.path))
@@ -154,7 +154,7 @@ class Code2Vec(AITool):
             logger.warning(f"Failed to embed code for {src.name}")
             code_vector = np.array([])
 
-        code_vector_as_tensor = torch.from_numpy(code_vector)
+        code_vector_as_tensor = from_numpy(code_vector)
 
         return code_vector_as_tensor
 

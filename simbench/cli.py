@@ -1,23 +1,17 @@
-from simbench.tables import AIDistanceTable
 from simbench.differs import EditDistanceLines
 import os
-from simbench.evaluation import dataframe_as_latex_table
-from simbench.metrics import (
-    DiffMetric,
-    NormalizedDiffMetric,
-    SummedDiffMetric,
+from simbench.similarity_measures import (
+    DiffMeasure,
+    NormalizedDiffMeasure,
+    SummedDiffMeasure,
 )
 from simbench.plots import (
     plot_node,
     GoodEdges,
     Histogram,
-    chrissers_plot,
 )
 from simbench.normalizers import (
     IDNormalizer,
-    HashedProblemLabel,
-    PartitionedProblemClasses,
-    DecompileNormalizer,
 )
 from simbench.comparing import wilcoxon_signed_rank_test, find_analysis_difference
 import click
@@ -72,13 +66,44 @@ def show_file(file: str, filter, csv) -> None:
         logger.info(data.collect())
 
 
+def get_filtered_analysis_comparison(
+    cfg, suite, tool_pattern, normalizer_pattern, classifier_pattern, seed, samples
+):
+    bld = Builder(cfg.log)
+    if tool_pattern != ".*" or normalizer_pattern != ".*":
+        patterns = [(tool_pattern, normalizer_pattern)]
+    else:
+        bld.log.info("Running with prespecified filters")
+        patterns = [
+            (
+                ".*",  # "^(zstd-9.*|.*BERT.*|Code2Vec).*",
+                "(unprocessed|token_format|.*google.*|decompiled)",
+            ),
+        ]
+
+    for tool_pattern, normalizer_pattern in patterns:
+        filtered_tools = [t for t in cfg.tools if t.matches(tool_pattern)]
+        filtered_classifiers = [
+            c for c in cfg.classifiers if c.matches(classifier_pattern)
+        ]
+        normalizers = [
+            norm for norm in get_all_normalizers() if norm.matches(normalizer_pattern)
+        ]
+
+        comparison = AnalysisComparison(
+            Suite(suite, seed=seed, n_samples=samples),
+            filtered_tools,
+            filtered_classifiers,
+            normalizers,
+        )
+        return comparison
+
+
 @click.command()
 @click.argument("file")
 def count_bad(file: str) -> None:
     assert file.endswith(".parquet"), "Can only show parquet file"
     data = pl.scan_parquet(Path(file))
-    # assert isinstance(data, AIDistanceTable)
-
     bad = data.filter(pl.col("failed_emb")).collect()["failed_emb"]
     print(f"Failed to embed: {len(bad)}")
 
@@ -103,16 +128,15 @@ def analyse(cfg, suite, tool_pattern, normalizer_pattern, classifier_pattern):
     bld = Builder(cfg.log)
 
     for normalizer in cfg.normalizers:
-        cfg.log.info(f"Using {normalizer.name} data for the following analyses!")
         for tool in cfg.tools:
             if not tool.matches(tool_pattern) or not normalizer.matches(
                 normalizer_pattern
             ):
-                cfg.log.debug(
-                    f"Skipping {tool} with name: {tool.name} on {normalizer.name} data"
-                )
                 continue
-            cfg.log.info(f"Computing classifications for {tool}")
+
+            bld.log.info(
+                f"Using {tool.name} on {normalizer.name} data for the following analyses!"
+            )
 
             filtered_classifiers = [
                 c for c in cfg.classifiers if c.matches(classifier_pattern)
@@ -197,50 +221,31 @@ def perr_table_comparisons(
     samples,
 ):
     bld = Builder(logger)
-    bld.log.info("Running with prespecified filters")
-    patterns = [
-        # (".*zstd-1.*", "token_format"),
-        # ("(Code2Vec).*", ".*"),
-        # ("^(?!Code2Vec).*", "(unprocessed)"),  # (.*diff.*|.*NCD.*)
-        (
-            ".*",  # "^(zstd-9.*|.*BERT.*|Code2Vec).*",
-            "(unprocessed|token_format|.*google.*|decompiled)",
-        ),  # (.*diff.*|.*NCD.*)
-        # ("^(?!Code2Vec).*", ".*"),
-    ]
 
-    if tool_pattern != ".*" or normalizer_pattern != ".*":
-        patterns = [(tool_pattern, normalizer_pattern)]
+    comparison = get_filtered_analysis_comparison(
+        cfg,
+        suite,
+        tool_pattern,
+        normalizer_pattern,
+        classifier_pattern,
+        seed,
+        samples,
+    )
 
-    for tool_pattern, normalizer_pattern in patterns:
-        filtered_tools = [t for t in cfg.tools if t.matches(tool_pattern)]
-        filtered_classifiers = [
-            c for c in cfg.classifiers if c.matches(classifier_pattern)
-        ]
-        normalizers = [
-            norm for norm in get_all_normalizers() if norm.matches(normalizer_pattern)
-        ]
+    if force and Path(comparison.comparison_evaluation_table_file).exists():
+        os.remove(comparison.comparison_evaluation_table_file)
 
-        comparison = AnalysisComparison(
-            Suite(suite, seed=seed, n_samples=samples),
-            filtered_tools,
-            filtered_classifiers,
-            normalizers,
-        )
-        if force and Path(comparison.comparison_evaluation_table_file).exists():
-            os.remove(comparison.comparison_evaluation_table_file)
+    if force and Path(comparison.comparison_performance_table_file).exists():
+        os.remove(comparison.comparison_performance_table_file)
 
-        if force and Path(comparison.comparison_performance_table_file).exists():
-            os.remove(comparison.comparison_performance_table_file)
+    performance_table = comparison.performance_table_comparison.pull(bld).collect()
+    evaluation_table = comparison.evaluation_table_comparison.pull(bld).collect()
 
-        performance_table = comparison.performance_table_comparison.pull(bld).collect()
-        evaluation_table = comparison.evaluation_table_comparison.pull(bld).collect()
-
-        if show:
-            print(evaluation_table)
-            print(performance_table)
-            # latex_table = dataframe_as_latex_table(evaluation_table)
-            # print(latex_table)
+    if show:
+        print(evaluation_table)
+        print(performance_table)
+        # latex_table = dataframe_as_latex_table(evaluation_table)
+        # print(latex_table)
 
 
 @click.command()
@@ -278,91 +283,35 @@ def diff_normalizer(
 @click.command()
 @click.argument("suite", type=click.Path(file_okay=True, path_type=Path))
 @click.option("--force", default=None, is_flag=True)
-def mds_plot(suite: Path, force: bool):
-    from simbench.compressors import Zstd
-    from simbench.classification import KNN
-    from simbench.metrics import NCD
-    from simbench.normalizers import OptimizedDecompiledNormalizer
-
-    bld = Builder(logger)
-    analysis1 = init_analysis(
-        CompressionTool(NCD(), Zstd(1)),
-        Suite(suite),
-        [KNN(1)],
-        IDNormalizer(),
-    )
-
-    fig, ax = plt.subplots(1, 1)
-    good_edges = plot_node(GoodEdges())
-    good_edges(bld, analysis1, ax, xlog=True, force=force)
-
-    # cluster_plot = plot_node(BiggestCluster())
-    # cluster_plot(bld, analysis1, ax[1], xlog=True, force=force)
-    # good_majority = plot_node(GoodMajorityCluster())
-    # good_majority(bld, analysis1, ax[2], xlog=True, force=force)
-    #
-    plt.show()
-
-    # cluster_boxplot(bld, analysis1, analysis2)
-    # mds_clustering_plot(bld, analysis1)
-
-
-@click.command()
-@click.argument("suite", type=click.Path(file_okay=True, path_type=Path))
-@click.option("--force", default=None, is_flag=True)
 def perr_plot(suite: Path, force: bool):
-    from simbench.compressors import Zstd
     from simbench.classification import KNN
-    from simbench.metrics import NCD
-    from simbench.normalizers import OptimizedDecompiledNormalizer
 
     bld = Builder(logger)
 
     diff = init_analysis(
-        DiffTool(DiffMetric(), EditDistanceLines()),
+        DiffTool(DiffMeasure(), EditDistanceLines()),
         Suite(suite),
         [KNN(1)],
         IDNormalizer(),
     )
 
     normdiff = init_analysis(
-        DiffTool(NormalizedDiffMetric(), EditDistanceLines()),
+        DiffTool(NormalizedDiffMeasure(), EditDistanceLines()),
         Suite(suite),
         [KNN(1)],
         IDNormalizer(),
     )
-    sumdiff = init_analysis(
-        DiffTool(SummedDiffMetric(), EditDistanceLines()),
-        Suite(suite),
-        [KNN(1)],
-        IDNormalizer(),
-    )
-    fig, ax = plt.subplots(1, 3, figsize=(8, 3), layout="constrained")
+
+    fig, ax = plt.subplots(1, 2, figsize=(8, 3), layout="constrained")
 
     histogram = Histogram()
     ax[0].set_ylabel("Frequency")
     histogram.compute_data(bld, diff, ax[0], "diff max")
     histogram.compute_data(bld, normdiff, ax[1], "diff norm")
-    histogram.compute_data(bld, sumdiff, ax[2], "diff sum")
 
     plot_name = "diff_unprocessed_histogram.pdf"
     bld.log.debug("Saving plot to file: " + plot_name)
     plt.savefig(plot_name, dpi=300, bbox_inches="tight")
-    plt.show()
-
-
-@click.command()
-@click.argument("suite", type=click.Path(file_okay=True, path_type=Path))
-@click.option("--force", default=None, is_flag=True)
-def perr_fit(suite: Path, force: bool):
-    from simbench.compressors import Zstd
-    from simbench.classification import KNN
-    from simbench.metrics import NCD
-    from simbench.normalizers import OptimizedDecompiledNormalizer
-
-    bld = Builder(logger)
-
-    plt.savefig("christians_plot_ide.pdf", dpi=300, bbox_inches="tight")
     plt.show()
 
 
@@ -374,9 +323,7 @@ def wilcoxon(file1, file2, key):
     wilcoxon_signed_rank_test(file1, file2, key)
 
 
-cli.add_command(mds_plot)
 cli.add_command(perr_plot)
-cli.add_command(perr_fit)
 cli.add_command(wilcoxon)
 cli.add_command(diff_normalizer)
 cli.add_command(show_file)

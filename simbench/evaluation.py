@@ -138,10 +138,6 @@ def pivot_normalizer(df: pl.DataFrame):
     return df
 
 
-def report_failed_embeddings(analysis):
-    assert isinstance(analysis.tool, AITool)
-
-
 def dataframe_as_latex_table(df: pl.DataFrame):
     df = prettify_dataframe(df)
 
