@@ -1,0 +1,21 @@
+import java.math.RoundingMode;
+import java.math.BigDecimal;
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final String next = scanner.next();
+        final String next2 = scanner.next();
+        final BigDecimal bigDecimal = new BigDecimal(next);
+        bigDecimal.setScale(0);
+        final BigDecimal multiplicand = new BigDecimal(next2);
+        multiplicand.setScale(2, RoundingMode.DOWN);
+        System.out.println(bigDecimal.multiply(multiplicand).longValue());
+    }
+}

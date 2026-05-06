@@ -7,16 +7,23 @@ from contextlib import contextmanager
 from numpy import arange
 import sys
 
-from dataclasses import dataclass, field
+from dataclasses import dataclass
 from abc import ABC, abstractmethod
 
 
-from simbench.compressors import Compressor, Diff, EditDistanceDiff
+from simbench.compressors import (
+    Compressor,
+)
+
+from simbench.differs import (
+    Diff,
+    EditDistanceLines,
+    EditDistanceChars,
+)
 from simbench.metrics import (
     Metric,
-    NormalizedDiffMetric,
-    SummedDiffMetric,
     NormalizedCosine,
+    CDM,
 )
 import time
 
@@ -41,6 +48,8 @@ from simbench.normalizers import (
     TokenNormalizer,
     IdentifierNoSemantics,
     DecompiledFormatted,
+    TestDecompileTokenNormalizer,
+    TestDecompileFormatterNormalizer,
 )
 
 from simbench.tables import (
@@ -115,25 +124,24 @@ class AITool(Tool):
 
 
 def get_all_tools():
-    from simbench.compressors import Zstd, Gzip, Zlib, Difflib
+    from simbench.compressors import Zstd, Gzip, Zlib
     from simbench.metrics import NCD
     from simbench.metrics import DiffMetric
 
-    comp_lvls = [1, 9]
+    comp_lvls = [1, 9]  # 3, 5, 7,
     zlib = [Zlib(comp_lvl) for comp_lvl in comp_lvls]
     gzip = [Gzip(comp_lvl) for comp_lvl in comp_lvls]
     zstd = [Zstd(comp_lvl) for comp_lvl in comp_lvls]
-
     compressors = gzip + zstd + zlib
-    comp_metrics = [NCD()]
-
+    comp_metrics = [NCD(), CDM()]
     comp_tools = [CompressionTool(m, c) for c in compressors for m in comp_metrics]
-    diff_tools = [
-        DiffTool(NormalizedDiffMetric(), EditDistanceDiff()),
-        DiffTool(DiffMetric(), EditDistanceDiff()),
-        DiffTool(SummedDiffMetric(), EditDistanceDiff()),
-    ]  # BSDiff is veeeery slooow
-    # other_tools = [GenericTool(GenericMetric(), Difflib())]
+
+    diff_metrics = [
+        DiffMetric()
+    ]  # [NormalizedDiffMetric(), DiffMetric(), SummedDiffMetric()]
+    diffs = [EditDistanceLines(), EditDistanceChars()]
+    diff_tools = [DiffTool(m, d) for m in diff_metrics for d in diffs]
+
     ai_tools = [
         AITool(NormalizedCosine(), CodeBERT()),
         AITool(NormalizedCosine(), GraphCodeBERT()),
@@ -147,10 +155,10 @@ def get_all_classifiers(steps: int = 20) -> Sequence[Classifier]:
     from simbench.classification import KNN, Threshold
 
     thrsh = [Threshold(round(t, 3)) for t in arange(0.05, 1.0, 1.0 / steps)]
-    knn = [KNN(k) for k in range(1, 300, int(301 / steps))]
+    # knn = [KNN(k) for k in range(1, 300, int(301 / steps))]
 
-    thrsh = [Threshold(0.5)]
-    knn = [KNN(1)]
+    thrsh = []  # [Threshold(0.5)]
+    knn = [KNN(1), KNN(10), KNN(50)]
     return thrsh + knn
 
 
@@ -168,15 +176,17 @@ def get_all_normalizers():
         DecompiledFormatted(),
         PartitionedProblemClasses(5),
         PartitionedProblemClasses(25),
+        TestDecompileFormatterNormalizer(),
+        TestDecompileTokenNormalizer(),
     ]
 
 
 @dataclass
 class Config:
     log: loguru.Logger
-    tools: Sequence[Tool] = field(default_factory=list)
-    classifiers: Sequence[Classifier] = field(default_factory=list)
-    normalizers: list[Tool] = field(default_factory=list)
+    # tools: Sequence[Tool] = field(default_factory=list)
+    # classifiers: Sequence[Classifier] = field(default_factory=list)
+    # normalizers: list[Tool] = field(default_factory=list)
 
     def __init__(self):
         self.log = logger
@@ -435,16 +445,37 @@ class AnalysisComparison:
         )
 
     @property
-    def comparison_table_file(self):
+    def comparison_hash(self):
         h = hashlib.new("sha256")
         h.update("".join(self.analyses.keys()).encode("utf-8"))
-        hashstr = h.hexdigest()[:16]
-
-        return self.suite.root / "results" / f"{hashstr}_table_comparison.parquet"
+        return h.hexdigest()[:16]
 
     @property
-    def table_comparison(self):
+    def comparison_evaluation_table_file(self):
+        return (
+            self.suite.root
+            / "results"
+            / f"{self.comparison_hash}_evaluation_table_comparison.parquet"
+        )
+
+    @property
+    def comparison_performance_table_file(self):
+        return (
+            self.suite.root
+            / "results"
+            / f"{self.comparison_hash}_performance_table_comparison.parquet"
+        )
+
+    @property
+    def evaluation_table_comparison(self):
         return evaluation(
-            self.comparison_table_file,
+            self.comparison_evaluation_table_file,
+            **self.analyses,
+        )
+
+    @property
+    def performance_table_comparison(self):
+        return performance(
+            self.comparison_performance_table_file,
             **self.analyses,
         )

@@ -34,7 +34,7 @@ class Classifier(ABC):
     def matches(self, match):
         import re
 
-        return re.fullmatch(match, f"{self.name}-{self.param}") is not None
+        return re.match(match, f"{self.name}-{self.param}") is not None
 
 
 @dataclass
@@ -59,15 +59,17 @@ class KNN(Classifier):
         )
 
         filter_expr = (pl.col("src") == src) & (pl.col("tgt") != src)
-        src_sim = distance_df.filter(filter_expr).select(
-            ["tgt_label", "tgt", "distance"]
+        src_sim = (
+            distance_df.filter(filter_expr)
+            .select(["tgt_label", "tgt", "distance"])
+            .sort(by="distance", descending=True)
         )
 
         k_best = src_sim.head(self.k)
         counts = (
             k_best.group_by("tgt_label")
             .agg(pl.len(), pl.col("distance").mean())
-            .sort(by=["len", "distance"], descending=[True, False])
+            .sort(by=["len", "distance"], descending=[True, True])
         )  # The sorting here takes care of the tie-breaking
         # This means src is labelled as the closest label based on mean distance when given a tie
 

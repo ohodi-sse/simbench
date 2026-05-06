@@ -1,0 +1,78 @@
+import java.util.List;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final ArrayList list = new ArrayList();
+        final ArrayList list2 = new ArrayList();
+        final ArrayList list3 = new ArrayList();
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        for (int i = 0; i < nextInt2; ++i) {
+            list.add(scanner.nextInt());
+        }
+        Collections.sort((List<Comparable>)list);
+        int n = 0;
+        int n2 = 0;
+        int n3 = 0;
+        if (list.size() == 0) {
+            System.out.println(nextInt);
+            System.exit(0);
+        }
+        list2.add(list.get(0) - 2);
+        for (int j = 0; j < nextInt2; ++j) {
+            if ((int)list.get(j) < nextInt) {
+                list2.add(list.get(j));
+            }
+            else if ((int)list.get(j) > nextInt) {
+                list3.add(list.get(j));
+            }
+            else {
+                ++n;
+            }
+        }
+        list3.add((int)list.get(nextInt2 - 1) + 2);
+        int n4 = 0;
+        int x = 0;
+        for (int k = 1; k < list2.size() + 1; ++k) {
+            if (nextInt - k > (int)list2.get(list2.size() - k)) {
+                ++n2;
+                n4 = nextInt - k;
+                break;
+            }
+        }
+        if (n2 == 0) {
+            n4 = list2.get(0) - 1;
+        }
+        for (int l = 1; l < list3.size() + 1; ++l) {
+            if (nextInt + l < (int)list3.get(l - 1)) {
+                ++n3;
+                x = nextInt + l;
+                break;
+            }
+        }
+        if (n3 == 0) {
+            x = list2.get(list2.size() - 1) + 1;
+        }
+        if (n == 0) {
+            System.out.println(nextInt);
+        }
+        else if (nextInt - n4 < x - nextInt) {
+            System.out.println(n4);
+        }
+        else if (nextInt - n4 > x - nextInt) {
+            System.out.println(x);
+        }
+        else {
+            System.out.println(n4);
+        }
+    }
+}

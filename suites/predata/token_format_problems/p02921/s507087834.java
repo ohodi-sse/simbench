@@ -21,16 +21,14 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-final
 Scanner
-scanner
+sc
 =
 new
 Scanner
@@ -40,40 +38,56 @@ System
 in
 )
 ;
-final
 String
-next
+s
 =
-scanner
+sc
 .
 next
 (
 )
 ;
-final
 String
-next2
+t
 =
-scanner
+sc
 .
 next
 (
 )
+;
+//int n = sc.nextInt();
+//int m = sc.nextInt();
+//int k = sc.nextInt();
+long
+count
+=
+0
 ;
 long
-x
+count1
 =
-0L
+0
 ;
-Arrays
-.
-sort
-(
+int
+[
+]
+array
+=
 new
 int
 [
 3
 ]
+;
+/*array[0]=n-m;
+		array[1]=n*m;
+		array[2]=n+m;*/
+Arrays
+.
+sort
+(
+array
 )
 ;
 for
@@ -87,13 +101,13 @@ i
 <
 3
 ;
-++
 i
+++
 )
 {
 if
 (
-next
+s
 .
 substring
 (
@@ -106,7 +120,7 @@ i
 .
 equals
 (
-next2
+t
 .
 substring
 (
@@ -119,18 +133,23 @@ i
 )
 )
 {
+count
 ++
-x
 ;
 }
 }
+/*if(count>2||count1>=2) {
+			System.out.println("No");
+		}else {
+			System.out.println("Yes");
+		}*/
 System
 .
 out
 .
 println
 (
-x
+count
 )
 ;
 }

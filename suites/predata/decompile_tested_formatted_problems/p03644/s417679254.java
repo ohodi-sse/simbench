@@ -1,0 +1,41 @@
+import java.util.Arrays;
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final int nextInt = new Scanner(System.in).nextInt();
+        final int[] a = new int[nextInt];
+        int x = 0;
+        for (int i = 1; i < nextInt; ++i) {
+            a[i - 1] = i;
+        }
+        a[nextInt - 1] = nextInt;
+        if (Arrays.binarySearch(a, 64) >= 0) {
+            x = 64;
+        }
+        else if (Arrays.binarySearch(a, 32) >= 0) {
+            x = 32;
+        }
+        else if (Arrays.binarySearch(a, 16) >= 0) {
+            x = 16;
+        }
+        else if (Arrays.binarySearch(a, 8) >= 0) {
+            x = 8;
+        }
+        else if (Arrays.binarySearch(a, 4) >= 0) {
+            x = 4;
+        }
+        else if (Arrays.binarySearch(a, 2) >= 0) {
+            x = 2;
+        }
+        else if (Arrays.binarySearch(a, 1) >= 0) {
+            x = 1;
+        }
+        System.out.println(x);
+    }
+}

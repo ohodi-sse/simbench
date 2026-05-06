@@ -16,8 +16,6 @@ from loguru import logger
 
 from indicatif import ProgressBar, ProgressStyle
 
-# Logger = type(logger)
-
 
 @dataclass(frozen=True)
 class Source:

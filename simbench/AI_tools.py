@@ -21,22 +21,17 @@ class AITool(ABC, NamedCallable):
     def __init__(self):
         self._tokenizer = None
         self._model = None
+        self._config = None
+
+    @property
+    @abstractmethod
+    def _load_model(self) -> PreTrainedModel: ...
 
     @property
     def model(self):
         if self._model is None:
             self._model = self._load_model()
         return self._model
-
-    @property
-    def tokenizer(self):
-        if self._tokenizer is None:
-            self._tokenizer = self._load_tokenizer()
-        return self._tokenizer
-
-    @property
-    @abstractmethod
-    def _load_model(self) -> PreTrainedModel: ...
 
     def normalize(self, embedding):
         import torch.nn.functional as F
@@ -49,8 +44,12 @@ class AITool(ABC, NamedCallable):
     def cosine_distance(self, e1, e2):
         from torch.nn.functional import cosine_similarity
 
-        # computing the normalized cosine similarity
-        cos = cosine_similarity(e1.unsqueeze(0), e2.unsqueeze(0), dim=-1).item()
+        # computing the normalized cosine similarity. If embedding has failed this will fail, and return an empty list.
+        # This will produce a similarity of 0 in the AIDistanceTable in tables.py
+        try:
+            cos = cosine_similarity(e1.unsqueeze(0), e2.unsqueeze(0), dim=-1).item()
+        except ValueError:
+            cos = []
 
         return cos
 
@@ -70,6 +69,12 @@ class HuggingFace(AITool):
     @abstractmethod
     def _load_tokenizer(self) -> PreTrainedTokenizer: ...
 
+    @property
+    def tokenizer(self):
+        if self._tokenizer is None:
+            self._tokenizer = self._load_tokenizer()
+        return self._tokenizer
+
     def embed_code(self, src: Source) -> torch.Tensor:
         code = src.get_bytes().decode("utf-8")
         inputs = self.tokenizer(
@@ -81,7 +86,7 @@ class HuggingFace(AITool):
         # Using mean as it should be better at finding semantic similarity
         embedding = outputs.last_hidden_state.mean(dim=1)
 
-        return embedding.squeeze(0)  # shape: (768,)
+        return embedding.squeeze(0)
 
     def preprocess(self, src: Source):
         return self.normalize(self.embed_code(src))
@@ -120,9 +125,7 @@ class Code2Vec(AITool):
     def name(self):
         return "Code2Vec"
 
-    @property
-    def config(self):
-        model_path = "processing_tools/code2vec/src/models/java14_model/saved_model_iter8.release"
+    def _load_config(self):
         conf = Config(
             set_defaults=True,
             load_from_args=False,
@@ -130,6 +133,12 @@ class Code2Vec(AITool):
         )
 
         return conf
+
+    @property
+    def config(self):
+        if self._config is None:
+            self._config = self._load_config()
+        return self._config
 
     def _load_model(self):
         model = load_model_dynamically(self.config)
@@ -141,9 +150,9 @@ class Code2Vec(AITool):
         predictor = self.model
         try:
             code_vector = predictor.one_time_predict(str(src.path))
-        except:
+        except ValueError:
             logger.warning(f"Failed to embed code for {src.name}")
-            code_vector = np.array([0.0])
+            code_vector = np.array([])
 
         code_vector_as_tensor = torch.from_numpy(code_vector)
 

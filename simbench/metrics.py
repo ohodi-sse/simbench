@@ -50,6 +50,21 @@ class NCD(Metric):
         return pl.col("src_time") + pl.col("tgt_time") + pl.col("srctgt_time")
 
 
+@dataclass(frozen=True)
+class CDM(Metric):
+    @property
+    def name(self) -> str:
+        return "CDM"
+
+    def metric_expr(self) -> pl.Expr:
+        return (
+            1 - (pl.col("srctgt_comp")) / (pl.col("src_comp") + pl.col("tgt_comp"))
+        ).cast(pl.Float32)
+
+    def time_expr(self) -> pl.Expr:
+        return pl.col("src_time") + pl.col("tgt_time") + pl.col("srctgt_time")
+
+
 class DiffMetric(Metric):
     @property
     def name(self) -> str:

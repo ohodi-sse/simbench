@@ -3,7 +3,7 @@ java
 .
 util
 .
-Scanner
+*
 ;
 class
 Main
@@ -13,16 +13,14 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-final
-int
-nextInt
+Scanner
+sc
 =
 new
 Scanner
@@ -31,6 +29,11 @@ System
 .
 in
 )
+;
+int
+n
+=
+sc
 .
 nextInt
 (
@@ -38,7 +41,7 @@ nextInt
 ;
 if
 (
-nextInt
+n
 >=
 64
 )
@@ -56,7 +59,7 @@ println
 else
 if
 (
-nextInt
+n
 >=
 32
 )
@@ -74,7 +77,7 @@ println
 else
 if
 (
-nextInt
+n
 >=
 16
 )
@@ -92,7 +95,7 @@ println
 else
 if
 (
-nextInt
+n
 >=
 8
 )
@@ -110,7 +113,7 @@ println
 else
 if
 (
-nextInt
+n
 >=
 4
 )
@@ -128,7 +131,7 @@ println
 else
 if
 (
-nextInt
+n
 >=
 2
 )

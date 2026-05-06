@@ -3,7 +3,14 @@ java
 .
 util
 .
-Scanner
+*
+;
+import
+java
+.
+lang
+.
+*
 ;
 public
 class
@@ -14,16 +21,14 @@ static
 void
 main
 (
-final
 String
+args
 [
 ]
-array
 )
 {
-final
-String
-next
+Scanner
+sc
 =
 new
 Scanner
@@ -32,6 +37,11 @@ System
 .
 in
 )
+;
+String
+s
+=
+sc
 .
 next
 (
@@ -39,7 +49,7 @@ next
 ;
 if
 (
-next
+s
 .
 charAt
 (
@@ -48,7 +58,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -57,7 +67,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -66,7 +76,6 @@ charAt
 ==
 'R'
 )
-{
 System
 .
 out
@@ -76,11 +85,10 @@ println
 3
 )
 ;
-}
 else
 if
 (
-next
+s
 .
 charAt
 (
@@ -90,7 +98,7 @@ charAt
 'R'
 &&
 (
-next
+s
 .
 charAt
 (
@@ -99,7 +107,7 @@ charAt
 ==
 'R'
 ||
-next
+s
 .
 charAt
 (
@@ -109,7 +117,6 @@ charAt
 'R'
 )
 )
-{
 System
 .
 out
@@ -119,11 +126,10 @@ println
 2
 )
 ;
-}
 else
 if
 (
-next
+s
 .
 charAt
 (
@@ -132,7 +138,7 @@ charAt
 ==
 'R'
 ||
-next
+s
 .
 charAt
 (
@@ -141,7 +147,7 @@ charAt
 ==
 'R'
 ||
-next
+s
 .
 charAt
 (
@@ -150,7 +156,6 @@ charAt
 ==
 'R'
 )
-{
 System
 .
 out
@@ -160,9 +165,7 @@ println
 1
 )
 ;
-}
 else
-{
 System
 .
 out
@@ -172,6 +175,5 @@ println
 0
 )
 ;
-}
 }
 }

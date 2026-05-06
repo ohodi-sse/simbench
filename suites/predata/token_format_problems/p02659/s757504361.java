@@ -1,9 +1,23 @@
 import
 java
 .
+math
+.
+BigDecimal
+;
+import
+java
+.
+nio
+.
+ByteBuffer
+;
+import
+java
+.
 util
 .
-Scanner
+*
 ;
 public
 class
@@ -14,16 +28,14 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-final
 Scanner
-scanner
+sc
 =
 new
 Scanner
@@ -33,36 +45,71 @@ System
 in
 )
 ;
+//        int n = sc.nextInt();
+//        BigDecimal base = new BigDecimal("1");
+//        long m = (long) Math.pow(10,18);
+//        BigDecimal mm = new BigDecimal(m);
+//
+//        for (int i = 0;i<n;++i)
+//        {
+//            BigDecimal a = sc.nextBigDecimal();
+//            //System.out.println(base+" * "+a);
+//            base = a.multiply(a);
+//            if (base.compareTo(mm) > 0)
+//            {
+//                base = new BigDecimal(-1);
+//                break;
+//            }
+//        }
+//
+//        System.out.println(base);
+BigDecimal
+a
+=
+sc
+.
+nextBigDecimal
+(
+)
+;
+BigDecimal
+b
+=
+sc
+.
+nextBigDecimal
+(
+)
+;
+BigDecimal
+ans
+=
+a
+.
+multiply
+(
+b
+)
+;
 System
 .
 out
 .
 println
 (
-scanner
-.
-nextBigDecimal
-(
-)
-.
-multiply
-(
-scanner
-.
-nextBigDecimal
-(
-)
-)
+ans
 .
 setScale
 (
 0
 ,
-1
+BigDecimal
+.
+ROUND_DOWN
 )
 )
 ;
-scanner
+sc
 .
 close
 (

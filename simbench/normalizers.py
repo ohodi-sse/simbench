@@ -346,7 +346,7 @@ class PartitionedProblemClasses(DependentNormalizer):
 
 class TokenNormalizer(DependentNormalizer):
     def __init__(self):
-        self.depends_on_normalizer = DecompileNormalizer()
+        self.depends_on_normalizer = IDNormalizer()
 
     @property
     def name(self):
@@ -357,7 +357,11 @@ class TokenNormalizer(DependentNormalizer):
         return ".java"
 
     def write_tokens(self, node, source, target):
-        # If no children → leaf node → token
+        if node.type == "string_literal":
+            token = source[node.start_byte : node.end_byte].decode("utf-8")
+            target.write(token)
+            return
+
         if node.child_count == 0:
             token = source[node.start_byte : node.end_byte]
             target.write(f"{token.decode('utf-8')}\n")
@@ -448,3 +452,80 @@ class DecompiledFormatted(DependentNormalizer):
         rust_batch_format(sources, targets)
         remove_final(targets)
         remove_comments(targets)
+
+
+class TestCompileFormatterNormalizer(DependentNormalizer):
+    def __init__(self):
+        self.depends_on_normalizer = GoogleFormatter()
+
+    @property
+    def name(self):
+        return "compile_tested_formatted"
+
+    @property
+    def required_output_file_extension(self) -> str | None:
+        return ".java"
+
+    def __call__(self, sources: list[str], targets: list[str]):
+        logger.info("Testing Google formatter by compiling and decompiling")
+        logger.info("Now compiling")
+        rust_batch_compile(sources, targets)
+
+        logger.info("Now decompiling")
+        rust_batch_decompile(targets, targets)
+
+
+class TestDecompileFormatterNormalizer(DependentNormalizer):
+    def __init__(self):
+        self.depends_on_normalizer = TestCompileFormatterNormalizer()
+
+    @property
+    def name(self):
+        return "decompile_tested_formatted"
+
+    @property
+    def required_output_file_extension(self) -> str | None:
+        return ".java"
+
+    def __call__(self, sources: list[str], targets: list[str]):
+        logger.info("Testing Google formatter by compiling and decompiling")
+
+        logger.info("Now decompiling")
+        rust_batch_decompile(sources, targets)
+
+
+class TestCompileTokenNormalizer(DependentNormalizer):
+    def __init__(self):
+        self.depends_on_normalizer = TokenNormalizer()
+
+    @property
+    def name(self):
+        return "compile_tested_tokenized"
+
+    @property
+    def required_output_file_extension(self) -> str | None:
+        return ".java"
+
+    def __call__(self, sources: list[str], targets: list[str]):
+        logger.info("Testing TokenNormalizer")
+
+        logger.info("Now compiling")
+        rust_batch_compile(sources, targets)
+
+
+class TestDecompileTokenNormalizer(DependentNormalizer):
+    def __init__(self):
+        self.depends_on_normalizer = TestCompileTokenNormalizer()
+
+    @property
+    def name(self):
+        return "decompile_tested_tokenized"
+
+    @property
+    def required_output_file_extension(self) -> str | None:
+        return ".java"
+
+    def __call__(self, sources: list[str], targets: list[str]):
+        logger.info("Testing TokenNormalizer")
+        logger.info("Now decompiling")
+        rust_batch_decompile(sources, targets)

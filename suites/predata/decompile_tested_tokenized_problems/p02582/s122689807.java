@@ -1,0 +1,20 @@
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) {
+        try (final Scanner scanner = new Scanner(System.in)) {
+            final String[] split = scanner.next().split("S");
+            int max = 0;
+            final String[] array2 = split;
+            for (int length = array2.length, i = 0; i < length; ++i) {
+                max = Math.max(array2[i].length(), max);
+            }
+            System.out.println(max);
+        }
+    }
+}

@@ -1,0 +1,33 @@
+import java.util.Scanner;
+import java.io.OutputStream;
+import java.io.BufferedOutputStream;
+import java.io.PrintWriter;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static PrintWriter out;
+    
+    public static void main(final String[] array) {
+        run();
+    }
+    
+    private static void run() {
+        Main.out = new PrintWriter(new BufferedOutputStream(System.out));
+        final Scanner scanner = new Scanner(System.in);
+        Main.out.println(count(Integer.parseInt(scanner.next())));
+        Main.out.close();
+        scanner.close();
+    }
+    
+    private static int count(final int n) {
+        int n2 = 0;
+        for (int n3 = 0; (int)Math.pow(2.0, n3) <= n; ++n3) {
+            n2 = (int)Math.pow(2.0, n3);
+        }
+        return n2;
+    }
+}

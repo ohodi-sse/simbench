@@ -3,58 +3,53 @@ java
 .
 util
 .
-HashSet
+*
 ;
 import
 java
 .
 io
 .
-Reader
+*
 ;
 import
 java
 .
-io
+math
 .
-BufferedReader
+BigDecimal
 ;
 import
 java
 .
-io
+math
 .
-InputStreamReader
-;
-import
-java
-.
-util
-.
-Hashtable
+BigInteger
 ;
 class
 Main
 {
 static
 boolean
+visited
 [
 ]
-visited
 ;
 static
 long
-[
-]
-[
-]
-[
-]
 dp
+[
+]
+[
+]
+[
+]
 ;
 static
 long
 MOD
+=
+1000000007L
 ;
 static
 Hashtable
@@ -64,24 +59,33 @@ String
 Long
 >
 hash
+=
+new
+Hashtable
+<
+>
+(
+)
 ;
 public
 static
 void
 main
 (
-final
 String
+args
 [
 ]
-array
 )
 throws
+java
+.
+lang
+.
 Exception
 {
-final
 BufferedReader
-bufferedReader
+inp
 =
 new
 BufferedReader
@@ -95,13 +99,12 @@ in
 )
 )
 ;
-final
 String
+h
 [
 ]
-split
 =
-bufferedReader
+inp
 .
 readLine
 (
@@ -109,15 +112,12 @@ readLine
 .
 split
 (
-"
- 
-"
-)
+" ")
 ;
 String
+hh
 [
 ]
-split2
 =
 new
 String
@@ -131,7 +131,7 @@ Integer
 .
 parseInt
 (
-split
+h
 [
 1
 ]
@@ -140,9 +140,9 @@ split
 0
 )
 {
-split2
+hh
 =
-bufferedReader
+inp
 .
 readLine
 (
@@ -150,23 +150,18 @@ readLine
 .
 split
 (
-"
- 
-"
-)
+" ")
 ;
 }
-final
 HashSet
 <
 Integer
 >
-set
+hash
 =
 new
 HashSet
 <
-Integer
 >
 (
 )
@@ -180,15 +175,15 @@ i
 ;
 i
 <
-split2
+hh
 .
 length
 ;
-++
 i
+++
 )
 {
-set
+hash
 .
 add
 (
@@ -196,7 +191,7 @@ Integer
 .
 parseInt
 (
-split2
+hh
 [
 i
 ]
@@ -204,84 +199,100 @@ i
 )
 ;
 }
+// Arrays.sort(arr);
 int
-int1
-;
-int
-n
-;
-for
-(
-n
-=
-(
-int1
+x
 =
 Integer
 .
 parseInt
 (
-split
+h
 [
 0
 ]
 )
-)
 ;
-set
+int
+x1
+=
+x
+;
+int
+ans
+=
+0
+;
+while
+(
+true
+)
+{
+if
+(
+!
+hash
 .
 contains
 (
-int1
+x1
 )
-;
-++
-int1
 )
 {
+ans
+=
+x1
+;
+break
+;
 }
-int
+x1
+++
+;
+}
+x1
+=
 x
-=
-int1
-;
-int
-j
-;
-for
-(
-j
-=
-n
 -
 1
 ;
-set
+while
+(
+true
+)
+{
+if
+(
+!
+hash
 .
 contains
 (
-j
+x1
 )
-;
---
-j
 )
 {
-}
 if
 (
-n
--
-j
-<=
 x
 -
-n
+x1
+<=
+ans
+-
+x
 )
 {
-x
+ans
 =
-j
+x1
+;
+}
+break
+;
+}
+x1
+--
 ;
 }
 System
@@ -290,7 +301,7 @@ out
 .
 println
 (
-x
+ans
 )
 ;
 }
@@ -298,36 +309,30 @@ static
 long
 get
 (
-final
 long
-n
+x
 ,
-final
 String
 s
 ,
-final
 long
+arr
 [
 ]
-array
 ,
-final
 int
-index
+i
 ,
-final
 int
-n2
+a
 ,
-final
 int
-n3
+b
 )
 {
 if
 (
-index
+i
 ==
 s
 .
@@ -337,47 +342,43 @@ length
 )
 {
 return
-(
-n
+x
 ==
-0L
-)
+0
 ?
-1L
+1
 :
-2L
+2
 ;
 }
+// String ss=i+" "+x;
+// if(hash.containsKey(ss)){return hash.get(ss);}
 if
 (
-Main
-.
 dp
 [
-index
+i
 ]
 [
-n2
+a
 ]
 [
-n3
+b
 ]
 !=
-0L
+0
 )
 {
 return
-Main
-.
 dp
 [
-index
+i
 ]
 [
-n2
+a
 ]
 [
-n3
+b
 ]
 ;
 }
@@ -387,23 +388,21 @@ s
 .
 charAt
 (
-index
+i
 )
 ==
 '1'
 )
 {
-Main
-.
 dp
 [
-index
+i
 ]
 [
-n2
+a
 ]
 [
-n3
+b
 ]
 =
 Math
@@ -412,60 +411,58 @@ max
 (
 get
 (
-n
+x
 ^
-array
+arr
 [
-index
+i
 ]
 ,
 s
 ,
-array
+arr
 ,
-index
+i
 +
 1
 ,
-n2
+a
 ,
-n3
+b
 +
 1
 )
 ,
 get
 (
-n
+x
 ,
 s
 ,
-array
+arr
 ,
-index
+i
 +
 1
 ,
-n2
+a
 ,
-n3
+b
 )
 )
 ;
 }
 else
 {
-Main
-.
 dp
 [
-index
+i
 ]
 [
-n2
+a
 ]
 [
-n3
+b
 ]
 =
 Math
@@ -474,85 +471,191 @@ min
 (
 get
 (
-n
+x
 ^
-array
+arr
 [
-index
+i
 ]
 ,
 s
 ,
-array
+arr
 ,
-index
+i
 +
 1
 ,
-n2
+a
 +
 1
 ,
-n3
+b
 )
 ,
 get
 (
-n
+x
 ,
 s
 ,
-array
+arr
 ,
-index
+i
 +
 1
 ,
-n2
+a
 ,
-n3
+b
 )
 )
 ;
 }
 return
-Main
-.
 dp
 [
-index
+i
 ]
 [
-n2
+a
 ]
 [
-n3
+b
 ]
 ;
 }
-static
-{
-Main
-.
-MOD
-=
-1000000007L
-;
-Main
-.
-hash
-=
-new
-Hashtable
-<
-String
-,
-Long
->
-(
-)
-;
-}
+// System.out.println(a);
+// static long get(int i,int pre, int n, int arr[],boolean visited[])
+// {
+// 	if(i==n){return 1;}
+// 	long ans=0;
+// 	if(dp[i][pre]!=-1){return dp[i][pre];}
+// 	if(arr[i]==1)
+// 	{
+// 		for(int k=pre+1;k<=n;k++)
+// 		{
+// 			if(!visited[k])
+// 			{
+// 				visited[k]=true;
+// 				ans=(ans%MOD+get(i+1,k,n,arr,visited)%MOD)%MOD;
+// 				visited[k]=false;
+// 			}
+// 		}
+// 		dp[i][pre]=ans;
+// 		return ans;
+// 	}
+// 	for(int k=1;k<pre;k++)
+// 	{
+// 		if(!visited[k])
+// 		{
+// 			visited[k]=true;
+// 			ans=(ans%MOD+get(i+1,k,n,arr,visited)%MOD)%MOD;
+// 			visited[k]=false;
+// 		}
+// 	}
+// 	dp[i][pre]=ans;
+// 	return ans;
+// }
+// static long getall(int gg[], long arr[][], int i, int g)
+// {
+// 	if(i==arr.length)
+// 	{
+// 		long ans=0;
+// 		for(int j=0;j<=g;j++)
+// 		{
+// 			ArrayList<Integer>arr1=new ArrayList<>();
+// 			for(int k=0;k<gg.length;k++)
+// 			{
+// 				if(gg[k]==j){arr1.add(k);}
+// 			}
+// 			for(int k=0;k<arr1.size()-1;k++)
+// 			{
+// 				for(int l=k+1;l<arr1.size();l++)
+// 				{
+// 					ans+=arr[arr1.get(k)][arr1.get(l)];
+// 				}
+// 			}
+// 		}
+// 		return ans;
+// 	}
+// 	String s=Arrays.toString(gg);
+// 	// if(hash.containsKey(s)){return hash.get(s);}
+// 	if(dp[i][g]!=0){return dp[i][g];}
+// 	gg[i]=g+1;
+// 	long max=getall(gg,arr,i+1,g+1);
+// 	for(int k=0;k<=g;k++)
+// 	{
+// 		gg[i]=k;
+// 		max=Math.max(getall(gg,arr,i+1,g),max);
+// 	}
+// 	dp[i][g]=max;
+// 	// hash.put(s,max);
+// 	return max;
+// }
+// static boolean prime(long n)
+// {
+// 	if(n==1){return false;}
+//        if (n <= 3) 
+//            return true; 
+//        if (n % 2 == 0 || n % 3 == 0) 
+//            return false; 
+//        for (int i = 5; i * i <= n; i = i + 6) 
+//            if (n % i == 0 || n % (i + 2) == 0) 
+//                return false; 
+//        return true; 
+// }
+// static int[] gg(String y){
+// 	int a[]=new int[y.length()];
+// 	for(int i=0;i<y.length();i++)
+// 	{
+// 		a[i]=(int)y.charAt(i)-(int)'0';
+// 	}
+// 	return a;
+// }
+// static long get(int a[], int d, int sum, int tight, int i)
+// {
+// 	if(i==a.length){if(sum%d==0){return 1;}return 0;}
+// 	// if(dp[i][sum][tight]!=-1){return dp[i][sum][tight];}
+// 	// String s=i+" "+sum+" "+tight;
+// 	if(dp[i][sum][tight]!=-1){return dp[i][sum][tight];}
+// 	long ans=0;
+// 	int limit=(tight==0?9:a[i]);
+// 		for(int j=0;j<=limit;j++)
+// 		{
+// 			int newt=(a[i]==j?tight:0);
+// 			ans=(ans%MOD+get(a,d,(sum+j)%d,newt,i+1)%MOD)%MOD;
+// 		}
+// 		dp[i][sum%d][tight]=ans;
+// 		// hash.put(s,ans);
+// 		return ans;	
+// }
+// static long bfs(int src, ArrayList<ArrayList<Integer>>arr)
+// {
+// 	Queue<Pair>q=new LinkedList<>();
+// 	q.add(new Pair(src,1,1));
+// 	visited[src]=true;
+// 	long ans=0;
+// 	while(q.size()!=0)
+// 	{
+// 		ans=0;
+// 		int size=q.size();
+// 		for(int j=0;j<size;j++)
+// 		{
+// 			Pair t=q.poll();
+// 			ans=(ans%MOD+(t.b%MOD+t.c%MOD)%MOD)%MOD;
+// 			for(Integer node:arr.get(t.a))
+// 			{
+// 				if(!visited[node])
+// 				{
+// 					visited[node]=true;
+// 					q.add(new Pair(node,t.b+t.c,t.b));
+// 				}
+// 			}
+// 		}
+// 	}
+// 	return ans%MOD;
+// }
 }
 class
 Pair
@@ -565,26 +668,20 @@ b
 ;
 Pair
 (
-final
 long
-a
+f
 ,
-final
 long
-b
+h
 )
 {
-this
-.
 a
 =
-a
+f
 ;
-this
-.
 b
 =
-b
+h
 ;
 }
 }

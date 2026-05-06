@@ -1,10 +1,3 @@
-import
-java
-.
-util
-.
-Scanner
-;
 public
 class
 Main
@@ -14,11 +7,10 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+$
 )
 {
 System
@@ -32,6 +24,10 @@ Integer
 highestOneBit
 (
 new
+java
+.
+util
+.
 Scanner
 (
 System

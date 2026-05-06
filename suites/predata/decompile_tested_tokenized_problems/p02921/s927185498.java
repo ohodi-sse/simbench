@@ -1,0 +1,21 @@
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) {
+        int x = 0;
+        final Scanner scanner = new Scanner(System.in);
+        final String nextLine = scanner.nextLine();
+        final String nextLine2 = scanner.nextLine();
+        for (int i = 0; i < 3; ++i) {
+            if (nextLine.substring(i, i + 1).equals(nextLine2.substring(i, i + 1))) {
+                ++x;
+            }
+        }
+        System.out.println(x);
+    }
+}

@@ -1,6 +1,13 @@
 import
 java
 .
+math
+.
+BigDecimal
+;
+import
+java
+.
 util
 .
 Scanner
@@ -14,18 +21,16 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
 try
 (
-final
 Scanner
-scanner
+scan
 =
 new
 Scanner
@@ -36,32 +41,65 @@ in
 )
 )
 {
+BigDecimal
+s
+=
+scan
+.
+nextBigDecimal
+(
+)
+;
+BigDecimal
+k
+=
+scan
+.
+nextBigDecimal
+(
+)
+;
+BigDecimal
+C
+=
+s
+.
+multiply
+(
+k
+)
+;
+/*
+			long goukei = 0;
+			int k = (int)(100.0*B);
+			int a = k%10;//1
+			k/=10;
+			int b = k%10;//10
+			k/=10;
+			int c = k%10;//100
+			
+			
+			
+			goukei+=(long)c*A;
+			long x = A*(long)b/10;
+			long y = A*(long)a/100;
+			
+			goukei+=x+y;
+			*/
 System
 .
 out
 .
 println
 (
-scanner
-.
-nextBigDecimal
-(
-)
-.
-multiply
-(
-scanner
-.
-nextBigDecimal
-(
-)
-)
+C
 .
 longValue
 (
 )
 )
 ;
+//System.out.println();
 }
 }
 }

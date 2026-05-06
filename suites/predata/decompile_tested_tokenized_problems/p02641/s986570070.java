@@ -1,0 +1,41 @@
+import java.util.Iterator;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    Scanner sc;
+    
+    public Main() {
+        this.sc = new Scanner(System.in);
+    }
+    
+    public static void main(final String[] array) {
+        new Main().run();
+    }
+    
+    void run() {
+        final int nextInt = this.sc.nextInt();
+        final int nextInt2 = this.sc.nextInt();
+        final ArrayList list = new ArrayList();
+        for (int i = -200; i <= 200; ++i) {
+            list.add(i);
+        }
+        for (int j = 0; j < nextInt2; ++j) {
+            list.remove((Object)this.sc.nextInt());
+        }
+        int intValue = 1000;
+        int abs = 10000;
+        for (final Integer n : list) {
+            if (Math.abs(nextInt - n) < abs) {
+                abs = Math.abs(nextInt - n);
+                intValue = n;
+            }
+        }
+        System.out.println(intValue);
+    }
+}

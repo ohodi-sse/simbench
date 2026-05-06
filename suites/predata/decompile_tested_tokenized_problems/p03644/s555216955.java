@@ -1,0 +1,107 @@
+import java.io.IOException;
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.util.Arrays;
+import java.io.PrintStream;
+import java.io.InputStream;
+import java.io.OutputStream;
+import java.io.PrintWriter;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) throws Exception {
+        final InputStream in = System.in;
+        final PrintStream out = System.out;
+        final FastScanner fastScanner = new FastScanner(in);
+        final PrintWriter printWriter = new PrintWriter(out);
+        new Question().main(fastScanner, printWriter);
+        printWriter.close();
+        fastScanner.close();
+    }
+    
+    static class Question
+    {
+        int N;
+        
+        public int solve() {
+            int n;
+            for (n = 0; n < 7 && 1 << n <= this.N; ++n) {}
+            return 1 << n - 1;
+        }
+        
+        public void main(final FastScanner fastScanner, final PrintWriter printWriter) {
+            this.N = fastScanner.nextInt();
+            printWriter.println(this.solve());
+        }
+        
+        public void p(final Object obj) {
+            System.out.print(obj);
+        }
+        
+        public void pl(final Object x) {
+            System.out.println(x);
+        }
+        
+        public void arp(final int[] a) {
+            this.pl(Arrays.toString(a));
+        }
+        
+        public void arpp(final int[][] array) {
+            for (int i = 0; i < array.length; ++i) {
+                for (int j = 0; j < array[0].length; ++j) {
+                    this.p("" + array[i][j]);
+                }
+                this.pl("");
+            }
+        }
+    }
+    
+    static class FastScanner
+    {
+        BufferedReader br;
+        StringTokenizer st;
+        
+        public FastScanner(final InputStream in) {
+            this.br = new BufferedReader(new InputStreamReader(in));
+        }
+        
+        public int nextInt() {
+            return Integer.parseInt(this.next());
+        }
+        
+        public long nextLong() {
+            return Long.parseLong(this.next());
+        }
+        
+        public double nextDouble() {
+            return Double.parseDouble(this.next());
+        }
+        
+        public String next() {
+            while (true) {
+                if (this.st != null) {
+                    if (this.st.hasMoreTokens()) {
+                        break;
+                    }
+                }
+                try {
+                    this.st = new StringTokenizer(this.br.readLine());
+                }
+                catch (final IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            return this.st.nextToken();
+        }
+        
+        public void close() throws IOException {
+            this.br.close();
+        }
+    }
+}

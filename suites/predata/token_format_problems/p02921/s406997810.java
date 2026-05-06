@@ -3,6 +3,13 @@ java
 .
 util
 .
+List
+;
+import
+java
+.
+util
+.
 Scanner
 ;
 public
@@ -18,15 +25,12 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-Main
-.
 scanner
 =
 new
@@ -37,63 +41,59 @@ System
 in
 )
 ;
-final
 String
-gs
+s
 =
 gs
 (
 )
 ;
-final
 String
-gs2
+t
 =
 gs
 (
 )
 ;
 int
-i
+c
 =
 0
 ;
 for
 (
 int
-j
+i
 =
 0
 ;
-j
+i
 <
 3
 ;
+i
 ++
-j
 )
 {
 if
 (
-gs
+s
 .
 charAt
 (
-j
+i
 )
 ==
-gs2
+t
 .
 charAt
 (
-j
-)
-)
-{
-++
 i
+)
+)
+c
+++
 ;
-}
 }
 System
 .
@@ -101,10 +101,16 @@ out
 .
 print
 (
-i
+c
 )
 ;
+//        if (a>=3200) {
+//        	System.out.print(s);
+//        }else {
+//        	System.out.print("red");
+//        }
 }
+// 文字列として入力を取得
 public
 static
 String
@@ -113,8 +119,6 @@ gs
 )
 {
 return
-Main
-.
 scanner
 .
 next
@@ -122,6 +126,7 @@ next
 )
 ;
 }
+// intとして入力を取得
 public
 static
 int
@@ -134,8 +139,6 @@ Integer
 .
 parseInt
 (
-Main
-.
 scanner
 .
 next
@@ -144,6 +147,7 @@ next
 )
 ;
 }
+// longとして入力を取得
 public
 static
 long
@@ -156,8 +160,6 @@ Long
 .
 parseLong
 (
-Main
-.
 scanner
 .
 next
@@ -166,6 +168,7 @@ next
 )
 ;
 }
+// doubleとして入力を取得
 public
 static
 double
@@ -178,8 +181,6 @@ Double
 .
 parseDouble
 (
-Main
-.
 scanner
 .
 next

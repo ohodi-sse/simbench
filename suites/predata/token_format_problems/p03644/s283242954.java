@@ -1,10 +1,3 @@
-import
-java
-.
-util
-.
-Scanner
-;
 public
 class
 Main
@@ -14,11 +7,10 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
 System
@@ -34,7 +26,7 @@ Math
 .
 pow
 (
-2.0
+2
 ,
 (
 int
@@ -45,6 +37,10 @@ Math
 log
 (
 new
+java
+.
+util
+.
 Scanner
 (
 System
@@ -61,7 +57,7 @@ Math
 .
 log
 (
-2.0
+2
 )
 )
 )

@@ -18,15 +18,12 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-Main
-.
 scanner
 =
 new
@@ -37,18 +34,16 @@ System
 in
 )
 ;
-final
-String
-value
+long
+A
 =
-String
-.
-valueOf
-(
 gl
 (
 )
-*
+;
+long
+B
+=
 Math
 .
 round
@@ -57,13 +52,29 @@ gd
 (
 )
 *
-100.0
+100
 )
+;
+long
+ab
+=
+A
+*
+B
+;
+String
+s
+=
+String
+.
+valueOf
+(
+ab
 )
 ;
 if
 (
-value
+s
 .
 length
 (
@@ -78,10 +89,7 @@ out
 .
 print
 (
-"
-0
-"
-)
+"0")
 ;
 return
 ;
@@ -95,7 +103,7 @@ i
 ;
 i
 <
-value
+s
 .
 length
 (
@@ -103,8 +111,8 @@ length
 -
 2
 ;
-++
 i
+++
 )
 {
 System
@@ -113,7 +121,7 @@ out
 .
 print
 (
-value
+s
 .
 charAt
 (
@@ -122,7 +130,13 @@ i
 )
 ;
 }
+//        if (flg) {
+//        	System.out.print("YES");
+//        }else {
+//        	System.out.print("NO");
+//        }
 }
+// 文字列として入力を取得
 public
 static
 String
@@ -131,8 +145,6 @@ gs
 )
 {
 return
-Main
-.
 scanner
 .
 next
@@ -140,6 +152,7 @@ next
 )
 ;
 }
+// intとして入力を取得
 public
 static
 int
@@ -152,8 +165,6 @@ Integer
 .
 parseInt
 (
-Main
-.
 scanner
 .
 next
@@ -162,6 +173,7 @@ next
 )
 ;
 }
+// longとして入力を取得
 public
 static
 long
@@ -174,8 +186,6 @@ Long
 .
 parseLong
 (
-Main
-.
 scanner
 .
 next
@@ -184,6 +194,7 @@ next
 )
 ;
 }
+// doubleとして入力を取得
 public
 static
 double
@@ -196,8 +207,6 @@ Double
 .
 parseDouble
 (
-Main
-.
 scanner
 .
 next

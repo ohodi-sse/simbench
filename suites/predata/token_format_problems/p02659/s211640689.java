@@ -3,7 +3,7 @@ java
 .
 util
 .
-Scanner
+*
 ;
 public
 class
@@ -14,16 +14,14 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-final
 Scanner
-scanner
+scan
 =
 new
 Scanner
@@ -33,30 +31,70 @@ System
 in
 )
 ;
-final
 long
-nextLong
+a
 =
-scanner
+scan
 .
 nextLong
 (
 )
 ;
-final
 int
-n
+b
 =
 0
 ;
-final
 String
-next
+s
 =
-scanner
+scan
 .
 next
 (
+)
+;
+b
++=
+(
+s
+.
+charAt
+(
+0
+)
+-
+48
+)
+*
+100
+;
+b
++=
+(
+s
+.
+charAt
+(
+2
+)
+-
+48
+)
+*
+10
+;
+b
++=
+(
+s
+.
+charAt
+(
+3
+)
+-
+48
 )
 ;
 System
@@ -65,51 +103,34 @@ out
 .
 println
 (
-nextLong
+a
 *
-(
-n
-+
-(
-next
-.
-charAt
-(
-0
-)
--
-'0'
-)
-*
-100
-+
-(
-next
-.
-charAt
-(
-2
-)
--
-'0'
-)
-*
-10
-+
-(
-next
-.
-charAt
-(
-3
-)
--
-'0'
-)
-)
+b
 /
-100L
+100
 )
 ;
 }
+//�ŏ�����
+/*
+	static int gcd (int a, int b) {
+		int temp;
+		while((temp = a%b)!=0) {
+			a = b;
+			b = temp;
+		}
+		return b;
+	}
+	*/
+//����ւ�
+/*
+	static int swap (int a, int b) {
+		int swap_arr[] = new int[2];
+		
+		swap[0] = b;
+		swap[1] = a;
+		
+		return swap_arr;
+	}
+	*/
 }

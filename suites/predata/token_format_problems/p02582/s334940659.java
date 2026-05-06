@@ -14,16 +14,14 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-final
-String
-next
+Scanner
+input
 =
 new
 Scanner
@@ -32,6 +30,11 @@ System
 .
 in
 )
+;
+String
+s
+=
+input
 .
 next
 (
@@ -39,7 +42,7 @@ next
 ;
 if
 (
-next
+s
 .
 charAt
 (
@@ -48,7 +51,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -57,7 +60,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -80,7 +83,7 @@ println
 else
 if
 (
-next
+s
 .
 charAt
 (
@@ -89,7 +92,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -98,7 +101,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -121,7 +124,7 @@ println
 else
 if
 (
-next
+s
 .
 charAt
 (
@@ -130,7 +133,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -139,7 +142,7 @@ charAt
 ==
 'S'
 &&
-next
+s
 .
 charAt
 (
@@ -162,7 +165,7 @@ println
 else
 if
 (
-next
+s
 .
 charAt
 (
@@ -171,7 +174,7 @@ charAt
 ==
 'S'
 &&
-next
+s
 .
 charAt
 (
@@ -180,7 +183,7 @@ charAt
 ==
 'S'
 &&
-next
+s
 .
 charAt
 (
@@ -203,7 +206,7 @@ println
 else
 if
 (
-next
+s
 .
 charAt
 (
@@ -212,7 +215,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -221,7 +224,7 @@ charAt
 ==
 'S'
 &&
-next
+s
 .
 charAt
 (
@@ -244,7 +247,7 @@ println
 else
 if
 (
-next
+s
 .
 charAt
 (
@@ -253,7 +256,7 @@ charAt
 ==
 'S'
 &&
-next
+s
 .
 charAt
 (
@@ -262,7 +265,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -285,7 +288,7 @@ println
 else
 if
 (
-next
+s
 .
 charAt
 (
@@ -294,7 +297,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -303,7 +306,7 @@ charAt
 ==
 'R'
 &&
-next
+s
 .
 charAt
 (
@@ -326,7 +329,7 @@ println
 else
 if
 (
-next
+s
 .
 charAt
 (
@@ -335,7 +338,7 @@ charAt
 ==
 'S'
 &&
-next
+s
 .
 charAt
 (
@@ -344,7 +347,7 @@ charAt
 ==
 'S'
 &&
-next
+s
 .
 charAt
 (

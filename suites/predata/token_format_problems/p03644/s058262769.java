@@ -14,16 +14,15 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
 final
-int
-nextInt
+Scanner
+sc
 =
 new
 Scanner
@@ -32,6 +31,11 @@ System
 .
 in
 )
+;
+int
+N
+=
+sc
 .
 nextInt
 (
@@ -41,7 +45,7 @@ if
 (
 64
 <=
-nextInt
+N
 )
 {
 System
@@ -59,7 +63,7 @@ if
 (
 32
 <=
-nextInt
+N
 )
 {
 System
@@ -77,7 +81,7 @@ if
 (
 16
 <=
-nextInt
+N
 )
 {
 System
@@ -95,7 +99,7 @@ if
 (
 8
 <=
-nextInt
+N
 )
 {
 System
@@ -113,7 +117,7 @@ if
 (
 4
 <=
-nextInt
+N
 )
 {
 System
@@ -131,7 +135,7 @@ if
 (
 2
 <=
-nextInt
+N
 )
 {
 System

@@ -5,6 +5,7 @@ util
 .
 Scanner
 ;
+// 提出時にclass Main に書き換え
 public
 class
 Main
@@ -14,16 +15,15 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-final
+// 標準入力を受け取る
 Scanner
-scanner
+sc
 =
 new
 Scanner
@@ -34,33 +34,37 @@ in
 )
 ;
 String
-s
+S
 =
-scanner
+sc
 .
 nextLine
 (
 )
 ;
-scanner
+// String Sを受け取る
+sc
 .
 close
 (
 )
 ;
+// 標準入力を終了
 int
-n
+r
 =
 0
 ;
+// 連続した雨の日数
 int
-x
+rm
 =
 0
 ;
+// 連続した雨の日数(最大値)
 while
 (
-s
+S
 .
 length
 (
@@ -71,44 +75,46 @@ length
 {
 if
 (
-s
+S
 .
 startsWith
 (
-"
-R
-"
-)
+"R")
 )
 {
-++
-n
+r
++=
+1
 ;
+// 連続した雨の日数を加算
 }
 else
 {
-n
+r
 =
 0
 ;
+// 連続した雨の日数を加算
 }
+// 最大値更新
 if
 (
-n
+r
 >
-x
+rm
 )
 {
-x
+rm
 =
-n
+r
 ;
 }
-s
+// Sの先頭の文字を消去
+S
 =
 removeLeadingZeroes
 (
-s
+S
 )
 ;
 }
@@ -118,27 +124,26 @@ out
 .
 println
 (
-x
+rm
 )
 ;
 }
+// 文字列の先頭を削除するメソッド
 static
 String
 removeLeadingZeroes
 (
-final
 String
-str
+s
 )
 {
-final
 StringBuilder
 sb
 =
 new
 StringBuilder
 (
-str
+s
 )
 ;
 if

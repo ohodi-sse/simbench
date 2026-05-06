@@ -1,0 +1,46 @@
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        int abs = 301;
+        final int[] array2 = new int[nextInt2];
+        final int[] array3 = new int[300 - nextInt2];
+        for (int i = 0; i < nextInt2; ++i) {
+            array2[i] = scanner.nextInt();
+        }
+        int n = 0;
+        for (int j = -150; j < 150; ++j) {
+            int n2 = 0;
+            for (int k = 0; k < nextInt2; ++k) {
+                if (j == array2[k]) {
+                    ++n2;
+                    break;
+                }
+            }
+            if (n2 == 0) {
+                array3[n] = j;
+                ++n;
+            }
+        }
+        if (nextInt2 == 0) {
+            System.out.println(nextInt);
+        }
+        else {
+            for (int l = 0; l < array3.length; ++l) {
+                if (abs <= Math.abs(nextInt - array3[l])) {
+                    System.out.println(array3[l - 1]);
+                    break;
+                }
+                abs = Math.abs(nextInt - array3[l]);
+            }
+        }
+    }
+}

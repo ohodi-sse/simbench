@@ -4,10 +4,8 @@ import polars as pl
 from sklearn.metrics import (
     precision_recall_fscore_support,
     accuracy_score,
-    confusion_matrix,
     multilabel_confusion_matrix,
 )
-import numpy as np
 import itertools
 
 from simbench.build import (
@@ -18,7 +16,8 @@ from simbench.build import (
     NamedCallable,
     Source,
 )
-from simbench.compressors import Compressor, Diff
+from simbench.compressors import Compressor
+from simbench.differs import Diff
 from simbench.metrics import Metric
 from simbench.classification import Classifier
 from rust_src import rust_compressions, rust_pairwise_compressions
@@ -104,21 +103,23 @@ def pairwise_diff(
 
     bld.log.info(f"Computing pairwise diffs table for {diff.name}")
 
-    byte_lookup = {name: src.get_bytes() for name, src in sources.items()}  # For speed
+    byte_lookup = {
+        name: diff.preprocess(src) for name, src in sources.items()
+    }  # For speed
     srcs = [src for _, src in sources.items()]
 
     n = len(byte_lookup) ** 2
     with bld.progressbar(n) as pb:
         for src, tgt in itertools.product(srcs, repeat=2):
             pb.inc(1)
-            strls1 = byte_lookup[src.name].decode("utf-8").splitlines(keepends=True)
-            strls2 = byte_lookup[tgt.name].decode("utf-8").splitlines(keepends=True)
+            processed1 = byte_lookup[src.name]
+            processed2 = byte_lookup[tgt.name]
 
             with bld.profile() as timed:
-                difflen = diff(strls1, strls2)
+                difflen = diff(processed1, processed2)
 
-            srclen = len(strls1)
-            tgtlen = len(strls2)
+            srclen = len(processed1)
+            tgtlen = len(processed2)
             out.add(
                 src=src.name,
                 tgt=tgt.name,
@@ -211,19 +212,21 @@ def ai_distances(
             with bld.profile() as timed:
                 dist = tool(preprocess_lookup[src.name], preprocess_lookup[tgt.name])
 
-            emb_status = np.isnan(dist)
+            failed_emb = not dist
+            corrected = 0 if failed_emb else dist
+
             total_time = timed() + preprocess_time[src.name] + preprocess_time[tgt.name]
             out.add(
                 src=src.name,
                 tgt=tgt.name,
                 src_label=src.label,
                 tgt_label=tgt.label,
-                distance=dist,
+                distance=corrected,
                 time=total_time,
-                failed_emb=emb_status,
+                failed_emb=failed_emb,
             )
 
-    return out.getvalue().collect().fill_nan(0).lazy()
+        return out.getvalue()
 
 
 @tablenode(schema(DistanceTable))
@@ -332,8 +335,11 @@ def classifications(
 
 
 class PerformanceTable:
-    classifier: pl.String
-    class_param: pl.Float32
+    Similarity_Measure: pl.String
+    Tool: pl.String
+    Normalizer: pl.String
+    Classifier: pl.String
+    Class_param: pl.Float32
     FP: pl.UInt64
     FN: pl.UInt64
     Acc: pl.Float32
@@ -343,7 +349,7 @@ class PerformanceTable:
 
 
 @tablenode(schema(PerformanceTable))
-def performance(schema: pl.Schema, bld: Builder, **classifications) -> pl.LazyFrame:
+def performance(schema: pl.Schema, bld: Builder, **analyses) -> pl.LazyFrame:
     out = TableBuilder(schema)
 
     def get_performance_row(class_df: pl.LazyFrame):
@@ -371,26 +377,31 @@ def performance(schema: pl.Schema, bld: Builder, **classifications) -> pl.LazyFr
 
         return classif, param, FP, FN, accuracy, precision, recall, f_score
 
-    for _, classification in classifications.items():
-        assert isinstance(classification, pl.LazyFrame), f"Got: {classification}"
+    for _, analysis in analyses.items():
+        for _, classification_node in analysis.classification_nodes.items():
+            classification = classification_node.pull(bld)
+            assert isinstance(classification, pl.LazyFrame), f"Got: {classification}"
 
-        if classification.collect().is_empty():
-            continue
+            if classification.collect().is_empty():
+                continue
 
-        classif, param, FP, FN, accuracy, precision, recall, f_score = (
-            get_performance_row(classification)
-        )
+            classif, param, FP, FN, accuracy, precision, recall, f_score = (
+                get_performance_row(classification)
+            )
 
-        out.add(
-            classifier=classif,
-            class_param=param,
-            FP=FP,
-            FN=FN,
-            Acc=accuracy,
-            Prec=precision,
-            Rec=recall,
-            F1=f_score,
-        )
+            out.add(
+                Similarity_Measure=analysis.tool.similarity_name,
+                Tool=analysis.tool.tool_name,
+                Normalizer=analysis.normalizer.name,
+                Classifier=classif,
+                Class_param=param,
+                FP=FP,
+                FN=FN,
+                Acc=accuracy,
+                Prec=precision,
+                Rec=recall,
+                F1=f_score,
+            )
 
     return out.getvalue()
 

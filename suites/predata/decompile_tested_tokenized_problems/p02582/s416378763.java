@@ -1,0 +1,25 @@
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final String next = new Scanner(System.in).next();
+        int i = 0;
+        Object substring = null;
+        for (int j = 0; j < 3; ++j) {
+            if ((next.substring(j, j + 1).equals(substring) || i == 0) && next.substring(j, j + 1).equals("R")) {
+                ++i;
+            }
+            substring = next.substring(j, j + 1);
+        }
+        p(String.valueOf(i));
+    }
+    
+    static void p(final String x) {
+        System.out.println(x);
+    }
+}

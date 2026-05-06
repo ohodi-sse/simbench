@@ -3,7 +3,7 @@ java
 .
 util
 .
-Scanner
+*
 ;
 public
 class
@@ -14,16 +14,15 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-final
-int
-nextInt
+// TODO Auto-generated method stub
+Scanner
+sc
 =
 new
 Scanner
@@ -32,6 +31,11 @@ System
 .
 in
 )
+;
+int
+n
+=
+sc
 .
 nextInt
 (
@@ -48,8 +52,8 @@ i
 <=
 7
 ;
-++
 i
+++
 )
 {
 if
@@ -58,12 +62,12 @@ Math
 .
 pow
 (
-2.0
+2
 ,
 i
 )
 >
-nextInt
+n
 )
 {
 System
@@ -79,7 +83,7 @@ Math
 .
 pow
 (
-2.0
+2
 ,
 i
 -

@@ -3,7 +3,7 @@ java
 .
 util
 .
-Scanner
+*
 ;
 public
 class
@@ -14,16 +14,15 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-final
+// TODO Auto-generated method stub
 Scanner
-scanner
+sc
 =
 new
 Scanner
@@ -33,31 +32,40 @@ System
 in
 )
 ;
-final
 String
-next
+s
 =
-scanner
+sc
 .
 next
 (
 )
 ;
-final
 String
-next2
+t
 =
-scanner
+sc
 .
 next
 (
 )
 ;
 int
-x
+c
 =
 0
 ;
+/*
+		if(s.charAt(0)==t.charAt(0)){
+			c++;
+		}
+		if(s.charAt(1)==t.charAt(1)){
+			c++;
+		}
+		if(s.charAt(2)==t.charAt(2)){
+			c++;
+		}
+		*/
 for
 (
 int
@@ -69,20 +77,20 @@ i
 <=
 2
 ;
-++
 i
+++
 )
 {
 if
 (
-next
+s
 .
 charAt
 (
 i
 )
 ==
-next2
+t
 .
 charAt
 (
@@ -90,8 +98,8 @@ i
 )
 )
 {
+c
 ++
-x
 ;
 }
 }
@@ -101,7 +109,7 @@ out
 .
 println
 (
-x
+c
 )
 ;
 }

@@ -3,6 +3,27 @@ java
 .
 util
 .
+HashMap
+;
+import
+java
+.
+util
+.
+List
+;
+import
+java
+.
+util
+.
+Map
+;
+import
+java
+.
+util
+.
 Scanner
 ;
 public
@@ -18,15 +39,12 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-Main
-.
 scanner
 =
 new
@@ -37,42 +55,43 @@ System
 in
 )
 ;
-final
 int
-gi
+N
 =
 gi
 (
 )
 ;
 int
-i
+m
 =
 1
 ;
-for
-(
 int
-n
+i
 =
 0
 ;
+while
+(
+true
+)
+{
+if
+(
 Math
 .
 pow
 (
-2.0
+2
 ,
-n
+i
 )
 <=
-gi
-;
-++
-n
+N
 )
 {
-i
+m
 =
 (
 int
@@ -81,11 +100,20 @@ Math
 .
 pow
 (
-2.0
+2
 ,
-n
+i
 )
 ;
+i
+++
+;
+}
+else
+{
+break
+;
+}
 }
 System
 .
@@ -93,10 +121,18 @@ out
 .
 print
 (
-i
+m
 )
 ;
+//        if (t.equals("Sunny")) {
+//        	System.out.print("Cloudy");
+//        }else if(t.equals("Cloudy")){
+//        	System.out.print("Rainy");
+//        } else {
+//        	System.out.print("Sunny");
+//        }
 }
+// 文字列として入力を取得
 public
 static
 String
@@ -105,8 +141,6 @@ gs
 )
 {
 return
-Main
-.
 scanner
 .
 next
@@ -114,6 +148,7 @@ next
 )
 ;
 }
+// intとして入力を取得
 public
 static
 int
@@ -126,8 +161,6 @@ Integer
 .
 parseInt
 (
-Main
-.
 scanner
 .
 next
@@ -136,6 +169,7 @@ next
 )
 ;
 }
+// longとして入力を取得
 public
 static
 long
@@ -148,8 +182,6 @@ Long
 .
 parseLong
 (
-Main
-.
 scanner
 .
 next
@@ -158,6 +190,7 @@ next
 )
 ;
 }
+// doubleとして入力を取得
 public
 static
 double
@@ -170,8 +203,6 @@ Double
 .
 parseDouble
 (
-Main
-.
 scanner
 .
 next

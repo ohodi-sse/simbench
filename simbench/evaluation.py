@@ -88,7 +88,7 @@ def mean_time(bld, analysis):
 
 def prettify_dataframe(df: pl.DataFrame) -> pl.DataFrame:
     df = df.rename({col: col.replace("_", " ") for col in df.columns})
-    df = df.with_columns(pl.col("Similarity Measure").str.replace_all("NCD", "\\ncd^{"))
+    df = df.with_columns(pl.col("Similarity Measure").str.replace_all("NCD", "\\ncd^"))
     df = df.with_columns(
         pl.col("Similarity Measure")
         .str.replace_all("without_similarity_measure", "\\cos^{")
@@ -111,7 +111,7 @@ def prettify_dataframe(df: pl.DataFrame) -> pl.DataFrame:
 def pivot_normalizer(df: pl.DataFrame):
     df = df.with_columns(
         pl.struct(["Similarity Measure", "Tool"])
-        .map_elements(lambda x: rf"{x['Similarity Measure']}mathrm{x['Tool']}" + "}")
+        .map_elements(lambda x: rf"{x['Similarity Measure']}mathrm{x['Tool']}")
         .alias("Similarity Measure")
     )
 
@@ -126,16 +126,20 @@ def pivot_normalizer(df: pl.DataFrame):
         {
             "unprocessed": "Original",
             "decompiled": "Recompiled",
-            # "google_java_formatted": "Formatted",
-            # "token_format": "Tokens",
+            "google_java_formatted": "Formatted",
+            "token_format": "Tokens",
         }
     )
 
     df = df.select(
-        ["Similarity Measure", "Original", "Recompiled"]  # "Formatted", "Tokens",
+        ["Similarity Measure", "Original", "Formatted", "Tokens", "Recompiled"]
     )
 
     return df
+
+
+def report_failed_embeddings(analysis):
+    assert isinstance(analysis.tool, AITool)
 
 
 def dataframe_as_latex_table(df: pl.DataFrame):
@@ -163,10 +167,6 @@ def dataframe_as_latex_table(df: pl.DataFrame):
             )
             .alias("Similarity Measure")
         ).select(pl.exclude("Tool"))
-
-        df = df.with_columns(
-            pl.col("Similarity Measure").str.replace_all("-", "},", literal=True)
-        )
 
     if multiple_normalizers:
         df = pivot_normalizer(df)
@@ -209,9 +209,12 @@ def dataframe_as_latex_table(df: pl.DataFrame):
     latex_gt = latex_gt.replace(r"\time", "time")
     latex_gt = latex_gt.replace(r"\d", "d")
     latex_gt = latex_gt.replace(r"\ncd", "ncd")
+    latex_gt = latex_gt.replace(r"CDM", "\cdm^")
     latex_gt = latex_gt.replace(r"mathrm", "\mathrm{")
     latex_gt = latex_gt.replace(r"BERT", "BERT}")
-    latex_gt = latex_gt.replace(r"distance", "distance}")
+    latex_gt = latex_gt.replace(r"Vec", "Vec}")
+    latex_gt = latex_gt.replace(r"normalized_cosine", "\cos^{")
+    latex_gt = latex_gt.replace(r"distance", "distance")
     latex_gt = latex_gt.replace(r"\fontsize{12.0pt}{14.4pt}\selectfont", "")
 
     return latex_gt

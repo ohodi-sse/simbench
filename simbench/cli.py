@@ -1,8 +1,7 @@
+from simbench.tables import AIDistanceTable
+from simbench.differs import EditDistanceLines
 import os
-import shutil
 from simbench.evaluation import dataframe_as_latex_table
-from simbench.compressors import Diff, EditDistanceDiff, Zstd
-from simbench.AI_tools import Code2Vec
 from simbench.metrics import (
     DiffMetric,
     NormalizedDiffMetric,
@@ -60,8 +59,8 @@ def show_file(file: str, filter, csv) -> None:
     assert file.endswith(".parquet"), "Can only show parquet file"
     data = (
         pl.scan_parquet(Path(file))
-        .sort(by="distance", descending=True)
-        .filter(pl.col("src") != pl.col("tgt"))
+        # .sort(by="distance", descending=True)
+        # .filter(pl.col("src") != pl.col("tgt"))
     )
 
     if filter:
@@ -71,6 +70,17 @@ def show_file(file: str, filter, csv) -> None:
         print(data.collect().write_csv(file=None))
     else:
         logger.info(data.collect())
+
+
+@click.command()
+@click.argument("file")
+def count_bad(file: str) -> None:
+    assert file.endswith(".parquet"), "Can only show parquet file"
+    data = pl.scan_parquet(Path(file))
+    # assert isinstance(data, AIDistanceTable)
+
+    bad = data.filter(pl.col("failed_emb")).collect()["failed_emb"]
+    print(f"Failed to embed: {len(bad)}")
 
 
 @click.command()
@@ -187,20 +197,20 @@ def perr_table_comparisons(
     samples,
 ):
     bld = Builder(logger)
-    if tool_pattern or normalizer_pattern:
-        patterns = [(tool_pattern, normalizer_pattern)]
-    else:
-        bld.log.info("Running with prespecified filters")
+    bld.log.info("Running with prespecified filters")
     patterns = [
         # (".*zstd-1.*", "token_format"),
         # ("(Code2Vec).*", ".*"),
         # ("^(?!Code2Vec).*", "(unprocessed)"),  # (.*diff.*|.*NCD.*)
         (
-            "^(zstd-1.*|.*BERT.*|Code2Vec).*",
-            "(unprocessed|.*token.*|.*google.*|decompiled)",
+            ".*",  # "^(zstd-9.*|.*BERT.*|Code2Vec).*",
+            "(unprocessed|token_format|.*google.*|decompiled)",
         ),  # (.*diff.*|.*NCD.*)
         # ("^(?!Code2Vec).*", ".*"),
     ]
+
+    if tool_pattern != ".*" or normalizer_pattern != ".*":
+        patterns = [(tool_pattern, normalizer_pattern)]
 
     for tool_pattern, normalizer_pattern in patterns:
         filtered_tools = [t for t in cfg.tools if t.matches(tool_pattern)]
@@ -217,14 +227,20 @@ def perr_table_comparisons(
             filtered_classifiers,
             normalizers,
         )
-        if force and Path(comparison.comparison_table_file).exists():
-            os.remove(comparison.comparison_table_file)
+        if force and Path(comparison.comparison_evaluation_table_file).exists():
+            os.remove(comparison.comparison_evaluation_table_file)
 
-        table = comparison.table_comparison.pull(bld).collect()
+        if force and Path(comparison.comparison_performance_table_file).exists():
+            os.remove(comparison.comparison_performance_table_file)
+
+        performance_table = comparison.performance_table_comparison.pull(bld).collect()
+        evaluation_table = comparison.evaluation_table_comparison.pull(bld).collect()
 
         if show:
-            latex_table = dataframe_as_latex_table(table)
-            print(latex_table)
+            print(evaluation_table)
+            print(performance_table)
+            # latex_table = dataframe_as_latex_table(evaluation_table)
+            # print(latex_table)
 
 
 @click.command()
@@ -275,65 +291,16 @@ def mds_plot(suite: Path, force: bool):
         [KNN(1)],
         IDNormalizer(),
     )
-    analysis1 = init_analysis(
-        DiffTool(DiffMetric(), EditDistanceDiff()),
-        Suite(suite),
-        [KNN(1)],
-        IDNormalizer(),
-    )
-    analysis5 = init_analysis(
-        CompressionTool(NCD(), Zstd(1)),
-        Suite(suite),
-        [KNN(1)],
-        DecompileNormalizer(),
-    )
-    analysis2 = init_analysis(
-        CompressionTool(NCD(), Zstd(1)),
-        Suite(suite),
-        [KNN(1)],
-        HashedProblemLabel(),  # OptimizedDecompiledNormalizer(),
-    )
-    analysis3 = init_analysis(
-        CompressionTool(NCD(), Zstd(1)),
-        Suite(suite),
-        [KNN(1)],
-        PartitionedProblemClasses(25),  # OptimizedDecompiledNormalizer(),
-    )
 
-    analysis4 = init_analysis(
-        CompressionTool(NCD(), Zstd(1)),
-        Suite(suite),
-        [KNN(1)],
-        PartitionedProblemClasses(5),  # OptimizedDecompiledNormalizer(),
-    )
-    # analysis5 = init_analysis(
-    #     GenericTool(GenericMetric(), Code2Vec()),
-    #     Suite(suite),
-    #     [KNN(1)],
-    #     IDNormalizer(),
-    # )
     fig, ax = plt.subplots(1, 1)
     good_edges = plot_node(GoodEdges())
     good_edges(bld, analysis1, ax, xlog=True, force=force)
-    good_edges(bld, analysis2, ax, xlog=True, force=force)
-    good_edges(bld, analysis3, ax, xlog=True, force=force)
-    good_edges(bld, analysis4, ax, xlog=True, force=force)
-    good_edges(bld, analysis5, ax, xlog=True, force=force)
-    #
+
     # cluster_plot = plot_node(BiggestCluster())
     # cluster_plot(bld, analysis1, ax[1], xlog=True, force=force)
-    # cluster_plot(bld, analysis2, ax[1], xlog=True, force=force)
-    # cluster_plot(bld, analysis3, ax[1], xlog=True, force=force)
-    # cluster_plot(bld, analysis4, ax[1], xlog=True, force=force)
-    # cluster_plot(bld, analysis5, ax[1], xlog=True, force=force)
-    #
     # good_majority = plot_node(GoodMajorityCluster())
     # good_majority(bld, analysis1, ax[2], xlog=True, force=force)
-    # good_majority(bld, analysis2, ax[2], xlog=True, force=force)
-    # good_majority(bld, analysis3, ax[2], xlog=True, force=force)
-    # good_majority(bld, analysis4, ax[2], xlog=True, force=force)
-    # good_majority(bld, analysis5, ax[2], xlog=True, force=force)
-
+    #
     plt.show()
 
     # cluster_boxplot(bld, analysis1, analysis2)
@@ -352,20 +319,20 @@ def perr_plot(suite: Path, force: bool):
     bld = Builder(logger)
 
     diff = init_analysis(
-        DiffTool(DiffMetric(), EditDistanceDiff()),
+        DiffTool(DiffMetric(), EditDistanceLines()),
         Suite(suite),
         [KNN(1)],
         IDNormalizer(),
     )
 
     normdiff = init_analysis(
-        DiffTool(NormalizedDiffMetric(), EditDistanceDiff()),
+        DiffTool(NormalizedDiffMetric(), EditDistanceLines()),
         Suite(suite),
         [KNN(1)],
         IDNormalizer(),
     )
     sumdiff = init_analysis(
-        DiffTool(SummedDiffMetric(), EditDistanceDiff()),
+        DiffTool(SummedDiffMetric(), EditDistanceLines()),
         Suite(suite),
         [KNN(1)],
         IDNormalizer(),
@@ -413,6 +380,7 @@ cli.add_command(perr_fit)
 cli.add_command(wilcoxon)
 cli.add_command(diff_normalizer)
 cli.add_command(show_file)
+cli.add_command(count_bad)
 cli.add_command(analyse)
 cli.add_command(plot_comparison)
 cli.add_command(perr_table_comparisons)

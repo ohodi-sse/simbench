@@ -1,0 +1,127 @@
+import java.io.Reader;
+import java.io.InputStreamReader;
+import java.util.StringTokenizer;
+import java.io.BufferedReader;
+import java.util.Arrays;
+import java.util.Random;
+import java.io.OutputStream;
+import java.io.IOException;
+import java.math.RoundingMode;
+import java.math.BigDecimal;
+import java.io.PrintWriter;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    static FastReader sc;
+    static PrintWriter out;
+    static long mod;
+    
+    public static void process() throws IOException {
+        pn(new BigDecimal(Main.sc.next()).multiply(new BigDecimal(Main.sc.next())).setScale(0, RoundingMode.FLOOR).toString());
+    }
+    
+    public static void main(final String[] array) throws IOException {
+        Main.out = new PrintWriter(System.out);
+        Main.sc = new FastReader();
+        final long currentTimeMillis = System.currentTimeMillis();
+        int n = 1;
+        while (n-- > 0) {
+            process();
+        }
+        Main.out.flush();
+        System.err.println(System.currentTimeMillis() - currentTimeMillis + "ms");
+    }
+    
+    static void pn(final Object x) {
+        Main.out.println(x);
+    }
+    
+    static void p(final Object obj) {
+        Main.out.print(obj);
+    }
+    
+    static int ni() throws IOException {
+        return Integer.parseInt(Main.sc.next());
+    }
+    
+    static long nl() throws IOException {
+        return Long.parseLong(Main.sc.next());
+    }
+    
+    static double nd() throws IOException {
+        return Double.parseDouble(Main.sc.next());
+    }
+    
+    static String nln() throws IOException {
+        return Main.sc.nextLine();
+    }
+    
+    static long gcd(final long n, final long n2) throws IOException {
+        return (n2 == 0L) ? n : gcd(n2, n % n2);
+    }
+    
+    static int gcd(final int n, final int n2) throws IOException {
+        return (n2 == 0) ? n : gcd(n2, n % n2);
+    }
+    
+    static int bit(final long n) throws IOException {
+        return (n == 0L) ? 0 : (1 + bit(n & n - 1L));
+    }
+    
+    static <T> void r_sort(final T[] a, final int n) {
+        final Random random = new Random();
+        for (int i = n - 1; i > 0; --i) {
+            final int nextInt = random.nextInt(i + 1);
+            final T t = a[i];
+            a[i] = a[nextInt];
+            a[nextInt] = t;
+        }
+        Arrays.sort(a);
+    }
+    
+    static {
+        Main.mod = 1000000007L;
+    }
+    
+    static class FastReader
+    {
+        BufferedReader br;
+        StringTokenizer st;
+        
+        public FastReader() {
+            this.br = new BufferedReader(new InputStreamReader(System.in));
+        }
+        
+        String next() {
+            while (true) {
+                if (this.st != null) {
+                    if (this.st.hasMoreElements()) {
+                        break;
+                    }
+                }
+                try {
+                    this.st = new StringTokenizer(this.br.readLine());
+                }
+                catch (final IOException ex) {
+                    ex.printStackTrace();
+                }
+            }
+            return this.st.nextToken();
+        }
+        
+        String nextLine() {
+            String line = "";
+            try {
+                line = this.br.readLine();
+            }
+            catch (final IOException ex) {
+                ex.printStackTrace();
+            }
+            return line;
+        }
+    }
+}

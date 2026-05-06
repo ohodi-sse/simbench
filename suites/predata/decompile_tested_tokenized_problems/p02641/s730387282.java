@@ -1,0 +1,38 @@
+import java.util.Collection;
+import java.util.Collections;
+import java.util.ArrayList;
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        final int nextInt = scanner.nextInt();
+        final int nextInt2 = scanner.nextInt();
+        if (nextInt2 == 0) {
+            System.out.println(nextInt);
+            System.exit(0);
+        }
+        final int[] array2 = new int[nextInt2];
+        for (int i = 0; i < nextInt2; ++i) {
+            array2[i] = scanner.nextInt();
+        }
+        final ArrayList c = new ArrayList(array2.length);
+        for (int j = 0; j < array2.length; ++j) {
+            c.add((Object)array2[j]);
+        }
+        for (int k = 1; k < nextInt + 1; ++k) {
+            for (int l = -1; l < 2; ++l) {
+                final int n = nextInt + l * k;
+                if (Collections.frequency(c, n) == 0) {
+                    System.out.println(n);
+                    System.exit(0);
+                }
+            }
+        }
+    }
+}

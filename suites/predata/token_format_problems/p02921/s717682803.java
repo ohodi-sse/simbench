@@ -14,14 +14,16 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-final
+@
+SuppressWarnings
+(
+"resource")
 Scanner
 scanner
 =
@@ -33,9 +35,11 @@ System
 in
 )
 ;
-final
+//		int N = scanner.nextInt();
+//
+//		int K = scanner.nextInt();
 String
-next
+S
 =
 scanner
 .
@@ -43,9 +47,8 @@ next
 (
 )
 ;
-final
 String
-next2
+K
 =
 scanner
 .
@@ -54,13 +57,13 @@ next
 )
 ;
 int
-n
+ans
 =
 0
 ;
 if
 (
-next
+S
 .
 substring
 (
@@ -71,7 +74,7 @@ substring
 .
 equals
 (
-next2
+K
 .
 substring
 (
@@ -82,13 +85,13 @@ substring
 )
 )
 {
+ans
 ++
-n
 ;
 }
 if
 (
-next
+S
 .
 substring
 (
@@ -99,7 +102,7 @@ substring
 .
 equals
 (
-next2
+K
 .
 substring
 (
@@ -110,13 +113,13 @@ substring
 )
 )
 {
+ans
 ++
-n
 ;
 }
 if
 (
-next
+S
 .
 substring
 (
@@ -127,7 +130,7 @@ substring
 .
 equals
 (
-next2
+K
 .
 substring
 (
@@ -138,22 +141,55 @@ substring
 )
 )
 {
+ans
 ++
-n
 ;
 }
 log
 (
-n
+ans
 )
 ;
+//		int[] scannerArray = new int[N];
+//
+//		for (int index = 0; index < N; index++) {
+//			scannerArray[index] = scanner.nextInt();
+//		}
+//
+//		int tmp = countSwapBabbleSort(scannerArray);
+//
+//		log((
+//				(BigInteger.valueOf((long)tmp)
+//				.multiply(BigInteger.valueOf((long)K)
+//						))
+//				.add((
+//						BigInteger.valueOf((long)tmp)
+//						.multiply(
+//								BigInteger.valueOf((long)K)
+//								.multiply(
+//										BigInteger.valueOf((long)K)
+//										.subtract(BigInteger.ONE)
+//										)
+//								.divide(BigInteger.valueOf((long)2)
+//										)
+//								)
+//						)))
+//				.remainder(
+//						BigInteger.valueOf((long)1000000007)
+//						)
+//				.toString());
 }
+/**
+	 * バブルソートの交換数を算出
+	 * ※転倒数
+	 * @param array
+	 * @return
+	 */
 private
 static
 int
 countSwapBabbleSort
 (
-final
 int
 [
 ]
@@ -161,15 +197,14 @@ array
 )
 {
 int
-n
+ans
 =
 0
 ;
-final
 int
 [
 ]
-array2
+binary
 =
 new
 int
@@ -184,41 +219,45 @@ length
 for
 (
 int
-i
+index
 =
 0
 ;
-i
+index
 <
 array
 .
 length
 ;
+index
 ++
-i
 )
 {
-n
-+=
-i
+ans
+=
+ans
++
+(
+index
 -
 sum
 (
-array2
+binary
 ,
 array
 [
-i
+index
 ]
+)
 )
 ;
 add
 (
-array2
+binary
 ,
 array
 [
-i
+index
 ]
 ,
 1
@@ -226,27 +265,25 @@ i
 ;
 }
 return
-n
+ans
 ;
 }
+//add value at idx on bit O(logN)
 private
 static
 void
 add
 (
-final
 int
 [
 ]
-array
+bit
 ,
-final
 int
-n
+idx
 ,
-final
 int
-n2
+value
 )
 {
 for
@@ -254,16 +291,18 @@ for
 int
 i
 =
-n
+idx
 ;
 i
 <
-array
+bit
 .
 length
 ;
 i
-+=
+=
+i
++
 (
 i
 &
@@ -272,39 +311,32 @@ i
 )
 )
 {
-final
-int
-n3
-=
-i
-;
-array
+bit
 [
-n3
+i
 ]
 +=
-n2
+value
 ;
 }
 }
+//return sum [1,idx] O(logN)
 private
 static
 int
 sum
 (
-final
 int
 [
 ]
-array
+bit
 ,
-final
 int
-n
+idx
 )
 {
 int
-n2
+ret
 =
 0
 ;
@@ -313,7 +345,7 @@ for
 int
 i
 =
-n
+idx
 ;
 i
 >
@@ -329,16 +361,16 @@ i
 )
 )
 {
-n2
+ret
 +=
-array
+bit
 [
 i
 ]
 ;
 }
 return
-n2
+ret
 ;
 }
 private
@@ -346,9 +378,8 @@ static
 void
 log
 (
-final
 String
-x
+str
 )
 {
 System
@@ -357,7 +388,7 @@ out
 .
 println
 (
-x
+str
 )
 ;
 }
@@ -366,9 +397,8 @@ static
 void
 log
 (
-final
 int
-x
+str
 )
 {
 System
@@ -377,7 +407,7 @@ out
 .
 println
 (
-x
+str
 )
 ;
 }
@@ -386,9 +416,8 @@ static
 void
 log
 (
-final
 double
-x
+str
 )
 {
 System
@@ -397,7 +426,7 @@ out
 .
 println
 (
-x
+str
 )
 ;
 }

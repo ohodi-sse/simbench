@@ -14,14 +14,12 @@ static
 void
 main
 (
-final
 String
 [
 ]
-array
+args
 )
 {
-final
 Main
 main
 =
@@ -30,9 +28,8 @@ Main
 (
 )
 ;
-final
 Scanner
-scanner
+sc
 =
 new
 Scanner
@@ -46,10 +43,10 @@ main
 .
 solve
 (
-scanner
+sc
 )
 ;
-scanner
+sc
 .
 close
 (
@@ -59,24 +56,27 @@ close
 void
 solve
 (
-final
 Scanner
-scanner
+sc
 )
 {
-final
 int
-nextInt
+N
 =
-scanner
+sc
 .
 nextInt
 (
 )
 ;
+int
+k
+=
+0
+;
 if
 (
-nextInt
+N
 ==
 0
 )
@@ -94,7 +94,7 @@ println
 else
 if
 (
-nextInt
+N
 ==
 1
 )
@@ -112,11 +112,11 @@ println
 else
 if
 (
-nextInt
+N
 >
 1
 &&
-nextInt
+N
 <=
 3
 )
@@ -134,11 +134,11 @@ println
 else
 if
 (
-nextInt
+N
 >
 3
 &&
-nextInt
+N
 <=
 7
 )
@@ -156,11 +156,11 @@ println
 else
 if
 (
-nextInt
+N
 >
 7
 &&
-nextInt
+N
 <=
 15
 )
@@ -178,11 +178,11 @@ println
 else
 if
 (
-nextInt
+N
 >
 15
 &&
-nextInt
+N
 <=
 31
 )
@@ -200,11 +200,11 @@ println
 else
 if
 (
-nextInt
+N
 >
 31
 &&
-nextInt
+N
 <=
 63
 )
@@ -222,11 +222,11 @@ println
 else
 if
 (
-nextInt
+N
 >
 63
 &&
-nextInt
+N
 <=
 100
 )
@@ -242,4 +242,17 @@ println
 ;
 }
 }
+// void solve(Scanner sc) {
+// int N = sc.nextInt();
+// int k = 0;
+//
+// for (double i = 1;; i++) {
+// k = (int) Math.pow(2, i);
+// N /= k;
+// if (N == 0) {
+// break;
+// }
+// }
+// System.out.println(k);
+// }
 }

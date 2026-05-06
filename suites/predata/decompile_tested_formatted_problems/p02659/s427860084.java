@@ -1,0 +1,20 @@
+import java.util.Scanner;
+
+// 
+// Decompiled by Procyon v0.6.0
+// 
+
+public class Main
+{
+    static final int max = 100;
+    
+    public static void main(final String[] array) {
+        final Scanner scanner = new Scanner(System.in);
+        cal(scanner.nextLong(), scanner.nextDouble());
+        scanner.close();
+    }
+    
+    public static void cal(final long n, final double n2) {
+        System.out.println(n * Math.round(n2 * 100.0) / 100L);
+    }
+}
