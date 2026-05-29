@@ -152,6 +152,7 @@ class ParquetStore(Store[pl.LazyFrame], Pullable[pl.LazyFrame]):
     def store(self, item: pl.LazyFrame, bld):
         item.collect().write_parquet(self.file)
         assert self.file.exists(), f"Failed to create file {self.file}"
+        bld.log.success(f"Stored result to {self.file}")
 
     def pull(self, bld) -> pl.LazyFrame:
         return pl.scan_parquet(self.file, schema=self.schema)
@@ -199,14 +200,16 @@ class Node[A](Pullable[A]):
 
     def updated_dependencies(self):
         return [
-            dep.store.file.name
+            dep.store.file
             for dep in self.dependencies.values()
-            if isinstance(dep, Node) and dep.store.store_time < self.store.store_time
+            if isinstance(dep, Node) and dep.store.store_time > self.store.store_time
         ]
 
     def pull(self, bld) -> A:
         if self.updated_dependencies():
-            bld.log.debug(f"Found updated dependencies: {self.updated_dependencies()}")
+            bld.log.debug(
+                f"Found updated or missing dependencies: {self.updated_dependencies()}"
+            )
 
         if (a := self.store.load(bld)) is not None and not self.updated_dependencies():
             bld.log.info(f"Loaded precomputed store: {self.store.file}")
@@ -216,7 +219,6 @@ class Node[A](Pullable[A]):
 
         a = self.action(bld=bld, **outputs)
         self.store.store(a, bld=bld)
-        bld.log.success(f"Stored result to {self.store.file}")
 
         return a
 

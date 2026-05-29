@@ -1,6 +1,6 @@
 from __future__ import annotations
 import hashlib
-from simbench.AI_tools import CodeBERT, GraphCodeBERT, Code2Vec
+from simbench.AI_tools import CodeBERT, GraphCodeBERT, Code2Vec, Model2Vec
 
 from typing import Sequence
 from contextlib import contextmanager
@@ -148,6 +148,7 @@ def get_all_tools():
         AITool(NormalizedCosine(), CodeBERT()),
         AITool(NormalizedCosine(), GraphCodeBERT()),
         AITool(NormalizedCosine(), Code2Vec()),
+        AITool(NormalizedCosine(), Model2Vec()),
     ]
 
     return diff_tools + comp_tools + ai_tools
@@ -192,7 +193,7 @@ class Config:
 
     def __init__(self):
         self.log = logger
-        self.log.remove(0)
+        self.log.remove()
         self.log.add(sys.stderr, level="DEBUG")
 
         self.tools = get_all_tools()

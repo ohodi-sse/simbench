@@ -1,19 +1,17 @@
+from simbench.evaluation import dataframe_as_latex_table
 from simbench.differs import EditDistanceLines
 import os
 from simbench.similarity_measures import (
     DiffMeasure,
     NormalizedDiffMeasure,
-    SummedDiffMeasure,
 )
 from simbench.plots import (
-    plot_node,
-    GoodEdges,
     Histogram,
 )
 from simbench.normalizers import (
     IDNormalizer,
 )
-from simbench.comparing import wilcoxon_signed_rank_test, find_analysis_difference
+from simbench.comparing import find_analysis_difference
 import click
 from pathlib import Path
 import polars as pl
@@ -32,7 +30,6 @@ from simbench.analysis import (
     get_all_normalizers,
     init_analysis,
     get_all_tools,
-    CompressionTool,
     DiffTool,
 )
 
@@ -67,7 +64,13 @@ def show_file(file: str, filter, csv) -> None:
 
 
 def get_filtered_analysis_comparison(
-    cfg, suite, tool_pattern, normalizer_pattern, classifier_pattern, seed, samples
+    cfg,
+    suite,
+    tool_pattern,
+    normalizer_pattern,
+    classifier_pattern,
+    seed=None,
+    samples=None,
 ):
     bld = Builder(cfg.log)
     if tool_pattern != ".*" or normalizer_pattern != ".*":
@@ -96,6 +99,7 @@ def get_filtered_analysis_comparison(
             filtered_classifiers,
             normalizers,
         )
+
         return comparison
 
 
@@ -165,20 +169,29 @@ def analyse(cfg, suite, tool_pattern, normalizer_pattern, classifier_pattern):
     default=".*",
 )
 @click.option("--show/--no-show", default=False)
+@click.option("--seed", default=None, type=int)
+@click.option("--samples", default=None, type=int)
 @click.pass_obj
 def plot_comparison(
-    cfg, suite, tool_pattern, classifier_pattern, normalizer_pattern, show
+    cfg,
+    suite,
+    tool_pattern,
+    classifier_pattern,
+    normalizer_pattern,
+    seed,
+    samples,
+    show,
 ):
     bld = Builder(logger)
 
-    filtered_tools = [t for t in cfg.tools if t.matches(tool_pattern)]
-    filtered_classifiers = [c for c in cfg.classifiers if c.matches(classifier_pattern)]
-    normalizers = [
-        norm for norm in get_all_normalizers() if norm.matches(normalizer_pattern)
-    ]
-
-    comparison = AnalysisComparison(
-        Suite(suite), filtered_tools, filtered_classifiers, normalizers
+    comparison = get_filtered_analysis_comparison(
+        cfg,
+        suite,
+        tool_pattern,
+        normalizer_pattern,
+        classifier_pattern,
+        seed,
+        samples,
     )
 
     plt.rcParams.update({"figure.figsize": (10, 5.625), "font.size": 16})
@@ -209,7 +222,59 @@ def plot_comparison(
 @click.option("--seed", default=None, type=int)
 @click.option("--samples", default=None, type=int)
 @click.pass_obj
-def perr_table_comparisons(
+def comparison_performance_table(
+    cfg,
+    suite,
+    tool_pattern,
+    classifier_pattern,
+    normalizer_pattern,
+    show,
+    force,
+    seed,
+    samples,
+):
+    bld = Builder(logger)
+
+    comparison = get_filtered_analysis_comparison(
+        cfg,
+        suite,
+        tool_pattern,
+        normalizer_pattern,
+        classifier_pattern,
+        seed,
+        samples,
+    )
+
+    if force and Path(comparison.comparison_performance_table_file).exists():
+        os.remove(comparison.comparison_performance_table_file)
+
+    performance_table = comparison.performance_table_comparison.pull(bld).collect()
+
+    if show:
+        bld.log.success(performance_table)
+
+
+@click.command()
+@click.argument("suite", type=click.Path(file_okay=False, path_type=Path))
+@click.option("--tool", "tool_pattern", help="filter the tools to be run", default=".*")
+@click.option(
+    "--classifier",
+    "classifier_pattern",
+    help="filter on which classifiers to run",
+    default=".*",
+)
+@click.option(
+    "--normalizer",
+    "normalizer_pattern",
+    help="filter the normalizers to be run",
+    default=".*",
+)
+@click.option("--show/--no-show", default=False)
+@click.option("--force", default=None, is_flag=True)
+@click.option("--seed", default=None, type=int)
+@click.option("--samples", default=None, type=int)
+@click.pass_obj
+def comparison_evaluation_table(
     cfg,
     suite,
     tool_pattern,
@@ -235,17 +300,11 @@ def perr_table_comparisons(
     if force and Path(comparison.comparison_evaluation_table_file).exists():
         os.remove(comparison.comparison_evaluation_table_file)
 
-    if force and Path(comparison.comparison_performance_table_file).exists():
-        os.remove(comparison.comparison_performance_table_file)
-
-    performance_table = comparison.performance_table_comparison.pull(bld).collect()
     evaluation_table = comparison.evaluation_table_comparison.pull(bld).collect()
 
     if show:
-        print(evaluation_table)
-        print(performance_table)
-        # latex_table = dataframe_as_latex_table(evaluation_table)
-        # print(latex_table)
+        latex_table = dataframe_as_latex_table(evaluation_table)
+        bld.log.success(latex_table)
 
 
 @click.command()
@@ -283,7 +342,7 @@ def diff_normalizer(
 @click.command()
 @click.argument("suite", type=click.Path(file_okay=True, path_type=Path))
 @click.option("--force", default=None, is_flag=True)
-def perr_plot(suite: Path, force: bool):
+def comparison_plot(suite: Path, force: bool):
     from simbench.classification import KNN
 
     bld = Builder(logger)
@@ -315,19 +374,11 @@ def perr_plot(suite: Path, force: bool):
     plt.show()
 
 
-@click.command()
-@click.argument("file1", type=click.Path(file_okay=True, path_type=Path))
-@click.argument("file2", type=click.Path(file_okay=True, path_type=Path))
-@click.option("--key", default="distance")
-def wilcoxon(file1, file2, key):
-    wilcoxon_signed_rank_test(file1, file2, key)
-
-
-cli.add_command(perr_plot)
-cli.add_command(wilcoxon)
+cli.add_command(comparison_plot)
 cli.add_command(diff_normalizer)
 cli.add_command(show_file)
 cli.add_command(count_bad)
 cli.add_command(analyse)
 cli.add_command(plot_comparison)
-cli.add_command(perr_table_comparisons)
+cli.add_command(comparison_evaluation_table)
+cli.add_command(comparison_performance_table)

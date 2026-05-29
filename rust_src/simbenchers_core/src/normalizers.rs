@@ -6,10 +6,10 @@ use duct::cmd;
 use indicatif::{ParallelProgressIterator, ProgressStyle};
 use rayon::iter::IntoParallelRefIterator;
 use rayon::prelude::*;
-use std::env;
 use std::fs::File;
 use std::io::{BufWriter, Write};
 use std::path::Path;
+use std::{env, fs};
 use tempfile::tempdir_in;
 
 fn get_parent_dir(filepath: &Utf8Path) -> Result<&Utf8Path> {
@@ -24,6 +24,11 @@ fn _get_file_name(filepath: &Utf8Path) -> Result<&str> {
         .ok_or_eyre("Failed to extract filename")
 }
 
+fn get_file_name(filepath: &Utf8Path) -> Result<&str> {
+    filepath
+        .file_prefix()
+        .ok_or_eyre("Failed to extract filename")
+}
 fn get_file_extension(filepath: &Utf8Path) -> Result<&str> {
     filepath
         .extension()
@@ -52,17 +57,32 @@ fn compile_java(filepath: impl AsRef<Path>, compiled_path: impl AsRef<Path>) -> 
     );
     debug_assert!(filepath.exists(), "Failed to locate file {}", filepath);
 
+    // Early return if file has already been compiled
+    if compiled_path.exists() {
+        return Ok(());
+    }
     // Create temporary directory
     let tmp_dir = tempdir_in(get_parent_dir(filepath)?.as_std_path())?;
-    let tmp_file = tmp_dir.path().join("Main.java");
+
+    let file_dir = tmp_dir.path().join(get_file_name(filepath)?);
+    fs::create_dir(&file_dir)?;
+    let tmp_file = file_dir.join("Main.java");
 
     // Copy file into new directory
     cmd!("cp", filepath, &tmp_file).run()?;
     debug_assert!(&tmp_file.exists(), "File was not copied properly");
     // Compile into the temporary directory
-    cmd!("javac", "-nowarn", "-Xlint:-deprecation", &tmp_file)
-        .dir(tmp_dir.path())
-        .run()?;
+    cmd!(
+        "javac",
+        "-cp",
+        "rust_src/simbenchers_core/processing_tools/java_deps/*",
+        "-nowarn",
+        "-Xlint:-deprecation",
+        "-Xlint:-unchecked",
+        tmp_file
+    )
+    .run()?;
+
     debug_assert!(
         tmp_dir.path().join("Main.class").exists(),
         "File was not compiled properly"
@@ -100,6 +120,10 @@ fn optimize_w_proguard(filepath: impl AsRef<Path>, processed_path: impl AsRef<Pa
         )
     })?;
 
+    // Early return if file has already been optimized
+    if processed_path.exists() {
+        return Ok(());
+    }
     let proguard_path = env::current_dir()?.join("processing_tools/proguard-7.8.2/");
     let binary_path = proguard_path.join("bin/proguard.sh");
     debug_assert!(binary_path.try_exists().is_ok());
@@ -145,6 +169,12 @@ fn decompile_w_procyon(
             .ok_or_eyre("Failed to extract extension")?
             == "java"
     );
+
+    // Early return if file has already been decompiled
+    if decompiled_path.as_ref().exists() {
+        return Ok(());
+    }
+
     let full_compiled_path = env::current_dir()?.join(filepath);
     let full_decompiled_path = env::current_dir()?.join(&decompiled_path);
 
@@ -213,6 +243,7 @@ fn google_format(filepath: impl AsRef<Path>, formatted_path: impl AsRef<Path>) -
 
 macro_rules! batch_process {
     ($name:ident,$f:ident) => {
+        #[tracing::instrument]
         pub fn $name(source_files: &[String], target_files: &[String]) -> Result<()> {
             assert_eq!(source_files.len(), target_files.len());
 

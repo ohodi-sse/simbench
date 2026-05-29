@@ -177,10 +177,7 @@ def move_and_sort_imports(sources):
                 deduped_imports.append(imp)
         imports = deduped_imports
 
-        # Build import block
         import_block = b"\n".join(imports) + b"\n\n"
-
-        # Remove imports from original bytes (reverse order!)
         new_bs = bs
         for node in sorted(import_nodes, key=lambda n: n.start_byte, reverse=True):
             new_bs = new_bs[: node.start_byte] + new_bs[node.end_byte :]

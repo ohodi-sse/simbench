@@ -1,6 +1,5 @@
-use pyo3::prelude::*;
-
 use pyo3::exceptions::{PyRuntimeError, PyTypeError};
+use pyo3::prelude::*;
 use pyo3_polars::PyDataFrame;
 use simbenchers_core::normalizers::{batch_format, batch_optimize};
 use simbenchers_core::{

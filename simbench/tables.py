@@ -1,3 +1,4 @@
+from loguru import logger
 import simbench.evaluation
 from simbench.evaluation import log_loss, isotonic_regression
 import polars as pl
@@ -428,8 +429,8 @@ def evaluation(schema: pl.Schema, bld: Builder, **analyses) -> pl.LazyFrame:
             Tool=analysis.tool.tool_name,
             Normalizer=analysis.normalizer.name,
             Time=mean_time,
-            Raw_Loss=1 - raw_loss,
-            Iso_Loss=(iso_log_loss - 0.5) * 1e3,
+            Raw_Loss=raw_loss,
+            Iso_Loss=(iso_log_loss) * 1e3,
         )
 
     return out.getvalue()

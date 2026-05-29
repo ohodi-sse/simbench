@@ -1,4 +1,6 @@
+import torch
 import numpy as np
+from model2vec import StaticModel
 from simbench.build import NamedCallable, Source
 from abc import ABC, abstractmethod
 from transformers import (
@@ -62,7 +64,7 @@ class AITool(ABC, NamedCallable):
     def preprocess(self, src: Source): ...
 
 
-class HuggingFace(AITool):
+class BERT(AITool):
     @property
     @abstractmethod
     def _load_tokenizer(self) -> PreTrainedTokenizer: ...
@@ -90,7 +92,7 @@ class HuggingFace(AITool):
         return self.normalize(self.embed_code(src))
 
 
-class CodeBERT(HuggingFace):
+class CodeBERT(BERT):
     @property
     def name(self):
         return "CodeBERT"
@@ -104,7 +106,7 @@ class CodeBERT(HuggingFace):
         return RobertaTokenizer.from_pretrained("microsoft/codebert-base")
 
 
-class GraphCodeBERT(HuggingFace):
+class GraphCodeBERT(BERT):
     @property
     def name(self):
         return "GraphCodeBERT"
@@ -116,6 +118,28 @@ class GraphCodeBERT(HuggingFace):
 
     def _load_tokenizer(self):
         return AutoTokenizer.from_pretrained("microsoft/graphcodebert-base")
+
+
+class Model2Vec(AITool):
+    @property
+    def name(self):
+        return "Model2Vec"
+
+    def _load_model(self):
+        model = StaticModel.from_pretrained("minishlab/potion-code-16M")
+        return model
+
+    def _load_tokenizer(self):
+        return
+
+    def embed_code(self, src: Source) -> Tensor:
+        code = src.get_bytes().decode("utf-8")
+        embedding = self.model.encode(code)
+
+        return torch.from_numpy(embedding)
+
+    def preprocess(self, src: Source):
+        return self.normalize(self.embed_code(src))
 
 
 class Code2Vec(AITool):

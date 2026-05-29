@@ -1,3 +1,4 @@
+from loguru import logger
 import polars as pl
 from great_tables import GT
 from great_tables import GT, loc, style, exibble
@@ -126,13 +127,13 @@ def pivot_normalizer(df: pl.DataFrame):
         {
             "unprocessed": "Original",
             "decompiled": "Recompiled",
-            "google_java_formatted": "Formatted",
-            "token_format": "Tokens",
+            # "google_java_formatted": "Formatted",
+            # "token_format": "Tokens",
         }
     )
 
     df = df.select(
-        ["Similarity Measure", "Original", "Formatted", "Tokens", "Recompiled"]
+        ["Similarity Measure", "Original", "Recompiled"]  # "Formatted", "Tokens",
     )
 
     return df
