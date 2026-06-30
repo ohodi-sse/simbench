@@ -1,5 +1,5 @@
-from simbench.AI_tools import Code2Vec, AITool
-from IPython.display import Code
+import random
+from simbench.AI_tools import AITool
 import pytest
 from pathlib import Path
 from loguru import logger
@@ -29,7 +29,7 @@ def test_suite():
     shutil.rmtree(suite.root / "decompiled_problems", ignore_errors=True)
     shutil.rmtree(suite.root / "google_java_formatted_problems", ignore_errors=True)
     shutil.rmtree(suite.root / "imports_removed_problems", ignore_errors=True)
-    shutil.rmtree(suite.root / "optimized_decompiled_problems", ignore_errors=True)
+    # shutil.rmtree(suite.root / "optimized_decompiled_problems", ignore_errors=True)
     shutil.rmtree(suite.root / "decompiled_wo_imports_problems", ignore_errors=True)
     shutil.rmtree(suite.root / "hashed_src_label_problems", ignore_errors=True)
     shutil.rmtree(suite.root / "5_partitioned_problems", ignore_errors=True)
@@ -52,6 +52,17 @@ def test_classifiers(test_suite):
 
 @pytest.fixture(params=[n for n in get_all_normalizers()])
 def test_normalizer(request):
+    return request.param
+
+
+# Randomly sampling some tool/normalizer combinations for testing classifiers.
+@pytest.fixture(params=random.sample([n for n in get_all_normalizers()], 2))
+def test_random_tool(request):
+    return request.param
+
+
+@pytest.fixture(params=random.sample([n for n in get_all_normalizers()], 2))
+def test_random_normalizer(request):
     return request.param
 
 

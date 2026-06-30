@@ -42,11 +42,12 @@ def cli(ctx):
 
 @click.command()
 @click.argument("file")
-@click.option("-fl", "--filter", default=None, help="Filter on source")
+@click.option("-s", "--source", default=None, help="Filter on source")
+@click.option("-t", "--target", default=None, help="Filter on target")
 @click.option(
     "--csv", "csv", default=None, help="Output the file as csv. Pairs well with xan"
 )
-def show_file(file: str, filter, csv) -> None:
+def show_file(file: str, source, target, csv) -> None:
     assert file.endswith(".parquet"), "Can only show parquet file"
     data = (
         pl.scan_parquet(Path(file))
@@ -54,8 +55,11 @@ def show_file(file: str, filter, csv) -> None:
         # .filter(pl.col("src") != pl.col("tgt"))
     )
 
-    if filter:
-        data = data.filter(pl.col("src") == filter)
+    if source:
+        data = data.filter(pl.col("src") == source)
+
+    if target:
+        data = data.filter(pl.col("tgt") == target)
 
     if csv:
         print(data.collect().write_csv(file=None))

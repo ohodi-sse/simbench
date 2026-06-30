@@ -70,11 +70,10 @@ module-name = "rust_src"
 
 [tool.uv.workspace]
 members = [
-    "processing_tools/graphcode2vec",
     "processing_tools/code2vec",
 ]
 
 [tool.uv.sources]
-graphcode2vec = { workspace = true }
+graphcode2vec = { git = "https://github.com/BilboBackend/graphcode2vec.git" }
 code2vec = { workspace = true }
 

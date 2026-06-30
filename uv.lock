@@ -9,7 +9,6 @@ resolution-markers = [
 [manifest]
 members = [
     "code2vec",
-    "graphcode2vec",
     "simbench",
 ]
 
@@ -427,7 +426,7 @@ wheels = [
 [[package]]
 name = "graphcode2vec"
 version = "0.1.0"
-source = { editable = "processing_tools/graphcode2vec" }
+source = { git = "https://github.com/BilboBackend/graphcode2vec.git#216f737bbf75975fea1527fbe6dafacd90cc84a6" }
 
 [[package]]
 name = "great-tables"
@@ -2164,7 +2163,7 @@ requires-dist = [
     { name = "bsdiff4", specifier = ">=1.2.6" },
     { name = "click", specifier = ">=8.3.0" },
     { name = "code2vec", editable = "processing_tools/code2vec" },
-    { name = "graphcode2vec", editable = "processing_tools/graphcode2vec" },
+    { name = "graphcode2vec", git = "https://github.com/BilboBackend/graphcode2vec.git" },
     { name = "great-tables", specifier = ">=0.21.0" },
     { name = "loguru", specifier = ">=0.7.3" },
     { name = "marimo", specifier = ">=0.23.8" },

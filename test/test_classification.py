@@ -6,23 +6,21 @@ from simbench.classification import (
 )
 
 
-def test_knn_classify(test_tool, test_suite, test_bld, test_normalizer):
+def test_knn_classify(test_random_tool, test_suite, test_bld, test_random_normalizer):
     test_src = "test2.java"
 
     classifier = KNN(3)
     analysis = init_analysis(
-        tool=test_tool,
+        tool=test_random_tool,
         suite=test_suite,
         classifiers=[classifier],
-        normalizer=test_normalizer,
+        normalizer=test_random_normalizer,
     )
 
     classifiers = analysis.classification_nodes
     cl_df = classifiers["knn-3"].pull(test_bld)
-    print(cl_df.collect())
 
     classification = cl_df.filter(pl.col("src") == test_src).collect()
-    print(classification)
     assert classification["labelled_as"].item() in ["class1", "class2"], (
         f"{cl_df.collect()}"
     )

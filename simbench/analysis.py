@@ -24,6 +24,7 @@ from simbench.similarity_measures import (
     Measure,
     NormalizedCosine,
     CDM,
+    NormalizedDiffMeasure,
 )
 import time
 
@@ -39,9 +40,7 @@ from simbench.classification import Classifier
 from simbench.normalizers import (
     IDNormalizer,
     GoogleFormatter,
-    DecompileWOImports,
     DecompileNormalizer,
-    OptimizedDecompiledNormalizer,
     HashedProblemLabel,
     PartitionedProblemClasses,
     DecompileFixedImports,
@@ -139,7 +138,7 @@ def get_all_tools():
     ]
 
     diff_similarity_measures = [
-        DiffMeasure()
+        DiffMeasure(),
     ]  # [NormalizedDiffMeasure(), DiffMeasure(), SummedDiffMeasure()]
     diffs = [EditDistanceLines(), EditDistanceChars()]
     diff_tools = [DiffTool(m, d) for m in diff_similarity_measures for d in diffs]
@@ -169,10 +168,10 @@ def get_all_normalizers():
     return [
         IDNormalizer(),
         DecompileNormalizer(),
-        OptimizedDecompiledNormalizer(),
+        # OptimizedDecompiledNormalizer(),
         GoogleFormatter(),
         TokenNormalizer(),
-        DecompileWOImports(),
+        # DecompileWOImports(),
         DecompileFixedImports(),
         HashedProblemLabel(),
         IdentifierNoSemantics(),
@@ -486,3 +485,21 @@ class AnalysisComparison:
             self.comparison_performance_table_file,
             **self.analyses,
         )
+
+    def get_analysis(self, tool_name, normalizer_name):
+        analysis = {
+            a: v
+            for (a, v) in self.analyses.items()
+            if tool_name in a and normalizer_name in a
+        }
+
+        analyses = list(analysis.values())
+        if len(analyses) == 0:
+            print("No such analysis")
+            return
+
+        if len(analyses) > 1:
+            print(f"Too many analyses in {analysis.keys()} matches the description")
+            return
+
+        return analyses[0]

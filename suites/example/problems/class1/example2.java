@@ -1,0 +1,10 @@
+import java.util.*;
+
+public class Main {
+    public static void main(String[] args) {
+        Scanner scan = new Scanner(System.in);
+        int input = scan.nextInt();
+        int doubled = input * 2; 
+        System.out.println(doubled);
+    }
+}
