@@ -220,7 +220,12 @@ __marimo__/
 nixfeedback.txt
 prof/
 suites/data/*
+suites/problematic_data/*
+suites/predata/*_problems
+suites/predata/results/*problems
+suites/predata/results/unprocessed
+suites/predata/results/*format*
+suites/predata/results/decompiled
 
 # Submodules
-
 figures
